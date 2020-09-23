@@ -8,7 +8,8 @@ import {
   Box, 
   Typography, 
   Container,
-  Link
+  Link,
+  Grid,
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import Copyright from '../components/copyright';
@@ -71,13 +72,19 @@ export default function Login() {
             id="password"
             autoComplete="current-password"
           />
-          <Link component={RouterLink} to={"/signup"}>
-            Need to create an account?
-          </Link>
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary"/>}
-            label="Remember me"
-          />
+          <Grid container direction="column">
+            <Grid item>
+              <Link component={RouterLink} to={"/signup"}>
+                Need to create an account?
+              </Link>
+            </Grid>
+            <Grid item>
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary"/>}
+                label="Remember me"
+              />
+            </Grid>
+          </Grid>
           <Button
             type="submit"
             fullWidth
