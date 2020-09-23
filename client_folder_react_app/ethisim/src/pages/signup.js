@@ -8,7 +8,7 @@ import {
   Typography,
   Container,
 } from '@material-ui/core';
-import Copyright from '../components/copyright'
+import Copyright from '../components/copyright';
 
 export default function Signup() {
   const useStyles = makeStyles((theme) => ({
