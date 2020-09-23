@@ -72,7 +72,7 @@ export default function Login() {
             autoComplete="current-password"
           />
           <Link component={RouterLink} to={"/signup"}>
-            Need to register an account?
+            Need to create an account?
           </Link>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary"/>}

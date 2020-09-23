@@ -38,13 +38,13 @@ export default function Signup() {
   const classes = useStyles();
 
   //TODO add in Ethisim Logo at top of page
-  //TODO add functionality to register account button
+  //TODO add functionality to signup account button
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.container}>
 
         <Typography variant="h4">
-          Register
+          Sign up
         </Typography>
         <form className={classes.form}>
           <TextField
