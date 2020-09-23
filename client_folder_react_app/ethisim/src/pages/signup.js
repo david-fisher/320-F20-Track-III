@@ -39,7 +39,6 @@ export default function Signup() {
 
   //TODO add in Ethisim Logo at top of page
   //TODO add functionality to signup account button
-  //TODO add in a confirm password textbox
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.container}>
@@ -101,6 +100,17 @@ export default function Signup() {
             label="Password"
             name="password"
             autoComplete="password"
+            autoFocus
+          />
+           <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="confirm_password"
+            label="Confirm Password"
+            name="confirm_password"
+            autoComplete="confirm_password"
             autoFocus
           />
           <Button
