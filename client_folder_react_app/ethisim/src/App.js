@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import {
   BrowserRouter as Router,
   Route,
@@ -13,9 +12,8 @@ export default function App() {
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
-
-        <Route path = "/login" component={Login}/>
-        <Route path="/signup" component={Signup}></Route>
+        <Route path="/login" component={Login}/>
+        <Route path="/signup" component={Signup}/>
     </Router>
   );
 }

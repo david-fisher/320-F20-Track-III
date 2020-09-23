@@ -13,31 +13,31 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import Copyright from '../components/copyright';
 
-export default function Login() {
-  const useStyles = makeStyles((theme) => ({
-    container: {
-      marginTop: theme.spacing(6),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    logo: {
-      //TODO Implement logo styling
-    },
-    form: {
-      marginTop: theme.spacing(1),
-      width: '100%', 
-    },
-    submit: {
-      marginTop: theme.spacing(2),
-      backgroundColor:  '#881c1c',
-      color: "white"
-    },
-    copyright: {
-      marginTop: theme.spacing(2),
-    }
-  }));
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: theme.spacing(6),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  logo: {
+    //TODO Implement logo styling
+  },
+  form: {
+    marginTop: theme.spacing(1),
+    width: '100%', 
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    backgroundColor:  '#881c1c',
+    color: "white"
+  },
+  copyright: {
+    marginTop: theme.spacing(2),
+  }
+}));
 
+export default function Login() {
   const classes = useStyles();
 
   //TODO add in Ethisim Logo at top of page

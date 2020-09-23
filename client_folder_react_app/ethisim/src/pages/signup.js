@@ -10,31 +10,31 @@ import {
 } from '@material-ui/core';
 import Copyright from '../components/copyright';
 
-export default function Signup() {
-  const useStyles = makeStyles((theme) => ({
-    container: {
-      marginTop: theme.spacing(6),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    logo: {
-      //TODO Implement logo styling
-    },
-    form: {
-      marginTop: theme.spacing(1),
-      width: '100%',
-    },
-    submit: {
-      marginTop: theme.spacing(2),
-      backgroundColor:  '#881c1c',
-      color: "white"
-    },
-    copyright: {
-      marginTop: theme.spacing(2),
-    }
-  }));
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: theme.spacing(6),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  logo: {
+    //TODO Implement logo styling
+  },
+  form: {
+    marginTop: theme.spacing(1),
+    width: '100%',
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    backgroundColor:  '#881c1c',
+    color: "white"
+  },
+  copyright: {
+    marginTop: theme.spacing(2),
+  }
+}));
 
+export default function Signup() {
   const classes = useStyles();
 
   //TODO add in Ethisim Logo at top of page
@@ -67,7 +67,6 @@ export default function Signup() {
             label="Last Name"
             name="last_name"
             autoComplete="last_name"
-            autoFocus
           />
           <TextField
             variant="outlined"
@@ -78,7 +77,6 @@ export default function Signup() {
             label="Email Address"
             name="email_address"
             autoComplete="email_address"
-            autoFocus
           />
           <TextField
             variant="outlined"
@@ -89,7 +87,6 @@ export default function Signup() {
             label="Username"
             name="username"
             autoComplete="username"
-            autoFocus
           />
           <TextField
             variant="outlined"
@@ -100,7 +97,6 @@ export default function Signup() {
             label="Password"
             name="password"
             autoComplete="password"
-            autoFocus
           />
            <TextField
             variant="outlined"
@@ -111,11 +107,9 @@ export default function Signup() {
             label="Confirm Password"
             name="confirm_password"
             autoComplete="confirm_password"
-            autoFocus
           />
           <Button
-          component={Link} to={"/login"}
-
+            component={Link} to={"/login"}
             linkButton={true}
             type="submit"
             fullWidth
