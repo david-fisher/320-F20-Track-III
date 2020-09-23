@@ -6,22 +6,20 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import Login from './pages/login';
+import Register from './pages/register_account';
 
 export default function App() {
   return (
     <Router>
         <Route exact path="/">
-          <Redirect to="/login" />
+          <Redirect to="/register_account" />
         </Route>
 
         <Switch>
-          <Route path="/login">
-            <Login />
+          <Route path="/register_account">
+            <Register />
           </Route>
         </Switch>
     </Router>
   );
 }
-
-
