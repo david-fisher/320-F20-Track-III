@@ -8,10 +8,12 @@ import {
   Box, 
   Typography, 
   Container,
+  Link
 } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import Copyright from '../components/copyright'
 
-export default function SignIn() {
+export default function Login() {
   const useStyles = makeStyles((theme) => ({
     container: {
       marginTop: theme.spacing(6),
@@ -69,6 +71,9 @@ export default function SignIn() {
             id="password"
             autoComplete="current-password"
           />
+          <Link component={RouterLink} to={"/signup"}>
+            Need to register an account?
+          </Link>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary"/>}
             label="Remember me"
@@ -79,7 +84,7 @@ export default function SignIn() {
             variant="contained"
             className={classes.submit}
           >
-            Sign In
+            Login
           </Button>
         </form>
       </div>
