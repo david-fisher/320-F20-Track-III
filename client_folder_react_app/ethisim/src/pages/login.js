@@ -8,34 +8,37 @@ import {
   Box, 
   Typography, 
   Container,
+  Link,
+  Grid,
 } from '@material-ui/core';
-import Copyright from '../components/copyright'
+import { Link as RouterLink } from 'react-router-dom';
+import Copyright from '../components/copyright';
 
-export default function SignIn() {
-  const useStyles = makeStyles((theme) => ({
-    container: {
-      marginTop: theme.spacing(6),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    logo: {
-      //TODO Implement logo styling
-    },
-    form: {
-      marginTop: theme.spacing(1),
-      width: '100%', 
-    },
-    submit: {
-      marginTop: theme.spacing(2),
-      backgroundColor:  '#881c1c',
-      color: "white"
-    },
-    copyright: {
-      marginTop: theme.spacing(2),
-    }
-  }));
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: theme.spacing(6),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  logo: {
+    //TODO Implement logo styling
+  },
+  form: {
+    marginTop: theme.spacing(1),
+    width: '100%', 
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    backgroundColor:  '#881c1c',
+    color: "white"
+  },
+  copyright: {
+    marginTop: theme.spacing(2),
+  }
+}));
 
+export default function Login() {
   const classes = useStyles();
 
   //TODO add in Ethisim Logo at top of page
@@ -69,17 +72,26 @@ export default function SignIn() {
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary"/>}
-            label="Remember me"
-          />
+          <Grid container direction="column">
+            <Grid item>
+              <Link component={RouterLink} to={"/signup"}>
+                Need to create an account?
+              </Link>
+            </Grid>
+            <Grid item>
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary"/>}
+                label="Remember me"
+              />
+            </Grid>
+          </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             className={classes.submit}
           >
-            Sign In
+            Login
           </Button>
         </form>
       </div>
