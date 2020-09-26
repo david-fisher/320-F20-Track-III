@@ -11,9 +11,10 @@ import {
 } from '@material-ui/core';
 import Copyright from '../components/copyright';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ShareIcon from '@material-ui/icons/Share';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 3,
     backgroundColor:'#F7E7E7',
   },
-  viewDataContainer: {
+  buttonContainer: {
     display:'flex',
     justifyContent: 'center',
     alignItems:'center',
@@ -38,18 +39,8 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     backgroundColor:  '#881c1c',
     borderStyle: 'solid',
-    border: 2,
-    borderColor: '#F7E7E7',
-    borderRadius: 3,
-  },
-  addNewScenarioContainer: {
-    display:'flex',
-    justifyContent: 'center',
-    alignItems:'center',
-    height: '227px',
-    borderStyle: 'dashed',
     border: 3,
-    borderColor: '#881c1c',
+    borderColor: '#F7E7E7',
     borderRadius: 3,
   },
   button: {
@@ -61,6 +52,23 @@ const useStyles = makeStyles((theme) => ({
   buttonText: {
     textTransform: 'unset',
     color: 'white',
+  },
+  addNewScenarioContainer: {
+    height: '227px',
+    borderStyle: 'dashed',
+    border: 3,
+    borderColor: '#881c1c',
+    borderRadius: 3,
+  },
+  addNewScenarioGrid: {
+    marginTop:'40px',
+  },
+  addIcon: {
+     color: '#881c1c', 
+     fontSize: 70 
+  },
+  addNewScenarioText: {
+    color: '#881c1c', 
   },
   copyright: {
     marginTop: theme.spacing(2),
@@ -92,13 +100,13 @@ export default function Dashboard() {
         </CardContent>
           <Grid
             container
-            className={classes.viewDataContainer}
+            className={classes.buttonContainer}
           >
           <Grid item xs={6} className={classes.button}>
               <Button size="small" className={classes.buttonText}>
                 <EditIcon />
                 <Typography variant="subtitle1">
-                {' '}Edit
+                  Edit
                 </Typography>
               </Button>
             </Grid>
@@ -106,7 +114,7 @@ export default function Dashboard() {
               <Button size="small" className={classes.buttonText}>
                 <ShareIcon />
                 <Typography variant="subtitle1" display="block" noWrap>
-                {' '}Share
+                  Share
                 </Typography>
               </Button>
             </Grid>
@@ -114,7 +122,7 @@ export default function Dashboard() {
               <Button size="small" className={classes.buttonText}>
                 <DeleteForeverIcon />
                 <Typography variant="subtitle1" display="block" noWrap>
-                {' '}Delete
+                  Delete
                 </Typography>
               </Button>
             </Grid>
@@ -135,9 +143,23 @@ export default function Dashboard() {
   scenarios.push(
     <Grid item xs>
       <Container className={classes.addNewScenarioContainer} fixed="true" maxWidth="xs">
-        <Typography variant="h6" display="block" noWrap>
-          Create New Simulation
-        </Typography>
+        <Grid
+          className={classes.addNewScenarioGrid}
+          container
+          spacing={0}
+          direction="column"
+          justify="center"
+          alignItems="center"
+        > 
+          <Grid item>
+            <AddIcon className={classes.addIcon} />
+          </Grid>
+          <Grid item>
+            <Typography className={classes.addNewScenarioText} variant="h6" noWrap>
+              Create New Simulation
+            </Typography>
+          </Grid>
+        </Grid>
       </Container>
     </Grid>
   );
