@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     marginTop: theme.spacing(2),
-    backgroundColor:  '#881c1c',
-    color: "white"
+    backgroundColor: theme.palette.primary.main,
+    color: 'white',
   },
   copyright: {
     marginTop: theme.spacing(2),

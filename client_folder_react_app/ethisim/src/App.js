@@ -7,6 +7,8 @@ import {
 import Signup from './pages/signup';
 import Login from './pages/login';
 import Dashboard from './pages/dashboard';
+import Editor from './pages/editor';
+import Data from './pages/data';
 
 export default function App() {
   return (
@@ -17,6 +19,12 @@ export default function App() {
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
         <Route path="/dashboard" component={Dashboard}/>
+        <Route path="/editor/:id" render={(props) => (
+          <Editor {...props} />
+        )}/>
+        <Route path="/data/:id" render={(props) => (
+          <Data {...props} />
+        )}/>
     </Router>
   );
 }
