@@ -9,13 +9,15 @@ import Login from './pages/login';
 import Dashboard from './pages/dashboard';
 import Editor from './pages/editor';
 import Data from './pages/data';
+import Homepage from './pages/homepage';
 
 export default function App() {
   return (
     <Router>
         <Route exact path="/">
-          <Redirect to="/login" />
+          <Redirect to="/home" />
         </Route>
+        <Route path="/home" component={Homepage}/>
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
         <Route path="/dashboard" component={Dashboard}/>
