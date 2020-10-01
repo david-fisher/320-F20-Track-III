@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Data(props) {
   const classes = useStyles();
-  console.log(props);
   return (
     <Container component="main" maxWidth="lg">
       <Typography className={classes.title} variant="h4">
