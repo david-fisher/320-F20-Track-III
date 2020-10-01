@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { 
   Box, 
   Container,
+  Typography,
 } from '@material-ui/core';
 import Copyright from '../components/copyright';
 
@@ -23,6 +24,20 @@ export default function Homepage() {
 
   return (
     <Container className={classes.container}>
+      <Typography 
+        variant="h1"
+        align="center"
+      >
+        Convenient Ethics Simulations
+      </Typography>
+      <Typography 
+        variant="h4"
+        align="center"
+        >
+        Ethisim allows you to easily create and assign ethics 
+        simulations. Run them for a participation grade, or
+        develop them further into longer discussions for class.
+      </Typography>
         <Box className={classes.copyright}>
           <Copyright />
         </Box>
