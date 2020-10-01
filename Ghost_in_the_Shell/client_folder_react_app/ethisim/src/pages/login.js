@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     marginTop: theme.spacing(2),
-    backgroundColor:  '#881c1c',
+    backgroundColor:  theme.palette.primary.main,
     color: "white"
   },
   copyright: {
@@ -86,10 +86,11 @@ export default function Login() {
             </Grid>
           </Grid>
           <Button
+            className={classes.submit}
+            component={RouterLink} to={"/dashboard"}
             type="submit"
             fullWidth
             variant="contained"
-            className={classes.submit}
           >
             Login
           </Button>
