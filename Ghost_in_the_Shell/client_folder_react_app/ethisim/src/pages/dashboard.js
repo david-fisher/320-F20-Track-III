@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import ScenarioCard from '../components/ScenarioCard';
 import AddNewScenarioCard from '../components/AddNewScenarioCard';
-import Copyright from '../components/copyright';
+import Copyright from '../components/Copyright';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -39,7 +39,7 @@ export default function Dashboard() {
 
   //TODO change when Scenario Objects are defined
   let scenarios = sampleScenariosData.map(data => 
-    <ScenarioCard data={data}/>
+    <ScenarioCard data={data} key={data.id}/>
   );
 
   return (

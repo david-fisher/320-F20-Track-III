@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import Copyright from '../components/copyright';
+import Copyright from '../components/Copyright';
 
 const useStyles = makeStyles((theme) => ({
   container: {

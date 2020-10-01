@@ -6,91 +6,105 @@ import {
   Typography,
   TextField,
   Button,
-  Grid
 } from '@material-ui/core';
-import Copyright from '../components/copyright';
-import HomepageNavBar from './homepageNavBar'
+import Copyright from '../components/Copyright';
+import HomepageNavBar from '../components/HomepageNavBar'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(0),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: '#881c1c'
+    height: '100%',
+    width: '100%',
+    minHeight: '100vh',
+    backgroundColor: theme.palette.primary.main,
   },
-  StudentAccessContainer:{
-    width: 1000,
-    height: 200,
+  studentAccessContainer:{
+    marginTop: '0',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  EthisimIntroContainer:{
-    marginTop: theme.spacing(8),
-    width: 1000,
-    height: 200,
+  ethisimIntroContainer:{
+    marginTop: theme.spacing(4),
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
+    justifyContent: 'center',
   },
-  TextField:{
-    marginTop: theme.spacing(20),
+  textField:{
+    marginTop: theme.spacing(4),
+  },
+  accessButton:{
+    marginTop: theme.spacing(2),
+    width: '225px',
+    textTransform: 'unset',
+    borderStyle: 'solid',
+    borderColor: 'white',
+    border: 2, 
+  },
+  margin: {
+    margin: theme.spacing(3),
+  },
+  copyright: {
     color: 'white',
   },
-  AccessButton:{
-    marginTop: theme.spacing(2),
-    width: 225,
-  },
-
-  copyright: {
-    marginTop: theme.spacing(2),
-  },
-
 }));
 
-export default function Homepage() {
-  const classes = useStyles();
+const ValidationTextField = withStyles({
+  root: {
+    width: '300px',
+    color: 'white',
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: 'white',
+        borderWidth: '2',
+      },
+    },
+    '& .MuiFormLabel-root': {
+      color: 'white',
+    },
+    '& .MuiInputBase-root': {
+      color: 'white',
+    },
+    '& input:valid + fieldset': {
+      borderColor: 'white',
+      borderWidth: 2,
+    },
+    '& input:invalid + fieldset': {
+      borderColor: 'white',
+      borderWidth: 2,
+    },
+    '& input:valid:focus + fieldset': {
+      color: 'white',
+      borderColor: 'white',
+      borderLeftWidth: 6,
+      padding: '4px !important', // override inline-style
+    },
+  },
+})(TextField);
 
-  return (
-
-    <Container className={classes.container}>
-    <div>
-
-    <HomepageNavBar/>
-    <StudentAccess/>
-    <EthisimIntro/>
-
-    <Box className={classes.copyright}>
-      <Copyright />
-    </Box>
-
-    </div>
-    </Container>
-
-
-  );
-}
 function StudentAccess(){
   const classes = useStyles();
   return(
-
     <div>
-    <Container className={classes.StudentAccessContainer}>
-    <form className={classes.TextField} noValidate autoComplete="off">
-       <TextField
-         id="Enter Class Code"
-         label="Enter Class Code"
-         variant="outlined"
-         color="primary"
-       />
-     </form>
-
-    <Button className={classes.AccessButton} variant="contained" color="primary" size="large">
-     Join
-    </Button>
-    </Container>
+      <Container className={classes.studentAccessContainer}>
+        <form className={classes.textField} noValidate autoComplete="off">
+          <ValidationTextField
+            label="Enter Class Code"
+            id="Enter Class Code"
+            variant="outlined"
+          />
+        </form>
+        <Button className={classes.accessButton} variant="contained" color="primary">
+          <Typography 
+            variant="h5" 
+            display="block" 
+            noWrap
+          >
+            Join
+          </Typography>
+        </Button>
+      </Container>
     </div>
   )
 }
@@ -104,23 +118,37 @@ const WhiteTextTypography = withStyles({
 function EthisimIntro(){
   const classes = useStyles();
   return(
-    <div className={classes.EthisimIntroContainer}>
-    <WhiteTextTypography
-       variant="h3"
-       align="center"
-
-     >
-       Convenient Ethics Simulations
-     </WhiteTextTypography>
-     <WhiteTextTypography
-       variant="body"
-       align="center"
-       className="EthisimIntro"
-       >
-       Ethisim allows you to easily create and assign ethics<br/>
-       simulations. Run them for a participation grade, or<br/>
-       develop them further into longer discussions for class.<br/>
-     </WhiteTextTypography>
+    <div className={classes.ethisimIntroContainer}>
+      <WhiteTextTypography
+        variant="h3"
+        align="center"
+      >
+        Convenient Ethics Simulations
+      </WhiteTextTypography>
+      <WhiteTextTypography
+        align="center"
+        className={classes.margin}
+        >
+        Ethisim allows you to easily create and assign ethics<br/>
+        simulations. Run them for a participation grade, or<br/>
+        develop them further into longer discussions for class.<br/>
+      </WhiteTextTypography>
     </div>
   )
+}
+
+export default function Homepage() {
+  const classes = useStyles();
+
+  return (
+    <div  className={classes.container}>
+      <HomepageNavBar/>
+      <StudentAccess/>
+      <EthisimIntro/>
+
+      <Box className={classes.copyright}>
+        <Copyright />
+      </Box>
+    </div>
+  );
 }

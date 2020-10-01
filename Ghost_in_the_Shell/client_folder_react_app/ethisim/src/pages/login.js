@@ -12,7 +12,7 @@ import {
   Grid,
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
-import Copyright from '../components/copyright';
+import Copyright from '../components/Copyright'
 
 const useStyles = makeStyles((theme) => ({
   container: {

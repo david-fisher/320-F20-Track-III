@@ -22,7 +22,6 @@ export default function App() {
         <Route path="/home" component={Homepage}/>
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
-        <Route path="/home" component={Homepage}/>
 
         <Route path="/dashboard" component={Dashboard}/>
         <Route path="/editor/:id" render={(props) => (

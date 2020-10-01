@@ -8,7 +8,7 @@ import {
   Typography,
   Container,
 } from '@material-ui/core';
-import Copyright from '../components/copyright';
+import Copyright from '../components/Copyright';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -110,7 +110,6 @@ export default function Signup() {
           />
           <Button
             component={Link} to={"/login"}
-            linkButton={true}
             type="submit"
             fullWidth
             variant="contained"
