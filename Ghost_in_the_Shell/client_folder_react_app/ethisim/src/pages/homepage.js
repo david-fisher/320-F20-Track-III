@@ -1,5 +1,8 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { 
+  makeStyles, 
+  withStyles
+} from '@material-ui/core/styles';
 import {
   Box,
   Container,
@@ -8,7 +11,7 @@ import {
   Button,
 } from '@material-ui/core';
 import Copyright from '../components/Copyright';
-import HomepageNavBar from '../components/HomepageNavBar'
+import HomepageNavBar from '../components/HomepageNavBar';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -85,6 +88,7 @@ const ValidationTextField = withStyles({
 
 function StudentAccess(){
   const classes = useStyles();
+
   return(
     <div>
       <Container className={classes.studentAccessContainer}>
@@ -117,6 +121,7 @@ const WhiteTextTypography = withStyles({
 
 function EthisimIntro(){
   const classes = useStyles();
+  
   return(
     <div className={classes.ethisimIntroContainer}>
       <WhiteTextTypography

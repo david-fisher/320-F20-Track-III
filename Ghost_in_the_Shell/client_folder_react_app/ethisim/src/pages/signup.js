@@ -9,16 +9,17 @@ import {
   Container,
 } from '@material-ui/core';
 import Copyright from '../components/Copyright';
+import RedLogo from '../shared/RedLogo.png';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(6),
+    marginTop: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
   logo: {
-    //TODO Implement logo styling
+    width: '100px',
   },
   form: {
     marginTop: theme.spacing(1),
@@ -37,12 +38,15 @@ const useStyles = makeStyles((theme) => ({
 export default function Signup() {
   const classes = useStyles();
 
-  //TODO add in Ethisim Logo at top of page
   //TODO add functionality to signup account button
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.container}>
-
+        <img 
+          src= {RedLogo} 
+          alt="EthismLogo" 
+          className={classes.logo}
+        />
         <Typography variant="h4">
           Sign up
         </Typography>

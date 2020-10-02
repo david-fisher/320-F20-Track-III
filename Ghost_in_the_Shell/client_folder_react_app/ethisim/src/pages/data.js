@@ -5,7 +5,6 @@ import {
   Container,
   Typography,
 } from '@material-ui/core';
-
 import Copyright from '../components/Copyright';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Data(props) {
   const classes = useStyles();
+  
   return (
     <Container component="main" maxWidth="lg">
       <Typography className={classes.title} variant="h4">
