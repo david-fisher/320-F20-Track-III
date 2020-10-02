@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   copyright: {
-    marginTop: theme.spacing(2),
+    margin: theme.spacing(2),
   }
 }));
 

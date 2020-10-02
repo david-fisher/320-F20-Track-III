@@ -50,6 +50,16 @@ const useStyles = makeStyles((theme) => ({
   },
   copyright: {
     color: 'white',
+    paddingBottom: theme.spacing(2),
+    '@media (min-height:500px)': { 
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      bottom: '0px',
+      width: '100%',
+      position: 'absolute',
+    }
   },
 }));
 
@@ -121,7 +131,7 @@ const WhiteTextTypography = withStyles({
 
 function EthisimIntro(){
   const classes = useStyles();
-  
+
   return(
     <div className={classes.ethisimIntroContainer}>
       <WhiteTextTypography

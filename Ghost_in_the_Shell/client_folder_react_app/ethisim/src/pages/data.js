@@ -18,13 +18,13 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center'
   },
   copyright: {
-    marginTop: theme.spacing(2),
+    margin: theme.spacing(2),
   }
 }));
 
 export default function Data(props) {
   const classes = useStyles();
-  
+
   return (
     <Container component="main" maxWidth="lg">
       <Typography className={classes.title} variant="h4">

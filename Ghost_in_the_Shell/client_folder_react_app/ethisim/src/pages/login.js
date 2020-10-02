@@ -35,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
     color: "white"
   },
   copyright: {
-    marginTop: theme.spacing(2),
+    margin: theme.spacing(2),
+    opacity: 0.5,
   }
 }));
 
