@@ -5,8 +5,7 @@ import {
   Container,
   Typography,
 } from '@material-ui/core';
-
-import Copyright from '../components/copyright';
+import Copyright from '../components/Copyright';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,15 +15,17 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   copyright: {
-    marginTop: theme.spacing(2),
+    margin: theme.spacing(2),
+    opacity: 0.5,
   }
 }));
 
 export default function Login(props) {
   const classes = useStyles();
+
   return (
     <Container component="main" maxWidth="lg">
       <Typography className={classes.title} variant="h4">
