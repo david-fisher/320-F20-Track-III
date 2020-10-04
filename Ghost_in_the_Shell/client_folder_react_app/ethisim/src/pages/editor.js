@@ -62,19 +62,19 @@ const useStyles = makeStyles((theme) => ({
     {name: "Action", component: <Action />},
   ];
 
-
 export default function Editor(props) {
   const classes = useStyles();
   const [scenarioComponent, setScenarioComponent] = useState(<Logistics />);
 
-  function Sidebar (){
+  function Sidebar () {
     const classes = useStyles();
+    
     const onClick = function(component) {
       setScenarioComponent(component);
     };
   
     return(
-        <Drawer
+      <Drawer
         className={classes.drawer}
         variant="permanent"
         classes={{
@@ -82,13 +82,12 @@ export default function Editor(props) {
         }}
         anchor="left"
       >
-        <div className={classes.toolbar} />
-          <List>
-            {scenarioComponents.map((componentData) => (
-              <ListItem button key={componentData.name} onClick={() => onClick(componentData.component)}>
-                <ListItemText primary={componentData.name} />
-              </ListItem>
-            ))}
+        <List>
+          {scenarioComponents.map((componentData) => (
+            <ListItem button key={componentData.name} onClick={() => onClick(componentData.component)}>
+              <ListItemText primary={componentData.name} />
+            </ListItem>
+          ))}
         </List>
       </Drawer>
     )
