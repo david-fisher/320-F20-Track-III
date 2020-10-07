@@ -7,13 +7,6 @@ class ResponseList extends React.Component{
         responses: [<ResponseNode />]
     }
 
-    addResponse(){
-        //this part doesn't actually work :()
-        this.setState({
-            responses: [...this.state.responses, <ResponseNode />]
-        })
-    }
-
     render(){
         return (
             <div>
@@ -21,7 +14,7 @@ class ResponseList extends React.Component{
                 Responses
               </Typography>
               {this.state.responses}
-              <button onClick={() => this.addResponse}>
+              <button onClick={() => this.setState({responses: [...this.state.responses, <ResponseNode />]})}>
                 Add Response
               </button>
             </div>

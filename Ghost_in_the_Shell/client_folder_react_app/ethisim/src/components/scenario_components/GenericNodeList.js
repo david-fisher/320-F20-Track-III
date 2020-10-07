@@ -10,13 +10,6 @@ class GenericNodeList extends React.Component{
         nodes: [<GenericNode />]
     }
 
-    addNode(){
-        //just like for responses, this doesn't work :()
-        this.setState({
-            nodes: [...this.state.nodes, <GenericNode />]
-        })
-    }
-
     render(){
         return (
             <div>
@@ -24,7 +17,7 @@ class GenericNodeList extends React.Component{
                 Generic Node
               </Typography>
               {this.state.nodes}
-              <button onClick={() => this.addNode}>
+              <button onClick={() => this.setState({nodes: [...this.state.nodes, <GenericNode />]})}>
                 <AddIcon></AddIcon> 
               </button>
             </div>
