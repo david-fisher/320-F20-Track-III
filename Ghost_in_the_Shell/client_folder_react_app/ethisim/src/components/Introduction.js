@@ -6,14 +6,17 @@ export default function Introduction() {
   
   let handleEditorChange = (content, editor) => {
     //TODO Implement
-    console.log('Content was updated:', content);
+    console.log('HTML String:', content);
+    console.log('Plain Text:', editor.getContent({format: 'text'}));
   }
+  const apiKey = process.env.REACT_APP_TINY_MCE_API_KEY;
   return (
     <div>
       <Typography variant="h4" >
         Introduction:
       </Typography>
       <Editor
+        apiKey={apiKey}
         initialValue="<p>Write in your introduction for your component.</p>"
         init={{
           height: 350,
@@ -24,9 +27,9 @@ export default function Introduction() {
             'insertdatetime media table paste code help wordcount'
           ],
           toolbar:
-            'undo redo | formatselect | bold italic backcolor | \
+            'formatselect fontsizeselect | bold italic backcolor | \
             alignleft aligncenter alignright alignjustify | \
-            bullist numlist outdent indent | removeformat | help'
+            bullist numlist outdent indent | removeformat | undo redo | help'
         }}
         onEditorChange={handleEditorChange}
        />

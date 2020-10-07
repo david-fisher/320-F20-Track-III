@@ -6,8 +6,10 @@ export default function Title() {
 
   let handleEditorChange = (content, editor) => {
     //TODO Implement
-    console.log('Content was updated:', content);
+    console.log('HTML String:', content);
+    console.log('Plain Text:', editor.getContent({format: 'text'}));
   }
+  const apiKey = process.env.REACT_APP_TINY_MCE_API_KEY;
 
   return (
     <div>
@@ -15,14 +17,13 @@ export default function Title() {
         Title:
       </Typography>
       <Editor
+        apiKey={apiKey}
         initialValue="<p>Write in the title for your component.</p>"
         init={{
           height: 150,
           menubar: false,
           toolbar:
-            'undo redo | formatselect | bold italic backcolor | \
-            alignleft aligncenter alignright alignjustify | \
-            bullist numlist outdent indent | removeformat | help'
+            'formatselect fontsizeselect | undo redo | help'
         }}
         onEditorChange={handleEditorChange}
        />
