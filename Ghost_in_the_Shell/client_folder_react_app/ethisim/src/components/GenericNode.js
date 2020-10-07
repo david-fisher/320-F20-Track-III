@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Introduction from '../Introduction';
-import Title from '../Title';
-import Editor from '../../pages/editor.js';
+import Introduction from './Introduction';
+import Title from './Title';
+import Editor from '../pages/editor.js';
+import ResponseList from './ResponseList';
 
 export default function GenericNode() {
   return (
@@ -13,6 +14,7 @@ export default function GenericNode() {
       <Title />
       <Introduction />
       <Editor />
+      <ResponseList />
     </div>
   );
 }

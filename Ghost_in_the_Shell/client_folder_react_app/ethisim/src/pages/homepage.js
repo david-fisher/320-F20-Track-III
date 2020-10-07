@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import Copyright from '../components/Copyright';
 import HomepageNavBar from '../components/HomepageNavBar';
-import ResponseList from '../components/ResponseList';
+import GenericNodeList from '../components/GenericNodeList';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -149,7 +149,7 @@ function EthisimIntro(){
         simulations. Run them for a participation grade, or<br/>
         develop them further into longer discussions for class.<br/>
       </WhiteTextTypography>
-      <ResponseList />
+      <GenericNodeList />
     </div>
   )
 }

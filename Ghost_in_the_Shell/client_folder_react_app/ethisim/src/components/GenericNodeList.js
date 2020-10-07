@@ -18,7 +18,7 @@ class GenericNodeList extends React.Component{
               </Typography>
               {this.state.nodes}
               <button onClick={() => this.setState({nodes: [...this.state.nodes, <GenericNode />]})}>
-                <AddIcon></AddIcon> 
+                Add Generic Component
               </button>
             </div>
         )
