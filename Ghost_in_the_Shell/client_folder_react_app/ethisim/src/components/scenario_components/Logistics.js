@@ -3,8 +3,9 @@ import Typography from '@material-ui/core/Typography';
 
 export default function Logistics() {
   return (
-    <Typography align="center">
-      Logistics Component
+    <Typography align="center" variant="h2">
+      Logistics
     </Typography>
+    
   );
 }
