@@ -6,7 +6,8 @@ export default function Introduction() {
   
   let handleEditorChange = (content, editor) => {
     //TODO Implement
-    console.log('Content was updated:', content);
+    console.log('HTML String:', content);
+    console.log('Plain Text:', editor.getContent({format: 'text'}));
   }
   return (
     <div>
@@ -14,6 +15,7 @@ export default function Introduction() {
         Introduction:
       </Typography>
       <Editor
+        apiKey="sd525gpjpg57p2irp3p3nsdjmxj0j708hdfxp3iu0fdw3455"
         initialValue="<p>Write in your introduction for your component.</p>"
         init={{
           height: 350,

@@ -6,7 +6,8 @@ export default function Title() {
 
   let handleEditorChange = (content, editor) => {
     //TODO Implement
-    console.log('Content was updated:', content);
+    console.log('HTML String:', content);
+    console.log('Plain Text:', editor.getContent({format: 'text'}));
   }
 
   return (
@@ -15,14 +16,13 @@ export default function Title() {
         Title:
       </Typography>
       <Editor
+        apiKey="sd525gpjpg57p2irp3p3nsdjmxj0j708hdfxp3iu0fdw3455"
         initialValue="<p>Write in the title for your component.</p>"
         init={{
           height: 150,
           menubar: false,
           toolbar:
-            'undo redo | formatselect | bold italic backcolor | \
-            alignleft aligncenter alignright alignjustify | \
-            bullist numlist outdent indent | removeformat | help'
+            'undo redo | formatselect | bold italic | removeformat | help'
         }}
         onEditorChange={handleEditorChange}
        />
