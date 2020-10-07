@@ -1,13 +1,16 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Editor } from '@tinymce/tinymce-react';
+import SunEditor from "suneditor-react";
+import 'suneditor/dist/css/suneditor.min.css';
+import htmlToText from 'html-to-text';
+
 
 export default function Title() {
 
-  let handleEditorChange = (content, editor) => {
+  let handleChange = (content, editor) => {
     //TODO Implement
-    console.log('HTML String:', content);
-    console.log('Plain Text:', editor.getContent({format: 'text'}));
+    console.log(content);
+    console.log(htmlToText.fromString(content));
   }
 
   return (
@@ -15,17 +18,17 @@ export default function Title() {
       <Typography variant="h4" >
         Title:
       </Typography>
-      <Editor
-        apiKey="sd525gpjpg57p2irp3p3nsdjmxj0j708hdfxp3iu0fdw3455"
-        initialValue="<p>Write in the title for your component.</p>"
-        init={{
+      <SunEditor 
+        setOptions={{
+          width:'100%',
           height: 150,
-          menubar: false,
-          toolbar:
-            'undo redo | formatselect | bold italic | removeformat | help'
-        }}
-        onEditorChange={handleEditorChange}
-       />
+          placeholder: "Enter in Title of component...",
+          buttonList: [   
+            ['undo', 'redo'],
+            ['fullScreen', 'preview'],
+          ]}}
+        onChange={handleChange}
+      />
     </div>
   );
 }
