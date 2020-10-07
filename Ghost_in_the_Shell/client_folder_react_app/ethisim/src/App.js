@@ -11,7 +11,7 @@ import Dashboard from './pages/dashboard';
 import Editor from './pages/editor';
 import Data from './pages/data';
 import Homepage from './pages/homepage';
-
+import ConversationEditor from './pages/conversation-editor'
 export default function App() {
   return (
     <Router>
@@ -29,6 +29,7 @@ export default function App() {
         <Route path="/data/:id" render={(props) => (
           <Data {...props} />
         )}/>
+        <Route path="/conversation-editor" component={ConversationEditor}/>
     </Router>
   );
 }
