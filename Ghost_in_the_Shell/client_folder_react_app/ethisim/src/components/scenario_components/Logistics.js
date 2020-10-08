@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     '& > *':{
     margin: theme.spacing(1),
-    width: '50ch',
+    width: '100%',
   },
   },
   subdiv: {
-    '@media (min-height:500px)': {
+    '@media (min-height:600px)': {
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'column',
@@ -31,19 +31,6 @@ const useStyles = makeStyles((theme) => ({
       //width: '100%',
       position: 'absolute',
     },
-  },
-  copyright: {
-    color: 'white',
-    paddingBottom: theme.spacing(2),
-    '@media (min-height:500px)': {
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      bottom: '0px',
-      width: '100%',
-      position: 'absolute',
-    }
   },
 }));
 
