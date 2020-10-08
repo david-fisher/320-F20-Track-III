@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-
   Route,
   Redirect,
 } from "react-router-dom";
@@ -15,7 +14,6 @@ import ConversationEditor from './pages/conversation-editor'
 export default function App() {
   return (
     <Router>
-
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -29,7 +27,7 @@ export default function App() {
         <Route path="/data/:id" render={(props) => (
           <Data {...props} />
         )}/>
-        <Route path="/conversation-editor" component={ConversationEditor}/>
+        
     </Router>
   );
 }

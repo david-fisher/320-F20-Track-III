@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
+import { 
   Container,
   Typography,
   Grid,
@@ -23,11 +23,11 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'unset',
   },
   addIcon: {
-     color: theme.palette.primary.main,
+     color: theme.palette.primary.main, 
      fontSize: 70,
   },
   addNewScenarioText: {
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.main, 
   },
 }));
 
@@ -36,31 +36,31 @@ export default function AddNewScenarioCard() {
   const classes = useStyles();
 
   return (
-    <Grid
+    <Grid 
       key="createNewScenarioButton"
-      item
+      item 
       xs
     >
-      <Container
-        className={classes.addNewScenarioContainer}
-        fixed={true}
+      <Container 
+        className={classes.addNewScenarioContainer} 
+        fixed={true} 
       >
-        <Button
-          className={classes.addNewScenarioButton}
+        <Button 
+          className={classes.addNewScenarioButton} 
         >
           <Grid
             container
             direction="column"
             justify="center"
             alignItems="center"
-          >
+          > 
             <Grid item>
               <AddIcon className={classes.addIcon}/>
             </Grid>
             <Grid item>
-              <Typography
-                className={classes.addNewScenarioText}
-                variant="h6"
+              <Typography 
+                className={classes.addNewScenarioText} 
+                variant="h6" 
                 noWrap
               >
                 Create New Scenario

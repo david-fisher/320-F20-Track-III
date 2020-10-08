@@ -1,4 +1,3 @@
-
 import React, {useState} from 'react';
 import {
   makeStyles,
@@ -14,6 +13,9 @@ import {
   Grid,
 } from '@material-ui/core';
 import Copyright from '../components/Copyright';
+import SunEditor from "suneditor-react";
+import 'suneditor/dist/css/suneditor.min.css';
+import htmlToText from 'html-to-text';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -21,12 +23,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StakeHoldeListNode({id,name}){
 
+  let handleChange = (content) => {
+    //TODO Implement
+    console.log(content);
+    console.log(htmlToText.fromString(content));
+  };
+
   return(
     <Grid
       container
       direction="row"
       justify = "flex-start"
       allignItems="center"
+      spacing={2}
     >
 
 
@@ -42,29 +51,30 @@ export default function StakeHoldeListNode({id,name}){
 
 
         <Grid item xs={6}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="bio"
-            label="Biography"
-            name="bio"
-            autoComplete="Does this guy even exist?"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="conversation entry"
-            label="Conversation Entry"
-            name="conversation entry"
-            autoComplete="hello? anybody there?"
-            autoFocus
-          />
-          <Button>yellow</Button>
+        <SunEditor
+          setOptions={{
+            width:'100%',
+            height: 150,
+            placeholder: "Biography",
+            buttonList: [
+              ['undo', 'redo'],
+              ['fullScreen', 'preview'],
+            ]}}
+          onChange={handleChange}
+        />
+        <SunEditor
+          setOptions={{
+            width:'100%',
+            height: 150,
+            placeholder: "Conversation Entry",
+            buttonList: [
+              ['undo', 'redo'],
+              ['fullScreen', 'preview'],
+            ]}}
+          onChange={handleChange}
+        />
+          <Button
+          variant="contained">Save</Button>
         </Grid>
 
 
