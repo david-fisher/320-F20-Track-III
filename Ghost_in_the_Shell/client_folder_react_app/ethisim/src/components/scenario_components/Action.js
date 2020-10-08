@@ -9,7 +9,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Introduction from '../Introduction';
 import Title from '../Title';
-import Copyright from '../components/Copyright';
+import Copyright from '../Copyright';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -56,7 +56,6 @@ export default function FinalAction() {
             id="option 1"
             label="Input Option 1 Text"
             name="option 1"
-            autoFocus
           />
           <Typography align="center" variant="h6">
             Option 2
