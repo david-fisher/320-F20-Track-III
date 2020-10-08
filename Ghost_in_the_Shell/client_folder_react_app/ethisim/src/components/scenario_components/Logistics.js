@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
   textfields: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '110ch',
+      width: '100%',
     },
   },
   buttons: {
@@ -18,14 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
   },
   subdiv: {
-    '@media (min-height:600px)': {
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      bottom: '15px',
-      //width: '100%',
-      position: 'absolute',
+    marginTop: theme.spacing(1),
+    width: '500px',
+    '@media (max-width:750px)': {
+      width: '100%',
     },
   },
 }));
@@ -63,7 +59,7 @@ export default function Logistics() {
               View Version History
               </Button>
             </form>
-           </div>
+          </div>
     </div>
 
   );
