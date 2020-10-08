@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 
-import GenericNode from './GenericNode.js';
+import GenericComponent from './GenericComponent.js';
 
 
 class GenericNodeList extends React.Component{
@@ -17,7 +17,7 @@ class GenericNodeList extends React.Component{
                 Generic Node
               </Typography>
               {this.state.nodes}
-              <button onClick={() => this.setState({nodes: [...this.state.nodes, <GenericNode />]})}>
+              <button onClick={() => this.setState({nodes: [...this.state.nodes, <GenericComponent />]})}>
                 Add Generic Component
               </button>
             </div>
@@ -25,4 +25,4 @@ class GenericNodeList extends React.Component{
     }
 }
 
-export default GenericNodeList
+export default GenericComponentList
