@@ -4,12 +4,10 @@ import {
   TextField,
   Typography,
   Container,
-  Box,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Introduction from '../Introduction';
 import Title from '../Title';
-import Copyright from '../components/Copyright';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,10 +25,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     color: 'white',
   },
-  copyright: {
-    margin: theme.spacing(2),
-    opacity: 0.5,
-  }
 }));
 
 export default function FinalAction() {
@@ -56,7 +50,6 @@ export default function FinalAction() {
             id="option 1"
             label="Input Option 1 Text"
             name="option 1"
-            autoFocus
           />
           <Typography align="center" variant="h6">
             Option 2
@@ -80,9 +73,6 @@ export default function FinalAction() {
           </Button>
         </form>
       </div>
-      <Box className={classes.copyright}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }
