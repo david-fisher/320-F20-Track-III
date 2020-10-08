@@ -6,7 +6,6 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core';
-import Copyright from '../components/Copyright';
 import Logistics from '../components/scenario_components/Logistics';
 import Event from '../components/scenario_components/Event';
 import ConfigureAttributes from '../components/scenario_components/ConfigureAttributes';
@@ -98,7 +97,6 @@ export default function Editor(props) {
       <Sidebar />
       <main className={classes.content}>
         {scenarioComponent}
-        <Copyright />
       </main>
     </div>
   );
