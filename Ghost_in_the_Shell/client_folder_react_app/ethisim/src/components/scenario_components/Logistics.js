@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -28,6 +28,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Logistics() {
   const classes = useStyles();
+  const [authors, setAuthor] = useState([<TextField id="Author" label="" />])
+
+  const addAuthor = event => {
+    setAuthor(authors.concat(<TextField id="Author" label="" />))
+    event.preventDefault()
+  }
+
   return (
     <div>
           <Typography align="center" variant="h2">
@@ -40,7 +47,10 @@ export default function Logistics() {
                 Course Name
               <TextField id="Course Name" label="" />
                 Authors
-              <TextField id="Author" label="" />
+              {authors}
+              <button onClick={addAuthor}>
+                Add Author
+              </button>
               Scenario ID:
               1342431
               </form>
@@ -61,6 +71,5 @@ export default function Logistics() {
             </form>
           </div>
     </div>
-
   );
 }
