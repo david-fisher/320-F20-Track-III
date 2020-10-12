@@ -1,28 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
 
 import GenericComponent from './GenericComponent.js';
 
 
-class GenericComponentList extends React.Component{
-    state = {
-        nodes: [<GenericComponent />]
-    }
+export default function GenericComponentList() {
+  const [components, setComponent] = useState([<GenericComponent />])
 
-    render(){
-        return (
-            <div>
-              <Typography align="center" variant="h2">
-                Generic Node
+  const addComponent = event => {
+    setComponent(components.concat(<GenericComponent />))
+    event.preventDefault()
+  }
+
+  return (
+    <div>
+      <Typography align="center" variant="h2">
+        Generic Component List
               </Typography>
-              {this.state.nodes}
-              <button onClick={() => this.setState({nodes: [...this.state.nodes, <GenericComponent />]})}>
-                Add Generic Component
-              </button>
-            </div>
-        )
-    }
+      {components}
+      <Button variant="contained" color="grey" onClick={addComponent}>
+        Add Generic Component
+              </Button>
+    </div>
+  )
 }
-
-export default GenericComponentList

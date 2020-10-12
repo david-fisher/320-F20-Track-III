@@ -2,6 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Introduction from '../Introduction';
 import Title from '../Title';
+import GenericComponentList from './GenericComponentList';
 
 export default function Event() {
   return (
@@ -11,6 +12,7 @@ export default function Event() {
       </Typography>
       <Title />
       <Introduction />
+      <GenericComponentList />
     </div>
   );
 }
