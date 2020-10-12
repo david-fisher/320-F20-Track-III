@@ -3,7 +3,7 @@ import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
 import Button from '@material-ui/core/Button';
 
-export default function ResponseNode() {
+export default function InformationItem() {
   return (
     <div>
       <SunEditor
@@ -28,10 +28,10 @@ export default function ResponseNode() {
         }}
       />
       <Button variant="contained" color="grey" >
-        Save Response
+        Save Information Item
               </Button>
       <Button variant="contained" color="primary" >
-        Delete Response
+        Delete Information Item
               </Button>
 
     </div>

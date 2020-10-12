@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Introduction from '../Introduction';
 import Title from '../Title';
-import ResponseList from './ResponseList';
+import InformationItemList from './InformationItemList';
 import Button from '@material-ui/core/Button';
 
 export default function GenericComponent() {
@@ -13,7 +13,7 @@ export default function GenericComponent() {
       </Typography>
       <Title />
       <Introduction />
-      <ResponseList />
+      <InformationItemList />
       <Button variant="contained" color="grey" >
         Save Generic Component
               </Button>
