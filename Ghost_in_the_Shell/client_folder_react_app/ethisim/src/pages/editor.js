@@ -51,14 +51,75 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+  //Mock Version History 
+  const mockEventHistory =
+  [
+    {
+      component: 'Event',
+      title: 'Marius Minea Version Control Introduction',
+      introduction: '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #1</strong></u></em></span><em></em><br></p>',
+      date: new Date().getTime(),
+      author: 'Marius Minea',
+      id: 1,
+    },
+    {
+      component: 'Event',
+      title: 'David Fisher Version Control Introduction',
+      introduction: '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #2</strong></u></em></span><em></em><br></p>',
+      date: new Date().getTime() - 300000,
+      author: 'David Fisher',
+      id: 2,
+    },
+  ]
+
+  const mockReflectionHistory = 
+  [
+    {
+      component: 'Event',
+      title: 'David Barrington Version Control Introduction',
+      introduction: '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #1</strong></u></em></span><em></em><br></p>',
+      date: new Date().getTime(),
+      author: 'David Barrington',
+      id: 1,
+    },
+    {
+      component: 'Event',
+      title: 'David Fisher Version Control Introduction',
+      introduction: '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #2</strong></u></em></span><em></em><br></p>',
+      date: new Date().getTime() - 2000000,
+      author: 'David Fisher',
+      id: 2,
+    },
+  ]
+
+  const mockActionHistory =  
+  [
+    {
+      component: 'Event',
+      title: 'David Fisher Version Control Introduction',
+      introduction: '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #1</strong></u></em></span><em></em><br></p>',
+      date: new Date().getTime(),
+      author: 'David Fisher',
+      id: 1,
+    },
+    {
+      component: 'Event',
+      title: 'Gordan Anderson Version Control Introduction',
+      introduction: '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #2</strong></u></em></span><em></em><br></p>',
+      date: new Date().getTime() - 1000000,
+      author: 'Gordan Anderson',
+      id: 2,
+    },
+  ]
+
   //Sidebar Components
   const scenarioComponents = [
-    {name: "Logistics", component: <Logistics />},
-    {name: "Configure Attributes", component: <ConfigureAttributes />},
-    {name: "Conversation Editor", component: <ConversationEditor />},
-    {name: "Event", component: <Event />},
-    {name: "Reflection", component: <Reflection />},
-    {name: "Action", component: <Action />},
+    {name: 'Logistics'},
+    {name: 'Configure Attributes'},
+    {name: 'Conversation Editor'},
+    {name: 'Event', history: mockEventHistory, title: 'Sample Title', introduction: 'Sample Introduction'},
+    {name: 'Reflection', history: mockReflectionHistory, title: 'Sample Title', introduction: 'Sample Introduction'},
+    {name: 'Action', history: mockActionHistory, title: 'Sample Title', introduction: 'Sample Introduction'},
   ];
 
 export default function Editor(props) {
@@ -68,22 +129,50 @@ export default function Editor(props) {
   function Sidebar () {
     const classes = useStyles();
 
-    const onClick = function(component) {
-      setScenarioComponent(component);
+    const onClick = function(componentData) {
+      const { name } = componentData;
+      if(name === 'Logistics') {
+        setScenarioComponent(<Logistics />);
+      } else if (name === 'Configure Attributes') {
+        setScenarioComponent(<ConfigureAttributes />);
+      } else if (name === 'Conversation Editor') {
+        setScenarioComponent(<ConversationEditor />);
+      } else if(name === 'Event') {
+        setScenarioComponent(
+          React.cloneElement(
+            <Event />,
+            {componentData: componentData}
+          )
+        );
+      } else if (name === 'Reflection') {
+        setScenarioComponent(
+          React.cloneElement(
+            <Reflection />,
+            {componentData: componentData}
+          )
+        );
+      } else if (name === 'Action') {
+        setScenarioComponent(
+          React.cloneElement(
+            <Action />,
+            {componentData: componentData}
+          )
+        );
+      }
     };
 
     return(
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant='permanent'
         classes={{
           paper: classes.drawerPaper,
         }}
-        anchor="left"
+        anchor='left'
       >
         <List>
           {scenarioComponents.map((componentData) => (
-            <ListItem button key={componentData.name} onClick={() => onClick(componentData.component)}>
+            <ListItem button key={componentData.name} onClick={() => onClick(componentData)}>
               <ListItemText primary={componentData.name} />
             </ListItem>
           ))}

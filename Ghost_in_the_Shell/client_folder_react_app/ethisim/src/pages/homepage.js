@@ -129,7 +129,7 @@ const WhiteTextTypography = withStyles({
   }
 })(Typography);
 
-function EthisimIntro(){
+function EthisimIntro() {
   const classes = useStyles();
 
   return(

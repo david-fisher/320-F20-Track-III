@@ -4,7 +4,8 @@ import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 
-export default function Introduction() {
+export default function Introduction(props) {
+  const { introduction } = props;
 
   let handleChange = (content) => {
     //TODO Implement
@@ -59,6 +60,7 @@ export default function Introduction() {
           ],
           
         }}
+        setContents={introduction}
         onChange={handleChange}
       />
     </div>

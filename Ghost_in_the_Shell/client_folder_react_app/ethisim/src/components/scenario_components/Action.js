@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   TextField,
@@ -8,6 +8,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Introduction from '../Introduction';
 import Title from '../Title';
+import VersionControl from '../VersionControl';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,16 +28,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FinalAction() {
+export default function Action(props) {
   const classes = useStyles();
   
+  const { componentData } = props;
+  const titleData = componentData.title;
+  const introductionData = componentData.introduction;
+  const [ title, setTitle ] = useState(titleData);
+  const [ introduction, setIntroduction ] = useState(introductionData);
+
   return (
     <Container component="main">
       <Typography align="center" variant="h2">
         Action Component
       </Typography>
-      <Title />
-      <Introduction />
+      <VersionControl 
+        history={componentData.history} 
+        setTitle={setTitle}
+        setIntroduction={setIntroduction}
+      />
+      <Title title={title} setTitle={setTitle} />
+      <Introduction 
+        introduction={introduction} 
+      />
       <div className={classes.container}>
         <form className={classes.form}>
           <Typography align="center" variant="h6">

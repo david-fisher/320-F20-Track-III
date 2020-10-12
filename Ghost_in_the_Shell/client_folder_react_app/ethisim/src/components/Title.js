@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 
 
-export default function Title() {
+export default function Title(props) {
+  const { title } = props;
 
   let handleChange = (content, editor) => {
     //TODO Implement
@@ -27,6 +28,7 @@ export default function Title() {
             ['undo', 'redo'],
             ['fullScreen', 'preview'],
           ]}}
+        setContents={title}
         onChange={handleChange}
       />
     </div>
