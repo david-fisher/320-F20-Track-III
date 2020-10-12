@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import Copyright from '../components/Copyright';
 import HomepageNavBar from '../components/HomepageNavBar';
-import GenericComponentList from '../components/GenericComponentList';
+import GenericComponentList from '../components/scenario_components/GenericComponentList';
 
 const useStyles = makeStyles((theme) => ({
   container: {

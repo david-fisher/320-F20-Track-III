@@ -5,9 +5,9 @@ import AddIcon from '@material-ui/icons/Add';
 import GenericComponent from './GenericComponent.js';
 
 
-class GenericNodeList extends React.Component{
+class GenericComponentList extends React.Component{
     state = {
-        nodes: [<GenericNode />]
+        nodes: [<GenericComponent />]
     }
 
     render(){
