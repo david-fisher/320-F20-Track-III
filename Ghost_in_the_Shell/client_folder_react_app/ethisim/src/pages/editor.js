@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { 
+import {
   List,
   Drawer,
   ListItem,
   ListItemText,
 } from '@material-ui/core';
-import Copyright from '../components/Copyright';
 import Logistics from '../components/scenario_components/Logistics';
 import Event from '../components/scenario_components/Event';
 import ConfigureAttributes from '../components/scenario_components/ConfigureAttributes';
@@ -68,11 +67,11 @@ export default function Editor(props) {
 
   function Sidebar () {
     const classes = useStyles();
-    
+
     const onClick = function(component) {
       setScenarioComponent(component);
     };
-  
+
     return(
       <Drawer
         className={classes.drawer}
@@ -98,7 +97,6 @@ export default function Editor(props) {
       <Sidebar />
       <main className={classes.content}>
         {scenarioComponent}
-        <Copyright />
       </main>
     </div>
   );

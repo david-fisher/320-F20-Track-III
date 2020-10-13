@@ -18,12 +18,12 @@ export default function Title() {
       <Typography variant="h4" >
         Title:
       </Typography>
-      <SunEditor
+      <SunEditor 
         setOptions={{
           width:'100%',
           height: 150,
           placeholder: "Enter in Title of component...",
-          buttonList: [
+          buttonList: [   
             ['undo', 'redo'],
             ['fullScreen', 'preview'],
           ]}}

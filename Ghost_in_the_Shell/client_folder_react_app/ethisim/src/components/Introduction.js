@@ -32,7 +32,7 @@ export default function Introduction() {
             ['removeFormat'],
             ['outdent', 'indent'],
             ['align', 'horizontalRule', 'list', 'lineHeight'],
-            ['table', 'link', 'image', 'video', 'audio'],
+            ['table', 'link', 'image', 'video', 'audio'], 
             ['fullScreen', 'showBlocks', 'codeView'],
             ['preview',],
             // (min-width: 1000px)
@@ -56,8 +56,7 @@ export default function Introduction() {
               [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
               ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
             ]],
-          ],
-
+          ],   
         }}
         onChange={handleChange}
       />
