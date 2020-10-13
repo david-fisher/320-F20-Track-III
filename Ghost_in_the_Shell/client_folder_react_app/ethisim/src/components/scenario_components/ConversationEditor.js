@@ -1,50 +1,42 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
-import { Link as RouterLink } from 'react-router-dom';
-import Copyright from '../Copyright';
 import StakeHolderList from '../StakeHolderList'
-import {
-  Button,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Box,
-  Typography,
-  Container,
-  Link,
-  Grid,
-  Avatar,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
-    maxWidth: 1000,
-    height: '100%',
-    maxHeight: 1000,
+    alignItems: 'center',
     backgroundColor: theme.palette.background.paper,
   },
+  button: {
+    textTransform: 'unset',
+  }
 }));
 
-function ConversationEditor(){
+export default function ConversationEditor(){
   const classes = useStyles();
-  const [stakeholders,setStakeholders] = useState([
-    {id: 0, name: 'John'}
-  ])
-  const [count,setCount] = useState(1)
+
+  const [stakeholders,setStakeholders] = useState([{id: 1}]);
+  const [count, setCount] = useState(2);
+
   function handleAdd(){
-    setCount(count+1)
-    const addStakeholder = stakeholders.concat({id: count, name:'Jay'})
-    setStakeholders(addStakeholder)
+    let newCount = count + 1;
+    setCount(newCount);
+    const addStakeholder = stakeholders.concat({id: count});
+    setStakeholders(addStakeholder);
   }
 
   return (
-    <div>
-    <StakeHolderList stakeholders={stakeholders}/>
-    <button onClick={handleAdd}>add</button>
-    </div>
+    <div className={classes.root}>
+      <StakeHolderList stakeholders={stakeholders}/>
+      <Button 
+        className={classes.button}
+        onClick={handleAdd}
+        variant="contained"
+        color="primary"
+      >
+        Add Stakeholder
+      </Button>
+    </ div>
   );
 }
-
-export default ConversationEditor;
