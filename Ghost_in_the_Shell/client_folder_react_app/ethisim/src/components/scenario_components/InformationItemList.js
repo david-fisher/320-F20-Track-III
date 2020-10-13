@@ -8,7 +8,8 @@ export default function InformationItemList() {
   const [iItems, setIItem] = useState([<InformationItem />])
 
   const addIItem = event => {
-    setIItem(iItems.concat(<InformationItem />))
+    var ii = <InformationItem />
+    setIItem(iItems.concat(ii))
     event.preventDefault()
   }
 
@@ -17,7 +18,7 @@ export default function InformationItemList() {
       <Typography align="center" variant="h2">
         Information Items
               </Typography>
-      {responses}
+      {iItems}
       <Button variant="contained" color="grey" onClick={addIItem}>
         Add Information Item
       </Button>
