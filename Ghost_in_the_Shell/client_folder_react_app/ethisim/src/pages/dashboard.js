@@ -38,10 +38,6 @@ export default function Dashboard() {
   const classes = useStyles();
 
   //TODO change when Scenario Objects are defined
-  let scenarios = sampleScenariosData.map(data => 
-    <ScenarioCard data={data} key={data.id}/>
-  );
-
   let finishedScenarios = sampleScenariosData.filter(data => data.finished);
   let unfinishedScenarios = sampleScenariosData.filter(data => !data.finished);
 
