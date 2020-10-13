@@ -160,14 +160,14 @@ const useStyles = makeStyles((theme) => ({
     },
   ]
 
-  //Sidebar Components
+  //Scenario Components
   const scenarioComponents = [
     {name: 'Logistics'},
     {name: 'Configure Attributes'},
     {name: 'Conversation Editor'},
     {name: 'Event', history: mockEventHistory, title: 'Sample Title for Event Component', introduction: 'Sample Introduction for Event Component'},
     {name: 'Reflection', history: mockReflectionHistory, title: 'Sample Title for Reflection Component', introduction: 'Sample Introduction for Reflection Component'},
-    {name: 'Action', history: mockActionHistory, title: 'Sample Title for action Component', introduction: 'Sample Introduction for Action Component'},
+    {name: 'Action', history: mockActionHistory, title: 'Sample Title for Action Component', introduction: 'Sample Introduction for Action Component'},
   ];
 
 export default function Editor(props) {

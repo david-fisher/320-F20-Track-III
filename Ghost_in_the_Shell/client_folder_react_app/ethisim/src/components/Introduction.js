@@ -1,10 +1,19 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+}));
+
 export default function Introduction(props) {
+  const classes = useStyles();
   const { introduction } = props;
 
   let handleChange = (content) => {
@@ -14,7 +23,7 @@ export default function Introduction(props) {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <Typography variant="h4" >
         Introduction:
       </Typography>
