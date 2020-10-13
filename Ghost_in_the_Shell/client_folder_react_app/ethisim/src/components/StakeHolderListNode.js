@@ -12,9 +12,6 @@ import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-
-  },
   avatar: {
     margin: theme.spacing(2),
   },
@@ -30,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   informationSide: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
     '@media (max-width:1100px)': { 
       flexBasis: '100%',
@@ -43,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     textTransform: 'unset',
-    '@media (max-width:1100px)': { 
-    }
   },
 }));
 
@@ -68,14 +63,11 @@ export default function StakeHoldeListNode({id,name}){
   };
 
   return(
-
     <Grid
-      className={classes.root}
       container
       direction="row"
       justify = "flex-start"
     >
-
       <Grid className={classes.avatarSide} item xs={3}>
         <Avatar
           className={classes.avatar}
@@ -108,103 +100,102 @@ export default function StakeHoldeListNode({id,name}){
           Bio:
         </Typography>
         <SunEditor
-        setOptions={{
-          width:'100%',
-          height: 150,
-          placeholder: "Enter in Biography of component...",
-          buttonList: [
-            ['font', 'fontSize', 'formatBlock'],
-            ['paragraphStyle', 'blockquote'],
-            ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-            ['fontColor', 'hiliteColor', 'textStyle'],
-            '/', // Line break
-            ['undo', 'redo'],
-            ['removeFormat'],
-            ['outdent', 'indent'],
-            ['align', 'horizontalRule', 'list', 'lineHeight'],
-            ['table', 'link', 'image', 'video', 'audio'], 
-            ['fullScreen', 'showBlocks', 'codeView'],
-            ['preview',],
-            // (min-width: 1200px)
-            ['%1200', [
+          setOptions={{
+            width:'100%',
+            height: 150,
+            placeholder: "Enter in Biography of component...",
+            buttonList: [
+              ['font', 'fontSize', 'formatBlock'],
+              ['paragraphStyle', 'blockquote'],
+              ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+              ['fontColor', 'hiliteColor', 'textStyle'],
+              '/', // Line break
               ['undo', 'redo'],
-              [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
-              ['bold', 'underline', 'italic', 'strike'],
-              [':t-More Text-default.more_text', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle'],
               ['removeFormat'],
               ['outdent', 'indent'],
-              [':e-More Line-default.more_horizontal', 'align', 'horizontalRule', 'list', 'lineHeight'],
-              ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview'],
-              ['-right', ':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
-            ]],
-            // (min-width: 875px)
-            ['%875', [
+              ['align', 'horizontalRule', 'list', 'lineHeight'],
+              ['table', 'link', 'image', 'video', 'audio'], 
+              ['fullScreen', 'showBlocks', 'codeView'],
+              ['preview',],
+              // (min-width: 1200px)
+              ['%1200', [
+                ['undo', 'redo'],
+                [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
+                ['bold', 'underline', 'italic', 'strike'],
+                [':t-More Text-default.more_text', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle'],
+                ['removeFormat'],
+                ['outdent', 'indent'],
+                [':e-More Line-default.more_horizontal', 'align', 'horizontalRule', 'list', 'lineHeight'],
+                ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview'],
+                ['-right', ':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
+              ]],
+              // (min-width: 875px)
+              ['%875', [
+                ['undo', 'redo'],
+                [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
+                [':t-More Text-default.more_text', 'bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle', 'removeFormat'],
+                [':e-More Line-default.more_horizontal', 'outdent', 'indent', 'align', 'horizontalRule', 'list', 'lineHeight'],
+                [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
+                ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
+              ]],
+            ],   
+          }}
+          onChange={handleChangeBiography}
+        />
+        <Typography variant="h6">
+          Conversation Entry:
+        </Typography>
+        <SunEditor
+          setOptions={{
+            width:'100%',
+            height: 300,
+            placeholder: "Conversation Entry",
+            buttonList: [
+              ['font', 'fontSize', 'formatBlock'],
+              ['paragraphStyle', 'blockquote'],
+              ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+              ['fontColor', 'hiliteColor', 'textStyle'],
+              '/', // Line break
               ['undo', 'redo'],
-              [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
-              [':t-More Text-default.more_text', 'bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle', 'removeFormat'],
-              [':e-More Line-default.more_horizontal', 'outdent', 'indent', 'align', 'horizontalRule', 'list', 'lineHeight'],
-              [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
-              ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
-            ]],
-          ],   
-        }}
-        onChange={handleChangeBiography}
-      />
-      <Typography variant="h6">
-        Conversation Entry:
-      </Typography>
-      <SunEditor
-        setOptions={{
-          width:'100%',
-          height: 300,
-          placeholder: "Conversation Entry",
-          buttonList: [
-            ['font', 'fontSize', 'formatBlock'],
-            ['paragraphStyle', 'blockquote'],
-            ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-            ['fontColor', 'hiliteColor', 'textStyle'],
-            '/', // Line break
-            ['undo', 'redo'],
-            ['removeFormat'],
-            ['outdent', 'indent'],
-            ['align', 'horizontalRule', 'list', 'lineHeight'],
-            ['table', 'link', 'image', 'video', 'audio'], 
-            ['fullScreen', 'showBlocks', 'codeView'],
-            ['preview',],
-            // (min-width: 1200px)
-            ['%1200', [
-              ['undo', 'redo'],
-              [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
-              ['bold', 'underline', 'italic', 'strike'],
-              [':t-More Text-default.more_text', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle'],
               ['removeFormat'],
               ['outdent', 'indent'],
-              [':e-More Line-default.more_horizontal', 'align', 'horizontalRule', 'list', 'lineHeight'],
-              ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview'],
-              ['-right', ':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
-            ]],
-            // (min-width: 875px)
-            ['%875', [
-              ['undo', 'redo'],
-              [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
-              [':t-More Text-default.more_text', 'bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle', 'removeFormat'],
-              [':e-More Line-default.more_horizontal', 'outdent', 'indent', 'align', 'horizontalRule', 'list', 'lineHeight'],
-              [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
-              ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
-            ]],
-          ],   
-        }}
-        onChange={handleChangeConversationEntry}
-      />
-      <Button
-        className={classes.button}
-        variant="contained"
-        color="primary"
-      >
-        Save
-      </Button>
-    </Grid>
-
+              ['align', 'horizontalRule', 'list', 'lineHeight'],
+              ['table', 'link', 'image', 'video', 'audio'], 
+              ['fullScreen', 'showBlocks', 'codeView'],
+              ['preview',],
+              // (min-width: 1200px)
+              ['%1200', [
+                ['undo', 'redo'],
+                [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
+                ['bold', 'underline', 'italic', 'strike'],
+                [':t-More Text-default.more_text', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle'],
+                ['removeFormat'],
+                ['outdent', 'indent'],
+                [':e-More Line-default.more_horizontal', 'align', 'horizontalRule', 'list', 'lineHeight'],
+                ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview'],
+                ['-right', ':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
+              ]],
+              // (min-width: 875px)
+              ['%875', [
+                ['undo', 'redo'],
+                [':p-More Paragraph-default.more_paragraph', 'font', 'fontSize', 'formatBlock', 'paragraphStyle', 'blockquote'],
+                [':t-More Text-default.more_text', 'bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor', 'textStyle', 'removeFormat'],
+                [':e-More Line-default.more_horizontal', 'outdent', 'indent', 'align', 'horizontalRule', 'list', 'lineHeight'],
+                [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
+                ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
+              ]],
+            ],   
+          }}
+          onChange={handleChangeConversationEntry}
+        />
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+        >
+          Save
+        </Button>
+      </Grid>
     </Grid>
   )
 }
