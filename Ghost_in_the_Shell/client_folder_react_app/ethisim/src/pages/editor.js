@@ -1,29 +1,24 @@
-import React, {useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {
-  List,
-  Drawer,
-  ListItem,
-  ListItemText,
-} from '@material-ui/core';
-import Logistics from '../components/scenario_components/Logistics';
-import Event from '../components/scenario_components/Event';
-import ConfigureAttributes from '../components/scenario_components/ConfigureAttributes';
-import ConversationEditor from '../components/scenario_components/ConversationEditor';
-import Reflection from '../components/scenario_components/Reflection';
-import Action from '../components/scenario_components/Action';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { List, Drawer, ListItem, ListItemText } from "@material-ui/core";
+import Logistics from "../components/scenario_components/Logistics";
+import Event from "../components/scenario_components/Event";
+import ConfigureAttributes from "../components/scenario_components/ConfigureAttributes";
+import ConversationEditor from "../components/scenario_components/ConversationEditor";
+import Reflection from "../components/scenario_components/Reflection";
+import Action from "../components/scenario_components/Action";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
@@ -38,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     marginTop: theme.spacing(1),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   copyright: {
     margin: theme.spacing(2),
@@ -51,28 +46,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-  //Sidebar Components
-  const scenarioComponents = [
-    {name: "Logistics", component: <Logistics />},
-    {name: "Configure Attributes", component: <ConfigureAttributes />},
-    {name: "Conversation Editor", component: <ConversationEditor />},
-    {name: "Event", component: <Event />},
-    {name: "Reflection", component: <Reflection />},
-    {name: "Action", component: <Action />},
-  ];
+//Sidebar Components
+const scenarioComponents = [
+  { name: "Logistics", component: <Logistics /> },
+  { name: "Configure Attributes", component: <ConfigureAttributes /> },
+  { name: "Conversation Editor", component: <ConversationEditor /> },
+  { name: "Event", component: <Event /> },
+  { name: "Reflection", component: <Reflection /> },
+  { name: "Action", component: <Action /> },
+];
 
 export default function Editor(props) {
   const classes = useStyles();
   const [scenarioComponent, setScenarioComponent] = useState(<Logistics />);
 
-  function Sidebar () {
+  function Sidebar() {
     const classes = useStyles();
 
-    const onClick = function(component) {
+    const onClick = function (component) {
       setScenarioComponent(component);
     };
 
-    return(
+    return (
       <Drawer
         className={classes.drawer}
         variant="permanent"
@@ -83,21 +78,23 @@ export default function Editor(props) {
       >
         <List>
           {scenarioComponents.map((componentData) => (
-            <ListItem button key={componentData.name} onClick={() => onClick(componentData.component)}>
+            <ListItem
+              button
+              key={componentData.name}
+              onClick={() => onClick(componentData.component)}
+            >
               <ListItemText primary={componentData.name} />
             </ListItem>
           ))}
         </List>
       </Drawer>
-    )
+    );
   }
 
   return (
     <div className={classes.root}>
       <Sidebar />
-      <main className={classes.content}>
-        {scenarioComponent}
-      </main>
+      <main className={classes.content}>{scenarioComponent}</main>
     </div>
   );
 }
