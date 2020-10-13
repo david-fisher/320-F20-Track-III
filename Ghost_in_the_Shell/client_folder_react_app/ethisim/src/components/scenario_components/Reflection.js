@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
+import {
+  Typography,
+  Container,
+} from '@material-ui/core';
 import Introduction from '../Introduction';
 import Title from '../Title';
 import VersionControl from '../VersionControl';
@@ -13,7 +16,7 @@ export default function Reflection(props) {
   const [ introduction, setIntroduction ] = useState(introductionData);
 
   return (
-    <div>
+    <Container component="main">
       <Typography align="center" variant="h2">
         Reflection Component
       </Typography>
@@ -26,6 +29,6 @@ export default function Reflection(props) {
       <Introduction 
         introduction={introduction} 
       />
-    </div>
+    </Container>
   );
 }
