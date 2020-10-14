@@ -27,7 +27,7 @@ export default function Introduction(props) {
       <Typography variant="h4" >
         Introduction:
       </Typography>
-      <SunEditor 
+      <SunEditor
         setOptions={{
           width:'100%',
           height: 400,
@@ -66,8 +66,7 @@ export default function Introduction(props) {
               [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
               ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
             ]],
-          ],
-          
+          ],   
         }}
         setContents={introduction}
         onChange={handleChange}

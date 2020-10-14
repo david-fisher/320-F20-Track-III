@@ -52,7 +52,7 @@ export default function Logistics() {
         </Typography>
       <div className = {classes.subdiv}>
         <form className={classes.buttons} noValidate autoComplete="off">
-          <Button variant="contained" color="primary" >
+          <Button variant="contained" >
             View Student Responses
           </Button>
           <Button variant="contained" color="primary" >
