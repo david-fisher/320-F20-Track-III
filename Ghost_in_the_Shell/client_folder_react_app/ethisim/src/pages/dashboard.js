@@ -9,6 +9,7 @@ import {
 import ScenarioCard from '../components/ScenarioCard';
 import AddNewScenarioCard from '../components/AddNewScenarioCard';
 import Copyright from '../components/Copyright';
+import { mockUnfinishedScenarioData, mockFinishedScenarioData } from '../shared/mockScenarioData';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -24,13 +25,8 @@ const useStyles = makeStyles((theme) => ({
 
 //Placeholder data
 const sampleScenariosData = [
-  { scenarioName: "Scenario 1", className: "CS1", id: '1'},
-  { scenarioName: "Scenario 2", className: "CS2", id: '2'},
-  { scenarioName: "Scenario 3", className: "CS3", id: '3'},
-  { scenarioName: "Scenario 4", className: "CS4", id: '4'},
-  { scenarioName: "Scenario 5", className: "CS5", id: '5'},
-  { scenarioName: "Scenario 6", className: "CS6", id: '6'},
-  { scenarioName: "Scenario 7", className: "CS7", id: '7'},
+  mockUnfinishedScenarioData,
+  mockFinishedScenarioData,
 ];
 
 //Passing props with React Router in Material UI: https://stackoverflow.com/questions/30115324/pass-props-in-link-react-router

@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ScenarioCard(props) {
   const classes = useStyles();
   const data = props.data;
-  
+
   return (
     <Grid 
       key={data.id}
@@ -55,7 +55,7 @@ export default function ScenarioCard(props) {
             display="block" 
             noWrap
           >
-            {data.scenarioName}
+            {data.name}
           </Typography>
           <Typography 
             variant="subtitle1" 
