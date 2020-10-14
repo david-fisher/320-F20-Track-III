@@ -27,6 +27,7 @@ export default function App() {
         <Route path="/data/:id" render={(props) => (
           <Data {...props} />
         )}/>
+        
     </Router>
   );
 }
