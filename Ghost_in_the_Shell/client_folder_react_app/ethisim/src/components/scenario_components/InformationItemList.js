@@ -1,27 +1,74 @@
-import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import InformationItem from './InformationItem.js'
-import Button from '@material-ui/core/Button';
+import React, { Component } from "react";
+import InformationItem from "./InformationItem";
+import Button from "@material-ui/core/Button";
 
-export default function InformationItemList() {
-
-  const [iItems, setIItem] = useState([<InformationItem />])
-
-  const addIItem = event => {
-    var ii = <InformationItem />
-    setIItem(iItems.concat(ii))
-    event.preventDefault()
+class InformationItemFields extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      iItems: [],
+      iItemCur: {
+        body: "",
+        id: 0,
+      },
+    };
+    this.addItem = this.addItem.bind(this);
   }
 
-  return (
-    <div>
-      <Typography align="center" variant="h2">
-        Information Items
-              </Typography>
-      {iItems}
-      <Button variant="contained" color="grey" onClick={addIItem}>
-        Add Information Item
-      </Button>
-    </div>
-  );
+  addItem(e) {
+    e.preventDefault();
+    const newIItem = this.state.iItemCur;
+    const newIItems = [...this.state.iItems, newIItem];
+
+    this.setState({
+      iItems: newIItems,
+      iItemCur: {
+        body: "",
+        id: this.state.iItemCur.id + 1,
+      },
+    });
+  }
+
+  handleDelete = (iItemID) => {
+    const iItems = this.state.iItems.filter((q) => q.id !== iItemID);
+    this.setState({ iItems });
+  };
+
+  updateItem = (iItemID, iItemBody) => {
+    const newIItems = [...this.state.iItems];
+    
+    //does this even save stuff to the backend?
+    newIItems.forEach(element => {if(element.props.id === iItemID){element.props.body = iItemBody}})
+    this.setState({
+      iItems: {newIItems},
+      iItemCur: this.state.iItemCur
+    })
+  }
+
+  render() {
+    return (
+      <div className="InformationItems">
+        <Button
+          id="button"
+          onClick={this.addItem}
+          variant="contained"
+          color="primary"
+        >
+          Add Information Item
+        </Button>
+
+        <form id="form">
+          {this.state.iItems.map((iItem) => (
+            <InformationItem
+              key={iItem.id}
+              onDelete={this.handleDelete}
+              iItem={iItem}
+            />
+          ))}
+        </form>
+      </div>
+    );
+  }
 }
+
+export default InformationItemFields;

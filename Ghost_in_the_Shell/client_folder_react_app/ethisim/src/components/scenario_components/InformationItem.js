@@ -1,63 +1,63 @@
-import React, { useState } from 'react';
-import suneditor from 'suneditor'
-import SunEditor from "suneditor-react";
-import Button from '@material-ui/core/Button';
-import { getByText } from '@testing-library/react';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import { Button } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
-export default function InformationItem() {
-  const [body, setBody] = useState("1ed");
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0.5),
+    marginTop: theme.spacing(0),
+    width: 50,
+  },
+}));
 
-  const saveIItem = event => {
-    //TODO
-    /*
-      how do I get the body from the SunEditor?
-    */
-    setBody()
-    event.preventDefault()
-  }
-
-  const deleteIItem = event => {
-    //TODO
-    /*
-      we can simply filter by body text, and if any match this one's body text, we delete it
-      but where is the body text stored?
-    */
-    event.preventDefault()
-  }
-
+export default function InformationItem(props) {
+  const classes = useStyles();
 
   return (
     <div>
-      {body}
-      <SunEditor
-        setOptions={{
-          width: '100%',
-          height: 400,
-          placeholder: "Enter in introduction of component...",
-          buttonList: [
-            ['font', 'fontSize', 'formatBlock'],
-            ['paragraphStyle', 'blockquote'],
-            ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-            ['fontColor', 'hiliteColor', 'textStyle'],
-            '/', // Line break
-            ['undo', 'redo'],
-            ['removeFormat'],
-            ['outdent', 'indent'],
-            ['align', 'horizontalRule', 'list', 'lineHeight'],
-            ['table', 'link', 'image', 'video', 'audio'],
-            ['fullScreen', 'showBlocks', 'codeView'],
-            ['preview',],
-          ]
-        }}
-      />
-
-      <Button variant="contained" color="grey" onClick={saveIItem}>
-        Save Information Item
-              </Button>
-      <Button variant="contained" color="primary" onClick={deleteIItem}>
-        Delete Information Item
-              </Button>
-
+      <Box
+        display="flex"
+        flexDirection="row"
+        p={1}
+        m={1}
+        bgcolor="background.paper"
+      >
+        <Box p={1}>
+          <form noValidate autoComplete="off">
+            <TextField
+              style={{ width: 500 }}
+              id="outlined-multiline-static"
+              label="Information Item"
+              multiline
+              rows={2}
+              variant="outlined"
+            />
+          </form>
+        </Box>
+        <Box p={1}>
+          <div>
+            <Button
+              className={classes.margin}
+              variant="contained"
+              color="primary"
+            >
+              Save
+            </Button>
+          </div>
+          <div>
+            <Button
+              className={classes.margin}
+              variant="contained"
+              color="primary"
+              onClick={() => props.onDelete(props.iItem.id)}
+            >
+              Delete
+            </Button>
+          </div>
+        </Box>
+      </Box>
     </div>
   );
 }
