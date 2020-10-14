@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import EntryField from "./entry";
+import EntryField from "../Input";
 import Button from "@material-ui/core/Button";
 
 class EntryFields extends Component {
