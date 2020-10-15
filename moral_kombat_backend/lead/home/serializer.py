@@ -1,7 +1,13 @@
 from rest_framework import serializers
-from home.models import Home
+from tables.models import demographics, students
 
-class HomeSerializer(serializers.ModelSerializer):
+class DemographicsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Home
-        fields = ('scenario_name',)
+        model = demographics
+        fields = ('STUDENT_ID', 'AGE', 'GRADE', 'GENDER', 'RACE', 'MAJOR')
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = students
+        fields = ('STUDENT_ID', 'COURSE_ID')

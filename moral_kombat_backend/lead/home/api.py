@@ -1,9 +1,8 @@
-from home.models import Home
 from rest_framework import viewsets, permissions
-from .serializer import HomeSerializer
+from .serializer import 
 
-class HomeViewSet(viewsets.ModelViewSet):
-    queryset = Home.objects.all()
+class TablesViewSet(viewsets.ModelViewSet):
+    queryset = Tables.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
