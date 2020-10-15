@@ -162,13 +162,12 @@ class scenarios_for(models.Model):
     COURSE_ID = models.ForeignKey('courses', on_delete = models.CASCADE, related_name = "scenarios_for")
     VERSION_ID = models.IntegerField()
 
-
 class students(models.Model):
     STUDENT_ID = models.IntegerField(primary_key = True)
     NAME = models.CharField(max_length = 100)
 
 class demographics(models.Model):
-    STUDENT_ID = models.OneToOneField('students', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
+    STUDENT_ID = models.OneToOneField('students', default = 1, on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
     AGE = models.SmallIntegerField()
     GRADE_CHOICES = (
     ('FR', 'FRESHMAN'),

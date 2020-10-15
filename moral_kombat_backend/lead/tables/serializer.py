@@ -10,4 +10,4 @@ class DemographicsSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = students
-        fields = ('STUDENT_ID', 'COURSE_ID')
+        fields = ('STUDENT_ID', 'NAME')
