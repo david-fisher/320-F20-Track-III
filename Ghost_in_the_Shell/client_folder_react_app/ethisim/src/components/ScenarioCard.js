@@ -45,159 +45,101 @@ export default function ScenarioCard(props) {
 
   //If scenario is unfinished, we show the buttons "Edit," "Delete," "Share"
   //If scenario is finished, we show the button "Edit," "Delete," "Share," "View Student Data"
-  const buttons = 
-    finished ? 
-      <Grid
-        className={classes.buttonContainer}
-        container
+  const sizeOfShareButton = finished ? 6 : 12;
+  const dataButton = 
+    finished ?
+      <Grid 
+      component={Link} to={{
+        pathname: "/data/" + data.id, 
+        scenarioData: data, 
+      }}
+      className={classes.button}
+      item 
+      xs={6} 
+    >
+      <Button 
+        className={classes.buttonText}  
+        variant="contained"
+        color="primary"
       >
-        <Grid 
-          className={classes.button}
-          item 
-          xs={6}
+        <AssessmentIcon />
+        <Typography 
+          variant="subtitle1" 
+          noWrap
         >
-          <Button 
-            component={Link} to={{
-              pathname: "/editor/" + data.id, 
-              scenarioData: data, 
-            }}
-            className={classes.buttonText}
-            variant="contained"
-            color="primary"
-          >
-            <EditIcon />
-            <Typography variant="subtitle1">
-              Edit
-            </Typography>
-          </Button>
-        </Grid>
-        <Grid
-          className={classes.button} 
-          item 
-          xs={6} 
-        >
-          <Button 
-            className={classes.buttonText} 
-            variant="contained"
-            color="primary"
-          >
-            <DeleteForeverIcon />
-            <Typography 
-              variant="subtitle1" 
-              noWrap
-            >
-              Delete
-            </Typography>
-          </Button>
-        </Grid>
-        <Grid 
-          className={classes.button}
-          item 
-          xs={6} 
-        >
-          <Button 
-            className={classes.buttonText}  
-            variant="contained"
-            color="primary"
-          >
-            <ShareIcon />
-            <Typography 
-              variant="subtitle1" 
-              noWrap
-            >
-              Share
-            </Typography>
-          </Button>
-        </Grid>
-        <Grid 
-          component={Link} to={{
-            pathname: "/data/" + data.id, 
-            scenarioData: data, 
-          }}
-          className={classes.button}
-          item 
-          xs={6} 
-        >
-          <Button 
-            className={classes.buttonText}  
-            variant="contained"
-            color="primary"
-          >
-            <AssessmentIcon />
-            <Typography 
-              variant="subtitle1" 
-              noWrap
-            >
-              Data
-            </Typography>
-          </Button>
-        </Grid>
-      </Grid>
-      :
-      <Grid
-        className={classes.buttonContainer}
-        container
-      >
-        <Grid 
-          className={classes.button}
-          item 
-          xs={6}
-        >
-          <Button 
-            component={Link} to={{
-              pathname: "/editor/" + data.id, 
-              scenarioData: data, 
-            }}
-            className={classes.buttonText}
-            variant="contained"
-            color="primary"
-          >
-            <EditIcon />
-            <Typography variant="subtitle1">
-              Edit
-            </Typography>
-          </Button>
-        </Grid>
-        <Grid
-          className={classes.button} 
-          item 
-          xs={6} 
-        >
-          <Button 
-            className={classes.buttonText} 
-            variant="contained"
-            color="primary"
-          >
-            <DeleteForeverIcon />
-            <Typography 
-              variant="subtitle1" 
-              noWrap
-            >
-              Delete
-            </Typography>
-          </Button>
-        </Grid>
-        <Grid 
-          className={classes.button}
-          item 
-          xs={12} 
-        >
-          <Button 
-            className={classes.buttonText}  
-            variant="contained"
-            color="primary"
-          >
-            <ShareIcon />
-            <Typography 
-              variant="subtitle1" 
-              noWrap
-            >
-              Share
-            </Typography>
-          </Button>
-        </Grid>
-      </Grid>
+          Data
+        </Typography>
+      </Button>
+    </Grid>
+    :
+    null;
 
+  const buttons = 
+      <Grid
+        className={classes.buttonContainer}
+        container
+      >
+        <Grid 
+          className={classes.button}
+          item 
+          xs={6}
+        >
+          <Button 
+            component={Link} to={{
+              pathname: "/editor/" + data.id, 
+              scenarioData: data, 
+            }}
+            className={classes.buttonText}
+            variant="contained"
+            color="primary"
+          >
+            <EditIcon />
+            <Typography variant="subtitle1">
+              Edit
+            </Typography>
+          </Button>
+        </Grid>
+        <Grid
+          className={classes.button} 
+          item 
+          xs={6} 
+        >
+          <Button 
+            className={classes.buttonText} 
+            variant="contained"
+            color="primary"
+          >
+            <DeleteForeverIcon />
+            <Typography 
+              variant="subtitle1" 
+              noWrap
+            >
+              Delete
+            </Typography>
+          </Button>
+        </Grid>
+        <Grid 
+          className={classes.button}
+          item 
+          xs={sizeOfShareButton} 
+        >
+          <Button 
+            className={classes.buttonText}  
+            variant="contained"
+            color="primary"
+          >
+            <ShareIcon />
+            <Typography 
+              variant="subtitle1" 
+              noWrap
+            >
+              Share
+            </Typography>
+          </Button>
+        </Grid>
+        {dataButton}
+      </Grid>;
+      
   return (
     <Grid 
       key={id}
