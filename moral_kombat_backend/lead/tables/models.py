@@ -167,7 +167,7 @@ class students(models.Model):
     STUDENT_ID = models.IntegerField(primary_key = True)
     NAME = models.CharField(max_length = 100)
 
-class dempgraphics(models.Model):
+class demographics(models.Model):
     STUDENT_ID = models.OneToOneField('students', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
     AGE = models.SmallIntegerField()
     GRADE_CHOICES = (
