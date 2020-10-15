@@ -37,6 +37,7 @@ ScenarioCard.propTypes = {
     id: PropTypes.number.isRequired,
     scenarioName: PropTypes.string.isRequired,
     className: PropTypes.string.isRequired,
+    scenarioData: PropTypes.any.isRequired,
 };
 
 export default function ScenarioCard(props) {
@@ -49,7 +50,7 @@ export default function ScenarioCard(props) {
             <Card>
                 <CardContent className={classes.scenarioContainer}>
                     <Typography variant="h6" display="block" noWrap>
-                        {data.id}
+                        {data.scenarioName}
                     </Typography>
                     <Typography
                         variant="subtitle1"
