@@ -1,10 +1,28 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from "@material-ui/core/styles";
+import EntryFields from "../IssueEntryFieldList";
+
+const useStyles = makeStyles((theme) => ({
+  issue: {
+    marginTop: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+}));
 
 export default function ConfigureAttributes() {
+  const classes = useStyles();
+
   return (
-    <Typography align="center" variant="h2">
-      Configure Attributes
-    </Typography>
+    <div className={classes.issue}>
+      <Typography align="center" variant="h2">
+        Configure Issues
+      </Typography>
+      <br />
+      <br />
+      <EntryFields />
+    </div>
   );
 }
