@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import InformationItem from "./InformationItem";
 import Button from "@material-ui/core/Button";
 
-class InformationItemFields extends Component {
+class InformationItemList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,4 +71,4 @@ class InformationItemFields extends Component {
   }
 }
 
-export default InformationItemFields;
+export default InformationItemList;
