@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MiddleReflection() {
+export default function ConfigureAttributes() {
   const classes = useStyles();
 
   return (

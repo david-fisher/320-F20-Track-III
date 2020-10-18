@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EntryField(props) {
+export default function IssueEntryField(props) {
   const classes = useStyles();
 
   return (

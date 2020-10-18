@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import EntryField from "./IssueEntryField";
 import Button from "@material-ui/core/Button";
 
-class EntryFields extends Component {
+class IssueEntryFieldList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,4 +60,4 @@ class EntryFields extends Component {
   }
 }
 
-export default EntryFields;
+export default IssueEntryFieldList;
