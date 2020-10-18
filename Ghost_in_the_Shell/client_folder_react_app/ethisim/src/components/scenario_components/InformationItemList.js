@@ -12,10 +12,10 @@ class InformationItemList extends Component {
         id: 0,
       },
     };
-    this.addItem = this.addItem.bind(this);
+    this.addIItem = this.addIItem.bind(this);
   }
 
-  addItem(e) {
+  addIItem(e) {
     e.preventDefault();
     const newIItem = this.state.iItemCur;
     const newIItems = [...this.state.iItems, newIItem];
@@ -34,7 +34,7 @@ class InformationItemList extends Component {
     this.setState({ iItems });
   };
 
-  updateItem = (iItemID, iItemBody) => {
+  updateIItem = (iItemID, iItemBody) => {
     const newIItems = [...this.state.iItems];
     
     //does this even save stuff to the backend?
@@ -50,7 +50,7 @@ class InformationItemList extends Component {
       <div className="InformationItems">
         <Button
           id="button"
-          onClick={this.addItem}
+          onClick={this.addIItem}
           variant="contained"
           color="primary"
         >

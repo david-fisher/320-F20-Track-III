@@ -9,11 +9,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0.5),
     marginTop: theme.spacing(0),
     width: 50,
-    height: "5vh",
   },
 }));
 
-export default function InformationItem(props) {
+export default function Author(props) {
   const classes = useStyles();
 
   return (
@@ -30,7 +29,7 @@ export default function InformationItem(props) {
             <TextField
               style={{ width: 500 }}
               id="outlined-multiline-static"
-              label="Information Item"
+              label="Author"
               multiline
               rows={2}
               variant="outlined"
@@ -43,16 +42,7 @@ export default function InformationItem(props) {
               className={classes.margin}
               variant="contained"
               color="primary"
-            >
-              Save
-            </Button>
-          </div>
-          <div>
-            <Button
-              className={classes.margin}
-              variant="contained"
-              color="primary"
-              onClick={() => props.onDelete(props.iItem.id)}
+              //onClick={() => props.onDelete(props.author.id)}
             >
               Delete
             </Button>

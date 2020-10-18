@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Author from './Author';
 
 const useStyles = makeStyles((theme) => ({
   textfields: {
@@ -28,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Logistics() {
   const classes = useStyles();
-  const [authors, setAuthor] = useState([<TextField id="Author" label="" />])
+  const [authors, setAuthor] = useState([<Author />])
 
   const addAuthor = event => {
-    setAuthor(authors.concat(<TextField id="Author" label="" />))
+    setAuthor(authors.concat(<Author />))
     event.preventDefault()
   }
 
@@ -51,6 +52,13 @@ export default function Logistics() {
           <Button variant="contained" color="primary" onClick={addAuthor}>
             Add Author
               </Button>
+          <Button
+            className={classes.margin}
+            variant="contained"
+            color="primary"
+          >
+            Save Authors
+            </Button>
               Scenario ID:
               1342431
               </form>
