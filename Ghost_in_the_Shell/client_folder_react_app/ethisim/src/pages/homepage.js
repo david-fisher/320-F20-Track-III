@@ -160,7 +160,6 @@ export default function Homepage() {
       <HomepageNavBar/>
       <StudentAccess/>
       <EthisimIntro/>
-
       <Box className={classes.copyright}>
         <Copyright />
       </Box>
