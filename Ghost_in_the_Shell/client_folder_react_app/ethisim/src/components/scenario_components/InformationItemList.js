@@ -37,7 +37,9 @@ class InformationItemList extends Component {
   updateIItem = (iItemID, iItemBody) => {
     const newIItems = [...this.state.iItems];
     
-    //does this even save stuff to the backend?
+    //TODO
+    //functional code to save items to backend
+    
     newIItems.forEach(element => {if(element.props.id === iItemID){element.props.body = iItemBody}})
     this.setState({
       iItems: {newIItems},

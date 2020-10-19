@@ -161,11 +161,6 @@ export default function Homepage() {
       <StudentAccess/>
       <EthisimIntro/>
 
-    {/*}
-      <Box className={classes.copyright}>
-        <Copyright />
-      </Box>
-    */}
     </div>
   );
 }
