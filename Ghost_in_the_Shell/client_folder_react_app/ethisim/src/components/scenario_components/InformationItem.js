@@ -78,20 +78,6 @@ export default function InformationItem(props) {
         m={1}
         bgcolor="background.paper"
       >
-      {/*
-        <Box p={1}>
-          <form noValidate autoComplete="off">
-            <TextField
-              style={{ width: 500 }}
-              id="outlined-multiline-static"
-              label="Information Item"
-              multiline
-              rows={2}
-              variant="outlined"
-            />
-          </form>
-        </Box>
-      */}
         <Box p={1}>
           <div>
             <Button
