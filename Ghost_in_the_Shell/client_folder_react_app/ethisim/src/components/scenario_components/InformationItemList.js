@@ -3,23 +3,35 @@ import InformationItem from "./InformationItem";
 import Button from "@material-ui/core/Button";
 
 export default function InformationItemList() {
-  const [iItems, setIItems] = useState([]);
-  const [nextIID, setIID] = useState(0);
+  //const [iItems, setIItems] = useState([]);
+  //const [nextIID, setIID] = useState(0);
+  const [state, setState] = useState({
+    iItems: [],
+    id: 0,
+  })
 
   function addIItem(e) {
     e.preventDefault();
     const newIItem = {
       body: "",
-      id: nextIID,
+      id: state.id,
     }
 
-    setIItems([...iItems, newIItem]);
-    setIID(nextIID + 1);
+    const newIItems = [...state.iItems, newIItem];
+    const newID = state.id + 1;
+
+    setState({
+      iItems: newIItems,
+      id: newID
+    })
   }
 
   function handleDelete(iItemID) {
-    const newIItems = iItems.filter((q) => q.id !== iItemID);
-    setIItems({ newIItems });
+    const newIItems = state.iItems.filter((q) => q.id !== iItemID);
+    setState({
+      iItems: newIItems,
+      id: state.id,
+    })
   };
 
 
@@ -40,7 +52,7 @@ export default function InformationItemList() {
       </Button>
 
       <form id="form">
-        {iItems.map((iItem) => (
+        {state.iItems.map((iItem) => (
           <InformationItem
             key={iItem.id}
             onDelete={handleDelete}
