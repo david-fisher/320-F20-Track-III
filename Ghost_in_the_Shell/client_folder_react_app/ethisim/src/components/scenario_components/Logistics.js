@@ -40,6 +40,7 @@ export default function Logistics() {
   //default if it's a browser
   var body = (
     <div>
+<<<<<<< HEAD
       <Typography align="center" variant="h2">
         Logistics
               </Typography >
@@ -120,6 +121,31 @@ export default function Logistics() {
               View Student Responses
                   </Button>
             <Button variant="contained" color="primary" >
+=======
+          <Typography align="center" variant="h2">
+            Logistics
+          </Typography >
+            <Typography align = "left" variant="h6">
+              <form className={classes.textfields} noValidate autoComplete="off">
+                Simulation Title
+              <TextField id="Simulation Title" label="" />
+                Course Name
+              <TextField id="Course Name" label="" />
+                Authors
+              <TextField id="Author" label="" />
+              Scenario ID:
+              1342431
+              </form>
+              Shareable Link:
+              wwww.ethisim.com
+            </Typography>
+          <div className = {classes.subdiv}>
+            <form className={classes.buttons} noValidate autoComplete="off">
+              <Button variant="contained" >
+               View Student Responses
+              </Button>
+              <Button variant="contained" color="primary" >
+>>>>>>> master
               Delete Scenario
                   </Button>
             <Button variant="contained" color="primary" >
