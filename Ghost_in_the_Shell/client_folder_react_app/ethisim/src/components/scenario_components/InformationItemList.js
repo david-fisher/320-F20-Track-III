@@ -1,76 +1,53 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import InformationItem from "./InformationItem";
 import Button from "@material-ui/core/Button";
 
-class InformationItemList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      iItems: [],
-      iItemCur: {
-        body: "",
-        id: 0,
-      },
-    };
-    this.addIItem = this.addIItem.bind(this);
-  }
+export default function InformationItemList() {
+  const [iItems, setIItems] = useState([]);
+  const [nextIID, setIID] = useState(0);
 
-  addIItem(e) {
+  function addIItem(e) {
     e.preventDefault();
-    const newIItem = this.state.iItemCur;
-    const newIItems = [...this.state.iItems, newIItem];
+    const newIItem = {
+      body: "",
+      id: nextIID,
+    }
 
-    this.setState({
-      iItems: newIItems,
-      iItemCur: {
-        body: "",
-        id: this.state.iItemCur.id + 1,
-      },
-    });
+    setIItems([...iItems, newIItem]);
+    setIID(nextIID + 1);
   }
 
-  handleDelete = (iItemID) => {
-    const iItems = this.state.iItems.filter((q) => q.id !== iItemID);
-    this.setState({ iItems });
+  function handleDelete(iItemID) {
+    const newIItems = iItems.filter((q) => q.id !== iItemID);
+    setIItems({ newIItems });
   };
 
-  updateIItem = (iItemID, iItemBody) => {
-    const newIItems = [...this.state.iItems];
-    
+
+  function updateIItem(iItemID, iItemBody) {
     //TODO
     //functional code to save items to backend
-    
-    newIItems.forEach(element => {if(element.props.id === iItemID){element.props.body = iItemBody}})
-    this.setState({
-      iItems: {newIItems},
-      iItemCur: this.state.iItemCur
-    })
   }
 
-  render() {
-    return (
-      <div className="InformationItems">
-        <Button
-          id="button"
-          onClick={this.addIItem}
-          variant="contained"
-          color="primary"
-        >
-          Add Information Item
-        </Button>
+  return (
+    <div className="InformationItems">
+      <Button
+        id="button"
+        onClick={addIItem}
+        variant="contained"
+        color="primary"
+      >
+        Add Information Item
+      </Button>
 
-        <form id="form">
-          {this.state.iItems.map((iItem) => (
-            <InformationItem
-              key={iItem.id}
-              onDelete={this.handleDelete}
-              iItem={iItem}
-            />
-          ))}
-        </form>
-      </div>
-    );
-  }
+      <form id="form">
+        {iItems.map((iItem) => (
+          <InformationItem
+            key={iItem.id}
+            onDelete={handleDelete}
+            iItem={iItem}
+          />
+        ))}
+      </form>
+    </div>
+  );
 }
-
-export default InformationItemList;
