@@ -1,26 +1,36 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import SunEditor from 'suneditor-react';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 
-export default function Introduction() {
-    let handleChange = (content) => {
-    //TODO Implement
-        console.log(content);
-        console.log(htmlToText.fromString(content));
-    };
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0.5),
+    marginTop: theme.spacing(0),
+    width: 50,
+    height: "5vh",
+  },
+}));
+
+let handleChange = (content) => {
+  //TODO Implement
+  console.log(content);
+  console.log(htmlToText.fromString(content));
+};
+
+export default function InformationItem(props) {
+  const classes = useStyles();
 
   return (
     <div>
-      <Typography variant="h4" >
-        Introduction:
-      </Typography>
       <SunEditor
         setOptions={{
           width:'100%',
-          height: 400,
-          placeholder: "Enter in introduction of component...",
+          height: '10%',
+          placeholder: "Enter body for information item...",
           buttonList: [
             ['font', 'fontSize', 'formatBlock'],
             ['paragraphStyle', 'blockquote'],
@@ -59,6 +69,34 @@ export default function Introduction() {
         }}
         onChange={handleChange}
       />
+
+      <Box
+        display="flex"
+        flexDirection="row"
+        p={1}
+        m={1}
+        bgcolor="background.paper"
+      >
+        <Box p={1}>
+          <div>
+            <Button
+              className={classes.margin}
+              variant="contained"
+              color="primary"
+            >
+              Save
+            </Button>
+            <Button
+              className={classes.margin}
+              variant="contained"
+              color="primary"
+              onClick={() => props.onDelete(props.iItem.id)}
+            >
+              Delete
+            </Button>
+          </div>
+        </Box>
+      </Box>
     </div>
   );
 }

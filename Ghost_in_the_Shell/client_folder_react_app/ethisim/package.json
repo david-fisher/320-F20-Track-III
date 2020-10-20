@@ -10,9 +10,11 @@
     "@testing-library/user-event": "^12.1.6",
     "html-to-text": "^5.1.1",
     "react": "^16.13.1",
+    "react-device-detect": "^1.14.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "start": "^5.1.0",
     "suneditor-react": "^2.14.2"
   },
   "scripts": {

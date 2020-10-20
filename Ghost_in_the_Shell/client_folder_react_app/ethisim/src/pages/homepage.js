@@ -149,15 +149,14 @@ function EthisimIntro() {
 export default function Homepage() {
     const classes = useStyles();
 
-    return (
-        <div className={classes.container}>
-            <HomepageNavBar />
-            <StudentAccess />
-            <EthisimIntro />
-
-            <Box className={classes.copyright}>
-                <Copyright />
-            </Box>
-        </div>
-    );
+  return (
+    <div  className={classes.container}>
+      <HomepageNavBar/>
+      <StudentAccess/>
+      <EthisimIntro/>
+      <Box className={classes.copyright}>
+        <Copyright />
+      </Box>
+    </div>
+  );
 }

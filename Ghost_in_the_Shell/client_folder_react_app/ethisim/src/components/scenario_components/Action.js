@@ -65,9 +65,9 @@ export default function FinalAction() {
                         className={classes.submit}
                     >
             Submit User Options
-                    </Button>
-                </form>
-            </div>
-        </Container>
-    );
+          </Button>
+        </form>
+      </div>
+    </Container>
+  );
 }
