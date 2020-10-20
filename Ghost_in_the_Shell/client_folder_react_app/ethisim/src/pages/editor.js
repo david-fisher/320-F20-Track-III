@@ -5,6 +5,7 @@ import {
   Drawer,
   ListItem,
   ListItemText,
+  Button,
 } from '@material-ui/core';
 import Logistics from '../components/scenario_components/Logistics';
 import Event from '../components/scenario_components/Event';
@@ -12,7 +13,9 @@ import ConfigureAttributes from '../components/scenario_components/ConfigureAttr
 import ConversationEditor from '../components/scenario_components/ConversationEditor';
 import Reflection from '../components/scenario_components/Reflection';
 import Action from '../components/scenario_components/Action';
-
+import AddNewSimulationScenarioPageDialog from "../components/AddNewSimulationScenarioPageDialog"
+import Copyright from "../components/Copyright"
+import AddNewScenarioPageDialogBody from "../components/AddNewScenarioPageDialogBody"
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -49,21 +52,37 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     opacity: 0.5,
   },
+  addPageButton:{
+    width: "75px",
+    height: "25px",
+    float: "right",
+    margin: theme.spacing(2),
+
+  }
 }));
 
   //Sidebar Components
   const scenarioComponents = [
-    {name: "Logistics", component: <Logistics />},
-    {name: "Configure Attributes", component: <ConfigureAttributes />},
-    {name: "Conversation Editor", component: <ConversationEditor />},
-    {name: "Event", component: <Event />},
-    {name: "Reflection", component: <Reflection />},
-    {name: "Action", component: <Action />},
+    {id: 0 ,name: "Logistics", component: <Logistics />},
+    {id: 1, name: "Configure Attributes", component: <ConfigureAttributes />},
+    {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
+    {id: 3, name: "Event", component: <Event />},
+    {id: 4, name: "Reflection", component: <Reflection />},
+    {id: 5, name: "Action", component: <Action />},
   ];
 
 export default function Editor(props) {
   const classes = useStyles();
-  const [scenarioComponent, setScenarioComponent] = useState(<Logistics />);
+  const [scenarioComponent,setScenarioComponent] = useState(<Logistics/>)
+  const [openPopup, setOpenPopup] = useState(false)
+  const [dynamicComponents, setDynamicComponents] = useState(
+    {id: 0, name: "Logistics", component: <Logistics />},
+    {id: 1, name: "Configure Attributes", component: <ConfigureAttributes />},
+    {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
+    {id: 3, name: "Event", component: <Event />},
+    {id: 4, name: "Reflection", component: <Reflection />},
+    {id: 5, name: "Action", component: <Action />},
+  )
 
   function Sidebar () {
     const classes = useStyles();
@@ -72,7 +91,31 @@ export default function Editor(props) {
       setScenarioComponent(component);
     };
 
+    const addPage = (newId,newName,componentType) =>{
+        const c = <Event/>
+        if (componentType.normalize() == "Event".normalize()){
+
+        }
+        else if (componentType.normalize() == "Convsersation".normalize()){
+           c = <ConversationEditor/>
+        }
+        else if (componentType.normalize() == "Reflection".normalize()){
+          c = <Reflection/>
+        }
+        else if (componentType.normalize() == "Action".normalize()){
+          c = <Action/>
+        }
+        scenarioComponents.push({id: newId, name: newName, component: c})
+    }
+
+    function handleAddNewComponent(){
+      
+      setOpenPopup(true)
+
+    }
+
     return(
+      <div>
       <Drawer
         className={classes.drawer}
         variant="permanent"
@@ -88,7 +131,14 @@ export default function Editor(props) {
             </ListItem>
           ))}
         </List>
+        <Button variant="contained" onClick={handleAddNewComponent}
+          className={classes.addPageButton}>addPage</Button>
       </Drawer>
+      <AddNewSimulationScenarioPageDialog openPopup = {openPopup}
+                                      title="Add New Page"
+                                      setOpenPopup={setOpenPopup}
+                                      addPage={addPage}> </AddNewSimulationScenarioPageDialog>
+     </div>
     )
   }
 
