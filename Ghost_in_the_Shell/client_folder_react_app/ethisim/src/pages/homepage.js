@@ -99,7 +99,11 @@ function StudentAccess() {
     return (
         <div>
             <Container className={classes.studentAccessContainer}>
-                <form className={classes.textField} noValidate autoComplete="off">
+                <form
+                    className={classes.textField}
+                    noValidate
+                    autoComplete="off"
+                >
                     <ValidationTextField
                         label="Enter Class Code"
                         id="Enter Class Code"
@@ -112,7 +116,7 @@ function StudentAccess() {
                     color="primary"
                 >
                     <Typography variant="h5" display="block" noWrap>
-            Join
+                        Join
                     </Typography>
                 </Button>
             </Container>
@@ -132,14 +136,14 @@ function EthisimIntro() {
     return (
         <div className={classes.ethisimIntroContainer}>
             <WhiteTextTypography variant="h3" align="center">
-        Convenient Ethics Simulations
+                Convenient Ethics Simulations
             </WhiteTextTypography>
             <WhiteTextTypography align="center" className={classes.margin}>
-        Ethisim allows you to easily create and assign ethics
+                Ethisim allows you to easily create and assign ethics
                 <br />
-        simulations. Run them for a participation grade, or
+                simulations. Run them for a participation grade, or
                 <br />
-        develop them further into longer discussions for class.
+                develop them further into longer discussions for class.
                 <br />
             </WhiteTextTypography>
         </div>
@@ -149,14 +153,14 @@ function EthisimIntro() {
 export default function Homepage() {
     const classes = useStyles();
 
-  return (
-    <div  className={classes.container}>
-      <HomepageNavBar/>
-      <StudentAccess/>
-      <EthisimIntro/>
-      <Box className={classes.copyright}>
-        <Copyright />
-      </Box>
-    </div>
-  );
+    return (
+        <div className={classes.container}>
+            <HomepageNavBar />
+            <StudentAccess />
+            <EthisimIntro />
+            <Box className={classes.copyright}>
+                <Copyright />
+            </Box>
+        </div>
+    );
 }

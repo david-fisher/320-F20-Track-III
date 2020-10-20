@@ -28,14 +28,14 @@ export default function FinalAction() {
     return (
         <Container component="main">
             <Typography align="center" variant="h2">
-        Action Component
+                Action Component
             </Typography>
             <Title />
             <Introduction />
             <div className={classes.container}>
                 <form className={classes.form}>
                     <Typography align="center" variant="h6">
-            Option 1
+                        Option 1
                     </Typography>
                     <TextField
                         variant="outlined"
@@ -47,7 +47,7 @@ export default function FinalAction() {
                         name="option 1"
                     />
                     <Typography align="center" variant="h6">
-            Option 2
+                        Option 2
                     </Typography>
                     <TextField
                         variant="outlined"
@@ -64,10 +64,10 @@ export default function FinalAction() {
                         variant="contained"
                         className={classes.submit}
                     >
-            Submit User Options
-          </Button>
-        </form>
-      </div>
-    </Container>
-  );
+                        Submit User Options
+                    </Button>
+                </form>
+            </div>
+        </Container>
+    );
 }

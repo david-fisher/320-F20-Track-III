@@ -8,22 +8,20 @@ import Data from './pages/data';
 import Homepage from './pages/homepage';
 
 export default function App() {
-  return (
-    <Router>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-        <Route path="/home" component={Homepage}/>
-        <Route path="/login" component={Login}/>
-        <Route path="/signup" component={Signup}/>
-        <Route path="/dashboard" component={Dashboard}/>
-        <Route path="/editor/:id" render={(props) => (
-          <Editor {...props} />
-        )}/>
-        <Route path="/data/:id" render={(props) => (
-          <Data {...props} />
-        )}/>
-        
-    </Router>
-  );
+    return (
+        <Router>
+            <Route exact path="/">
+                <Redirect to="/home" />
+            </Route>
+            <Route path="/home" component={Homepage} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route
+                path="/editor/:id"
+                render={(props) => <Editor {...props} />}
+            />
+            <Route path="/data/:id" render={(props) => <Data {...props} />} />
+        </Router>
+    );
 }
