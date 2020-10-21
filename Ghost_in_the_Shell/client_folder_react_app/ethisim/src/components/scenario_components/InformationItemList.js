@@ -34,8 +34,8 @@ export default function InformationItemList() {
     })
   };
 
-
-  function updateIItem(iItemID, iItemBody) {
+  // eslint-disable-next-line
+  function updateItem(iItemID, iItemBody) {
     //TODO
     //functional code to save items to backend
   }
