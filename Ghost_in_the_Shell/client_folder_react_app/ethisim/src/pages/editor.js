@@ -17,6 +17,7 @@ import Action from '../components/scenario_components/Action';
 import AddNewSimulationScenarioPageDialog from "../components/AddNewSimulationScenarioPageDialog"
 import Copyright from "../components/Copyright"
 import AddNewScenarioPageDialogBody from "../components/AddNewScenarioPageDialogBody"
+import NavSideBarList from "../components/NavSideBarList"
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
   //Sidebar Components
-  const scenarioComponents = [
+  var startList = [
     {id: 0 ,name: "Logistics", component: <Logistics />},
     {id: 1, name: "Configure Attributes", component: <ConfigureAttributes />},
     {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
@@ -76,19 +77,19 @@ export default function Editor(props) {
   const classes = useStyles();
   const [scenarioComponent,setScenarioComponent] = useState(<Logistics/>)
   const [openPopup, setOpenPopup] = useState(false)
-  const [dynamicComponents, setDynamicComponents] = useState(
-    {id: 0, name: "Logistics", component: <Logistics />},
-    {id: 1, name: "Configure Attributes", component: <ConfigureAttributes />},
-    {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
-    {id: 3, name: "Event", component: <Event />},
-    {id: 4, name: "Reflection", component: <Reflection />},
-    {id: 5, name: "Action", component: <Action />},
-  )
+  const [scenarioComponents,setScenarioComponents] = useState(startList)
+  const deleteByID = (d_id) =>{
+      console.log("we are currently deleteing:")
+      console.log(d_id)
+
+      setScenarioComponents(scenarioComponents.filter(i => i.id !== d_id));
+  }
 
   function Sidebar () {
     const classes = useStyles();
 
     const onClick = function(component) {
+      console.log(component)
       setScenarioComponent(component);
     };
 
@@ -133,13 +134,8 @@ export default function Editor(props) {
         }}
         anchor="left"
       >
-        <List>
-          {scenarioComponents.map((componentData) => (
-            <ListItem button key={componentData.name} onClick={() => onClick(componentData.component)}>
-              <ListItemText primary={componentData.name} />
-            </ListItem>
-          ))}
-        </List>
+      <NavSideBarList onClick={onClick} deleteByID={deleteByID} scenarioPages={scenarioComponents}></NavSideBarList>
+
         <Button variant="contained" onClick={handleAddNewComponent}
           className={classes.addPageButton}>addPage</Button>
       </Drawer>
@@ -147,6 +143,7 @@ export default function Editor(props) {
                                       title="Add New Page"
                                       setOpenPopup={setOpenPopup}
                                       addPage={addPage}> </AddNewSimulationScenarioPageDialog>
+
      </div>
     )
   }

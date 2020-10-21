@@ -11,52 +11,54 @@ import SunEditor from "suneditor-react";
 import htmlToText from 'html-to-text';
 
 const useStyles = makeStyles((theme) => ({
+  pageButton : {
+    width: "100%",
+    minHeight: "100px",
+  },
+  deleteButton:{
+    width:"100%",
+    mingHeight: "100px",
+  }
 }));
 
-export default function StakeHoldeListNode({id,name}){
+export default function NavSideBarNode({onClick,deleteByID,id,name,component}){
   const classes = useStyles();
-
-  let handleChangeName = (event) => {
-    console.log(event.target.value);
+  function handleDelete(){
+      console.log("delete is: ")
+      console.log(id)
+      deleteByID(id)
   }
 
-  let handleChangeBiography = (content) => {
-    //TODO Implement
-    console.log(content);
-    console.log(htmlToText.fromString(content));
-  };
-
-  let handleChangeConversationEntry = (content) => {
-    //TODO Implement
-    console.log(content);
-    console.log(htmlToText.fromString(content));
-  };
-
+  function handleDisplayComponent(){
+      onClick(component)
+  }
   return(
+    <div>
     <Grid
       container
       direction="row"
       justify = "flex-start"
-      onClick={}
+
     >
-      <Grid  item xs={9}>
-        <Avatar
-          className={classes.avatar}
-          alt={`${id}`}
-          src={`/static/images/avatar/${id}.jpg`}
-        />
+      <Grid  item xs={10}>
         <Button
-          className={classes.button}
+          className={classes.pageButton}
           variant="contained"
           color="primary"
+          onClick={handleDisplayComponent}
         >
-          Point Selection
+          {name}
         </Button>
       </Grid>
 
-      <Grid item xs={3}>
+      <Grid item xs={2}>
+        <Button className={classes.deleteButton} color = "secondary"
+        onClick={handleDelete}>
+          X
+        </Button>
 
       </Grid>
     </Grid>
+    </div>
   )
 }
