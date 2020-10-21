@@ -95,3 +95,18 @@ class allScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
         fields = ('SCENARIO_ID', 'NAME', 'SUB_TITLE', 'IS_FINISHED', 'CREATOR')
+
+class Scenarios_forSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = scenarios_for
+        fields = ('SCENARIO_ID', 'COURSE_ID', 'VERSION_ID')
+
+class Event_pageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = event_page
+        fields = ('PAGE_ID', 'BODY')
+
+class Professors_teachSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = professors_teach
+        fields = ('PROFESSOR_ID', 'COURSE_ID')

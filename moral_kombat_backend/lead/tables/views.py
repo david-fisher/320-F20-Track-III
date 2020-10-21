@@ -131,3 +131,26 @@ class allScenariosViewSet(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['CREATOR', 'IS_FINISHED']
     
+# Scenarios_for ViewSet
+class Scenarios_forViewSet(viewsets.ModelViewSet):
+    queryset = scenarios_for.objects.all()
+    permissions_class = [
+        permissions.AllowAny
+    ]
+    serializer_class = Scenarios_forSerializer
+
+# Event_page ViewSet
+class Event_pageViewSet(viewsets.ModelViewSet):
+    queryset = event_page.objects.all()
+    permissions_class = [
+        permissions.AllowAny
+    ]
+    serializer_class = Event_pageSerializer
+
+# Professors_teach ViewSet
+class Professors_teachViewSet(viewsets.ModelViewSet):
+    queryset = professors_teach.objects.all()
+    permissions_class = [
+        permissions.AllowAny
+    ]
+    serializer_class = Professors_teachSerializer
