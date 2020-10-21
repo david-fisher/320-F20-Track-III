@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemText,
   Button,
+  Typography,
 } from '@material-ui/core';
 import Logistics from '../components/scenario_components/Logistics';
 import Event from '../components/scenario_components/Event';
@@ -92,24 +93,32 @@ export default function Editor(props) {
     };
 
     const addPage = (newId,newName,componentType) =>{
-        const c = <Event/>
-        if (componentType.normalize() == "Event".normalize()){
+        console.log("componet type: ")
+        console.log(componentType)
+        var c = null;
+        switch(componentType){
+          case "Event":
+            c = <Event/>
+            break;
+          case "Conversation":
+            c = <ConversationEditor/>
+            break;
+          case "Reflection":
+            c= <Reflection/>
+            break;
+          case "Action":
+            c= <Action/>
+            break;
+          default:
+            c= <Typography>Error</Typography>
 
         }
-        else if (componentType.normalize() == "Convsersation".normalize()){
-           c = <ConversationEditor/>
-        }
-        else if (componentType.normalize() == "Reflection".normalize()){
-          c = <Reflection/>
-        }
-        else if (componentType.normalize() == "Action".normalize()){
-          c = <Action/>
-        }
+
         scenarioComponents.push({id: newId, name: newName, component: c})
     }
 
     function handleAddNewComponent(){
-      
+
       setOpenPopup(true)
 
     }

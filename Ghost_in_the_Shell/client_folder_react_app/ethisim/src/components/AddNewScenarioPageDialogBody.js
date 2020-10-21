@@ -32,11 +32,13 @@ export default function AddNewScenarioPageDialogBody({addPage, setOpenPopup}){
 
     const handleChange = (event) => {
       setPageType(event.target.value);
-      console.log(pageType)
+      //console.log(pageType)
     }
 
     const createNewPage = () => {
-        addPage(13,pageType,pageName)
+        console.log(pageType)
+        console.log(pageName)
+        addPage(13,pageName,pageType)
         setOpenPopup(false)
         setPageType("Event")
         setPageName("Event")
