@@ -1,33 +1,40 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import SunEditor from "suneditor-react";
-import 'suneditor/dist/css/suneditor.min.css';
-import htmlToText from 'html-to-text';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Typography,
+  TextField,
+} from '@material-ui/core';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+}));
 
-export default function Title() {
+export default function Title(props) {
+  const classes = useStyles();
+  const { title } = props;
 
-  let handleChange = (content, editor) => {
+  let handleChange = (content) => {
     //TODO Implement
-    console.log(content);
-    console.log(htmlToText.fromString(content));
   }
 
   return (
-    <div>
+    <div className={classes.root}>
       <Typography variant="h4" >
-        Title:
+        Scenario Page Name
       </Typography>
-      <SunEditor 
-        setOptions={{
-          width:'100%',
-          height: 150,
-          placeholder: "Enter in Title of component...",
-          buttonList: [   
-            ['undo', 'redo'],
-            ['fullScreen', 'preview'],
-          ]}}
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="title"
+        label="Title of component"
+        value={title}
         onChange={handleChange}
+        name="title"
       />
     </div>
   );

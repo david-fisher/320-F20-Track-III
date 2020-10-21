@@ -10,8 +10,8 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(0.5),
     marginTop: theme.spacing(0),
-    width: 50,
     height: "5vh",
+    textTransform: 'unset',
   },
 }));
 
@@ -29,7 +29,7 @@ export default function InformationItem(props) {
       <SunEditor
         setOptions={{
           width:'100%',
-          height: '10%',
+          height: '200px',
           placeholder: "Enter body for information item...",
           buttonList: [
             ['font', 'fontSize', 'formatBlock'],

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
 import GenericComponent from './GenericComponent.js';
 
 
@@ -17,11 +16,11 @@ export default function GenericComponentList() {
     <div>
       <Typography align="center" variant="h2">
         Generic Component List
-              </Typography>
+      </Typography>
       {components}
-      <Button variant="contained" color="grey" onClick={addComponent}>
+      <Button variant="contained" onClick={addComponent}>
         Add Generic Component
-              </Button>
+      </Button>
     </div>
   )
 }

@@ -1,18 +1,21 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Introduction from '../Introduction';
+import Body from '../Body';
 import Title from '../Title';
 import InformationItemList from './InformationItemList';
+import {
+  Typography,
+  Container,
+} from '@material-ui/core';
 
 export default function Event() {
   return (
-    <div>
+    <Container component="main">
       <Typography align="center" variant="h2">
         Event Component
       </Typography>
       <Title />
-      <Introduction />
+      <Body />
       <InformationItemList />
-    </div>
+    </Container>
   );
 }
