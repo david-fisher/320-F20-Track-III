@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    '@media (max-width:1100px)': { 
+    '@media (max-width:1100px)': {
       width: '100%',
       flexBasis: '0%',
       minWidth: '100%',
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   informationSide: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
-    '@media (max-width:1100px)': { 
+    '@media (max-width:1100px)': {
       flexBasis: '100%',
       width: '100%',
       maxWidth: '100%',
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function StakeHoldeListNode({id,name}){
+export default function StakeHolderListNode({id,name}){
   const classes = useStyles();
 
   let handleChangeName = (event) => {
@@ -87,11 +87,11 @@ export default function StakeHoldeListNode({id,name}){
         <Typography variant="h6">
           Name:
         </Typography>
-        <TextField 
+        <TextField
           variant="outlined"
           margin="normal"
           fullWidth
-          id="Name" 
+          id="Name"
           label="Name of stakeholder"
           onChange={handleChangeName}
           name="Name"
@@ -114,7 +114,7 @@ export default function StakeHoldeListNode({id,name}){
               ['removeFormat'],
               ['outdent', 'indent'],
               ['align', 'horizontalRule', 'list', 'lineHeight'],
-              ['table', 'link', 'image', 'video', 'audio'], 
+              ['table', 'link', 'image', 'video', 'audio'],
               ['fullScreen', 'showBlocks', 'codeView'],
               ['preview',],
               // (min-width: 1200px)
@@ -138,7 +138,7 @@ export default function StakeHoldeListNode({id,name}){
                 [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
                 ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
               ]],
-            ],   
+            ],
           }}
           onChange={handleChangeBiography}
         />
@@ -160,7 +160,7 @@ export default function StakeHoldeListNode({id,name}){
               ['removeFormat'],
               ['outdent', 'indent'],
               ['align', 'horizontalRule', 'list', 'lineHeight'],
-              ['table', 'link', 'image', 'video', 'audio'], 
+              ['table', 'link', 'image', 'video', 'audio'],
               ['fullScreen', 'showBlocks', 'codeView'],
               ['preview',],
               // (min-width: 1200px)
@@ -184,7 +184,7 @@ export default function StakeHoldeListNode({id,name}){
                 [':r-More Rich-default.more_plus', 'table', 'link', 'image', 'video', 'audio'],
                 ['-right', ':i-More Misc-default.more_vertical', 'fullScreen', 'showBlocks', 'codeView', 'preview']
               ]],
-            ],   
+            ],
           }}
           onChange={handleChangeConversationEntry}
         />
