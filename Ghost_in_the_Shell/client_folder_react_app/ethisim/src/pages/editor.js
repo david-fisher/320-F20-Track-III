@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   //Sidebar Components
   var startList = [
     {id: 0 ,name: "Logistics", component: <Logistics />},
-    {id: 1, name: "Configure Attributes", component: <ConfigureAttributes />},
+    {id: 1, name: "Configure Attributes", component: <ConfigureIssues />},
     {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
     {id: 3, name: "Event", component: <Event />},
     {id: 4, name: "Reflection", component: <Reflection />},
@@ -97,7 +97,7 @@ export default function Editor(props) {
         console.log(componentType)
         var c = null;
         switch(componentType){
-          case "Event":
+          case "Generic":
             c = <Event/>
             break;
           case "Reflection":
