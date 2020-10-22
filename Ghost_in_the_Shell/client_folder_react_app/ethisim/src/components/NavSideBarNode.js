@@ -28,37 +28,66 @@ export default function NavSideBarNode({onClick,deleteByID,id,name,component}){
       console.log(id)
       deleteByID(id)
   }
+  function pageType(name){
+    if (name === "Logistics" || name === "Conversation Editor"){
+      return(
+      <Grid
+        container
+        direction="row"
+        justify = "flex-start"
+
+      >
+        <Grid  item xs={10}>
+          <Button
+            className={classes.pageButton}
+            variant="contained"
+            color="primary"
+            onClick={handleDisplayComponent}
+          >
+            {name}
+          </Button>
+        </Grid>
+
+      </Grid>)
+    }
+    else{
+      return(
+      <Grid
+        container
+        direction="row"
+        justify = "flex-start"
+
+      >
+        <Grid  item xs={10}>
+          <Button
+            className={classes.pageButton}
+            variant="contained"
+            color="primary"
+            onClick={handleDisplayComponent}
+          >
+            {name}
+          </Button>
+        </Grid>
+
+        <Grid item xs={2}>
+          <Button className={classes.deleteButton} color = "secondary"
+          onClick={handleDelete}>
+            X
+          </Button>
+
+        </Grid>
+      </Grid>
+    )
+    }
+  }
+
 
   function handleDisplayComponent(){
       onClick(component)
   }
   return(
     <div>
-    <Grid
-      container
-      direction="row"
-      justify = "flex-start"
-
-    >
-      <Grid  item xs={10}>
-        <Button
-          className={classes.pageButton}
-          variant="contained"
-          color="primary"
-          onClick={handleDisplayComponent}
-        >
-          {name}
-        </Button>
-      </Grid>
-
-      <Grid item xs={2}>
-        <Button className={classes.deleteButton} color = "secondary"
-        onClick={handleDelete}>
-          X
-        </Button>
-
-      </Grid>
-    </Grid>
+      {pageType(name)}
     </div>
   )
 }

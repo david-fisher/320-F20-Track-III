@@ -101,9 +101,6 @@ export default function Editor(props) {
           case "Event":
             c = <Event/>
             break;
-          case "Conversation":
-            c = <ConversationEditor/>
-            break;
           case "Reflection":
             c= <Reflection/>
             break;

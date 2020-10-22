@@ -60,7 +60,6 @@ export default function AddNewScenarioPageDialogBody({addPage, setOpenPopup}){
             >
               <MenuItem value={"Generic"} onClick={handleClose}>Generic Component</MenuItem>
               <MenuItem value={"Action"} onClick={handleClose}>Action Component</MenuItem>
-              <MenuItem value={"Conversation"} onClick={handleClose}>Conversation Component</MenuItem>
               <MenuItem value={"Reflection"} onClick={handleClose}>Reflection Component</MenuItem>
 
             </Select>

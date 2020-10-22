@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme =>({
     margin: theme.spacing(2),
     float: "right"
   }
+  
 }))
 export default function AddNewSimulationScenarioPageDialog(props){
     const{title,openPopup,setOpenPopup,addPage} = props;
@@ -32,7 +33,7 @@ export default function AddNewSimulationScenarioPageDialog(props){
                   onClick={()=>{setOpenPopup(false)}}>X</Button>
 
           <DialogContent dividers>
-            
+
             <AddNewScenarioPageDialogBody addPage={addPage} setOpenPopup={setOpenPopup} ></AddNewScenarioPageDialogBody>
           </DialogContent>
         </Dialog>
