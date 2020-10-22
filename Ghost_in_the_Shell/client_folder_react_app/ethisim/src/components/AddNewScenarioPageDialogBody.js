@@ -40,8 +40,8 @@ export default function AddNewScenarioPageDialogBody({addPage, setOpenPopup}){
         console.log(pageName)
         addPage(13,pageName,pageType)
         setOpenPopup(false)
-        setPageType("Event")
-        setPageName("Event")
+        setPageType("Generic")
+        setPageName("Generic")
     }
 
     return(
