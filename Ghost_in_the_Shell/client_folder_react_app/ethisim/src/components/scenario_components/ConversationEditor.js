@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import StakeHolderList from '../StakeHolderList'
 import { Button } from '@material-ui/core';
-
+import StakeHolderFields from '../StakeHoldersComponent/stakeHolders'
+/*
 const useStyles = makeStyles((theme) => ({
   root: {
     alignItems: 'center',
@@ -12,9 +13,9 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'unset',
   }
 }));
-
+*/
 export default function ConversationEditor(){
-  const classes = useStyles();
+ /* const classes = useStyles();
 
   const [stakeholders,setStakeholders] = useState([{id: 1}]);
   const [count, setCount] = useState(2);
@@ -25,9 +26,9 @@ export default function ConversationEditor(){
     const addStakeholder = stakeholders.concat({id: count});
     setStakeholders(addStakeholder);
   }
-
+*/
   return (
-    <div className={classes.root}>
+   /* <div className={classes.root}>
       <StakeHolderList stakeholders={stakeholders}/>
       <Button 
         className={classes.button}
@@ -37,6 +38,9 @@ export default function ConversationEditor(){
       >
         Add Stakeholder
       </Button>
-    </ div>
+    </ div> */
+    <div>
+       <StakeHolderFields />
+    </div>
   );
 }
