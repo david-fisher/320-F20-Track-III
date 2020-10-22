@@ -3,7 +3,7 @@ import StakeHolder from "./stakeHolder";
 import Button from "@material-ui/core/Button";
 import "./stakeHolders.css";
 
-function StakeHolderFields (){
+export default function StakeHolderFields (){
   
   const[stakeHolders, setStakeHolders] = useState([]);
 
@@ -20,7 +20,6 @@ function StakeHolderFields (){
  };
  
  const addStakeHolder = (e) => {
-   
    const newStakeHolders = [...stakeHolders, stakeHolder];
    setStakeHolders(newStakeHolders);
    console.log(...stakeHolders);
@@ -28,16 +27,12 @@ function StakeHolderFields (){
 
  };
 
+ // eslint-disable-next-line
  function updateStakeholder(stakeholderID, stakeholderBody) {
    //TODO
    //functional code to save items to backend
  };
 
-
-
-
-
- 
     return (
       <div className="stakeHolders">
         <Button
@@ -61,6 +56,3 @@ function StakeHolderFields (){
       </div>
     );
   }
-
-
-export default StakeHolderFields;

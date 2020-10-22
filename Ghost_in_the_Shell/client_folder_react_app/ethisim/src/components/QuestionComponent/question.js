@@ -4,21 +4,15 @@ import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 
-
-
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0.5),
+    marginTop: theme.spacing(0),
+    width: 50,
+  },
+}));
 
 export default function QuestionField(props) {
-
-
-  const useStyles = makeStyles((theme) => ({
-    margin: {
-      margin: theme.spacing(0.5),
-      marginTop: theme.spacing(0),
-      width: 50,
-    },
-  }));
-  
-  
   const classes = useStyles();
 
   return (

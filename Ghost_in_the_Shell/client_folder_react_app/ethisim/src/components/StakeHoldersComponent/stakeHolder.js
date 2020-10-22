@@ -19,7 +19,6 @@ import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import shemptylogo from './shemptylogo.png';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -84,8 +83,6 @@ export default function StakeHolder(props) {
   const [openThree, setOpenThree] = React.useState(false);
   const [openFour, setOpenFour] = React.useState(false);
 
-
-
   //TABLE
   const[rows, setRows] = useState([]);
 
@@ -95,8 +92,6 @@ export default function StakeHolder(props) {
     score: ' ',
     maxpoints: ' ',
   });
-
-
 
   const removeRow = (rowID) => {
     console.log(rowID);
@@ -113,19 +108,13 @@ export default function StakeHolder(props) {
 
   }
 
+  // eslint-disable-next-line
   function updateRow(rowID, rowBody) {
     //TODO
     //functional code to save items to backend
   }
 
-
 //TABLE
-
-
-
-
-
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -177,7 +166,7 @@ export default function StakeHolder(props) {
           type="file"
         />
         <label htmlFor="contained-button-file">
-          <Button variant="contained" color="primary" component="span">
+          <Button variant="contained" color="primary" component="span" style={{ textTransform: "unset"}}>
             Upload
           </Button>
         </label>
