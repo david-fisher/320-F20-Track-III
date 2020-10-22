@@ -1,16 +1,27 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Introduction from '../Introduction';
+import Body from '../Body';
 import Title from '../Title';
 
-export default function MiddleReflection() {
+import {
+  Typography,
+  Container,
+} from '@material-ui/core';
+import QuestionFields from '../QuestionComponent/questions'
+
+
+
+
+
+
+export default function Reflection() {
   return (
-    <div>
+    <Container component="main">
       <Typography align="center" variant="h2">
         Reflection Component
       </Typography>
       <Title />
-      <Introduction />
-    </div>
+      <Body />
+     <QuestionFields />
+    </Container>
   );
 }

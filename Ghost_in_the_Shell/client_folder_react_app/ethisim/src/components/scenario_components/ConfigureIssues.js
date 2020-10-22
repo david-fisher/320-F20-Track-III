@@ -12,13 +12,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ConfigureAttributes() {
+export default function ConfigureIssues() {
   const classes = useStyles();
 
   return (
     <div className={classes.issue}>
       <Typography align="center" variant="h2">
-        Configure Issues
+        Configure Ethical Issues
       </Typography>
       <br />
       <br />

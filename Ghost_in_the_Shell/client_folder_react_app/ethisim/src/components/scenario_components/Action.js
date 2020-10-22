@@ -6,7 +6,7 @@ import {
   Container,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Introduction from '../Introduction';
+import Body from '../Body';
 import Title from '../Title';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     backgroundColor: theme.palette.primary.main,
     color: 'white',
+    textTransform: 'unset',
   },
 }));
 
@@ -36,7 +37,7 @@ export default function FinalAction() {
         Action Component
       </Typography>
       <Title />
-      <Introduction />
+      <Body />
       <div className={classes.container}>
         <form className={classes.form}>
           <Typography align="center" variant="h6">

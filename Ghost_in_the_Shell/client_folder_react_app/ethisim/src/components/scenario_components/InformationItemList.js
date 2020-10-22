@@ -1,8 +1,18 @@
 import React, { useState } from "react";
+import { makeStyles } from '@material-ui/core/styles';
 import InformationItem from "./InformationItem";
 import Button from "@material-ui/core/Button";
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    textTransform: 'unset',
+  },
+}));
+
 export default function InformationItemList() {
+  const classes = useStyles();
   //const [iItems, setIItems] = useState([]);
   //const [nextIID, setIID] = useState(0);
   const [state, setState] = useState({
@@ -43,6 +53,7 @@ export default function InformationItemList() {
   return (
     <div className="InformationItems">
       <Button
+        className={classes.button}
         id="button"
         onClick={addIItem}
         variant="contained"

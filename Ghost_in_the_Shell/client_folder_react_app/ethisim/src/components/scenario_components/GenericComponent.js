@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Introduction from '../Introduction';
+import Body from '../Body';
 import Title from '../Title';
 import InformationItemList from './InformationItemList';
 import Button from '@material-ui/core/Button';
@@ -12,14 +12,14 @@ export default function GenericComponent() {
         Generic Component
       </Typography>
       <Title />
-      <Introduction />
+      <Body />
       <InformationItemList />
       <Button variant="contained" color="grey" >
         Save Generic Component
-              </Button>
+      </Button>
       <Button variant="contained" color="primary" >
         Delete Generic Component
-              </Button>
+      </Button>
     </div>
   );
 }

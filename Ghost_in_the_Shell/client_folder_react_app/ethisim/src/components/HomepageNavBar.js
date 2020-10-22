@@ -15,9 +15,15 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
     margin: theme.spacing(1),
     marginRight: '15px',
+    '@media (max-width:500px)': { 
+      marginRight: '5px',
+    }
   }, 
   title: {
     flexGrow: 1,
+    '@media (max-width:500px)': { 
+      fontSize: '15px',
+    }
   },
   signupButton: {
     backgroundColor: 'white',
@@ -29,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     borderStyle: 'solid',
     borderColor: 'white',
     border: 2, 
+    '@media (max-width:500px)': { 
+      marginRight: theme.spacing(0.5),
+      padding: theme.spacing(1),
+    }
   },
   loginButton: {
     backgroundColor: theme.palette.primary.main,
@@ -40,12 +50,22 @@ const useStyles = makeStyles((theme) => ({
     borderStyle: 'solid',
     borderColor: 'white',
     border: 2, 
+    '@media (max-width:500px)': { 
+      marginRight: theme.spacing(0.5),
+      padding: theme.spacing(1),
+    }
   },
   signupButtonText: {
     color: theme.palette.primary.main,
+    '@media (max-width:500px)': { 
+      fontSize: '13px',
+    }
   },
-  login: {
+  loginButtonText: {
     color: 'white',
+    '@media (max-width:500px)': { 
+      fontSize: '13px',
+    }
   }
 }));
 
@@ -89,7 +109,7 @@ export default function HomepageNavBar() {
             m={-2}
           >
             <Typography 
-              className={classes.login}
+              className={classes.loginButtonText}
               variant="h6" 
             >
               Log In

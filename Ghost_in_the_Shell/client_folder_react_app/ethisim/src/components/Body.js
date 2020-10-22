@@ -4,7 +4,8 @@ import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 
-export default function Introduction() {
+
+export default function Body() {
 
   let handleChange = (content) => {
     //TODO Implement
@@ -15,13 +16,13 @@ export default function Introduction() {
   return (
     <div>
       <Typography variant="h4" >
-        Introduction:
+        Body
       </Typography>
       <SunEditor
         setOptions={{
           width:'100%',
           height: 400,
-          placeholder: "Enter in introduction of component...",
+          placeholder: "Enter body of component...",
           buttonList: [
             ['font', 'fontSize', 'formatBlock'],
             ['paragraphStyle', 'blockquote'],
