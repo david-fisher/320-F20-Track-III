@@ -149,7 +149,6 @@ const mockComponentsFlowChart = {
     {id: '3', type: 'Reflection',  title: 'Final Reflection', position: { x: 0, y: 0 }},
     {id: '4', type: 'Action',  title: 'First action', position: { x: 0, y: 0 }},
     {id: '5', type: 'Action',  title: 'Final Action', position: { x: 0, y: 0 }},
-    {id: '6', type: 'Conversation',  title: 'Coworkers Conversation', position: { x: 0, y: 0 }},
     {id: '7', type: 'Conversation',  title: 'Stakeholders Conversation', position: { x: 0, y: 0 }},
     {id: '8', type: 'Event',  title: 'Conclusion', position: { x: 0, y: 0 }},
     {id: '9', type: 'Event', title: 'Bad decision', position: { x: 0, y: 0 }},

@@ -28,7 +28,12 @@ const useStyles = makeStyles((theme) => ({
   copyright: {
     margin: theme.spacing(2),
   },
-  removeEdgeButton: {
+  buttonContainer: {
+    display: 'flex',
+    float: 'right',
+    flexDirection: 'column',
+  },
+  button: {
     zIndex: 5,
     float: 'right',
   }
@@ -186,6 +191,10 @@ export default function Data(props) {
     setElements(elementsCopy);
   }
 
+  const save = () => {
+
+  }
+
   console.log(elements);
   
   return (
@@ -201,21 +210,37 @@ export default function Data(props) {
         onNodeDragStop={onNodeDrag}
         nodeTypes={nodeTypes}
       >
-        <Button 
-          className={classes.removeEdgeButton} 
-          variant="contained" 
-          color="primary" 
-          disabled={isRemoveButtonDisabled}
-          onClick={deleteEdge}
-        >
-          <Typography 
-            variant="h6" 
-            display="block" 
-            noWrap
+        <div className={classes.buttonContainer}>
+          <Button 
+            className={classes.button} 
+            variant="contained" 
+            color="primary" 
+            onClick={save}
           >
-            Remove Edge
-          </Typography>
-        </Button>
+            <Typography 
+              variant="h6" 
+              display="block" 
+              noWrap
+            >
+              Save Changes
+            </Typography>
+          </Button>
+          <Button 
+            className={classes.button} 
+            variant="contained" 
+            color="primary" 
+            disabled={isRemoveButtonDisabled}
+            onClick={deleteEdge}
+          >
+            <Typography 
+              variant="h6" 
+              display="block" 
+              noWrap
+            >
+              Remove Edge
+            </Typography>
+          </Button>
+        </div>
         <MiniMap />
         <Controls />
         <Background />
