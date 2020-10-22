@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import Logistics from '../components/scenario_components/Logistics';
 import Event from '../components/scenario_components/Event';
-import ConfigureAttributes from '../components/scenario_components/ConfigureAttributes';
+import ConfigureIssues from '../components/scenario_components/ConfigureIssues';
 import ConversationEditor from '../components/scenario_components/ConversationEditor';
 import Reflection from '../components/scenario_components/Reflection';
 import Action from '../components/scenario_components/Action';
@@ -70,8 +70,7 @@ const useStyles = makeStyles((theme) => ({
     {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
     {id: 3, name: "Event", component: <Event />},
     {id: 4, name: "Reflection", component: <Reflection />},
-    {id: 5, name: "Action", component: <Action />},
-  ];
+    {id: 5, name: "Action", component: <Action />},];
 
 export default function Editor(props) {
   const classes = useStyles();
