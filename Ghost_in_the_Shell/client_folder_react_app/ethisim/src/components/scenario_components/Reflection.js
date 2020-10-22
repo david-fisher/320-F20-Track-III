@@ -2,6 +2,10 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Introduction from '../Introduction';
 import Title from '../Title';
+import QuestionFields from '../QuestionComponent/questions'
+
+
+
 
 export default function MiddleReflection() {
   return (
@@ -11,6 +15,7 @@ export default function MiddleReflection() {
       </Typography>
       <Title />
       <Introduction />
+      <QuestionFields />
     </div>
   );
 }
