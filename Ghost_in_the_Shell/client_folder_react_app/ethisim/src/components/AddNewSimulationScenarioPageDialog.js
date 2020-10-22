@@ -1,7 +1,14 @@
-import React from 'react'
-import {Dialog,DialogTitle,DialogContent,Button,Typography,makeStyles} from '@material-ui/core'
-import AddNewScenarioPageDialogBody from "../components/AddNewScenarioPageDialogBody"
-import NavSideBarNode from "../components/NavSideBarNode"
+import React from 'react';
+import {
+  Dialog, 
+  DialogTitle,
+  DialogContent,
+  Button, 
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
+import AddNewScenarioPageDialogBody from "../components/AddNewScenarioPageDialogBody";
+
 const useStyles = makeStyles(theme =>({
   dialogWrapper:{
     padding: theme.spacing(2),
@@ -23,9 +30,8 @@ export default function AddNewSimulationScenarioPageDialog(props){
         <Dialog open={openPopup} maxWidth="md" classes={{paper: classes.dialogWrapper }}>
           <DialogTitle style={{display: "flex"}}>
              <div>
-             <Typography variant="h2" alight="center" component="div" style={{flexFrow:1}}>{title}</Typography>
+             <Typography variant="h3" alight="center" component="div" style={{flexGrow:1}}>{title}</Typography>
              </div>
-
           </DialogTitle>
 
           <Button className={classes.exitOutButton} variant="contained"
@@ -33,7 +39,6 @@ export default function AddNewSimulationScenarioPageDialog(props){
                   onClick={()=>{setOpenPopup(false)}}>X</Button>
 
           <DialogContent dividers>
-
             <AddNewScenarioPageDialogBody addPage={addPage} setOpenPopup={setOpenPopup} ></AddNewScenarioPageDialogBody>
           </DialogContent>
         </Dialog>

@@ -67,7 +67,6 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-
 export default function QuestionField(props) {
 
   const [openThree, setOpenThree] = React.useState(false);
@@ -79,13 +78,14 @@ export default function QuestionField(props) {
     setOpenThree(false);
   };
 
+  // eslint-disable-next-line
   let handleChange = (content, editor) => {
     //TODO Implement
     console.log(content);
     console.log(htmlToText.fromString(content));
   }
  
-  
+
   //TABLE
   const[rows, setRows] = useState([]);
 
@@ -95,8 +95,6 @@ export default function QuestionField(props) {
     score: ' ',
     maxpoints: ' ',
   });
-
-
 
   const removeRow = (rowID) => {
     console.log(rowID);
@@ -118,14 +116,8 @@ export default function QuestionField(props) {
     //functional code to save items to backend
   }
 
-
 //TABLE
 
-
-
-
-
-  
   const classes = useStyles();
 
   return (
@@ -163,6 +155,7 @@ export default function QuestionField(props) {
               className={classes.margin}
               variant="contained"
               color="primary"
+              onClick={updateRow}
             >
               Save
             </Button>
@@ -204,17 +197,12 @@ export default function QuestionField(props) {
           </form>
         </DialogTitle>
         <DialogContent>
-
-
           <BasicTable 
            
            removeRow= {removeRow}
            rows = {rows}
           
           />
-
-
-
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleCloseThree} color="primary">

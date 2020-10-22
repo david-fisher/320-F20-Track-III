@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  List,
   Drawer,
-  ListItem,
-  ListItemText,
   Button,
   Typography,
 } from '@material-ui/core';
@@ -14,10 +11,10 @@ import ConfigureIssues from '../components/scenario_components/ConfigureIssues';
 import ConversationEditor from '../components/scenario_components/ConversationEditor';
 import Reflection from '../components/scenario_components/Reflection';
 import Action from '../components/scenario_components/Action';
-import AddNewSimulationScenarioPageDialog from "../components/AddNewSimulationScenarioPageDialog"
-import Copyright from "../components/Copyright"
-import AddNewScenarioPageDialogBody from "../components/AddNewScenarioPageDialogBody"
-import NavSideBarList from "../components/NavSideBarList"
+import AddNewSimulationScenarioPageDialog from "../components/AddNewSimulationScenarioPageDialog";
+import NavSideBarList from "../components/NavSideBarList";
+import AddIcon from '@material-ui/icons/Add';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -55,18 +52,17 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.5,
   },
   addPageButton:{
-    width: "75px",
-    height: "25px",
-    float: "right",
     margin: theme.spacing(2),
-
+    textTransform: 'unset',
+    border: "solid 3px",
+    borderColor: theme.palette.primary.light,
   }
 }));
 
   //Sidebar Components
   var startList = [
     {id: 0 ,name: "Logistics", component: <Logistics />},
-    {id: 1, name: "Configure Attributes", component: <ConfigureIssues />},
+    {id: 1, name: "Configure Issues", component: <ConfigureIssues />},
     {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
     {id: 3, name: "Event", component: <Event />},
     {id: 4, name: "Reflection", component: <Reflection />},
@@ -80,7 +76,6 @@ export default function Editor(props) {
   const deleteByID = (d_id) =>{
       console.log("we are currently deleteing:")
       console.log(d_id)
-
       setScenarioComponents(scenarioComponents.filter(i => i.id !== d_id));
   }
 
@@ -93,31 +88,28 @@ export default function Editor(props) {
     };
 
     const addPage = (newId,newName,componentType) =>{
-        console.log("componet type: ")
-        console.log(componentType)
-        var c = null;
-        switch(componentType){
-          case "Generic":
-            c = <Event/>
-            break;
-          case "Reflection":
-            c= <Reflection/>
-            break;
-          case "Action":
-            c= <Action/>
-            break;
-          default:
-            c= <Typography>Error</Typography>
+      console.log("Component type: ")
+      console.log(componentType)
+      var c = null;
+      switch(componentType){
+        case "Generic":
+          c = <Event/>
+          break;
+        case "Reflection":
+          c= <Reflection/>
+          break;
+        case "Action":
+          c= <Action/>
+          break;
+        default:
+          c= <Typography>Error</Typography>
 
-        }
-
-        scenarioComponents.push({id: newId, name: newName, component: c})
+      }
+      scenarioComponents.push({id: newId, name: newName, component: c})
     }
 
     function handleAddNewComponent(){
-
       setOpenPopup(true)
-
     }
 
     return(
@@ -130,16 +122,27 @@ export default function Editor(props) {
         }}
         anchor="left"
       >
-      <NavSideBarList onClick={onClick} deleteByID={deleteByID} scenarioPages={scenarioComponents}></NavSideBarList>
-
-        <Button variant="contained" onClick={handleAddNewComponent}
-          className={classes.addPageButton}>addPage</Button>
+        <NavSideBarList 
+          onClick={onClick} 
+          deleteByID={deleteByID} 
+          scenarioPages={scenarioComponents}
+        />
+        <Button 
+          variant="contained" 
+          color="primary"
+          onClick={handleAddNewComponent}
+          className={classes.addPageButton}
+        >
+          <AddIcon />
+          Add Page
+        </Button>
       </Drawer>
-      <AddNewSimulationScenarioPageDialog openPopup = {openPopup}
-                                      title="Add New Page"
-                                      setOpenPopup={setOpenPopup}
-                                      addPage={addPage}> </AddNewSimulationScenarioPageDialog>
-
+      <AddNewSimulationScenarioPageDialog 
+        openPopup = {openPopup}
+        title="Add New Page"
+        setOpenPopup={setOpenPopup}
+        addPage={addPage}> 
+      </AddNewSimulationScenarioPageDialog>
      </div>
     )
   }

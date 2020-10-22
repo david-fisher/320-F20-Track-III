@@ -28,16 +28,12 @@ function StakeHolderFields (){
 
  };
 
+ // eslint-disable-next-line
  function updateStakeholder(stakeholderID, stakeholderBody) {
    //TODO
    //functional code to save items to backend
  };
 
-
-
-
-
- 
     return (
       <div className="stakeHolders">
         <Button

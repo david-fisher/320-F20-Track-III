@@ -1,5 +1,13 @@
 import React from 'react'
-import {Menu,Select,MenuItem,Grid,Button,TextField,Typography,makeStyles} from '@material-ui/core';
+import {
+  Select,
+  MenuItem,
+  Grid,
+  Button,
+  TextField,
+  Typography,
+  makeStyles
+} from '@material-ui/core';
 import EditedSunEditor from "../components/EditedSunEditor"
 
 const useStyles = makeStyles(theme =>({
@@ -18,12 +26,14 @@ const useStyles = makeStyles(theme =>({
 
 export default function AddNewScenarioPageDialogBody({addPage, setOpenPopup}){
     const classes = useStyles();
+    // eslint-disable-next-line
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [pageType, setPageType] = React.useState("Event");
     const [pageName, setPageName] = React.useState("Event");
 
+    // eslint-disable-next-line
     const handleClick = (event) =>{
-        setAnchorEl(event.currentTarget);
+      setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
