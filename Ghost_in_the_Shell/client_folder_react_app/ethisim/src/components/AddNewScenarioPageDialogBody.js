@@ -9,6 +9,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import EditedSunEditor from "../components/EditedSunEditor"
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme =>({
   menuButton:{
@@ -16,7 +17,8 @@ const useStyles = makeStyles(theme =>({
   },
   addButton:{
     margin: theme.spacing(2),
-    float: "right"
+    float: "right",
+    textTransform: "unset",
   },
   selectMenu:{
     minWidth: 200,
@@ -48,7 +50,7 @@ export default function AddNewScenarioPageDialogBody({addPage, setOpenPopup}){
     const createNewPage = () => {
         console.log(pageType)
         console.log(pageName)
-        addPage(13,pageName,pageType)
+        addPage(Math.floor(Math.random() * 10000),pageName,pageType)
         setOpenPopup(false)
         setPageType("Generic")
         setPageName("Generic")
@@ -88,7 +90,15 @@ export default function AddNewScenarioPageDialogBody({addPage, setOpenPopup}){
             ></TextField>
             <EditedSunEditor></EditedSunEditor>
 
-            <Button className={classes.addButton} variant="contained" color="primary" onClick={createNewPage}>Add Scenario Page</Button>
+            <Button 
+              className={classes.addButton} 
+              variant="contained" 
+              color="primary" 
+              onClick={createNewPage}
+            >
+              <AddIcon />
+              Add Scenario Page
+            </Button>
           </Grid>
        </Grid>
       </div>

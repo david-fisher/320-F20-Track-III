@@ -39,8 +39,8 @@ export default function BasicTable(props) {
         <TableHead>
           <TableRow>
             <TableCell>Issue</TableCell>
-            <TableCell align="right">Score</TableCell>
-            <TableCell align="right">Max</TableCell>
+            <TableCell>Score</TableCell>
+            <TableCell>Max</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>

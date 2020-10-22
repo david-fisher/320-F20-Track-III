@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
   //Sidebar Components
   var startList = [
-    {id: 0 ,name: "Logistics", component: <Logistics />},
+    {id: 0, name: "Logistics", component: <Logistics />},
     {id: 1, name: "Configure Issues", component: <ConfigureIssues />},
     {id: 2, name: "Conversation Editor", component: <ConversationEditor />},
     {id: 3, name: "Event", component: <Event />},
@@ -73,6 +73,7 @@ export default function Editor(props) {
   const [scenarioComponent,setScenarioComponent] = useState(<Logistics/>)
   const [openPopup, setOpenPopup] = useState(false)
   const [scenarioComponents,setScenarioComponents] = useState(startList)
+
   const deleteByID = (d_id) =>{
       console.log("we are currently deleteing:")
       console.log(d_id)

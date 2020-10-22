@@ -8,6 +8,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import AddNewScenarioPageDialogBody from "../components/AddNewScenarioPageDialogBody";
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const useStyles = makeStyles(theme =>({
   dialogWrapper:{
@@ -17,10 +18,13 @@ const useStyles = makeStyles(theme =>({
   },
   exitOutButton:{
     margin: theme.spacing(2),
-    float: "right"
-  }
-
+    marginLeft: "auto",
+    float: "right",
+    border: "3px solid",
+    borderColor: theme.palette.primary.light,
+  },
 }))
+
 export default function AddNewSimulationScenarioPageDialog(props){
     const{title,openPopup,setOpenPopup,addPage} = props;
     const classes = useStyles();
@@ -28,19 +32,20 @@ export default function AddNewSimulationScenarioPageDialog(props){
     return(
       <div>
         <Dialog open={openPopup} maxWidth="md" classes={{paper: classes.dialogWrapper }}>
-          <DialogTitle style={{display: "flex"}}>
-             <div>
-             <Typography variant="h3" alight="center" component="div" style={{flexGrow:1}}>{title}</Typography>
-             </div>
-          </DialogTitle>
 
-          <Button className={classes.exitOutButton} variant="contained"
-                  color="secondary" style={{marginLeft: "auto"}}
-                  onClick={()=>{setOpenPopup(false)}}>X</Button>
+          <DialogTitle disableTypography={true} style={{display: "flex"}}>
+             <Typography variant="h3" align="center" component="div" style={{display: "flex"}}>{title}</Typography>
+             <Button className={classes.exitOutButton} variant="contained"
+                  color="primary"
+                  onClick={()=>{setOpenPopup(false)}}>
+                  <HighlightOffIcon />
+              </Button>
+          </DialogTitle>
 
           <DialogContent dividers>
             <AddNewScenarioPageDialogBody addPage={addPage} setOpenPopup={setOpenPopup} ></AddNewScenarioPageDialogBody>
           </DialogContent>
+
         </Dialog>
       </div>
     )
