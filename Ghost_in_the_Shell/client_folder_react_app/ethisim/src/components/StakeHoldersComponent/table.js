@@ -34,7 +34,7 @@ const rows = [
 BasicTable.propTypes = {
     rows: PropTypes.any.isRequired,
     removeRow: PropTypes.any.isRequired,
-    data: PropTypes.any.isRequired,
+    data: PropTypes.string,
 };
 
 export default function BasicTable(props) {
