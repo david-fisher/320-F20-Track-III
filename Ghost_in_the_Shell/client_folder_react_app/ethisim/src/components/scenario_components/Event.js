@@ -14,7 +14,6 @@ saveButton:{
   margin: theme.spacing(2),
   float: "right",
   textTransform: "unset",
-  variant: "contained",
 },
 }));
 
