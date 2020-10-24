@@ -26,11 +26,16 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     textTransform: 'unset',
   },
+  saveButton:{
+    margin: theme.spacing(2),
+    float: "right",
+    textTransform: "unset",
+  },
 }));
 
 export default function FinalAction() {
   const classes = useStyles();
-  
+
   return (
     <Container component="main">
       <Typography align="center" variant="h2">
@@ -74,6 +79,7 @@ export default function FinalAction() {
           </Button>
         </form>
       </div>
+      <Button className={classes.saveButton} variant="contained" color="primary">Save</Button>
     </Container>
   );
 }

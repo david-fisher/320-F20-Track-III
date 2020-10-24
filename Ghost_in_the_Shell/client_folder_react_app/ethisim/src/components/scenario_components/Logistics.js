@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
+  saveButton:{
+    margin: theme.spacing(2),
+    float: "right",
+    textTransform: "unset",
+  },
 }));
 
 export default function Logistics() {
@@ -67,9 +72,9 @@ export default function Logistics() {
         {authors}
       <div className={classes.subdiv}>
         <form className={classes.buttons} noValidate autoComplete="off">
-          <Button 
-            variant="contained" 
-            color="primary" 
+          <Button
+            variant="contained"
+            color="primary"
             onClick={addAuthor}
           >
             Add Author
@@ -103,6 +108,7 @@ export default function Logistics() {
           </Button>
         </form>
       </div>
+      <Button className={classes.saveButton} color="primary">Save</Button>
     </Container>
   );
 
@@ -123,9 +129,9 @@ export default function Logistics() {
           {authors}
         <div className={classes.subdiv}>
           <form className={classes.buttons} noValidate autoComplete="off">
-            <Button 
-              variant="contained" 
-              color="primary" 
+            <Button
+              variant="contained"
+              color="primary"
               onClick={addAuthor}
             >
               Add Author
@@ -159,6 +165,7 @@ export default function Logistics() {
             </Button>
           </form>
         </div>
+        <Button className={classes.saveButton}  variant="contained" color="primary">Save</Button>
       </Container>
     );
   }
