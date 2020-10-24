@@ -34,11 +34,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 ScenarioCard.propTypes = {
-    id: PropTypes.number.isRequired,
-    scenarioName: PropTypes.string.isRequired,
-    className: PropTypes.string.isRequired,
-    scenarioData: PropTypes.any.isRequired,
-    finish: PropTypes.any.isRequired,
+    id: PropTypes.string,
+    scenarioName: PropTypes.string,
+    className: PropTypes.string,
+    scenarioData: PropTypes.string,
+    finish: PropTypes.bool,
 };
 
 export default function ScenarioCard(props) {
