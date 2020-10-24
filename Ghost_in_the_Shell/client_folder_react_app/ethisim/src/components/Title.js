@@ -11,13 +11,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 Title.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.any.isRequired,
 };
 
 export default function Title(props) {
     const classes = useStyles();
     Title.propTypes = props.data;
-    const title = props;
+    const title = props.data;
 
     let handleChange = (content) => {
         //TODO Implement
