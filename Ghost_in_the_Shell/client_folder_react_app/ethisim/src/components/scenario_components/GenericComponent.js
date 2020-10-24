@@ -6,20 +6,20 @@ import InformationItemList from './InformationItemList';
 import Button from '@material-ui/core/Button';
 
 export default function GenericComponent() {
-  return (
-    <div>
-      <Typography align="center" variant="h2">
-        Generic Component
-      </Typography>
-      <Title />
-      <Body />
-      <InformationItemList />
-      <Button variant="contained" color="grey" >
-        Save Generic Component
-      </Button>
-      <Button variant="contained" color="primary" >
-        Delete Generic Component
-      </Button>
-    </div>
-  );
+    return (
+        <div>
+            <Typography align="center" variant="h2">
+                Generic Component
+            </Typography>
+            <Title />
+            <Body />
+            <InformationItemList />
+            <Button variant="contained" color="grey">
+                Save Generic Component
+            </Button>
+            <Button variant="contained" color="primary">
+                Delete Generic Component
+            </Button>
+        </div>
+    );
 }
