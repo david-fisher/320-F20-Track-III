@@ -32,13 +32,12 @@ AddNewScenarioPageDialogBody.propTypes = {
     addPage: PropTypes.any.isRequired,
 };
 
-export default function AddNewScenarioPageDialogBody({
-    addPage,
-    setOpenPopup,
-}) {
-    AddNewScenarioPageDialogBody.propTypes.addPage = { addPage };
-    AddNewScenarioPageDialogBody.propTypes.setOpenPopup = { setOpenPopup };
+export default function AddNewScenarioPageDialogBody(props) {
     const classes = useStyles();
+    AddNewScenarioPageDialogBody.propTypes = props.data;
+    const data = props;
+    const { addPage, setOpenPopup } = data;
+
     // eslint-disable-next-line
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [pageType, setPageType] = React.useState('Event');

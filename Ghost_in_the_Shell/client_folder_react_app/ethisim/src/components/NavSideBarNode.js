@@ -32,19 +32,11 @@ NavSideBarNode.propTypes = {
     component: PropTypes.any.isRequired,
 };
 
-export default function NavSideBarNode({
-    onClick,
-    deleteByID,
-    id,
-    name,
-    component,
-}) {
+export default function NavSideBarNode(props) {
     const classes = useStyles();
-    NavSideBarNode.propTypes.onClick = { onClick };
-    NavSideBarNode.propTypes.id = { id };
-    NavSideBarNode.propTypes.deleteByID = { deleteByID };
-    NavSideBarNode.propTypes.name = { name };
-    NavSideBarNode.propTypes.component = { component };
+    NavSideBarNode.propTypes = props.data;
+    const data = props;
+    const { onClick, deleteByID, id, name, component } = data;
 
     function handleDelete() {
         console.log('delete is: ');

@@ -8,14 +8,11 @@ StakeHolderList.propTypes = {
     scenarioPages: PropTypes.any.isRequired,
 };
 
-export default function StakeHolderList({
-    onClick,
-    deleteByID,
-    scenarioPages,
-}) {
-    StakeHolderList.propTypes.onClick = { onClick };
-    StakeHolderList.propTypes.scenarioPages = { scenarioPages };
-    StakeHolderList.propTypes.deleteByID = { deleteByID };
+export default function StakeHolderList(props) {
+    StakeHolderList.propTypes = props.data;
+    const data = props;
+    const { onClick, deleteByID, scenarioPages } = data;
+
     return (
         <div>
             {scenarioPages.map((scenarioPage) => (
