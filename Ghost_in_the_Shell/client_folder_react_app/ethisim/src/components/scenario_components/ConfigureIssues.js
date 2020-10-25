@@ -16,10 +16,12 @@ const useStyles = makeStyles((theme) => ({
     float: "right",
     textTransform: "unset",
   },
+
 }));
 
 export default function ConfigureIssues() {
-  const classes = useStyles();
+    const classes = useStyles();
+
 
   return (
     <div>
@@ -34,4 +36,5 @@ export default function ConfigureIssues() {
     <Button className={classes.saveButton} variant="contained" color="primary">Save</Button>
     </div>
   );
+
 }

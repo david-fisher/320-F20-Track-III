@@ -1,6 +1,7 @@
 import React from 'react';
 import Body from '../Body';
 import Title from '../Title';
+
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -35,4 +36,5 @@ export default function Reflection() {
     </Container>
 
   );
+
 }

@@ -1,15 +1,11 @@
 import React from 'react';
-import {
-  Button,
-  TextField,
-  Typography,
-  Container,
-} from '@material-ui/core';
+import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../Body';
 import Title from '../Title';
 
 const useStyles = makeStyles((theme) => ({
+
   container: {
     marginTop: theme.spacing(2),
     display: 'flex',

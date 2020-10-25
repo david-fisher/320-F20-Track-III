@@ -2,6 +2,7 @@ import React from 'react';
 import Body from '../Body';
 import Title from '../Title';
 import InformationItemList from './InformationItemList';
+
 import {
   Typography,
   Container,
@@ -30,4 +31,5 @@ export default function Event() {
       <Button className={classes.saveButton}  variant="contained" color="primary">Save</Button>
     </Container>
   );
+
 }

@@ -1,13 +1,28 @@
-
 import React from 'react';
 import NavSideBarNode from '../components/NavSideBarNode';
+import PropTypes from 'prop-types';
 
-export default function StakeHolderList({onClick,deleteByID,scenarioPages}){
-  return(
-    <div>
-      {scenarioPages.map(scenarioPage=>(
-        <NavSideBarNode key={scenarioPage.id} onClick={onClick} deleteByID={deleteByID} {...scenarioPage} />
-      ))}
-    </div>
-  );
+StakeHolderList.propTypes = {
+    onClick: PropTypes.any.isRequired,
+    deleteByID: PropTypes.any.isRequired,
+    scenarioPages: PropTypes.any.isRequired,
+};
+
+export default function StakeHolderList(props) {
+    StakeHolderList.propTypes = props.data;
+    const data = props;
+    const { onClick, deleteByID, scenarioPages } = data;
+
+    return (
+        <div>
+            {scenarioPages.map((scenarioPage) => (
+                <NavSideBarNode
+                    key={scenarioPage.id}
+                    onClick={onClick}
+                    deleteByID={deleteByID}
+                    {...scenarioPage}
+                />
+            ))}
+        </div>
+    );
 }
