@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 Title.propTypes = {
-    title: PropTypes.any.isRequired,
+    title: PropTypes.string,
 };
 
 export default function Title(props) {
