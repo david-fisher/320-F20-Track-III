@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FinalAction() {
+export default function Action() {
   const classes = useStyles();
 
   return (
@@ -69,14 +69,6 @@ export default function FinalAction() {
             label="Input Option 2 Text"
             name="option 2"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            className={classes.submit}
-          >
-            Submit User Options
-          </Button>
         </form>
       </div>
       <Button className={classes.saveButton} variant="contained" color="primary">Save</Button>
