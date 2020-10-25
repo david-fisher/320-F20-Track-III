@@ -3,8 +3,14 @@ import Typography from '@material-ui/core/Typography';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
+import PropTypes from 'prop-types';
 
-export default function Body() {
+Body.propTypes = {
+    body: PropTypes.string.isRequired,
+};
+
+export default function Body(props) {
+    const { body } = props;
     let handleChange = (content) => {
         //TODO Implement
         console.log(content);
@@ -15,6 +21,7 @@ export default function Body() {
         <div>
             <Typography variant="h4">Body</Typography>
             <SunEditor
+                setContents={body}
                 setOptions={{
                     width: '100%',
                     height: 400,

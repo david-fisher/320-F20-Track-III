@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 ScenarioCard.propTypes = {
-    id: PropTypes.string,
+    id: PropTypes.number,
     scenarioName: PropTypes.string,
     className: PropTypes.string,
     scenarioData: PropTypes.string,

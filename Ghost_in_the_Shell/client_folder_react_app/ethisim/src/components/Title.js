@@ -17,7 +17,7 @@ Title.propTypes = {
 export default function Title(props) {
     const classes = useStyles();
     Title.propTypes = props.data;
-    const title = props.data;
+    const title = props.title;
 
     let handleChange = (content) => {
         //TODO Implement

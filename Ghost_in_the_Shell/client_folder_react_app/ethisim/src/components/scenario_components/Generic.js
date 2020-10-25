@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
 import Body from '../Body';
 import Title from '../Title';
-import VersionControl from '../VersionControl';
 import { Typography, Container } from '@material-ui/core';
-import QuestionFields from '../QuestionComponent/questions';
-import { mockReflectionHistory } from '../../shared/mockScenarioData';
+import VersionControl from '../VersionControl';
+import InformationItemList from './InformationItemList';
+import { mockGenericHistory } from '../../shared/mockScenarioData';
 
-export default function Reflection(props) {
-    //const titleData = mockActionComponent.title;
-    //const bodyData = mockActionComponent.body;
+export default function Generic(props) {
+    //const titleData = mockGenericComponent.title;
+    //const bodyData = mockGenericComponent.body;
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
     return (
         <Container component="main">
             <Typography align="center" variant="h2">
-                Reflection Component
+                Event Component
             </Typography>
             <VersionControl
-                history={mockReflectionHistory.history}
-                type={mockReflectionHistory.type}
+                history={mockGenericHistory.history}
+                type={mockGenericHistory.type}
                 setTitle={setTitle}
                 setBody={setBody}
             />
             <Title title={title} />
             <Body body={body} />
-            <QuestionFields />
+            <InformationItemList />
         </Container>
     );
 }

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Author from './Author';
 import { isBrowser } from 'react-device-detect';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
-
+import { mockUnfinishedScenario } from '../../shared/mockScenarioData';
 const useStyles = makeStyles((theme) => ({
     textfields: {
         '& > *': {
@@ -34,17 +34,35 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Logistics() {
+export default function Logistics(props) {
     const classes = useStyles();
     //temporary until backend implements id's
     const [id, setId] = useState(0);
-    const [authors, setAuthor] = useState([<Author key={id} />]);
+    const { scenarioName, className } = mockUnfinishedScenario;
+    const initialAuthors = mockUnfinishedScenario.authors;
 
     const addAuthor = (event) => {
         setAuthor(authors.concat(<Author key={id + 1} />));
         setId(id + 1);
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
     };
+
+    const initializeAuthors = (authorsArray, currentAuthor, index) => {
+        return authorsArray.concat(
+            <Author key={index} author={currentAuthor} />
+        );
+    };
+
+    const currentAuthors = initialAuthors.reduce(
+        (authorsArray, currentAuthor, index) => {
+            return initializeAuthors(authorsArray, currentAuthor, index);
+        },
+        []
+    );
+
+    const [authors, setAuthor] = useState(currentAuthors);
 
     //default if it's a browser
     var body = (
@@ -54,9 +72,13 @@ export default function Logistics() {
             </Typography>
             <form className={classes.textfields} noValidate autoComplete="off">
                 Simulation Title
-                <TextField id="Simulation Title" label="" />
+                <TextField
+                    id="Simulation Title"
+                    label=""
+                    value={scenarioName}
+                />
                 Course Name
-                <TextField id="Course Name" label="" />
+                <TextField id="Course Name" label="" value={className} />
                 Authors
             </form>
             {authors}
@@ -107,9 +129,13 @@ export default function Logistics() {
                     autoComplete="off"
                 >
                     Simulation Title
-                    <TextField id="Simulation Title" label="" />
+                    <TextField
+                        id="Simulation Title"
+                        label=""
+                        value={scenarioName}
+                    />
                     Course Name
-                    <TextField id="Course Name" label="" />
+                    <TextField id="Course Name" label="" value={className} />
                     Authors
                 </form>
                 {authors}

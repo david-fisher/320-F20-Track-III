@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../Body';
 import Title from '../Title';
 import VersionControl from '../VersionControl';
+import { mockActionHistory } from '../../shared/mockScenarioData';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -25,24 +26,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FinalAction(props) {
-  const classes = useStyles();
-  
-  const { componentData } = props;
-  const titleData = componentData.title;
-  const introductionData = componentData.introduction;
-  const [ title, setTitle ] = useState(titleData);
-  const [ body, setBody ] = useState(introductionData);
+    const classes = useStyles();
 
+    //const titleData = mockActionComponent.title;
+    //const bodyData = mockActionComponent.body;
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
 
     return (
         <Container component="main">
             <Typography align="center" variant="h2">
                 Action Component
             </Typography>
-            <VersionControl 
-              history={componentData.history} 
-              setTitle={setTitle}
-              setIntroduction={setBody}
+            <VersionControl
+                history={mockActionHistory.history}
+                type={mockActionHistory.type}
+                setTitle={setTitle}
+                setBody={setBody}
             />
             <Title title={title} />
             <Body body={body} />

@@ -4,7 +4,10 @@ import { Container, Box, Typography, Grid } from '@material-ui/core';
 import ScenarioCard from '../components/ScenarioCard';
 import AddNewScenarioCard from '../components/AddNewScenarioCard';
 import Copyright from '../components/Copyright';
-import { mockUnfinishedScenarioData, mockFinishedScenarioData } from '../shared/mockScenarioData';
+import {
+    mockUnfinishedScenario,
+    mockFinishedScenario,
+} from '../shared/mockScenarioData';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -19,10 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //Placeholder data
-const sampleScenariosData = [
-  mockUnfinishedScenarioData,
-  mockFinishedScenarioData,
-];
+const sampleScenariosData = [mockUnfinishedScenario, mockFinishedScenario];
 
 //Passing props with React Router in Material UI: https://stackoverflow.com/questions/30115324/pass-props-in-link-react-router
 export default function Dashboard() {
