@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import Introduction from '../Introduction';
+import Body from '../Body';
 import Title from '../Title';
 import {
   Typography,
   Container,
 } from '@material-ui/core';
 import VersionControl from '../VersionControl';
+import InformationItemList from './InformationItemList';
 
 export default function Event(props) {
 
@@ -13,7 +14,7 @@ export default function Event(props) {
   const titleData = componentData.title;
   const introductionData = componentData.introduction;
   const [ title, setTitle ] = useState(titleData);
-  const [ introduction, setIntroduction ] = useState(introductionData);
+  const [ body, setBody ] = useState(introductionData);
 
   return (
     <Container component="main">
@@ -21,14 +22,13 @@ export default function Event(props) {
         Event Component
       </Typography>
       <VersionControl 
-        history={componentData.history} 
-        setTitle={setTitle}
-        setIntroduction={setIntroduction}
-      />
-      <Title title={title} setTitle={setTitle} />
-      <Introduction 
-        introduction={introduction} 
-      />
+              history={componentData.history} 
+              setTitle={setTitle}
+              setIntroduction={setBody}
+            />
+      <Title title={title} />
+      <Body body={body} />
+      <InformationItemList />
     </Container>
   );
 }

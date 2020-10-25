@@ -1,63 +1,64 @@
-import React, { Component } from "react";
-import EntryField from "./IssueEntryField";
-import Button from "@material-ui/core/Button";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import EntryField from './IssueEntryField';
+import { Container, Button } from '@material-ui/core';
 
-class IssueEntryFieldList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      entries: [],
-      entryCur: {
-        key: " ",
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    button: {
+        margin: theme.spacing(0.5),
+        marginTop: theme.spacing(0),
+        textTransform: 'unset',
+    },
+}));
+
+export default function IssueEntryFieldList() {
+    const classes = useStyles();
+
+    const [entries, setEntries] = useState([]);
+    const [entryCur, setEntryCur] = useState({
         id: 0,
-      },
-    };
-    this.addItem = this.addItem.bind(this);
-  }
-
-  handleDelete = (entryID) => {
-    const entries = this.state.entries.filter((q) => q.id !== entryID);
-    this.setState({ entries });
-  };
-
-  addItem(e) {
-    e.preventDefault();
-    const newEntry = this.state.entryCur;
-    const newEntries = [...this.state.entries, newEntry];
-
-    this.setState({
-      entries: newEntries,
-      entryCur: {
-        key: " ",
-        id: this.state.entryCur.id + 1,
-      },
     });
-  }
 
-  render() {
+    const handleDelete = (entryID) => {
+        setEntries(entries.filter((entry) => entry.id !== entryID));
+    };
+
+    const addItem = (e) => {
+        e.preventDefault();
+        const newEntry = entryCur;
+        const newEntries = [...entries, newEntry];
+        setEntries(newEntries);
+        setEntryCur({
+            id: entryCur.id + 1,
+        });
+    };
+
     return (
-      <div className="entries">
-        <Button
-          id="button"
-          onClick={this.addItem}
-          variant="contained"
-          color="primary"
-        >
-          Create Issue
-        </Button>
+        <Container component="main" className={classes.container}>
+            <Button
+                className={classes.button}
+                id="button"
+                onClick={addItem}
+                variant="contained"
+                color="primary"
+            >
+                Create Issue
+            </Button>
 
-        <form id="form">
-          {this.state.entries.map((entry) => (
-            <EntryField
-              key={entry.id}
-              onDelete={this.handleDelete}
-              entry={entry}
-            />
-          ))}
-        </form>
-      </div>
+            <form id="form">
+                {entries.map((entry) => (
+                    <EntryField
+                        key={entry.id}
+                        onDelete={handleDelete}
+                        entry={entry}
+                    />
+                ))}
+            </form>
+        </Container>
     );
-  }
 }
-
-export default IssueEntryFieldList;

@@ -1,34 +1,30 @@
 import React, { useState } from 'react';
-import {
-  Typography,
-  Container,
-} from '@material-ui/core';
-import Introduction from '../Introduction';
+import Body from '../Body';
 import Title from '../Title';
 import VersionControl from '../VersionControl';
+import { Typography, Container } from '@material-ui/core';
+import QuestionFields from '../QuestionComponent/questions';
 
 export default function Reflection(props) {
+    const { componentData } = props;
+    const titleData = componentData.title;
+    const introductionData = componentData.introduction;
+    const [ title, setTitle ] = useState(titleData);
+    const [ body, setBody ] = useState(introductionData);
 
-  const { componentData } = props;
-  const titleData = componentData.title;
-  const introductionData = componentData.introduction;
-  const [ title, setTitle ] = useState(titleData);
-  const [ introduction, setIntroduction ] = useState(introductionData);
-
-  return (
-    <Container component="main">
-      <Typography align="center" variant="h2">
-        Reflection Component
-      </Typography>
-      <VersionControl 
-        history={componentData.history} 
-        setTitle={setTitle}
-        setIntroduction={setIntroduction}
-      />
-      <Title title={title} setTitle={setTitle} />
-      <Introduction 
-        introduction={introduction} 
-      />
-    </Container>
-  );
+    return (
+        <Container component="main">
+            <Typography align="center" variant="h2">
+                Reflection Component
+            </Typography>
+            <VersionControl 
+              history={componentData.history} 
+              setTitle={setTitle}
+              setIntroduction={setBody}
+            />
+            <Title title={title} />
+            <Body body={body} />
+            <QuestionFields />
+        </Container>
+    );
 }
