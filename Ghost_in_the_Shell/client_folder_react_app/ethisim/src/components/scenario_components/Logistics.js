@@ -32,8 +32,6 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
-
-  },
   saveButton:{
     margin: theme.spacing(2),
     float: "right",
@@ -225,5 +223,5 @@ export default function Logistics() {
         );
     }
 
-    return body;
-}
+    return (body);
+}}
