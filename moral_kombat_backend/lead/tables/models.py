@@ -48,7 +48,7 @@ class reflection_questions(models.Model):
 
 
 class event_page(models.Model):
-    PAGE_ID = models.ForeignKey('pages', on_delete = models.CASCADE, related_name = "event_pages", primary_key = True)
+    PAGE_ID = models.ForeignKey('pages', on_delete = models.CASCADE, related_name = "event_page", primary_key = True)
     BODY = models.TextField()
 
 
