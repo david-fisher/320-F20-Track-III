@@ -6,14 +6,13 @@ from django.contrib.postgres.fields import ArrayField
 class scenarios(models.Model):
     class Meta:
         unique_together = (('SCENARIO_ID'), ('VERSION_ID'))
-    SCENARIO_ID = models.IntegerField()
-    VERSION_ID = models.IntegerField()
+    SCENARIO_ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    VERSION_ID = models.IntegerField(default=0, editable=False)
     NAME = models.CharField(max_length = 1000)
     SUB_TITLE = models.CharField(max_length = 1000, default = None)
     IS_FINISHED = models.BooleanField(default = False)
     PUBLIC = models.BooleanField(default = False)
-    NUM_CONVERSATIONS = models.IntegerField()
-    MATRIX = ArrayField(ArrayField(models.IntegerField(), size = 15), size = 15)
+    NUM_CONVERSATIONS = models.IntegerField(default = 0)
     CREATOR = models.ForeignKey('professors', to_field = 'PROFESSOR_ID', on_delete =models.CASCADE, related_name = "scenarios")
     FIRST_PAGE = models.IntegerField(default = 1)
     # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)

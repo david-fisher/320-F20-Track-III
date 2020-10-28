@@ -30,7 +30,8 @@ class ProfessorsViewSet(viewsets.ModelViewSet):
 
 
 class ScenariosViewSet(viewsets.ModelViewSet):
-    queryset = scenarios.objects.all()
+    def get(self, request):
+        
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -124,7 +125,7 @@ class ResponsesViewSet(viewsets.ModelViewSet):
     permission_classe = [permissions.AllowAny]
     serializer_class = ResponsesSerializer
 
-
+#this allows for filerting scenarios by professor_ID
 class allScenariosViewSet(generics.ListAPIView):
     serializer_class = allScenariosSerializer
     queryset = scenarios.objects.all()
