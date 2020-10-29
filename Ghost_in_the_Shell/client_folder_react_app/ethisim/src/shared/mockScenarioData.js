@@ -86,6 +86,7 @@ const mockReflectionHistory = {
             body:
                 '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #1</strong></u></em></span><em></em><br></p>',
             date: new Date().getTime(),
+            questions: ['How do you feel?', 'Do you like this?'],
             author: 'David Barrington',
             id: 1,
         },
@@ -95,6 +96,7 @@ const mockReflectionHistory = {
             body:
                 '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #2</strong></u></em></span><em></em><br></p>',
             date: new Date().getTime() - 2000000,
+            questions: ['How do you feel?', 'Do you like this?'],
             author: 'David Fisher',
             id: 2,
         },
@@ -109,6 +111,8 @@ const mockActionHistory = {
             title: 'David Fisher Version Control Introduction',
             body:
                 '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #1</strong></u></em></span><em></em><br></p>',
+            option1: 'Go Ahead',
+            option2: 'Wait',
             date: new Date().getTime(),
             author: 'David Fisher',
             id: 1,
@@ -118,6 +122,8 @@ const mockActionHistory = {
             title: 'Gordan Anderson Version Control Introduction',
             body:
                 '<p><span style="font-size: 28px;"><em><u><strong>VERSION CONTROL WORKS #2</strong></u></em></span><em></em><br></p>',
+            option1: 'Die',
+            option2: 'Live',
             date: new Date().getTime() - 1000000,
             author: 'Gordan Anderson',
             id: 2,
@@ -148,12 +154,43 @@ const mockIssuesHistory = {
     ],
 };
 
-const mockUnfinishedScenario = {
-    id: 1,
-    scenarioName: 'Unfinished Scenario',
-    className: 'CS320',
-    authors: ['David Fisher', 'Peter Haas', 'Lee Osterweil'],
-    finished: true,
+const mockConversationEditorHistory = {
+    history: [
+        {
+            date: new Date().getTime(),
+            author: 'Marius Minea',
+            id: 1,
+            stakeholders: [
+                {
+                    name: 'Da Big Cheeze',
+                    bio: 'Spiffy',
+                    mainConvo: 'Big Spiffy',
+                    questionsResponse: [
+                        {
+                            question: 'Do you like this idea?',
+                            response: "Yes, I love stealing everyone's data",
+                        },
+                        {
+                            question: 'Do you like this idea?',
+                            response: "Yes, I love stealing everyone's data",
+                        },
+                    ],
+                    stakeHolderIssues: [
+                        {
+                            id: 1,
+                            issue: 'Personal Wealth',
+                            stakeHolderScore: 3,
+                        },
+                        {
+                            id: 2,
+                            issue: 'Privacy',
+                            stakeHolderScore: 4,
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
 };
 
 const mockGenericComponent = {
@@ -177,6 +214,14 @@ const mockActionComponent = {
     body: 'Sample Introduction for Action Component',
 };
 
+const mockUnfinishedScenario = {
+    id: 1,
+    scenarioName: 'Unfinished Scenario',
+    className: 'CS320',
+    authors: ['David Fisher', 'Peter Haas', 'Lee Osterweil'],
+    finished: false,
+};
+
 const mockUnfinishedScenarioData = {
     id: 1,
     authors: ['David Fisher', 'Peter Haas', 'Lee Osterweil'],
@@ -185,7 +230,7 @@ const mockUnfinishedScenarioData = {
         mockReflectionComponent,
         mockActionComponent,
     ],
-    finished: true,
+    finished: false,
 };
 
 const mockFinishedScenario = {
@@ -193,7 +238,7 @@ const mockFinishedScenario = {
     scenarioName: 'Finished Scenario',
     className: 'CS320',
     authors: ['David Fisher', 'Peter Haas', 'Lee Osterweil'],
-    finished: false,
+    finished: true,
 };
 
 const mockFinishedScenarioData = {
@@ -204,7 +249,7 @@ const mockFinishedScenarioData = {
         mockReflectionComponent,
         mockActionComponent,
     ],
-    finished: false,
+    finished: true,
 };
 
 export {

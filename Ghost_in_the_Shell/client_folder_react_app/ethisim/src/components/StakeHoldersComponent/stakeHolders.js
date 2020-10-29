@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 import StakeHolder from './stakeHolder';
 import Button from '@material-ui/core/Button';
 import './stakeHolders.css';
+import PropTypes from 'prop-types';
 
-export default function StakeHolderFields() {
-    const [stakeHolders, setStakeHolders] = useState([]);
+StakeHolderFields.propTypes = {
+    stakeHolders: PropTypes.any,
+    setStakeHolders: PropTypes.any,
+};
+
+export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
+    //const [stakeHolders, setStakeHolders] = useState([]);
+    const [name, setName] = useState('');
 
     const [stakeHolder, setEdit] = useState({
         id: Math.floor(Math.random() * 10000),
@@ -48,6 +55,11 @@ export default function StakeHolderFields() {
                         key={stakeHolder.id}
                         removeStakeHolder={removeStakeHolder}
                         stakeHolder={stakeHolder}
+                        name={stakeHolder.name}
+                        bio={stakeHolder.bio}
+                        mainConvo={stakeHolder.mainConvo}
+                        questions={stakeHolder.questions}
+                        stakeHolderIssues={stakeHolder.stakeHolderIssues}
                     />
                 ))}
             </form>

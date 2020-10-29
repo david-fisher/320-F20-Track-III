@@ -11,6 +11,7 @@ export default function Reflection(props) {
     //const bodyData = mockActionComponent.body;
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [questions, setQuestions] = useState([]);
 
     return (
         <Container component="main">
@@ -22,10 +23,11 @@ export default function Reflection(props) {
                 type={mockReflectionHistory.type}
                 setTitle={setTitle}
                 setBody={setBody}
+                setQuestions={setQuestions}
             />
-            <Title title={title} />
+            <Title title={title} setTitle={setTitle} />
             <Body body={body} />
-            <QuestionFields />
+            <QuestionFields questions={questions} setQuestions={setQuestions} />
         </Container>
     );
 }

@@ -155,7 +155,7 @@ export default function StakeHolder(props) {
     return (
         <div id="parent">
             <form id="SHname">
-                <TextField label="StakeHolder Name" />
+                <TextField label="StakeHolder Name" value={props.name} />
             </form>
             <img id="stakeimg" src={shemptylogo} alt=" "></img>
             <label id="upl" htmlFor="contained-button-file">

@@ -23,7 +23,7 @@ export default function Generic(props) {
                 setTitle={setTitle}
                 setBody={setBody}
             />
-            <Title title={title} />
+            <Title title={title} setTitle={setTitle} />
             <Body body={body} />
             <InformationItemList />
         </Container>

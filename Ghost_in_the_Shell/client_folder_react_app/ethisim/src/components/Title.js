@@ -18,9 +18,11 @@ export default function Title(props) {
     const classes = useStyles();
     Title.propTypes = props.data;
     const title = props.title;
+    const setTitle = props.setTitle;
 
     let handleChange = (content) => {
         //TODO Implement
+        setTitle(content.target.value);
     };
 
     return (

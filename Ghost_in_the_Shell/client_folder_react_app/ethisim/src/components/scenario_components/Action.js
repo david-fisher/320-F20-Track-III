@@ -32,6 +32,8 @@ export default function FinalAction(props) {
     //const bodyData = mockActionComponent.body;
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [option1, setOption1] = useState('');
+    const [option2, setOption2] = useState('');
 
     return (
         <Container component="main">
@@ -43,10 +45,11 @@ export default function FinalAction(props) {
                 type={mockActionHistory.type}
                 setTitle={setTitle}
                 setBody={setBody}
+                setOption1={setOption1}
+                setOption2={setOption2}
             />
-            <Title title={title} />
-            <Body body={body} />
             <Title title={title} setTitle={setTitle} />
+            <Body body={body} />
             <div className={classes.container}>
                 <form className={classes.form}>
                     <Typography align="center" variant="h6">
@@ -59,6 +62,7 @@ export default function FinalAction(props) {
                         fullWidth
                         id="option 1"
                         label="Input Option 1 Text"
+                        value={option1}
                         name="option 1"
                     />
                     <Typography align="center" variant="h6">
@@ -71,6 +75,7 @@ export default function FinalAction(props) {
                         fullWidth
                         id="option 2"
                         label="Input Option 2 Text"
+                        value={option2}
                         name="option 2"
                     />
                     <Button

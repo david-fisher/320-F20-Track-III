@@ -131,6 +131,9 @@ VersionControlDialog.propTypes = {
     setIssueEntryFieldList: PropTypes.any,
     setTitle: PropTypes.any,
     setBody: PropTypes.any,
+    setOption1: PropTypes.any,
+    setOption2: PropTypes.any,
+    setQuestions: PropTypes.any,
 };
 
 export default function VersionControlDialog({
@@ -139,6 +142,9 @@ export default function VersionControlDialog({
     setIssueEntryFieldList,
     setTitle,
     setBody,
+    setOption1,
+    setOption2,
+    setQuestions,
 }) {
     const classes = useStyles();
 
@@ -169,10 +175,13 @@ export default function VersionControlDialog({
                 case 'Reflection':
                     setTitle(selectedVersionData.title);
                     setBody(selectedVersionData.body);
+                    setQuestions(selectedVersionData.questions);
                     break;
                 case 'Action':
                     setTitle(selectedVersionData.title);
                     setBody(selectedVersionData.body);
+                    setOption1(selectedVersionData.option1);
+                    setOption2(selectedVersionData.option2);
                     break;
                 default:
                     break;

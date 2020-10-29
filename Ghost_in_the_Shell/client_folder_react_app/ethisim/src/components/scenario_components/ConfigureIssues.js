@@ -29,7 +29,7 @@ export default function ConfigureIssues() {
             <div className={classes.versionControl}>
                 <VersionControl
                     history={mockIssuesHistory.history}
-                    type={mockIssuesHistory.type}
+                    type={'Issues'}
                     setIssueEntryFieldList={setIssueEntryFieldList}
                 />
             </div>
