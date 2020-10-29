@@ -137,7 +137,7 @@ class allScenariosViewSet(generics.ListAPIView):
     serializer_class = allScenariosSerializer
     queryset = scenarios.objects.all()
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['CREATOR', 'IS_FINISHED']
+    filterset_fields = ['PROFESSOR_ID', 'IS_FINISHED']
     
 # Scenarios_for ViewSet
 class Scenarios_forViewSet(viewsets.ModelViewSet):
