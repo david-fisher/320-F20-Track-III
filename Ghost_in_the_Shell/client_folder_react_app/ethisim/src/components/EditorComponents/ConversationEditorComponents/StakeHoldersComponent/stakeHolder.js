@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import BasicTable from './table';
 import './stakeHolder.css';
-import QuestionFields from '../stakeHolderQuestions/questions';
+import QuestionFields from './StakeHolderQuestions/questions';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';

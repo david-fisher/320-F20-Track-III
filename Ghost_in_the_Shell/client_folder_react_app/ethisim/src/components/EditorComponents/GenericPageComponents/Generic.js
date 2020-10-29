@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Body from '../Body';
-import Title from '../Title';
+import Body from '../GeneralPageComponents/Body';
+import Title from '../GeneralPageComponents/Title';
 import { Typography, Container } from '@material-ui/core';
-import VersionControl from '../VersionControl';
+import VersionControl from '../../VersionControl';
 import InformationItemList from './InformationItemList';
-import { mockGenericHistory } from '../../shared/mockScenarioData';
+import { mockGenericHistory } from '../../../shared/mockScenarioData';
 
 export default function Generic(props) {
     //const titleData = mockGenericComponent.title;

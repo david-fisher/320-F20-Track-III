@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, Button, Typography } from '@material-ui/core';
-import Logistics from '../components/scenario_components/Logistics';
-import Generic from '../components/scenario_components/Generic';
-import ConfigureIssues from '../components/scenario_components/ConfigureIssues';
-import ConversationEditor from '../components/scenario_components/ConversationEditor';
-import Reflection from '../components/scenario_components/Reflection';
-import Action from '../components/scenario_components/Action';
-import AddNewSimulationScenarioPageDialog from '../components/AddNewSimulationScenarioPageDialog';
-import NavSideBarList from '../components/NavSideBarList';
+import Logistics from '../components/EditorComponents/LogisticsPageComponents/Logistics';
+import Generic from '../components/EditorComponents/GenericPageComponents/Generic';
+import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesComponents/ConfigureIssues';
+import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
+import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
+import Action from '../components/EditorComponents/ActionPageComponents/Action';
+import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
+import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
 import { mockUnfinishedScenarioData } from '../shared/mockScenarioData';
 

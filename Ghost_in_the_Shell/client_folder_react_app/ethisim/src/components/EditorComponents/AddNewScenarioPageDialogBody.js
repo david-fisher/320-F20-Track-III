@@ -8,7 +8,7 @@ import {
     Typography,
     makeStyles,
 } from '@material-ui/core';
-import EditedSunEditor from '../components/EditedSunEditor';
+import EditedSunEditor from '../../components/EditedSunEditor';
 import AddIcon from '@material-ui/icons/Add';
 import PropTypes from 'prop-types';
 

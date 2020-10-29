@@ -7,7 +7,7 @@ import {
     Typography,
     makeStyles,
 } from '@material-ui/core';
-import AddNewScenarioPageDialogBody from '../components/AddNewScenarioPageDialogBody';
+import AddNewScenarioPageDialogBody from './AddNewScenarioPageDialogBody';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import PropTypes from 'prop-types';
 
