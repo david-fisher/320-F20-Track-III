@@ -30,12 +30,19 @@ class ProfessorsViewSet(viewsets.ModelViewSet):
 
 
 class ScenariosViewSet(viewsets.ModelViewSet):
-    def get(self, request):
-        
+    queryset = scenarios.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
     serializer_class = ScenariosSerializer
+
+class SingleScenarioViewSet(viewsets.ModelViewSet):
+    def get(self, request):
+        scenario = scenarios.objects.all()
+        serializer = ScenariosSerializer(scenarios)
+        return Response(serializer.data)
+
+
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = pages.objects.all()
@@ -140,13 +147,13 @@ class Scenarios_forViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Scenarios_forSerializer
 
-# Event_page ViewSet
-class Event_pageViewSet(viewsets.ModelViewSet):
-    queryset = event_page.objects.all()
+# generic_page ViewSet
+class generic_pageViewSet(viewsets.ModelViewSet):
+    queryset = generic_page.objects.all()
     permissions_class = [
         permissions.AllowAny
     ]
-    serializer_class = Event_pageSerializer
+    serializer_class = Generic_pageSerializer
 
 # Professors_teach ViewSet
 class Professors_teachViewSet(viewsets.ModelViewSet):

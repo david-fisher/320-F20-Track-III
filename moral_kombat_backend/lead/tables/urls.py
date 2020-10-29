@@ -23,8 +23,9 @@ router.register('api/studentsin', StudentsInViewSet, 'studentsin')
 router.register('api/courses', CoursesViewSet, 'courses')
 router.register('api/responses', ResponsesViewSet, 'responses')
 router.register('api/scenarios_for', Scenarios_forViewSet, 'scenarios_for')
-router.register('api/event_page', Event_pageViewSet, 'event_page')
+router.register('api/generic_page', generic_pageViewSet, 'generic_page')
 router.register('api/professors_teach', Professors_teachViewSet, 'professors_teach')
+router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
 # router.register('api/allScenarios', allScenariosViewSet.as_view())
 
 urlpatterns = [

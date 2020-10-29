@@ -22,7 +22,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
 class ScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO_ID', 'VERSION_ID', 'NAME', 'SUB_TITLE', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATIONS', 'MATRIX', 'CREATOR')
+        fields = ('SCENARIO_ID', 'VERSION_ID', 'NAME', 'SUB_TITLE', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATIONS', 'PROFESSOR_ID', 'FIRST_PAGE')
 
 class Choices_forSerializer(serializers.ModelSerializer):
     class Meta:
@@ -101,9 +101,9 @@ class Scenarios_forSerializer(serializers.ModelSerializer):
         model = scenarios_for
         fields = ('SCENARIO_ID', 'COURSE_ID', 'VERSION_ID')
 
-class Event_pageSerializer(serializers.ModelSerializer):
+class Generic_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = event_page
+        model = generic_page
         fields = ('PAGE_ID', 'BODY')
 
 class Professors_teachSerializer(serializers.ModelSerializer):
