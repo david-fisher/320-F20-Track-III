@@ -1,35 +1,40 @@
 import React from 'react';
-import Body from '../Body';
-import Title from '../Title';
-import InformationItemList from './InformationItemList';
+import Body from '../GeneralPageComponents/Body';
+import Title from '../GeneralPageComponents/Title';
 
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
   Container,
   Button,
 } from '@material-ui/core';
-import { makeStyles } from "@material-ui/core/styles";
+import QuestionFields from './QuestionComponent/questions'
+
+
 
 const useStyles = makeStyles((theme) => ({
 saveButton:{
   margin: theme.spacing(2),
   float: "right",
   textTransform: "unset",
+  variant: "contained",
 },
 }));
 
-export default function Event() {
+
+export default function Reflection() {
   const classes = useStyles();
   return (
     <Container component="main">
       <Typography align="center" variant="h2">
-        Event Component
+        Reflection Component
       </Typography>
       <Title />
       <Body />
-      <InformationItemList />
-      <Button className={classes.saveButton}  variant="contained" color="primary">Save</Button>
+     <QuestionFields />
+     <Button className={classes.saveButton}  variant="contained" color="primary">Save</Button>
     </Container>
+
   );
 
 }

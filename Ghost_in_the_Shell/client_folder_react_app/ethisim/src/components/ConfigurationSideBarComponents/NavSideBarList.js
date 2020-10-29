@@ -1,5 +1,5 @@
 import React from 'react';
-import NavSideBarNode from '../components/NavSideBarNode';
+import NavSideBarNode from '../ConfigurationSideBarComponents/NavSideBarNode';
 import PropTypes from 'prop-types';
 
 StakeHolderList.propTypes = {

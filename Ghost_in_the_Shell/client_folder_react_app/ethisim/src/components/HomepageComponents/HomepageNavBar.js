@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, Button } from '@material-ui/core/';
 import { Link } from 'react-router-dom';
-import WhiteLogo from '../shared/WhiteLogo.png';
+import WhiteLogo from '../../shared/WhiteLogo.png';
 
 const useStyles = makeStyles((theme) => ({
     root: {

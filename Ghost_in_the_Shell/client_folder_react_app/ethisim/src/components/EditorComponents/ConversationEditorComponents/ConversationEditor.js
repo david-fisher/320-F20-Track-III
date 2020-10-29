@@ -1,6 +1,6 @@
 import React from 'react';
 
-import StakeHolderFields from '../StakeHoldersComponent/stakeHolders'
+import StakeHolderFields from './StakeHoldersComponent/stakeHolders'
 import {
   Button,
   makeStyles

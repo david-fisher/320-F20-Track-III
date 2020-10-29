@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Box, Typography, Grid } from '@material-ui/core';
-import ScenarioCard from '../components/ScenarioCard';
-import AddNewScenarioCard from '../components/AddNewScenarioCard';
+import ScenarioCard from '../components/DashboardComponents/ScenarioCard';
+import AddNewScenarioCard from '../components/DashboardComponents/AddNewScenarioCard';
 import Copyright from '../components/Copyright';
 
 const useStyles = makeStyles((theme) => ({
