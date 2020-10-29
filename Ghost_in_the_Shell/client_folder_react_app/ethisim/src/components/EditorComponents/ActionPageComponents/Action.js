@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Body from '../Body';
-import Title from '../Title';
+import Body from '../GeneralPageComponents/Body';
+import Title from '../GeneralPageComponents/Title';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FinalAction() {
+export default function Action() {
     const classes = useStyles();
 
     return (

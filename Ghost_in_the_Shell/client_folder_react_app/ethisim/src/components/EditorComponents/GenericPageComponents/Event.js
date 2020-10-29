@@ -1,6 +1,6 @@
 import React from 'react';
-import Body from '../Body';
-import Title from '../Title';
+import Body from '../GeneralPageComponents/Body';
+import Title from '../GeneralPageComponents/Title';
 import InformationItemList from './InformationItemList';
 import { Typography, Container } from '@material-ui/core';
 

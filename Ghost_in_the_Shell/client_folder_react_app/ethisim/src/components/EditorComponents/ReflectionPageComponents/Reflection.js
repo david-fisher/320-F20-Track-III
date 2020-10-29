@@ -1,9 +1,9 @@
 import React from 'react';
-import Body from '../Body';
-import Title from '../Title';
+import Body from '../GeneralPageComponents/Body';
+import Title from '../GeneralPageComponents/Title';
 
 import { Typography, Container } from '@material-ui/core';
-import QuestionFields from '../QuestionComponent/questions';
+import QuestionFields from './QuestionComponent/questions';
 
 export default function Reflection() {
     return (

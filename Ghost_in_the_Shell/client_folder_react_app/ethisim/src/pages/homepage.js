@@ -8,7 +8,7 @@ import {
     Button,
 } from '@material-ui/core';
 import Copyright from '../components/Copyright';
-import HomepageNavBar from '../components/HomepageNavBar';
+import HomepageNavBar from '../components/HomepageComponents/HomepageNavBar';
 
 const useStyles = makeStyles((theme) => ({
     container: {
