@@ -8,7 +8,7 @@ import {
   Container,
   Button,
 } from '@material-ui/core';
-import QuestionFields from '../QuestionComponent/questions'
+import QuestionFields from './QuestionComponent/questions'
 
 
 
