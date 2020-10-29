@@ -39,9 +39,9 @@ export default function AddNewScenarioPageDialogBody(props) {
     const { addPage, setOpenPopup } = data;
 
     // eslint-disable-next-line
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [pageType, setPageType] = React.useState('Generic');
-    const [pageName, setPageName] = React.useState('Generic');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [pageType, setPageType] = useState('Generic');
+    const [pageName, setPageName] = useState('Generic');
 
     // eslint-disable-next-line
     const handleClick = (event) => {
