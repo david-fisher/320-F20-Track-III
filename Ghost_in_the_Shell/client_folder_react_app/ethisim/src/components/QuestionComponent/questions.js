@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionField from './question';
 import Button from '@material-ui/core/Button';
 import './questions.css';
@@ -21,9 +21,23 @@ function QuestionFields({ questions, setQuestions }) {
         initialQuestionsWithID
     );
 
+    let resetQuestionsWithID = (questionsWithID) => {
+        let initialQuestionsWithID = questions.map(function (question) {
+            return {
+                question: question,
+                id: Math.floor(Math.random() * 10000),
+            };
+        });
+        setQuestionsWithID(initialQuestionsWithID);
+    };
+
+    useEffect(resetQuestionsWithID, [questions]);
+
+    /*
     const [question, setEdit] = useState({
         id: Math.floor(Math.random() * 10000),
     });
+    */
 
     const removeQuestion = (questionID) => {
         console.log(questionID);
@@ -40,12 +54,11 @@ function QuestionFields({ questions, setQuestions }) {
             ...questionsWithID,
             {
                 id: Math.floor(Math.random() * 10000),
-                questions: '',
+                question: '',
             },
         ];
         setQuestionsWithID(newQuestionsWithID);
         console.log(...questions);
-        setEdit({ id: Math.floor(Math.random() * 10000) });
     };
 
     // eslint-disable-next-line

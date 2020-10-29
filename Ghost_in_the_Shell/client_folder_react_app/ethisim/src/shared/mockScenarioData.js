@@ -264,4 +264,5 @@ export {
     mockGenericComponent,
     mockActionComponent,
     mockReflectionComponent,
+    mockConversationEditorHistory,
 };

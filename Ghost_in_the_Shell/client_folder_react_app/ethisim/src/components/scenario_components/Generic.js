@@ -15,7 +15,7 @@ export default function Generic(props) {
     return (
         <Container component="main">
             <Typography align="center" variant="h2">
-                Event Component
+                Generic Component
             </Typography>
             <VersionControl
                 history={mockGenericHistory.history}

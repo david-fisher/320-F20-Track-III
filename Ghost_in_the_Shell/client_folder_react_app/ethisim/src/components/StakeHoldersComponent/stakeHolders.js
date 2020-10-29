@@ -11,7 +11,7 @@ StakeHolderFields.propTypes = {
 
 export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
     //const [stakeHolders, setStakeHolders] = useState([]);
-    const [name, setName] = useState('');
+    //const [name, setName] = useState('');
 
     const [stakeHolder, setEdit] = useState({
         id: Math.floor(Math.random() * 10000),
