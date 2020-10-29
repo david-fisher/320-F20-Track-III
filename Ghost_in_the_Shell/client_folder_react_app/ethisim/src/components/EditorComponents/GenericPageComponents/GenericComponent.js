@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Body from '../Body';
-import Title from '../Title';
+import Body from './GeneralPageComponents/Body';
+import Title from './GeneralPageComponents/Title';
 import InformationItemList from './InformationItemList';
 import Button from '@material-ui/core/Button';
 
