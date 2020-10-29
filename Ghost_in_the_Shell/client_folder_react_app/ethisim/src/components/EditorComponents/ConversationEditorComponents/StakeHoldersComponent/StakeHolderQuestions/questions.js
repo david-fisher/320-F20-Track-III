@@ -5,14 +5,14 @@ import './questions.css';
 import PropTypes from 'prop-types';
 
 QuestionFields.propTypes = {
-    questions: PropTypes.any,
-    setQuestions: PropTypes.any,
+    questionsResponses: PropTypes.any,
 };
 
-function QuestionFields({ questions, setQuestions }) {
-    let initialQuestionsWithID = questions.map(function (question) {
+export default function QuestionFields({ questionsResponses }) {
+    let initialQuestionsWithID = questionsResponses.map(function (data) {
         return {
-            question: question,
+            question: data.question,
+            response: data.response,
             id: Math.floor(Math.random() * 10000),
         };
     });
@@ -22,16 +22,17 @@ function QuestionFields({ questions, setQuestions }) {
     );
 
     let resetQuestionsWithID = (questionsWithID) => {
-        let initialQuestionsWithID = questions.map(function (question) {
+        let initialQuestionsWithID = questionsResponses.map(function (data) {
             return {
-                question: question,
+                question: data.question,
+                response: data.response,
                 id: Math.floor(Math.random() * 10000),
             };
         });
         setQuestionsWithID(initialQuestionsWithID);
     };
 
-    useEffect(resetQuestionsWithID, [questions]);
+    useEffect(resetQuestionsWithID, [questionsResponses]);
 
     /*
     const [question, setEdit] = useState({
@@ -48,17 +49,15 @@ function QuestionFields({ questions, setQuestions }) {
     };
 
     const addQuestion = (e) => {
-        const newQuestions = [...questions, ''];
-        setQuestions(newQuestions);
         const newQuestionsWithID = [
             ...questionsWithID,
             {
                 id: Math.floor(Math.random() * 10000),
                 question: '',
+                response: '',
             },
         ];
         setQuestionsWithID(newQuestionsWithID);
-        console.log(...questions);
     };
 
     // eslint-disable-next-line
@@ -85,11 +84,10 @@ function QuestionFields({ questions, setQuestions }) {
                         id={data.id}
                         removeQuestion={removeQuestion}
                         question={data.question}
+                        response={data.response}
                     />
                 ))}
             </form>
         </div>
     );
 }
-
-export default QuestionFields;

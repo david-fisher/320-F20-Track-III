@@ -43,7 +43,6 @@ export default function IssueEntryField(props) {
                         label="Score"
                         value={score}
                         rows={1}
-                        defaultValue="0"
                         variant="filled"
                     />
                 </Box>

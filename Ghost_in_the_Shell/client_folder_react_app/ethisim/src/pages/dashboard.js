@@ -35,11 +35,25 @@ export default function Dashboard() {
     );
 
     finishedScenarios = finishedScenarios.map((data) => (
-        <ScenarioCard data={data} key={data.id} finished={data.finished} />
+        <ScenarioCard
+            id={data.id}
+            scenarioName={data.scenarioName}
+            className={data.className}
+            scenarioData={data}
+            key={data.id}
+            finished={data.finished}
+        />
     ));
 
     unfinishedScenarios = unfinishedScenarios.map((data) => (
-        <ScenarioCard data={data} key={data.id} finished={data.finished} />
+        <ScenarioCard
+            id={data.id}
+            scenarioName={data.scenarioName}
+            className={data.className}
+            scenarioData={data}
+            key={data.id}
+            finished={data.finished}
+        />
     ));
 
     return (

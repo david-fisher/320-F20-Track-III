@@ -15,6 +15,7 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
 
     const [stakeHolder, setEdit] = useState({
         id: Math.floor(Math.random() * 10000),
+        questionsResponses: [],
     });
 
     const removeStakeHolder = (stakeHolderID) => {
@@ -29,7 +30,10 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
         const newStakeHolders = [...stakeHolders, stakeHolder];
         setStakeHolders(newStakeHolders);
         console.log(...stakeHolders);
-        setEdit({ id: Math.floor(Math.random() * 10000) });
+        setEdit({
+            id: Math.floor(Math.random() * 10000),
+            questionsResponses: [],
+        });
     };
 
     // eslint-disable-next-line
@@ -54,11 +58,11 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
                     <StakeHolder
                         key={stakeHolder.id}
                         removeStakeHolder={removeStakeHolder}
-                        stakeHolder={stakeHolder}
+                        id={stakeHolder.id}
                         name={stakeHolder.name}
                         bio={stakeHolder.bio}
                         mainConvo={stakeHolder.mainConvo}
-                        questions={stakeHolder.questions}
+                        questionsResponses={stakeHolder.questionsResponses}
                         stakeHolderIssues={stakeHolder.stakeHolderIssues}
                     />
                 ))}

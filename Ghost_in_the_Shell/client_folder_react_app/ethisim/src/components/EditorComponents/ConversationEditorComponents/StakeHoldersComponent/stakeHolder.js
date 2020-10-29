@@ -75,18 +75,31 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 StakeHolder.propTypes = {
-    removeStakeHolder: PropTypes.any.isRequired,
-    stakeHolder: PropTypes.any.isRequired,
+    name: PropTypes.string,
+    bio: PropTypes.string,
+    mainConvo: PropTypes.string,
+    questionsResponses: PropTypes.any,
+    stakeHolderIssues: PropTypes.any,
+    id: PropTypes.number,
+    removeStakeHolder: PropTypes.any,
+    stakeHolder: PropTypes.any,
 };
 
-export default function StakeHolder(props) {
+export default function StakeHolder({
+    name,
+    bio,
+    mainConvo,
+    questionsResponses,
+    stakeHolderIssues,
+    id,
+    removeStakeHolder,
+}) {
     const classes = useStyles();
-    StakeHolder.propTypes = props.data;
 
-    const [open, setOpen] = React.useState(false);
-    const [openTwo, setOpenTwo] = React.useState(false);
-    const [openThree, setOpenThree] = React.useState(false);
-    const [openFour, setOpenFour] = React.useState(false);
+    const [openBio, setOpenBio] = useState(false);
+    const [openMainConvo, setOpenMainConvo] = useState(false);
+    const [openPointSelection, setOpenPointSelection] = useState(false);
+    const [openQuestions, setOpenQuestions] = useState(false);
 
     //TABLE
     const [rows, setRows] = useState([]);
@@ -119,31 +132,31 @@ export default function StakeHolder(props) {
 
     //TABLE
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleClickOpenBio = () => {
+        setOpenBio(true);
     };
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseBio = () => {
+        setOpenBio(false);
     };
-    const handleClickOpenTwo = () => {
-        setOpenTwo(true);
+    const handleClickOpenMainConvo = () => {
+        setOpenMainConvo(true);
     };
-    const handleCloseTwo = () => {
-        setOpenTwo(false);
-    };
-
-    const handleClickOpenThree = () => {
-        setOpenThree(true);
-    };
-    const handleCloseThree = () => {
-        setOpenThree(false);
+    const handleCloseMainConvo = () => {
+        setOpenMainConvo(false);
     };
 
-    const handleClickOpenFour = () => {
-        setOpenFour(true);
+    const handleClickOpenPointSelection = () => {
+        setOpenPointSelection(true);
     };
-    const handleCloseFour = () => {
-        setOpenFour(false);
+    const handleClosePointSelection = () => {
+        setOpenPointSelection(false);
+    };
+
+    const handleClickOpenQuestions = () => {
+        setOpenQuestions(true);
+    };
+    const handleCloseQuestions = () => {
+        setOpenQuestions(false);
     };
 
     let handleChange = (content, editor) => {
@@ -154,9 +167,9 @@ export default function StakeHolder(props) {
 
     return (
         <div id="parent">
-            <form id="SHname">
-                <TextField label="StakeHolder Name" value={props.name} />
-            </form>
+            <div id="SHname">
+                <TextField label="StakeHolder Name" value={name} />
+            </div>
             <img id="stakeimg" src={shemptylogo} alt=" "></img>
             <label id="upl" htmlFor="contained-button-file">
                 <input
@@ -184,75 +197,74 @@ export default function StakeHolder(props) {
                 />
             </label>
 
-            <form id="Bio">
+            <div id="Bio">
                 <TextField
                     label="Biography"
                     style={{ width: 500 }}
                     multiline
                     rows={2}
                     variant="outlined"
-                    onClick={handleClickOpen}
+                    onClick={handleClickOpenBio}
                 />
-            </form>
+            </div>
 
-            <form id="MainConversationField">
+            <div id="MainConversationField">
                 <TextField
                     label="Main Conversation"
                     style={{ width: 500 }}
                     multiline
                     rows={2}
                     variant="outlined"
-                    onClick={handleClickOpenTwo}
+                    onClick={handleClickOpenMainConvo}
                 />
-            </form>
+            </div>
 
-            <form id="DeleteButton">
+            <div id="DeleteButton">
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() =>
-                        props.removeStakeHolder(props.stakeHolder.id)
-                    }
+                    onClick={() => removeStakeHolder(id)}
                 >
                     Delete
                 </Button>
-            </form>
+            </div>
 
-            <form id="PointButton">
+            <div id="PointButton">
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleClickOpenThree}
+                    onClick={handleClickOpenPointSelection}
                 >
                     Point Selection
                 </Button>
-            </form>
+            </div>
 
-            <form id="stakequestion">
+            <div id="stakequestion">
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleClickOpenFour}
+                    onClick={handleClickOpenQuestions}
                 >
                     View Questions
                 </Button>
-            </form>
+            </div>
 
             <Dialog
-                onClose={handleClose}
+                onClose={handleCloseBio}
                 aria-labelledby="customized-dialog-title"
-                open={open}
-                maxWidth="false"
+                open={openBio}
+                maxWidth={false}
             >
                 <div style={{ width: 900 }}>
                     <DialogTitle
                         id="customized-dialog-title"
-                        onClose={handleClose}
+                        onClose={handleCloseBio}
                     >
                         Biography
                     </DialogTitle>
                     <DialogContent>
                         <SunEditor
+                            setContents={bio}
                             setOptions={{
                                 width: '100%',
                                 height: 400,
@@ -403,7 +415,11 @@ export default function StakeHolder(props) {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button autoFocus onClick={handleClose} color="primary">
+                        <Button
+                            autoFocus
+                            onClick={handleCloseBio}
+                            color="primary"
+                        >
                             Save changes
                         </Button>
                     </DialogActions>
@@ -411,20 +427,21 @@ export default function StakeHolder(props) {
             </Dialog>
 
             <Dialog
-                onClose={handleCloseTwo}
+                onClose={handleCloseMainConvo}
                 aria-labelledby="customized-dialog-title"
-                maxWidth="false"
-                open={openTwo}
+                maxWidth={false}
+                open={openMainConvo}
             >
                 <div style={{ width: 900 }}>
                     <DialogTitle
                         id="customized-dialog-title"
-                        onClose={handleCloseTwo}
+                        onClose={handleCloseMainConvo}
                     >
                         Main Coversation
                     </DialogTitle>
                     <DialogContent>
                         <SunEditor
+                            setContents={mainConvo}
                             setOptions={{
                                 height: 400,
                                 placeholder:
@@ -576,7 +593,7 @@ export default function StakeHolder(props) {
                     <DialogActions>
                         <Button
                             autoFocus
-                            onClick={handleCloseTwo}
+                            onClick={handleCloseMainConvo}
                             color="primary"
                         >
                             Save changes
@@ -586,24 +603,22 @@ export default function StakeHolder(props) {
             </Dialog>
 
             <Dialog
-                onClose={handleCloseThree}
+                onClose={handleClosePointSelection}
                 aria-labelledby="customized-dialog-title"
-                open={openThree}
+                open={openPointSelection}
             >
                 <DialogTitle
                     id="customized-dialog-title"
-                    onClose={handleCloseThree}
+                    onClose={handleClosePointSelection}
                 >
                     <h2>Point Selection</h2>
-                    <form>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={addRow}
-                        >
-                            Add Issue
-                        </Button>
-                    </form>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={addRow}
+                    >
+                        Add Issue
+                    </Button>
                 </DialogTitle>
                 <DialogContent>
                     <BasicTable removeRow={removeRow} rows={rows} />
@@ -611,7 +626,7 @@ export default function StakeHolder(props) {
                 <DialogActions>
                     <Button
                         autoFocus
-                        onClick={handleCloseThree}
+                        onClick={handleClosePointSelection}
                         color="primary"
                     >
                         Save changes
@@ -620,25 +635,27 @@ export default function StakeHolder(props) {
             </Dialog>
 
             <Dialog
-                onClose={handleCloseFour}
+                onClose={handleCloseQuestions}
                 aria-labelledby="customized-dialog-title"
-                maxWidth="false"
-                open={openFour}
+                maxWidth={false}
+                open={openQuestions}
             >
                 <div style={{ width: 900 }}>
                     <DialogTitle
                         id="customized-dialog-title"
-                        onClose={handleCloseFour}
+                        onClose={handleCloseQuestions}
                     >
                         <h2>Questions</h2>
                     </DialogTitle>
                     <DialogContent>
-                        <QuestionFields />
+                        <QuestionFields
+                            questionsResponses={questionsResponses}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button
                             autoFocus
-                            onClick={handleCloseFour}
+                            onClick={handleCloseQuestions}
                             color="primary"
                         >
                             Save changes

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
+import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import VersionControl from '../../VersionControl';
@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
     },
     versionControl: {
         margin: theme.spacing(2),
+    },
+    saveButton: {
+        margin: theme.spacing(2),
+        float: 'right',
+        textTransform: 'unset',
     },
 }));
 
@@ -37,6 +42,13 @@ export default function ConfigureIssues() {
                 issueEntryFieldList={issueEntryFieldList}
                 setIssueEntryFieldList={setIssueEntryFieldList}
             />
+            <Button
+                className={classes.saveButton}
+                variant="contained"
+                color="primary"
+            >
+                Save
+            </Button>
         </div>
     );
 }

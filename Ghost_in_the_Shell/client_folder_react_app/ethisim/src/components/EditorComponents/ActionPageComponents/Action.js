@@ -23,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
         textTransform: 'unset',
     },
+    saveButton: {
+        margin: theme.spacing(2),
+        float: 'right',
+        textTransform: 'unset',
+    },
 }));
 
 export default function FinalAction(props) {
@@ -79,12 +84,11 @@ export default function FinalAction(props) {
                         name="option 2"
                     />
                     <Button
-                        type="submit"
-                        fullWidth
+                        className={classes.saveButton}
                         variant="contained"
-                        className={classes.submit}
+                        color="primary"
                     >
-                        Submit User Options
+                        Save
                     </Button>
                 </form>
             </div>

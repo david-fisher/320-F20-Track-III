@@ -134,6 +134,7 @@ VersionControlDialog.propTypes = {
     setOption1: PropTypes.any,
     setOption2: PropTypes.any,
     setQuestions: PropTypes.any,
+    setStakeHolders: PropTypes.any,
 };
 
 export default function VersionControlDialog({
@@ -145,6 +146,7 @@ export default function VersionControlDialog({
     setOption1,
     setOption2,
     setQuestions,
+    setStakeHolders,
 }) {
     const classes = useStyles();
 
@@ -167,6 +169,7 @@ export default function VersionControlDialog({
                     setIssueEntryFieldList(selectedVersionData.issues);
                     break;
                 case 'Conversation Editor':
+                    setStakeHolders(selectedVersionData.stakeholders);
                     break;
                 case 'Generic':
                     setTitle(selectedVersionData.title);

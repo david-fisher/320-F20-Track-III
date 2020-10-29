@@ -162,10 +162,11 @@ const mockConversationEditorHistory = {
             id: 1,
             stakeholders: [
                 {
+                    id: 1,
                     name: 'Da Big Cheeze',
                     bio: 'Spiffy',
                     mainConvo: 'Big Spiffy',
-                    questionsResponse: [
+                    questionsResponses: [
                         {
                             question: 'Do you like this idea?',
                             response: "Yes, I love stealing everyone's data",

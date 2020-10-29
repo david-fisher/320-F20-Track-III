@@ -32,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
+    saveButton: {
+        margin: theme.spacing(2),
+        float: 'right',
+        textTransform: 'unset',
+    },
 }));
 
 export default function Logistics(props) {
@@ -180,6 +185,13 @@ export default function Logistics(props) {
                         </Button>
                     </form>
                 </div>
+                <Button
+                    className={classes.saveButton}
+                    variant="contained"
+                    color="primary"
+                >
+                    Save
+                </Button>
             </Container>
         );
     }
