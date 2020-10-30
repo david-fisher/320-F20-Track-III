@@ -48,7 +48,8 @@ export default function NavSideBarNode(props) {
         if (
             name === 'Logistics' ||
             name === 'Conversation Editor' ||
-            name === 'Configure Issues'
+            name === 'Configure Issues' ||
+            name === 'Flow Diagram'
         ) {
             return (
                 <Grid container direction="row" justify="flex-start">

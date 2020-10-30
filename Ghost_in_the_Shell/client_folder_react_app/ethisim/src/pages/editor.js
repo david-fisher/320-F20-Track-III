@@ -7,6 +7,7 @@ import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesCompo
 import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
+import FlowDiagram from '../components/EditorComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
@@ -60,9 +61,10 @@ var startList = [
     { id: 0, name: 'Logistics', component: <Logistics /> },
     { id: 1, name: 'Configure Issues', component: <ConfigureIssues /> },
     { id: 2, name: 'Conversation Editor', component: <ConversationEditor /> },
-    { id: 3, name: 'Event', component: <Event /> },
-    { id: 4, name: 'Reflection', component: <Reflection /> },
-    { id: 5, name: 'Action', component: <Action /> },
+    { id: 3, name: 'Flow Diagram', component: <FlowDiagram /> },
+    { id: 4, name: 'Event', component: <Event /> },
+    { id: 5, name: 'Reflection', component: <Reflection /> },
+    { id: 6, name: 'Action', component: <Action /> },
 ];
 
 export default function Editor(props) {
