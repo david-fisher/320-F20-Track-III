@@ -21,6 +21,7 @@ IssueEntryField.propTypes = {
 export default function IssueEntryField(props) {
     const classes = useStyles();
     IssueEntryField.propTypes = props.data;
+    const { issue, score } = props;
 
     return (
         <div>
@@ -30,6 +31,7 @@ export default function IssueEntryField(props) {
                         style={{ width: '75%' }}
                         id="outlined-text"
                         label="Issue"
+                        value={issue}
                         multiline
                         rows={2}
                         variant="outlined"
@@ -39,8 +41,8 @@ export default function IssueEntryField(props) {
                         margin="normal"
                         id="outlined-number"
                         label="Score"
+                        value={score}
                         rows={1}
-                        defaultValue="0"
                         variant="filled"
                     />
                 </Box>

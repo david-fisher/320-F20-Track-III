@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Author from './Author';
 import { isBrowser } from 'react-device-detect';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
-import { mockUnfinishedScenario } from '../../../shared/mockScenarioData';
+import { mockUnfinishedScenario } from '../../shared/mockScenarioData';
 const useStyles = makeStyles((theme) => ({
     textfields: {
         '& > *': {
@@ -31,11 +31,6 @@ const useStyles = makeStyles((theme) => ({
         '@media (max-width: 1100px)': {
             width: '100%',
         },
-    },
-    saveButton: {
-        margin: theme.spacing(2),
-        float: 'right',
-        textTransform: 'unset',
     },
 }));
 
@@ -185,13 +180,6 @@ export default function Logistics(props) {
                         </Button>
                     </form>
                 </div>
-                <Button
-                    className={classes.saveButton}
-                    variant="contained"
-                    color="primary"
-                >
-                    Save
-                </Button>
             </Container>
         );
     }

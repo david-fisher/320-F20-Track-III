@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -17,8 +18,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+Author.propTypes = {
+    author: PropTypes.string,
+};
+
 export default function Author(props) {
     const classes = useStyles();
+
+    const { author } = props;
 
     return (
         <div>
@@ -30,6 +37,7 @@ export default function Author(props) {
                                 style={{ width: '100%' }}
                                 id="outlined-multiline-static"
                                 label="Author"
+                                value={author}
                                 multiline
                             />
                         </form>

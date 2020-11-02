@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryField from './IssueEntryField';
 import { Container, Button } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -16,23 +17,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function IssueEntryFieldList() {
-    const classes = useStyles();
+IssueEntryFieldList.propTypes = {
+    issueEntryFieldList: PropTypes.any.isRequired,
+    setIssueEntryFieldList: PropTypes.any.isRequired,
+};
 
-    const [entries, setEntries] = useState([]);
+export default function IssueEntryFieldList({
+    issueEntryFieldList,
+    setIssueEntryFieldList,
+}) {
+    const classes = useStyles();
+    //IssueEntryFieldList.propTypes.issueEntryFieldList = { issueEntryFieldList };
+    //IssueEntryFieldList.propTypes.setIssueEntryFieldList = { setIssueEntryFieldList };
     const [entryCur, setEntryCur] = useState({
         id: 0,
     });
 
     const handleDelete = (entryID) => {
-        setEntries(entries.filter((entry) => entry.id !== entryID));
+        setIssueEntryFieldList(
+            issueEntryFieldList.filter((entry) => entry.id !== entryID)
+        );
     };
 
     const addItem = (e) => {
         e.preventDefault();
         const newEntry = entryCur;
-        const newEntries = [...entries, newEntry];
-        setEntries(newEntries);
+        setIssueEntryFieldList(issueEntryFieldList.concat(newEntry));
         setEntryCur({
             id: entryCur.id + 1,
         });
@@ -51,9 +61,11 @@ export default function IssueEntryFieldList() {
             </Button>
 
             <form id="form">
-                {entries.map((entry) => (
+                {issueEntryFieldList.map((entry) => (
                     <EntryField
                         key={entry.id}
+                        issue={entry.issue}
+                        score={entry.score}
                         onDelete={handleDelete}
                         entry={entry}
                     />

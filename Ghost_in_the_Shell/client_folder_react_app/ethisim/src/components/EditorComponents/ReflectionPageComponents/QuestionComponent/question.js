@@ -14,14 +14,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 QuestionField.propTypes = {
-    removeQuestion: PropTypes.any.isRequired,
-    question: PropTypes.any.isRequired,
+    removeQuestion: PropTypes.any,
+    question: PropTypes.any,
 };
 
 export default function QuestionField(props) {
     const classes = useStyles();
     QuestionField.propTypes = props.data;
-
+    console.log(props.question);
     return (
         <div>
             <Box
@@ -32,16 +32,15 @@ export default function QuestionField(props) {
                 bgcolor="background.paper"
             >
                 <Box p={1}>
-                    <form noValidate autoComplete="off">
-                        <TextField
-                            style={{ width: 500 }}
-                            id="outlined-multiline-static"
-                            label="Question"
-                            multiline
-                            rows={2}
-                            variant="outlined"
-                        />
-                    </form>
+                    <TextField
+                        style={{ width: 500 }}
+                        id="outlined-multiline-static"
+                        label="Question"
+                        multiline
+                        rows={2}
+                        variant="outlined"
+                        value={props.question}
+                    />
                 </Box>
                 <Box p={1}>
                     <div>
@@ -58,9 +57,7 @@ export default function QuestionField(props) {
                             className={classes.margin}
                             variant="contained"
                             color="primary"
-                            onClick={() =>
-                                props.removeQuestion(props.question.id)
-                            }
+                            onClick={() => props.removeQuestion(props.id)}
                         >
                             Delete
                         </Button>

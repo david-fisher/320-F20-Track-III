@@ -1,26 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionField from './question';
 import Button from '@material-ui/core/Button';
 import './questions.css';
+import PropTypes from 'prop-types';
 
-function QuestionFields() {
-    const [questions, setQuestions] = useState([]);
+QuestionFields.propTypes = {
+    questions: PropTypes.any,
+    setQuestions: PropTypes.any,
+};
 
+export default function QuestionFields({ questions, setQuestions }) {
+    let initialQuestionsWithID = questions.map(function (question) {
+        return {
+            question: question,
+            id: Math.floor(Math.random() * 10000),
+        };
+    });
+
+    const [questionsWithID, setQuestionsWithID] = useState(
+        initialQuestionsWithID
+    );
+
+    let resetQuestionsWithID = (questionsWithID) => {
+        let initialQuestionsWithID = questions.map(function (question) {
+            return {
+                question: question,
+                id: Math.floor(Math.random() * 10000),
+            };
+        });
+        setQuestionsWithID(initialQuestionsWithID);
+    };
+
+    useEffect(resetQuestionsWithID, [questions]);
+
+    /*
     const [question, setEdit] = useState({
         id: Math.floor(Math.random() * 10000),
     });
+    */
 
     const removeQuestion = (questionID) => {
         console.log(questionID);
-        const leftQuestions = questions.filter((q) => q.id !== questionID);
-        setQuestions(leftQuestions);
+        const leftQuestions = questionsWithID.filter(
+            (q) => q.id !== questionID
+        );
+        setQuestionsWithID(leftQuestions);
     };
 
     const addQuestion = (e) => {
-        const newQuestions = [...questions, question];
+        const newQuestions = [...questions, ''];
         setQuestions(newQuestions);
+        const newQuestionsWithID = [
+            ...questionsWithID,
+            {
+                id: Math.floor(Math.random() * 10000),
+                question: '',
+            },
+        ];
+        setQuestionsWithID(newQuestionsWithID);
         console.log(...questions);
-        setEdit({ id: Math.floor(Math.random() * 10000) });
     };
 
     // eslint-disable-next-line
@@ -41,16 +79,15 @@ function QuestionFields() {
             </Button>
 
             <form id="form">
-                {questions.map((question) => (
+                {questionsWithID.map((data) => (
                     <QuestionField
-                        key={question.id}
+                        key={data.id}
+                        id={data.id}
                         removeQuestion={removeQuestion}
-                        question={question}
+                        question={data.question}
                     />
                 ))}
             </form>
         </div>
     );
 }
-
-export default QuestionFields;

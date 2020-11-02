@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
 
 NavSideBarNode.propTypes = {
     onClick: PropTypes.any.isRequired,
-    id: PropTypes.any.isRequired,
-    name: PropTypes.any.isRequired,
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
     deleteByID: PropTypes.any.isRequired,
     component: PropTypes.any.isRequired,
 };
@@ -36,19 +36,17 @@ export default function NavSideBarNode(props) {
     const classes = useStyles();
     NavSideBarNode.propTypes = props.data;
     const data = props;
-    const { onClick, deleteByID, id, name, component } = data;
+    const { onClick, deleteByID, id, title, component } = data;
 
     function handleDelete() {
-        console.log('delete is: ');
-        console.log(id);
         deleteByID(id);
     }
 
-    function pageType(name) {
+    function pageType(title) {
         if (
-            name === 'Logistics' ||
-            name === 'Conversation Editor' ||
-            name === 'Configure Issues'
+            title === 'Logistics' ||
+            title === 'Conversation Editor' ||
+            title === 'Configure Issues'
         ) {
             return (
                 <Grid container direction="row" justify="flex-start">
@@ -59,7 +57,7 @@ export default function NavSideBarNode(props) {
                             color="primary"
                             onClick={handleDisplayComponent}
                         >
-                            {name}
+                            {title}
                         </Button>
                     </Grid>
                 </Grid>
@@ -74,7 +72,7 @@ export default function NavSideBarNode(props) {
                             color="primary"
                             onClick={handleDisplayComponent}
                         >
-                            {name}
+                            {title}
                         </Button>
                     </Grid>
 
@@ -95,5 +93,6 @@ export default function NavSideBarNode(props) {
     function handleDisplayComponent() {
         onClick(component);
     }
-    return <div>{pageType(name)}</div>;
+
+    return <div>{pageType(title)}</div>;
 }
