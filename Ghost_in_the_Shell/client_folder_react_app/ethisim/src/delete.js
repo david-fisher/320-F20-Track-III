@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { baseURL } from '../../Constants/Config'
-// Universal post request using axios
-export default function universalPost(setResponse, endpoint, onError, onSuccess, requestBody) {
-    console.log('Post started');
+// Universal delete request using axios
+export default function universalDelete(setResponse, endpoint, onError, onSuccess) {
+    console.log('Delete started');
     setResponse({
         data: null,
         loading: true,
         error: null,
     });
     axios
-        .post(baseURL + endpoint, requestBody)
+        .delete(baseURL + endpoint)
         .then((resp) => {
             console.log('Response received');
             console.log(resp);
@@ -21,7 +21,7 @@ export default function universalPost(setResponse, endpoint, onError, onSuccess,
             onSuccess && onSuccess();
         })
         .catch((err) => {
-            console.log(`Post failed with error ${err.message}`);
+            console.log(`Delete failed with error ${err.message}`);
             setResponse({
                 data: null,
                 loading: false,
