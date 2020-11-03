@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Button, Box } from '@material-ui/core';
+import { Button, Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import get from '../../../get';
 import deleteReq from '../../../delete';
 import post from '../../../post';
 import put from '../../../put';
+import useInterval from '../../../shared/useInterval';
+
+//TODO once scenario dashabord and component/page loading is finished
+const tempScenarioID = 1;
+
+//Need scenarioID
+const endpointGET = 'http://localhost:8000/api/Issues/?SCENARIO_ID=';
 
 const endpointPOST = 'http://localhost:8000/api/Issues/';
 //Need issueID
@@ -29,16 +37,12 @@ IssueEntryField.propTypes = {
     isNewIssue: PropTypes.bool,
     issueEntryFieldList: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
-    listChange: PropTypes.any.isRequired,
-    setListChange: PropTypes.any.isRequired,
 };
 
 export default function IssueEntryField({
     id,
     issue,
     score,
-    listChange,
-    setListChange,
     isNewIssue,
     setIssueEntryFieldList,
     issueEntryFieldList,
@@ -48,11 +52,47 @@ export default function IssueEntryField({
     const scenarioID = 1;
     const versionID = 2;
 
-    const [postValue, setPost] = useState(null);
-    const [putValue, setPut] = useState(null);
-    const [deleteReqValue, setDeleteReq] = useState(null);
+    const [postValue, setPost] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+    const [putValue, setPut] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+    const [deleteReqValue, setDeleteReq] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+    const [issueID, setIssueID] = useState(id);
     const [issueScore, setIssueScore] = useState(score ? score : 0);
     const [issueName, setIssueName] = useState(issue ? issue : 0);
+    const [newIssue, setNewIssue] = useState(isNewIssue);
+
+    //const [processed, setProcessed] = useState(true);
+
+    //const [newList, setNewList] = useState(issueEntryFieldList);
+    //const [newValue, setNewValue] = useState(newList.data ? newList.data.length : 0);
+
+    /*
+    function poll() {
+        console.log("POLL");
+        console.log(newValue);
+        if(newList.data) {
+            console.log(newList.data.length);
+        }
+        get(setNewList, endpointGET + tempScenarioID);
+        if(newList.data && newList.data.length === newValue) {
+            setIssueEntryFieldList(newList);
+            setProcessed(true);
+        }
+    }   
+    */
+
+    //useInterval(poll, processed ? null : 500);
 
     const handleChangeScore = (content) => {
         setIssueScore(content.target.value);
@@ -63,13 +103,20 @@ export default function IssueEntryField({
     };
 
     const saveIssue = () => {
-        if (isNewIssue) {
-            post(setPost, endpointPOST, null, null, {
+        if (newIssue) {
+            function setID(resp) {
+                //if newly created issue, replace fake ID with new ID
+                if (resp.data) {
+                    setIssueID(resp.data.ISSUE_ID);
+                }
+            }
+            post(setPost, endpointPOST, null, setID, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
                 IMPORTANCE_SCORE: issueScore,
                 NAME: issueName,
             });
+            setNewIssue(false);
         } else {
             put(setPut, endpointPUT + id + '/', null, null, {
                 SCENARIO_ID: scenarioID,
@@ -79,25 +126,37 @@ export default function IssueEntryField({
                 ISSUE_ID: id,
             });
         }
-        setListChange(!listChange);
     };
 
-    const deleteIssue = (e) => {
-        if (isNewIssue) {
-            setIssueEntryFieldList(
-                issueEntryFieldList.filter((entry) => entry.ISSUE_ID !== id)
+    const deleteIssue = () => {
+        //remove issue from array, id represents the id in issueEntryFieldList
+        //If issue is a new issue, A POST request will replace the fake ID with the ID in database
+        //ID in the array will remain the fake id, so that is why we compare with 'id' rather than 'issueID'
+        let newData = issueEntryFieldList.data.filter(
+            (entry) => entry.ISSUE_ID !== id
+        );
+        setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
+        if (!newIssue) {
+            deleteReq(
+                setDeleteReq,
+                endpointDELETE + issueID + '/',
+                null,
+                null,
+                {
+                    SCENARIO_ID: scenarioID,
+                    ISSUE_ID: issueID,
+                }
             );
-        } else {
-            deleteReq(setDeleteReq, endpointDELETE + id + '/', null, null, {
-                SCENARIO_ID: scenarioID,
-                ISSUE_ID: id,
-            });
-            setListChange(!listChange);
         }
     };
 
     return (
         <div>
+            {newIssue ? (
+                <Typography variant="h6" align="center" color="error">
+                    Unsaved
+                </Typography>
+            ) : null}
             <Box display="flex" flexDirection="row" p={1} m={1}>
                 <Box p={1}>
                     <TextField
@@ -137,7 +196,7 @@ export default function IssueEntryField({
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            onClick={() => deleteIssue(id)}
+                            onClick={() => deleteIssue()}
                         >
                             Delete
                         </Button>

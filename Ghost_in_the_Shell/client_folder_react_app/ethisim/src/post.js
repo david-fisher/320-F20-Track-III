@@ -24,7 +24,7 @@ export default function universalFetch(
                 loading: false,
                 error: null,
             });
-            onSuccess && onSuccess();
+            onSuccess && onSuccess(resp);
         })
         .catch((err) => {
             console.log(`Fetch failed with error ${err.message}`);

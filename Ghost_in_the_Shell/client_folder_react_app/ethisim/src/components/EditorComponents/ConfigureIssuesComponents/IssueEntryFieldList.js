@@ -20,13 +20,9 @@ const useStyles = makeStyles((theme) => ({
 IssueEntryFieldList.propTypes = {
     issueEntryFieldList: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
-    listChange: PropTypes.any.isRequired,
-    setListChange: PropTypes.any.isRequired,
 };
 
 export default function IssueEntryFieldList({
-    listChange,
-    setListChange,
     issueEntryFieldList,
     setIssueEntryFieldList,
 }) {
@@ -37,10 +33,13 @@ export default function IssueEntryFieldList({
         isNewIssue: true,
     });
 
+    console.log(issueEntryFieldList);
+
     const addIssue = (e) => {
         e.preventDefault();
         const newEntry = entryCur;
-        setIssueEntryFieldList(issueEntryFieldList.concat(newEntry));
+        issueEntryFieldList.data = issueEntryFieldList.data.concat(newEntry);
+        setIssueEntryFieldList(issueEntryFieldList);
         setEntryCur({
             ISSUE_ID: Math.floor(Math.random() * 1000000),
             isNewIssue: true,
@@ -60,15 +59,13 @@ export default function IssueEntryFieldList({
             </Button>
 
             <form id="form">
-                {issueEntryFieldList.map((entry) => (
+                {issueEntryFieldList.data.map((entry) => (
                     <EntryField
                         key={entry.ISSUE_ID}
                         id={entry.ISSUE_ID}
                         isNewIssue={entry.isNewIssue === true ? true : false}
                         issue={entry.NAME}
                         score={entry.IMPORTANCE_SCORE}
-                        listChange={listChange}
-                        setListChange={setListChange}
                         setIssueEntryFieldList={setIssueEntryFieldList}
                         issueEntryFieldList={issueEntryFieldList}
                         entry={entry}

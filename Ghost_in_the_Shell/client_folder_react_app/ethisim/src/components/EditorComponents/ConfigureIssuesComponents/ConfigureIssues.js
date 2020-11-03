@@ -5,6 +5,7 @@ import EntryFields from './IssueEntryFieldList';
 import VersionControl from '../../VersionControl';
 import { mockIssuesHistory } from '../../../shared/mockScenarioData';
 import get from '../../../get';
+import LoadingSpinner from '../../LoadingSpinner';
 
 //TODO once scenario dashabord and component/page loading is finished
 const tempScenarioID = 1;
@@ -31,14 +32,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ConfigureIssues(props) {
     const classes = useStyles();
-    const [listChange, setListChange] = useState(false);
-    const [issueEntryFieldList, setIssueEntryFieldList] = useState(null);
+    const [issueEntryFieldList, setIssueEntryFieldList] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
     let getData = () => {
-        setTimeout(function () {
-            get(setIssueEntryFieldList, endpointGET + tempScenarioID);
-        }, 500);
+        get(setIssueEntryFieldList, endpointGET + tempScenarioID);
     };
-    useEffect(getData, [listChange]);
+    useEffect(getData, []);
+
+    if (issueEntryFieldList.loading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className={classes.issue}>
@@ -57,8 +64,6 @@ export default function ConfigureIssues(props) {
                     issueEntryFieldList !== null ? issueEntryFieldList : []
                 }
                 setIssueEntryFieldList={setIssueEntryFieldList}
-                listChange={listChange}
-                setListChange={setListChange}
             />
         </div>
     );

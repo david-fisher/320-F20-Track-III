@@ -8,12 +8,21 @@ export default function universalFetch(
     onSuccess
 ) {
     console.log('GET started');
+    setResponse({
+        data: null,
+        loading: true,
+        error: null,
+    });
     axios
         .get(endpoint)
         .then((resp) => {
             console.log('Response received');
             console.log(resp);
-            setResponse(resp.data);
+            setResponse({
+                data: resp.data,
+                loading: false,
+                error: null,
+            });
             onSuccess && onSuccess();
         })
         .catch((err) => {
