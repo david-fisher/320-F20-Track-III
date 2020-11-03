@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { baseURL } from '../../Constants/Config'
 // Universal delete request using axios
-export default function universalDelete(setResponse, endpoint, onError, onSuccess) {
+export default function universalDelete(setResponse, endpoint, onError, onSuccess, requestBody) {
     console.log('Delete started');
     setResponse({
         data: null,
@@ -9,7 +9,7 @@ export default function universalDelete(setResponse, endpoint, onError, onSucces
         error: null,
     });
     axios
-        .delete(baseURL + endpoint)
+        .delete(baseURL + endpoint, requestBody)
         .then((resp) => {
             console.log('Response received');
             console.log(resp);
