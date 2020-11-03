@@ -7,7 +7,7 @@ import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesCompo
 import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
-import FlowDiagram from '../components/EditorComponents/FlowDiagram';
+import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
