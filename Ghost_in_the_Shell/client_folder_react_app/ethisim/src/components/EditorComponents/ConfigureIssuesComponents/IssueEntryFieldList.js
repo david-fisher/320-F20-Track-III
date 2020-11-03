@@ -20,31 +20,30 @@ const useStyles = makeStyles((theme) => ({
 IssueEntryFieldList.propTypes = {
     issueEntryFieldList: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
+    listChange: PropTypes.any.isRequired,
+    setListChange: PropTypes.any.isRequired,
 };
 
 export default function IssueEntryFieldList({
+    listChange,
+    setListChange,
     issueEntryFieldList,
     setIssueEntryFieldList,
 }) {
     const classes = useStyles();
-    //IssueEntryFieldList.propTypes.issueEntryFieldList = { issueEntryFieldList };
-    //IssueEntryFieldList.propTypes.setIssueEntryFieldList = { setIssueEntryFieldList };
+
     const [entryCur, setEntryCur] = useState({
-        id: 0,
+        ISSUE_ID: Math.floor(Math.random() * 1000000),
+        isNewIssue: true,
     });
 
-    const handleDelete = (entryID) => {
-        setIssueEntryFieldList(
-            issueEntryFieldList.filter((entry) => entry.id !== entryID)
-        );
-    };
-
-    const addItem = (e) => {
+    const addIssue = (e) => {
         e.preventDefault();
         const newEntry = entryCur;
         setIssueEntryFieldList(issueEntryFieldList.concat(newEntry));
         setEntryCur({
-            id: entryCur.id + 1,
+            ISSUE_ID: Math.floor(Math.random() * 1000000),
+            isNewIssue: true,
         });
     };
 
@@ -53,7 +52,7 @@ export default function IssueEntryFieldList({
             <Button
                 className={classes.button}
                 id="button"
-                onClick={addItem}
+                onClick={addIssue}
                 variant="contained"
                 color="primary"
             >
@@ -63,10 +62,15 @@ export default function IssueEntryFieldList({
             <form id="form">
                 {issueEntryFieldList.map((entry) => (
                     <EntryField
-                        key={entry.id}
-                        issue={entry.issue}
-                        score={entry.score}
-                        onDelete={handleDelete}
+                        key={entry.ISSUE_ID}
+                        id={entry.ISSUE_ID}
+                        isNewIssue={entry.isNewIssue === true ? true : false}
+                        issue={entry.NAME}
+                        score={entry.IMPORTANCE_SCORE}
+                        listChange={listChange}
+                        setListChange={setListChange}
+                        setIssueEntryFieldList={setIssueEntryFieldList}
+                        issueEntryFieldList={issueEntryFieldList}
                         entry={entry}
                     />
                 ))}

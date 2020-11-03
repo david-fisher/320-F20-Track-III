@@ -8,14 +8,14 @@ export default function universalFetch(
     onSuccess,
     requestBody
 ) {
-    console.log('POST started');
+    console.log('DELETE started');
     setResponse({
         data: null,
         loading: true,
         error: null,
     });
     axios
-        .post(endpoint, requestBody)
+        .delete(endpoint, requestBody)
         .then((resp) => {
             console.log('Response received');
             console.log(resp);
