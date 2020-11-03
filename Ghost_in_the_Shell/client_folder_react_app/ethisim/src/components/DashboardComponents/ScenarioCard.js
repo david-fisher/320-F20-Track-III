@@ -34,18 +34,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 ScenarioCard.propTypes = {
-    id: PropTypes.string,
+    id: PropTypes.number,
     scenarioName: PropTypes.string,
     className: PropTypes.string,
-    scenarioData: PropTypes.string,
-    finish: PropTypes.bool,
+    scenarioData: PropTypes.any,
+    finished: PropTypes.bool,
 };
 
-export default function ScenarioCard(props) {
+export default function ScenarioCard({
+    id,
+    scenarioName,
+    className,
+    finished,
+    scenarioData,
+}) {
     const classes = useStyles();
-    ScenarioCard.propTypes = props.data;
-    const data = props.data;
-    const { id, scenarioName, className, finished } = data;
 
     //If scenario is unfinished, we show the buttons "Edit," "Delete," "Share"
     //If scenario is finished, we show the button "Edit," "Delete," "Share," "View Student Data"
@@ -54,8 +57,8 @@ export default function ScenarioCard(props) {
         <Grid
             component={Link}
             to={{
-                pathname: '/data/' + data.id,
-                scenarioData: data,
+                pathname: '/data/' + id,
+                scenarioData,
             }}
             className={classes.button}
             item
@@ -80,8 +83,8 @@ export default function ScenarioCard(props) {
                 <Button
                     component={Link}
                     to={{
-                        pathname: '/editor/' + data.id,
-                        scenarioData: data,
+                        pathname: '/editor/' + id,
+                        scenarioData,
                     }}
                     className={classes.buttonText}
                     variant="contained"

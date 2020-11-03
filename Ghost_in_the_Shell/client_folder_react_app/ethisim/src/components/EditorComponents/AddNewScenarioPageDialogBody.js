@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Select,
     MenuItem,
@@ -39,9 +39,9 @@ export default function AddNewScenarioPageDialogBody(props) {
     const { addPage, setOpenPopup } = data;
 
     // eslint-disable-next-line
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [pageType, setPageType] = React.useState('Event');
-    const [pageName, setPageName] = React.useState('Event');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [pageType, setPageType] = useState('Generic');
+    const [pageName, setPageName] = useState('Generic');
 
     // eslint-disable-next-line
     const handleClick = (event) => {

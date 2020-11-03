@@ -4,6 +4,10 @@ import { Container, Box, Typography, Grid } from '@material-ui/core';
 import ScenarioCard from '../components/DashboardComponents/ScenarioCard';
 import AddNewScenarioCard from '../components/DashboardComponents/AddNewScenarioCard';
 import Copyright from '../components/Copyright';
+import {
+    mockUnfinishedScenario,
+    mockFinishedScenario,
+} from '../shared/mockScenarioData';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -18,15 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //Placeholder data
-const sampleScenariosData = [
-    { scenarioName: 'Scenario 1', className: 'CS1', id: '1', finished: false },
-    { scenarioName: 'Scenario 2', className: 'CS2', id: '2', finished: false },
-    { scenarioName: 'Scenario 3', className: 'CS3', id: '3', finished: false },
-    { scenarioName: 'Scenario 4', className: 'CS4', id: '4', finished: true },
-    { scenarioName: 'Scenario 5', className: 'CS5', id: '5', finished: true },
-    { scenarioName: 'Scenario 6', className: 'CS6', id: '6', finished: true },
-    { scenarioName: 'Scenario 7', className: 'CS7', id: '7', finished: true },
-];
+const sampleScenariosData = [mockUnfinishedScenario, mockFinishedScenario];
 
 //Passing props with React Router in Material UI: https://stackoverflow.com/questions/30115324/pass-props-in-link-react-router
 export default function Dashboard() {
@@ -39,11 +35,25 @@ export default function Dashboard() {
     );
 
     finishedScenarios = finishedScenarios.map((data) => (
-        <ScenarioCard data={data} key={data.id} finished={data.finished} />
+        <ScenarioCard
+            id={data.id}
+            scenarioName={data.scenarioName}
+            className={data.className}
+            scenarioData={data}
+            key={data.id}
+            finished={data.finished}
+        />
     ));
 
     unfinishedScenarios = unfinishedScenarios.map((data) => (
-        <ScenarioCard data={data} key={data.id} finished={data.finished} />
+        <ScenarioCard
+            id={data.id}
+            scenarioName={data.scenarioName}
+            className={data.className}
+            scenarioData={data}
+            key={data.id}
+            finished={data.finished}
+        />
     ));
 
     return (

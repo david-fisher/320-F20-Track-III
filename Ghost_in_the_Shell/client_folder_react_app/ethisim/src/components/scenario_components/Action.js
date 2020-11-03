@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Body from '../GeneralPageComponents/Body';
-import Title from '../GeneralPageComponents/Title';
-import VersionControl from '../../VersionControl';
-import { mockActionHistory } from '../../../shared/mockScenarioData';
+import Body from '../Body';
+import Title from '../Title';
+import VersionControl from '../VersionControl';
+import { mockActionHistory } from '../../shared/mockScenarioData';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -21,11 +21,6 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
         backgroundColor: theme.palette.primary.main,
         color: 'white',
-        textTransform: 'unset',
-    },
-    saveButton: {
-        margin: theme.spacing(2),
-        float: 'right',
         textTransform: 'unset',
     },
 }));
@@ -84,11 +79,12 @@ export default function FinalAction(props) {
                         name="option 2"
                     />
                     <Button
-                        className={classes.saveButton}
+                        type="submit"
+                        fullWidth
                         variant="contained"
-                        color="primary"
+                        className={classes.submit}
                     >
-                        Save
+                        Submit User Options
                     </Button>
                 </form>
             </div>

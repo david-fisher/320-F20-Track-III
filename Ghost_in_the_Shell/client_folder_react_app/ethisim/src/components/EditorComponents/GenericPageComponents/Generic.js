@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import InformationItemList from './InformationItemList';
-
 import { Typography, Container, Button } from '@material-ui/core';
+import VersionControl from '../../VersionControl';
+import InformationItemList from './InformationItemList';
+import { mockGenericHistory } from '../../../shared/mockScenarioData';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -14,15 +15,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Event() {
+export default function Generic(props) {
     const classes = useStyles();
+    //const titleData = mockGenericComponent.title;
+    //const bodyData = mockGenericComponent.body;
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+
     return (
         <Container component="main">
             <Typography align="center" variant="h2">
-                Event Component
+                Generic Component
             </Typography>
-            <Title />
-            <Body />
+            <VersionControl
+                history={mockGenericHistory.history}
+                type={mockGenericHistory.type}
+                setTitle={setTitle}
+                setBody={setBody}
+            />
+            <Title title={title} setTitle={setTitle} />
+            <Body body={body} />
             <InformationItemList />
             <Button
                 className={classes.saveButton}

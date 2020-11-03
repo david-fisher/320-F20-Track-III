@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, Button, Typography } from '@material-ui/core';
 import Logistics from '../components/EditorComponents/LogisticsPageComponents/Logistics';
-import Event from '../components/EditorComponents/GenericPageComponents/Event';
+import Generic from '../components/EditorComponents/GenericPageComponents/Generic';
 import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesComponents/ConfigureIssues';
 import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
@@ -11,6 +11,7 @@ import FlowDiagram from '../components/EditorComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
+import { mockUnfinishedScenarioData } from '../shared/mockScenarioData';
 
 const drawerWidth = 240;
 
@@ -56,26 +57,69 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const addPage = (array, id, title, componentType, scenarioData) => {
+    var c = null;
+    switch (componentType) {
+        case 'Logistics':
+            c = <Logistics data={scenarioData} />;
+            break;
+        case 'Configure Issues':
+            c = <ConfigureIssues />;
+            break;
+        case 'Conversation Editor':
+            c = <ConversationEditor />;
+            break;
+        case 'Flow Diagram':
+            c = <FlowDiagram />;
+            break;
+        case 'Generic':
+            c = <Generic />;
+            break;
+        case 'Reflection':
+            c = <Reflection />;
+            break;
+        case 'Action':
+            c = <Action />;
+            break;
+        default:
+            c = <Typography>Error</Typography>;
+    }
+    return array.concat({ id, title, component: c });
+};
+
 //Sidebar Components
 var startList = [
-    { id: 0, name: 'Logistics', component: <Logistics /> },
-    { id: 1, name: 'Configure Issues', component: <ConfigureIssues /> },
-    { id: 2, name: 'Conversation Editor', component: <ConversationEditor /> },
-    { id: 3, name: 'Flow Diagram', component: <FlowDiagram /> },
-    { id: 4, name: 'Event', component: <Event /> },
-    { id: 5, name: 'Reflection', component: <Reflection /> },
-    { id: 6, name: 'Action', component: <Action /> },
+    { id: 0, title: 'Logistics', type: 'Logistics' },
+    { id: 1, title: 'Configure Issues', type: 'Configure Issues' },
+    { id: 2, title: 'Conversation Editor', type: 'Conversation Editor' },
+    { id: 3, title: 'Flow Diagram', type: 'Flow Diagram' },
 ];
 
 export default function Editor(props) {
     const classes = useStyles();
-    const [scenarioComponent, setScenarioComponent] = useState(<Logistics />);
     const [openPopup, setOpenPopup] = useState(false);
-    const [scenarioComponents, setScenarioComponents] = useState(startList);
-
+    //Fake fetch of scenarioData with components
+    let fetchedComponents = mockUnfinishedScenarioData.components;
+    let combinedComponents = startList.concat(fetchedComponents);
+    let initialComponents = combinedComponents.reduce(
+        (result, currentValue) => {
+            return addPage(
+                result,
+                currentValue.id,
+                currentValue.title,
+                currentValue.type,
+                mockUnfinishedScenarioData
+            );
+        },
+        []
+    );
+    const [scenarioComponents, setScenarioComponents] = useState(
+        initialComponents
+    );
+    const [scenarioComponent, setScenarioComponent] = useState(
+        scenarioComponents[0].component
+    );
     const deleteByID = (d_id) => {
-        console.log('we are currently deleteing:');
-        console.log(d_id);
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
     };
 
@@ -83,17 +127,14 @@ export default function Editor(props) {
         const classes = useStyles();
 
         const onClick = function (component) {
-            console.log(component);
             setScenarioComponent(component);
         };
 
-        const addPage = (newId, newName, componentType) => {
-            console.log('Component type: ');
-            console.log(componentType);
+        const addNewPage = (id, title, componentType) => {
             var c = null;
             switch (componentType) {
                 case 'Generic':
-                    c = <Event />;
+                    c = <Generic />;
                     break;
                 case 'Reflection':
                     c = <Reflection />;
@@ -104,7 +145,9 @@ export default function Editor(props) {
                 default:
                     c = <Typography>Error</Typography>;
             }
-            scenarioComponents.push({ id: newId, name: newName, component: c });
+            setScenarioComponents(
+                scenarioComponents.concat({ id, title, component: c })
+            );
         };
 
         function handleAddNewComponent() {
@@ -140,7 +183,7 @@ export default function Editor(props) {
                     openPopup={openPopup}
                     title="Add New Page"
                     setOpenPopup={setOpenPopup}
-                    addPage={addPage}
+                    addPage={addNewPage}
                 ></AddNewSimulationScenarioPageDialog>
             </div>
         );
