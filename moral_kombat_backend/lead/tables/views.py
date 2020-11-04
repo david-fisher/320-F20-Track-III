@@ -162,3 +162,16 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = Professors_teachSerializer
+
+"""
+    -Get Scenario(all fields)
+	-Get course name associated with scenario
+	-Get Professor (creators) names associated with scenario
+	-get page_ID and title for latest version of each page
+"""
+class logistics_page(APIView):
+
+    def get(self, request):
+
+        logistics = [senarios.SCENARIO_ID for senarios in senarios.objects.all()]
+        return Response(logistics)

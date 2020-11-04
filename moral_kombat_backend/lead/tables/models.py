@@ -13,12 +13,7 @@ class scenarios(models.Model):
     IS_FINISHED = models.BooleanField(default = False)
     PUBLIC = models.BooleanField(default = False)
     NUM_CONVERSATIONS = models.IntegerField(default = 0)
-    PROFESSOR_ID = models.ForeignKey('professors', to_field = 'PROFESSOR_ID', on_delete =models.CASCADE, related_name="scenarios1")
     FIRST_PAGE = models.IntegerField(default = 1)
-    # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)
-    # def __str__(self):
-    #     return "%s the scenario" % self.name
-
 
 class pages(models.Model):
     class Meta:
