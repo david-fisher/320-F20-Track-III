@@ -3,23 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import get from '../../../get';
-import deleteReq from '../../../delete';
-import post from '../../../post';
-import put from '../../../put';
-import useInterval from '../../../shared/useInterval';
+import deleteReq from '../../../universalHTTPRequests/delete';
+import post from '../../../universalHTTPRequests/post';
+import put from '../../../universalHTTPRequests/put';
 
-//TODO once scenario dashabord and component/page loading is finished
-const tempScenarioID = 1;
-
-//Need scenarioID
-const endpointGET = 'http://localhost:8000/api/Issues/?SCENARIO_ID=';
-
-const endpointPOST = 'http://localhost:8000/api/Issues/';
+const endpointPOST = '/api/Issues/';
 //Need issueID
-const endpointPUT = 'http://localhost:8000/api/Issues/';
+const endpointPUT = '/api/Issues/';
 //Need issueID
-const endpointDELETE = 'http://localhost:8000/api/Issues/';
+const endpointDELETE = '/api/Issues/';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -72,28 +64,6 @@ export default function IssueEntryField({
     const [issueName, setIssueName] = useState(issue ? issue : 0);
     const [newIssue, setNewIssue] = useState(isNewIssue);
 
-    //const [processed, setProcessed] = useState(true);
-
-    //const [newList, setNewList] = useState(issueEntryFieldList);
-    //const [newValue, setNewValue] = useState(newList.data ? newList.data.length : 0);
-
-    /*
-    function poll() {
-        console.log("POLL");
-        console.log(newValue);
-        if(newList.data) {
-            console.log(newList.data.length);
-        }
-        get(setNewList, endpointGET + tempScenarioID);
-        if(newList.data && newList.data.length === newValue) {
-            setIssueEntryFieldList(newList);
-            setProcessed(true);
-        }
-    }   
-    */
-
-    //useInterval(poll, processed ? null : 500);
-
     const handleChangeScore = (content) => {
         setIssueScore(content.target.value);
     };
@@ -118,7 +88,7 @@ export default function IssueEntryField({
             });
             setNewIssue(false);
         } else {
-            put(setPut, endpointPUT + id + '/', null, null, {
+            put(setPut, endpointPUT + issueID + '/', null, null, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
                 IMPORTANCE_SCORE: issueScore,

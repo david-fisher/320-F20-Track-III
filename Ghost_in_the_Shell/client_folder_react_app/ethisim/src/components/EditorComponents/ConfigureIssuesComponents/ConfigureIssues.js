@@ -4,14 +4,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import VersionControl from '../../VersionControl';
 import { mockIssuesHistory } from '../../../shared/mockScenarioData';
-import get from '../../../get';
+import get from '../../../universalHTTPRequests/get';
 import LoadingSpinner from '../../LoadingSpinner';
 
-//TODO once scenario dashabord and component/page loading is finished
+//TODO once scenario dashboard and component/page loading is finished
 const tempScenarioID = 1;
 
 //Need scenarioID
-const endpointGET = 'http://localhost:8000/api/Issues/?SCENARIO_ID=';
+const endpointGET = '/api/Issues/?SCENARIO_ID=';
 
 const useStyles = makeStyles((theme) => ({
     issue: {
