@@ -183,11 +183,9 @@ class logistics_page(APIView):
         #logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
         
         
-        PROFESSOR_ID = self.request.query_params.get('professor_id') 
+        PROFESSOR_ID = self.request.query_params.get('professor_id')
         print(PROFESSOR_ID)
-        SCENARIO_ID = self.request.query_params.get('scenario_id') 
-        print(SCENARIO_ID)
-        logistics = scenarios.objects.values()
+        logistics = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID).values()
         #logistics = serializers.serialize('json', scenarios.objects.all())
         #logistics = logistics.get(SCENARIO_ID = 12)
 
