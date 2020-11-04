@@ -28,10 +28,10 @@ export default function IssueEntryFieldList({
     setIssueEntryFieldList,
 }) {
     const classes = useStyles();
-
+    //IssueEntryFieldList.propTypes.issueEntryFieldList = { issueEntryFieldList };
+    //IssueEntryFieldList.propTypes.setIssueEntryFieldList = { setIssueEntryFieldList };
     const [entryCur, setEntryCur] = useState({
-        ISSUE_ID: Math.floor(Math.random() * 1000000),
-        isNewIssue: true,
+        id: 0,
     });
 
     console.log(issueEntryFieldList);
@@ -42,8 +42,7 @@ export default function IssueEntryFieldList({
         issueEntryFieldList.data = issueEntryFieldList.data.concat(newEntry);
         setIssueEntryFieldList(issueEntryFieldList);
         setEntryCur({
-            ISSUE_ID: Math.floor(Math.random() * 1000000),
-            isNewIssue: true,
+            id: entryCur.id + 1,
         });
     };
 
@@ -63,7 +62,7 @@ export default function IssueEntryFieldList({
             <Button
                 className={classes.button}
                 id="button"
-                onClick={addIssue}
+                onClick={addItem}
                 variant="contained"
                 color="primary"
             >

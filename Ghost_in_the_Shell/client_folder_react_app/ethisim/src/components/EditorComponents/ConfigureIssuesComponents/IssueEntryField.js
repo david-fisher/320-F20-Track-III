@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Box, Typography } from '@material-ui/core';
@@ -152,8 +152,7 @@ export default function IssueEntryField({
                         style={{ width: '75%' }}
                         id="outlined-text"
                         label="Issue"
-                        value={issueName}
-                        onChange={handleChangeName}
+                        value={issue}
                         multiline
                         rows={2}
                         variant="outlined"
@@ -163,8 +162,7 @@ export default function IssueEntryField({
                         margin="normal"
                         id="outlined-number"
                         label="Score"
-                        onChange={handleChangeScore}
-                        value={issueScore}
+                        value={score}
                         rows={1}
                         variant="filled"
                     />
@@ -175,7 +173,6 @@ export default function IssueEntryField({
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            onClick={() => saveIssue(id)}
                         >
                             Save
                         </Button>

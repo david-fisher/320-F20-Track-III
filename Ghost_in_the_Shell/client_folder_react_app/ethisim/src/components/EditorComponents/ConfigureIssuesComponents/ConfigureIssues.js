@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import VersionControl from '../../VersionControl';
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ConfigureIssues(props) {
+export default function ConfigureIssues() {
     const classes = useStyles();
     const [issueEntryFieldList, setIssueEntryFieldList] = useState({
         data: null,
@@ -61,11 +61,16 @@ export default function ConfigureIssues(props) {
                 />
             </div>
             <EntryFields
-                issueEntryFieldList={
-                    issueEntryFieldList !== null ? issueEntryFieldList : []
-                }
+                issueEntryFieldList={issueEntryFieldList}
                 setIssueEntryFieldList={setIssueEntryFieldList}
             />
+            <Button
+                className={classes.saveButton}
+                variant="contained"
+                color="primary"
+            >
+                Save
+            </Button>
         </div>
     );
 }

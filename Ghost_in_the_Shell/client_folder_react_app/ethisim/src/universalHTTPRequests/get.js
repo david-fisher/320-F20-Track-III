@@ -7,7 +7,7 @@ export default function universalFetch(
     onError,
     onSuccess
 ) {
-    console.log('GET started');
+    console.log('Fetch started');
     setResponse({
         data: null,
         loading: true,
