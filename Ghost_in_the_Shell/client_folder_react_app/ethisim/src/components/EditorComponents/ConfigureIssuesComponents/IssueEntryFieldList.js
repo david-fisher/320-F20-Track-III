@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryField from './IssueEntryField';
 import { Container, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import SavedBanner from '../../SavedBanner';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -46,8 +47,19 @@ export default function IssueEntryFieldList({
         });
     };
 
+    const [saved, setSaved] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSaved(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [saved]);
+
     return (
         <Container component="main" className={classes.container}>
+            <SavedBanner saved={saved} />
             <Button
                 className={classes.button}
                 id="button"
@@ -69,6 +81,7 @@ export default function IssueEntryFieldList({
                         setIssueEntryFieldList={setIssueEntryFieldList}
                         issueEntryFieldList={issueEntryFieldList}
                         entry={entry}
+                        setSaved={setSaved}
                     />
                 ))}
             </form>

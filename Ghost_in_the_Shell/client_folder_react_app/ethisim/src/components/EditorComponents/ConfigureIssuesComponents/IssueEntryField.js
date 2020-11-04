@@ -29,6 +29,7 @@ IssueEntryField.propTypes = {
     isNewIssue: PropTypes.bool,
     issueEntryFieldList: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
+    setSaved: PropTypes.any,
 };
 
 export default function IssueEntryField({
@@ -38,6 +39,7 @@ export default function IssueEntryField({
     isNewIssue,
     setIssueEntryFieldList,
     issueEntryFieldList,
+    setSaved,
 }) {
     const classes = useStyles();
     //TODO replace
@@ -59,6 +61,7 @@ export default function IssueEntryField({
         loading: true,
         error: null,
     });
+
     const [issueID, setIssueID] = useState(id);
     const [issueScore, setIssueScore] = useState(score ? score : 0);
     const [issueName, setIssueName] = useState(issue ? issue : 0);
@@ -74,21 +77,25 @@ export default function IssueEntryField({
 
     const saveIssue = () => {
         if (newIssue) {
-            function setID(resp) {
+            function onSuccess(resp) {
                 //if newly created issue, replace fake ID with new ID
                 if (resp.data) {
                     setIssueID(resp.data.ISSUE_ID);
+                    setSaved(true);
+                    setNewIssue(false);
                 }
             }
-            post(setPost, endpointPOST, null, setID, {
+            post(setPost, endpointPOST, null, onSuccess, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
                 IMPORTANCE_SCORE: issueScore,
                 NAME: issueName,
             });
-            setNewIssue(false);
         } else {
-            put(setPut, endpointPUT + issueID + '/', null, null, {
+            function successfullySaved(resp) {
+                setSaved(true);
+            }
+            put(setPut, endpointPUT + issueID + '/', null, successfullySaved, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
                 IMPORTANCE_SCORE: issueScore,
@@ -102,16 +109,28 @@ export default function IssueEntryField({
         //remove issue from array, id represents the id in issueEntryFieldList
         //If issue is a new issue, A POST request will replace the fake ID with the ID in database
         //ID in the array will remain the fake id, so that is why we compare with 'id' rather than 'issueID'
-        let newData = issueEntryFieldList.data.filter(
-            (entry) => entry.ISSUE_ID !== id
-        );
-        setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
+        if (newIssue) {
+            let newData = issueEntryFieldList.data.filter(
+                (entry) => entry.ISSUE_ID !== id
+            );
+            setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
+        }
         if (!newIssue) {
+            function successfullySaved() {
+                setSaved(true);
+                let newData = issueEntryFieldList.data.filter(
+                    (entry) => entry.ISSUE_ID !== id
+                );
+                setIssueEntryFieldList({
+                    ...issueEntryFieldList,
+                    data: newData,
+                });
+            }
             deleteReq(
                 setDeleteReq,
                 endpointDELETE + issueID + '/',
                 null,
-                null,
+                successfullySaved,
                 {
                     SCENARIO_ID: scenarioID,
                     ISSUE_ID: issueID,

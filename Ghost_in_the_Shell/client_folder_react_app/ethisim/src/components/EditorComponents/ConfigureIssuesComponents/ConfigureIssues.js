@@ -41,6 +41,7 @@ export default function ConfigureIssues(props) {
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + tempScenarioID);
     };
+
     useEffect(getData, []);
 
     if (issueEntryFieldList.loading) {
