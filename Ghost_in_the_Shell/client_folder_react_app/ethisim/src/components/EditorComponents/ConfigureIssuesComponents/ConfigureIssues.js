@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import VersionControl from '../../VersionControl';
 import { mockIssuesHistory } from '../../../shared/mockScenarioData';
-import get from '../../../get';
-
-//TODO once scenario dashabord and component/page loading is finished
-const tempScenarioID = 1;
-
-//Need scenarioID
-const endpointGET = 'http://localhost:8000/api/Issues/?SCENARIO_ID=';
 
 const useStyles = makeStyles((theme) => ({
     issue: {
@@ -29,16 +22,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ConfigureIssues(props) {
+export default function ConfigureIssues() {
     const classes = useStyles();
-    const [listChange, setListChange] = useState(false);
-    const [issueEntryFieldList, setIssueEntryFieldList] = useState(null);
-    let getData = () => {
-        setTimeout(function () {
-            get(setIssueEntryFieldList, endpointGET + tempScenarioID);
-        }, 500);
-    };
-    useEffect(getData, [listChange]);
+    const [issueEntryFieldList, setIssueEntryFieldList] = useState([]);
 
     return (
         <div className={classes.issue}>
@@ -53,13 +39,16 @@ export default function ConfigureIssues(props) {
                 />
             </div>
             <EntryFields
-                issueEntryFieldList={
-                    issueEntryFieldList !== null ? issueEntryFieldList : []
-                }
+                issueEntryFieldList={issueEntryFieldList}
                 setIssueEntryFieldList={setIssueEntryFieldList}
-                listChange={listChange}
-                setListChange={setListChange}
             />
+            <Button
+                className={classes.saveButton}
+                variant="contained"
+                color="primary"
+            >
+                Save
+            </Button>
         </div>
     );
 }

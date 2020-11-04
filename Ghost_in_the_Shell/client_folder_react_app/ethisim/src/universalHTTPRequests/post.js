@@ -1,21 +1,21 @@
 import axios from 'axios';
-import { baseURL } from '../Constants/Config';
-// Universal post request using axios
-export default function universalPost(
+import { baseURL } from '../../Constants/Config';
+// Universal fetch request using axios
+export default function universalFetch(
     setResponse,
     endpoint,
     onError,
     onSuccess,
     requestBody
 ) {
-    console.log('Post started');
+    console.log('Fetch started');
     setResponse({
         data: null,
         loading: true,
         error: null,
     });
     axios
-        .post(endpoint, requestBody)
+        .post(baseURL + endpoint, requestBody)
         .then((resp) => {
             console.log('Response received');
             console.log(resp);
