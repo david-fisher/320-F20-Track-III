@@ -44,6 +44,17 @@ export default function Logistics(props) {
     const classes = useStyles();
     //temporary until backend implements id's
     const { scenarioName, className } = mockUnfinishedScenario;
+    const [scenarioNameValue, setScenarioNameValue] = useState(scenarioName);
+    const [classNameValue, setClassNameValue] = useState(className);
+
+    const onChangeScenarioName = (event) => {
+        setScenarioNameValue(event.target.value);
+    };
+
+    const onChangeClassName = (event) => {
+        setClassNameValue(event.target.value);
+    };
+
     const initialAuthors = mockUnfinishedScenario.authors;
     const [authors, setAuthors] = useState(initialAuthors);
 
@@ -99,11 +110,15 @@ export default function Logistics(props) {
                 Simulation Title
                 <TextField
                     id="Simulation Title"
-                    label=""
-                    value={scenarioName}
+                    value={scenarioNameValue}
+                    onChange={onChangeScenarioName}
                 />
                 Course Name
-                <TextField id="Course Name" label="" value={className} />
+                <TextField
+                    id="Course Name"
+                    value={classNameValue}
+                    onChange={onChangeClassName}
+                />
                 Authors
             </form>
             {authorsWithID.map((data) => (
@@ -165,11 +180,15 @@ export default function Logistics(props) {
                     Simulation Title
                     <TextField
                         id="Simulation Title"
-                        label=""
-                        value={scenarioName}
+                        value={scenarioNameValue}
+                        onChange={onChangeScenarioName}
                     />
                     Course Name
-                    <TextField id="Course Name" label="" value={className} />
+                    <TextField
+                        id="Course Name"
+                        value={classNameValue}
+                        onChange={onChangeClassName}
+                    />
                     Authors
                 </form>
                 {authorsWithID.map((data) => (
