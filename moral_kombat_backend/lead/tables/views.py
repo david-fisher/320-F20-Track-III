@@ -173,5 +173,5 @@ class logistics_page(APIView):
 
     def get(self, request):
 
-        logistics = [senarios.SCENARIO_ID for senarios in senarios.objects.all()]
+        logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
         return Response(logistics)

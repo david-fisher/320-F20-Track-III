@@ -29,7 +29,8 @@ router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
 # router.register('api/allScenarios', allScenariosViewSet.as_view())
 
 urlpatterns = [
-    path('allScenarios', allScenariosViewSet.as_view())
+    path('allScenarios', allScenariosViewSet.as_view()),
+    path('logistics', logistics_page.as_view())
 ] 
 
 urlpatterns += router.urls
