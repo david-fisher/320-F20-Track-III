@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Reflection(props) {
     const classes = useStyles();
-    //const titleData = mockActionComponent.title;
-    //const bodyData = mockActionComponent.body;
+
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    //Assuming list of questions will be in array form
     const [questions, setQuestions] = useState([]);
 
     return (

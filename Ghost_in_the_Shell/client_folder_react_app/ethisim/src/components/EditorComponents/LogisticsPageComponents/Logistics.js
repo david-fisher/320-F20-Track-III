@@ -56,8 +56,10 @@ export default function Logistics(props) {
     };
 
     const initialAuthors = mockUnfinishedScenario.authors;
+    //Assume authors is an array of strings representing author names
     const [authors, setAuthors] = useState(initialAuthors);
 
+    //Set fake ID for list item
     let initialAuthorsWithID = authors.map(function (author) {
         return {
             author: author,

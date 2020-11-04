@@ -9,8 +9,9 @@ QuestionFields.propTypes = {
 };
 
 export default function QuestionFields({ questionsResponses }) {
+    //questionsResponses is an array of object in format {question: string, response: string}
+    //Set fake ID for list item
     let initialQuestionsWithID = questionsResponses.map(function (data) {
-        console.log(data);
         return {
             question: data.question,
             response: data.response,
@@ -34,12 +35,6 @@ export default function QuestionFields({ questionsResponses }) {
     };
 
     useEffect(resetQuestionsWithID, [questionsResponses]);
-
-    /*
-    const [question, setEdit] = useState({
-        id: Math.floor(Math.random() * 10000),
-    });
-    */
 
     const removeQuestion = (questionID) => {
         console.log(questionID);

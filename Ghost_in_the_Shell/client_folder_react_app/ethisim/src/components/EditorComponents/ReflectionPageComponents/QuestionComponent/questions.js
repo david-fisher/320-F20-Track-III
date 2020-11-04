@@ -10,6 +10,7 @@ QuestionFields.propTypes = {
 };
 
 export default function QuestionFields({ questions, setQuestions }) {
+    //Set fake ID for list item
     let initialQuestionsWithID = questions.map(function (question) {
         return {
             question: question,
@@ -32,12 +33,6 @@ export default function QuestionFields({ questions, setQuestions }) {
     };
 
     useEffect(resetQuestionsWithID, [questions]);
-
-    /*
-    const [question, setEdit] = useState({
-        id: Math.floor(Math.random() * 10000),
-    });
-    */
 
     const removeQuestion = (questionID) => {
         console.log(questionID);
