@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseURL } from '../constants/config';
+import { baseURL } from '../Constants/Config';
 // Universal post request using axios
 export default function universalPost(setResponse, endpoint, onError, onSuccess, requestBody) {
     console.log('Post started');
