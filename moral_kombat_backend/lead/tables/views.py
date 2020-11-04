@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from tables.models import *
 from .serializer import *
@@ -171,7 +172,19 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
 """
 class logistics_page(APIView):
 
+    
     def get(self, request):
+        """logistics = {}
+        for senarios in senarios.objects.all:
+            logistics[]"""
 
-        logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
+        #logistics = serializers.serialize('json', self.get_queryset())
+        #logistics = scenarios.objects.get(SCENARIO_ID = 12)
+        #logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
+        logistics = scenarios.objects.values()
+
+        for x in logistics:
+            
+        
+        #return JsonResponse({"scenario": list(logistics)})
         return Response(logistics)
