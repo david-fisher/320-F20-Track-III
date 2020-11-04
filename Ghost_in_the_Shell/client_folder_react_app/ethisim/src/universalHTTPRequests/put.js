@@ -1,15 +1,15 @@
 import axios from 'axios';
-import { baseURL } from '../../Constants/Config'
-// Universal fetch request using axios
-export default function universalFetch(setResponse, endpoint, onError, onSuccess, requestBody) {
-    console.log('Fetch started');
+import { baseURL } from '../Constants/Config';
+// Universal put request using axios
+export default function universalPut(setResponse, endpoint, onError, onSuccess, requestBody) {
+    console.log('Put started');
     setResponse({
         data: null,
         loading: true,
         error: null,
     });
     axios
-        .post(baseURL + endpoint, requestBody)
+        .put(baseURL + endpoint, requestBody)
         .then((resp) => {
             console.log('Response received');
             console.log(resp);
@@ -21,7 +21,7 @@ export default function universalFetch(setResponse, endpoint, onError, onSuccess
             onSuccess && onSuccess();
         })
         .catch((err) => {
-            console.log(`Fetch failed with error ${err.message}`);
+            console.log(`Put failed with error ${err.message}`);
             setResponse({
                 data: null,
                 loading: false,
