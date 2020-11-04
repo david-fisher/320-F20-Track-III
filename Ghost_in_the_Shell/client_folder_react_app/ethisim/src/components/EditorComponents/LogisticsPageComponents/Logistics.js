@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Author from './Author';
+import AuthorField from './Author';
 import { isBrowser } from 'react-device-detect';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { mockUnfinishedScenario } from '../../../shared/mockScenarioData';
+
 const useStyles = makeStyles((theme) => ({
     textfields: {
         '& > *': {
@@ -42,32 +43,51 @@ const useStyles = makeStyles((theme) => ({
 export default function Logistics(props) {
     const classes = useStyles();
     //temporary until backend implements id's
-    const [id, setId] = useState(0);
     const { scenarioName, className } = mockUnfinishedScenario;
     const initialAuthors = mockUnfinishedScenario.authors;
+    const [authors, setAuthors] = useState(initialAuthors);
 
-    const addAuthor = (event) => {
-        setAuthor(authors.concat(<Author key={id + 1} />));
-        setId(id + 1);
-        if (event) {
-            event.preventDefault();
-        }
+    let initialAuthorsWithID = authors.map(function (author) {
+        return {
+            author: author,
+            id: Math.floor(Math.random() * 10000),
+        };
+    });
+
+    const [authorsWithID, setAuthorsWithID] = useState(initialAuthorsWithID);
+
+    let resetAuthorsWithID = (authorsWithID) => {
+        let initialAuthorsWithID = authors.map(function (author) {
+            return {
+                author: author,
+                id: Math.floor(Math.random() * 10000),
+            };
+        });
+        setAuthorsWithID(initialAuthorsWithID);
     };
 
-    const initializeAuthors = (authorsArray, currentAuthor, index) => {
-        return authorsArray.concat(
-            <Author key={index} author={currentAuthor} />
+    useEffect(resetAuthorsWithID, [authors]);
+
+    const removeAuthor = (authorID) => {
+        const leftAuthors = authorsWithID.filter(
+            (author) => author.id !== authorID
         );
+        setAuthorsWithID(leftAuthors);
     };
 
-    const currentAuthors = initialAuthors.reduce(
-        (authorsArray, currentAuthor, index) => {
-            return initializeAuthors(authorsArray, currentAuthor, index);
-        },
-        []
-    );
-
-    const [authors, setAuthor] = useState(currentAuthors);
+    const addAuthor = (e) => {
+        let newAuthors = authorsWithID.map((data) => data.author);
+        newAuthors = [...newAuthors, ''];
+        setAuthors(newAuthors);
+        const newAuthorsWithID = [
+            ...authorsWithID,
+            {
+                id: Math.floor(Math.random() * 10000),
+                author: '',
+            },
+        ];
+        setAuthorsWithID(newAuthorsWithID);
+    };
 
     //default if it's a browser
     var body = (
@@ -86,7 +106,16 @@ export default function Logistics(props) {
                 <TextField id="Course Name" label="" value={className} />
                 Authors
             </form>
-            {authors}
+            {authorsWithID.map((data) => (
+                <AuthorField
+                    key={data.id}
+                    id={data.id}
+                    removeAuthor={removeAuthor}
+                    author={data.author}
+                    listOfAuthors={authorsWithID}
+                    setListOfAuthors={setAuthorsWithID}
+                />
+            ))}
             <div className={classes.subdiv}>
                 <form className={classes.buttons} noValidate autoComplete="off">
                     <Button
@@ -143,7 +172,16 @@ export default function Logistics(props) {
                     <TextField id="Course Name" label="" value={className} />
                     Authors
                 </form>
-                {authors}
+                {authorsWithID.map((data) => (
+                    <AuthorField
+                        key={data.id}
+                        id={data.id}
+                        removeAuthor={removeAuthor}
+                        author={data.author}
+                        listOfAuthors={authorsWithID}
+                        setListOfAuthors={setAuthorsWithID}
+                    />
+                ))}
                 <div className={classes.subdiv}>
                     <form
                         className={classes.buttons}

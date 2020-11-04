@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Grid } from '@material-ui/core';
@@ -20,13 +20,36 @@ const useStyles = makeStyles((theme) => ({
 
 Author.propTypes = {
     author: PropTypes.string,
+    listOfAuthors: PropTypes.any,
+    setListOfAuthors: PropTypes.any,
+    id: PropTypes.number,
+    removeAuthor: PropTypes.any,
 };
 
-export default function Author(props) {
+export default function Author({
+    author,
+    listOfAuthors,
+    setListOfAuthors,
+    id,
+    removeAuthor,
+}) {
     const classes = useStyles();
 
-    const { author } = props;
-
+    const [authorValue, setAuthorValue] = useState(author);
+    const onChangeAuthor = (event) => {
+        setAuthorValue(event.target.value);
+        setListOfAuthors(
+            listOfAuthors.map((data) => {
+                if (data.id === id) {
+                    return {
+                        ...data,
+                        author: event.target.value,
+                    };
+                }
+                return data;
+            })
+        );
+    };
     return (
         <div>
             <Grid container>
@@ -37,7 +60,8 @@ export default function Author(props) {
                                 style={{ width: '100%' }}
                                 id="outlined-multiline-static"
                                 label="Author"
-                                value={author}
+                                value={authorValue}
+                                onChange={onChangeAuthor}
                                 multiline
                             />
                         </form>
@@ -49,7 +73,7 @@ export default function Author(props) {
                             className={classes.margin}
                             variant="contained"
                             color="primary"
-                            //onClick={() => props.onDelete(props.author.id)}
+                            onClick={() => removeAuthor(id)}
                         >
                             Delete
                         </Button>

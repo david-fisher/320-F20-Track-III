@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
@@ -16,12 +16,36 @@ const useStyles = makeStyles((theme) => ({
 QuestionField.propTypes = {
     removeQuestion: PropTypes.any,
     question: PropTypes.any,
+    id: PropTypes.number,
+    listOfQuestions: PropTypes.any,
+    setListOfQuestions: PropTypes.any,
 };
 
-export default function QuestionField(props) {
+export default function QuestionField({
+    question,
+    removeQuestion,
+    id,
+    listOfQuestions,
+    setListOfQuestions,
+}) {
     const classes = useStyles();
-    QuestionField.propTypes = props.data;
-    console.log(props.question);
+    const [questionValue, setQuestionValue] = useState(question);
+
+    const onChangeQuestion = (event) => {
+        setQuestionValue(event.target.value);
+        setListOfQuestions(
+            listOfQuestions.map((data) => {
+                if (data.id === id) {
+                    return {
+                        ...data,
+                        question: event.target.value,
+                    };
+                }
+                return data;
+            })
+        );
+    };
+
     return (
         <div>
             <Box
@@ -39,7 +63,8 @@ export default function QuestionField(props) {
                         multiline
                         rows={2}
                         variant="outlined"
-                        value={props.question}
+                        value={questionValue}
+                        onChange={onChangeQuestion}
                     />
                 </Box>
                 <Box p={1}>
@@ -57,7 +82,7 @@ export default function QuestionField(props) {
                             className={classes.margin}
                             variant="contained"
                             color="primary"
-                            onClick={() => props.removeQuestion(props.id)}
+                            onClick={() => removeQuestion(id)}
                         >
                             Delete
                         </Button>

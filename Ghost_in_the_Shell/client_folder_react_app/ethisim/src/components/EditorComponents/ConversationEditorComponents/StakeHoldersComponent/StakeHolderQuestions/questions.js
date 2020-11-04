@@ -10,6 +10,7 @@ QuestionFields.propTypes = {
 
 export default function QuestionFields({ questionsResponses }) {
     let initialQuestionsWithID = questionsResponses.map(function (data) {
+        console.log(data);
         return {
             question: data.question,
             response: data.response,
@@ -85,6 +86,8 @@ export default function QuestionFields({ questionsResponses }) {
                         removeQuestion={removeQuestion}
                         question={data.question}
                         response={data.response}
+                        listOfQuestions={questionsWithID}
+                        setListOfQuestions={setQuestionsWithID}
                     />
                 ))}
             </form>

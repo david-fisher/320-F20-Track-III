@@ -48,7 +48,8 @@ export default function QuestionFields({ questions, setQuestions }) {
     };
 
     const addQuestion = (e) => {
-        const newQuestions = [...questions, ''];
+        let newQuestions = questionsWithID.map((data) => data.question);
+        newQuestions = [...newQuestions, ''];
         setQuestions(newQuestions);
         const newQuestionsWithID = [
             ...questionsWithID,
@@ -85,6 +86,8 @@ export default function QuestionFields({ questions, setQuestions }) {
                         id={data.id}
                         removeQuestion={removeQuestion}
                         question={data.question}
+                        listOfQuestions={questionsWithID}
+                        setListOfQuestions={setQuestionsWithID}
                     />
                 ))}
             </form>
