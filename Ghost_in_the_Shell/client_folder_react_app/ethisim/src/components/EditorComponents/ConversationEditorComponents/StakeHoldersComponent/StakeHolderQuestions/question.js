@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
@@ -19,6 +19,8 @@ QuestionField.propTypes = {
     response: PropTypes.string,
     id: PropTypes.number,
     removeQuestion: PropTypes.any.isRequired,
+    listOfQuestions: PropTypes.any,
+    setListOfQuestions: PropTypes.any,
 };
 
 export default function QuestionField({
@@ -26,7 +28,42 @@ export default function QuestionField({
     response,
     removeQuestion,
     id,
+    setListOfQuestions,
+    listOfQuestions,
 }) {
+    const [questionValue, setQuestionValue] = useState(question);
+    const [responseValue, setResponseValue] = useState(response);
+
+    const onChangeQuestion = (event) => {
+        setQuestionValue(event.target.value);
+        setListOfQuestions(
+            listOfQuestions.map((data) => {
+                if (data.id === id) {
+                    return {
+                        ...data,
+                        question: event.target.value,
+                    };
+                }
+                return data;
+            })
+        );
+    };
+
+    const onChangeResponse = (event) => {
+        setResponseValue(event.target.value);
+        setListOfQuestions(
+            listOfQuestions.map((data) => {
+                if (data.id === id) {
+                    return {
+                        ...data,
+                        response: event.target.value,
+                    };
+                }
+                return data;
+            })
+        );
+    };
+
     // eslint-disable-next-line
     let handleChange = (content, editor) => {
         //TODO Implement
@@ -58,7 +95,8 @@ export default function QuestionField({
                         multiline
                         rows={2}
                         variant="outlined"
-                        value={question}
+                        value={questionValue}
+                        onChange={onChangeQuestion}
                     />
                     <TextField
                         style={{ width: 700, marginTop: 20 }}
@@ -67,7 +105,8 @@ export default function QuestionField({
                         multiline
                         rows={2}
                         variant="outlined"
-                        value={response}
+                        value={responseValue}
+                        onChange={onChangeResponse}
                     />
                 </Box>
                 <Box p={1}>

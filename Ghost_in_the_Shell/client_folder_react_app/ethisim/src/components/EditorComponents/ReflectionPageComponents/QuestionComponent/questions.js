@@ -10,6 +10,7 @@ QuestionFields.propTypes = {
 };
 
 export default function QuestionFields({ questions, setQuestions }) {
+    //Set fake ID for list item
     let initialQuestionsWithID = questions.map(function (question) {
         return {
             question: question,
@@ -33,12 +34,6 @@ export default function QuestionFields({ questions, setQuestions }) {
 
     useEffect(resetQuestionsWithID, [questions]);
 
-    /*
-    const [question, setEdit] = useState({
-        id: Math.floor(Math.random() * 10000),
-    });
-    */
-
     const removeQuestion = (questionID) => {
         console.log(questionID);
         const leftQuestions = questionsWithID.filter(
@@ -48,7 +43,8 @@ export default function QuestionFields({ questions, setQuestions }) {
     };
 
     const addQuestion = (e) => {
-        const newQuestions = [...questions, ''];
+        let newQuestions = questionsWithID.map((data) => data.question);
+        newQuestions = [...newQuestions, ''];
         setQuestions(newQuestions);
         const newQuestionsWithID = [
             ...questionsWithID,
@@ -85,6 +81,8 @@ export default function QuestionFields({ questions, setQuestions }) {
                         id={data.id}
                         removeQuestion={removeQuestion}
                         question={data.question}
+                        listOfQuestions={questionsWithID}
+                        setListOfQuestions={setQuestionsWithID}
                     />
                 ))}
             </form>

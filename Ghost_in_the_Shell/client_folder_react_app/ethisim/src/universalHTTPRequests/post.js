@@ -27,7 +27,7 @@ export default function universalFetch(
             onSuccess && onSuccess();
         })
         .catch((err) => {
-            console.log(`Fetch failed with error ${err.message}`);
+            console.log(`Post failed with error ${err.message}`);
             setResponse({
                 data: null,
                 loading: false,
