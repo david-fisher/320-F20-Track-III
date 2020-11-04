@@ -2,10 +2,10 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from tables.models import *
 from .serializer import *
+from django.core import serializers
 # DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Choices_forSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer, Stakeholder_inSerializer
 
 class DemographicsViewSet(viewsets.ModelViewSet):
@@ -173,7 +173,7 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
 class logistics_page(APIView):
 
     
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         """logistics = {}
         for senarios in senarios.objects.all:
             logistics[]"""
@@ -181,10 +181,16 @@ class logistics_page(APIView):
         #logistics = serializers.serialize('json', self.get_queryset())
         #logistics = scenarios.objects.get(SCENARIO_ID = 12)
         #logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
-        logistics = scenarios.objects.values()
-
-        for x in logistics:
-            
         
-        #return JsonResponse({"scenario": list(logistics)})
+        
+        PROFESSOR_ID = self.request.query_params.get('professor_id') 
+        print(PROFESSOR_ID)
+        SCENARIO_ID = self.request.query_params.get('scenario_id') 
+        print(SCENARIO_ID)
+        logistics = scenarios.objects.values()
+        #logistics = serializers.serialize('json', scenarios.objects.all())
+        #logistics = logistics.get(SCENARIO_ID = 12)
+
+
+        
         return Response(logistics)

@@ -13,6 +13,7 @@ class scenarios(models.Model):
     IS_FINISHED = models.BooleanField(default = False)
     PUBLIC = models.BooleanField(default = False)
     NUM_CONVERSATIONS = models.IntegerField(default = 0)
+    PROFESSOR_ID = models.ForeignKey('professors', on_delete=models.RESTRICT)
     FIRST_PAGE = models.IntegerField(default = 1)
 
 class pages(models.Model):
