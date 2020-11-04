@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { baseURL } from '../Constants/Config';
 // Universal put request using axios
-export default function universalPut(setResponse, endpoint, onError, onSuccess, requestBody) {
+export default function universalPut(
+    setResponse,
+    endpoint,
+    onError,
+    onSuccess,
+    requestBody
+) {
     console.log('Put started');
     setResponse({
         data: null,

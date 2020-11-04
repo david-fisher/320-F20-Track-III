@@ -40,6 +40,14 @@ export default function FinalAction(props) {
     const [option1, setOption1] = useState('');
     const [option2, setOption2] = useState('');
 
+    const onChangeOption1 = (event) => {
+        setOption1(event.target.value);
+    };
+
+    const onChangeOption2 = (event) => {
+        setOption2(event.target.value);
+    };
+
     return (
         <Container component="main">
             <Typography align="center" variant="h2">
@@ -67,8 +75,9 @@ export default function FinalAction(props) {
                         fullWidth
                         id="option 1"
                         label="Input Option 1 Text"
-                        value={option1}
                         name="option 1"
+                        value={option1}
+                        onChange={onChangeOption1}
                     />
                     <Typography align="center" variant="h6">
                         Option 2
@@ -80,8 +89,9 @@ export default function FinalAction(props) {
                         fullWidth
                         id="option 2"
                         label="Input Option 2 Text"
-                        value={option2}
                         name="option 2"
+                        value={option2}
+                        onChange={onChangeOption2}
                     />
                     <Button
                         className={classes.saveButton}
