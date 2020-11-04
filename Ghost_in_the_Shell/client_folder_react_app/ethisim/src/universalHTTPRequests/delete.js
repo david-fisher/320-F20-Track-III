@@ -8,7 +8,7 @@ export default function universalDelete(
     onSuccess,
     requestBody
 ) {
-    console.log('Delete started');
+    console.log('DELETE started');
     setResponse({
         data: null,
         loading: true,
@@ -24,7 +24,7 @@ export default function universalDelete(
                 loading: false,
                 error: null,
             });
-            onSuccess && onSuccess();
+            onSuccess && onSuccess(resp);
         })
         .catch((err) => {
             console.log(`Delete failed with error ${err.message}`);
@@ -33,6 +33,6 @@ export default function universalDelete(
                 loading: false,
                 error: err,
             });
-            onError && onError();
+            onError && onError(resp);
         });
 }
