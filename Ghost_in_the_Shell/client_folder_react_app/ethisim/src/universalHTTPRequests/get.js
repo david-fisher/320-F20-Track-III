@@ -23,7 +23,7 @@ export default function universalFetch(
                 loading: false,
                 error: null,
             });
-            onSuccess && onSuccess();
+            onSuccess && onSuccess(resp);
         })
         .catch((err) => {
             console.log(`Fetch failed with error ${err.message}`);
@@ -32,6 +32,6 @@ export default function universalFetch(
                 loading: false,
                 error: err,
             });
-            onError && onError();
+            onError && onError(resp);
         });
 }

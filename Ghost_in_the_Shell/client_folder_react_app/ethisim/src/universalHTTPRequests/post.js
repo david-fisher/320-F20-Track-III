@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../Constants/Config';
-// Universal post request using axios
+// Universal fetch request using axios
 export default function universalPost(
     setResponse,
     endpoint,
@@ -8,7 +8,7 @@ export default function universalPost(
     onSuccess,
     requestBody
 ) {
-    console.log('Post started');
+    console.log('POST started');
     setResponse({
         data: null,
         loading: true,
@@ -33,6 +33,6 @@ export default function universalPost(
                 loading: false,
                 error: err,
             });
-            onError && onError();
+            onError && onError(err);
         });
 }

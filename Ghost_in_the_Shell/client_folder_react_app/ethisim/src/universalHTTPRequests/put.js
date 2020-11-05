@@ -8,7 +8,7 @@ export default function universalPut(
     onSuccess,
     requestBody
 ) {
-    console.log('Put started');
+    console.log('PUT started');
     setResponse({
         data: null,
         loading: true,
@@ -33,6 +33,6 @@ export default function universalPut(
                 loading: false,
                 error: err,
             });
-            onError && onError();
+            onError && onError(resp);
         });
 }
