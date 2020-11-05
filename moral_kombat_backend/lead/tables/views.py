@@ -196,9 +196,12 @@ class logistics_page(APIView):
                 course = courses.objects.get(COURSE_ID = x)
                 course_dict.update({"COURSE_ID":course.COURSE_ID, "NAME": course.NAME})
                 
+            pages_query = pages.objects.filter(SCENARIO_id=scenario['SCENARIO_ID']).values()
+
 
             scenario.update({
-                "COURSE": course_dict
+                "COURSE": course_dict,
+                "PAGES": pages_query
             })
 
         

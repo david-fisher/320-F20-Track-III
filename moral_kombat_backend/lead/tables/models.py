@@ -16,9 +16,10 @@ class scenarios(models.Model):
     PROFESSOR_ID = models.ForeignKey('professors', on_delete=models.RESTRICT)
     FIRST_PAGE = models.IntegerField(default = 1)
 
+#TODO: add genric page type and fix version_id
 class pages(models.Model):
     class Meta:
-        unique_together = (('PAGE_ID'), ('SCENARIO'), ('Vcourse['COURSE_ID']ERSION_ID'))
+        unique_together = (('PAGE_ID'), ('SCENARIO'), ('VERSION_ID'))
     PAGE_ID = models.IntegerField()
     PAGE_CHOICES = (
         ('R', 'REFLECTION'),
