@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseURL } from '../../Constants/Config';
+import { baseURL } from '../Constants/Config';
 // Universal fetch request using axios
 export default function universalPost(
     setResponse,
@@ -33,6 +33,6 @@ export default function universalPost(
                 loading: false,
                 error: err,
             });
-            onError && onError(resp);
+            onError && onError(err);
         });
 }
