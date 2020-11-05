@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import EntryField from './IssueEntryField';
 import { Container, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import SavedBanner from '../../SavedBanner';
+import SavedBanner from '../../Banners/SavedBanner';
+import ErrorBanner from '../../Banners/ErrorBanner';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -12,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     button: {
-        margin: theme.spacing(0.5),
-        marginTop: theme.spacing(0),
+        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
         textTransform: 'unset',
     },
 }));
@@ -47,19 +48,38 @@ export default function IssueEntryFieldList({
         });
     };
 
-    const [saved, setSaved] = useState(false);
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setSaved(false);
+            setSuccessBannerFade(false);
         }, 1000);
 
         return () => clearTimeout(timeout);
-    }, [saved]);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
 
     return (
         <Container component="main" className={classes.container}>
-            <SavedBanner saved={saved} />
+            <SavedBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
             <Button
                 className={classes.button}
                 id="button"
@@ -81,7 +101,10 @@ export default function IssueEntryFieldList({
                         setIssueEntryFieldList={setIssueEntryFieldList}
                         issueEntryFieldList={issueEntryFieldList}
                         entry={entry}
-                        setSaved={setSaved}
+                        setSuccessBannerFade={setSuccessBannerFade}
+                        setSuccessBannerMessage={setSuccessBannerMessage}
+                        setErrorBannerFade={setErrorBannerFade}
+                        setErrorBannerMessage={setErrorBannerMessage}
                     />
                 ))}
             </form>

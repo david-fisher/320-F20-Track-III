@@ -29,7 +29,10 @@ IssueEntryField.propTypes = {
     isNewIssue: PropTypes.bool,
     issueEntryFieldList: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
-    setSaved: PropTypes.any,
+    setSuccessBannerFade: PropTypes.any,
+    setSuccessBannerMessage: PropTypes.any,
+    setErrorBannerMessage: PropTypes.any,
+    setErrorBannerFade: PropTypes.any,
 };
 
 export default function IssueEntryField({
@@ -39,23 +42,29 @@ export default function IssueEntryField({
     isNewIssue,
     setIssueEntryFieldList,
     issueEntryFieldList,
-    setSaved,
+    setSuccessBannerMessage,
+    setSuccessBannerFade,
+    setErrorBannerMessage,
+    setErrorBannerFade,
 }) {
     const classes = useStyles();
-    //TODO replace
+    //TODO replace once scenario dashboard page is implemented with backend
     const scenarioID = 1;
     const versionID = 2;
 
+    // eslint-disable-next-line
     const [postValue, setPost] = useState({
         data: null,
         loading: true,
         error: null,
     });
+    // eslint-disable-next-line
     const [putValue, setPut] = useState({
         data: null,
         loading: true,
         error: null,
     });
+    // eslint-disable-next-line
     const [deleteReqValue, setDeleteReq] = useState({
         data: null,
         loading: true,
@@ -63,8 +72,8 @@ export default function IssueEntryField({
     });
 
     const [issueID, setIssueID] = useState(id);
-    const [issueScore, setIssueScore] = useState(score ? score : 0);
-    const [issueName, setIssueName] = useState(issue ? issue : 0);
+    const [issueScore, setIssueScore] = useState(score);
+    const [issueName, setIssueName] = useState(issue);
     const [newIssue, setNewIssue] = useState(isNewIssue);
 
     const handleChangeScore = (content) => {
@@ -76,26 +85,62 @@ export default function IssueEntryField({
     };
 
     const saveIssue = () => {
+        //Issue name is null or white space and issue score is null
+        if ((!issueName || !issueName.trim()) && !issueScore) {
+            setErrorBannerMessage('Issue score and name is not filled in!');
+            setErrorBannerFade(true);
+            return;
+        }
+        //Issue name is null or white space
+        if (!issueName || !issueName.trim()) {
+            setErrorBannerMessage('Issue name is not filled in!');
+            setErrorBannerFade(true);
+            return;
+        }
+        //Issue score is null
+        if (!issueScore) {
+            setErrorBannerMessage('Issue score is not filled in!');
+            setErrorBannerFade(true);
+            return;
+        }
+        //Issue score is not a number or not between 0 and 1
+        if (isNaN(issueScore) || issueScore > 5 || issueScore < 0) {
+            setErrorBannerMessage(
+                'Issue score must be a number between 5 and 0.'
+            );
+            setErrorBannerFade(true);
+            return;
+        }
         if (newIssue) {
             function onSuccess(resp) {
                 //if newly created issue, replace fake ID with new ID
                 if (resp.data) {
                     setIssueID(resp.data.ISSUE_ID);
-                    setSaved(true);
+                    setSuccessBannerFade(true);
+                    setSuccessBannerMessage('Successfully created issue!');
                     setNewIssue(false);
                 }
             }
-            post(setPost, endpointPOST, null, onSuccess, {
+            function onFailure() {
+                setErrorBannerMessage('Failed to save! Please try again.');
+                setErrorBannerFade(true);
+            }
+            post(setPost, endpointPOST, onFailure, onSuccess, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
                 IMPORTANCE_SCORE: issueScore,
                 NAME: issueName,
             });
         } else {
-            function successfullySaved(resp) {
-                setSaved(true);
+            function onSuccess(resp) {
+                setSuccessBannerFade(true);
+                setSuccessBannerMessage('Successfully updated issue!');
             }
-            put(setPut, endpointPUT + issueID + '/', null, successfullySaved, {
+            function onFailure() {
+                setErrorBannerMessage('Failed to save! Please try again.');
+                setErrorBannerFade(true);
+            }
+            put(setPut, endpointPUT + issueID + '/', onFailure, onSuccess, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
                 IMPORTANCE_SCORE: issueScore,
@@ -114,10 +159,10 @@ export default function IssueEntryField({
                 (entry) => entry.ISSUE_ID !== id
             );
             setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
-        }
-        if (!newIssue) {
+        } else {
             function successfullySaved() {
-                setSaved(true);
+                setSuccessBannerFade(true);
+                setSuccessBannerMessage('Successfully deleted issue!');
                 let newData = issueEntryFieldList.data.filter(
                     (entry) => entry.ISSUE_ID !== id
                 );
@@ -126,10 +171,14 @@ export default function IssueEntryField({
                     data: newData,
                 });
             }
+            function onFailure() {
+                setErrorBannerMessage('Failed to save! Please try again.');
+                setErrorBannerFade(true);
+            }
             deleteReq(
                 setDeleteReq,
                 endpointDELETE + issueID + '/',
-                null,
+                onFailure,
                 successfullySaved,
                 {
                     SCENARIO_ID: scenarioID,
@@ -147,9 +196,9 @@ export default function IssueEntryField({
                 </Typography>
             ) : null}
             <Box display="flex" flexDirection="row" p={1} m={1}>
-                <Box p={1}>
+                <Box p={2}>
                     <TextField
-                        style={{ width: '75%' }}
+                        style={{ width: '65%' }}
                         id="outlined-text"
                         label="Issue"
                         value={issueName}
@@ -159,10 +208,11 @@ export default function IssueEntryField({
                         variant="outlined"
                     />
                     <TextField
-                        style={{ width: '25%' }}
+                        style={{ width: '35%' }}
                         margin="normal"
                         id="outlined-number"
-                        label="Score"
+                        label="Importance Factor"
+                        placeholder="0-5"
                         onChange={handleChangeScore}
                         value={issueScore}
                         rows={1}
