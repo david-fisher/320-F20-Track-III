@@ -32,6 +32,6 @@ export default function universalFetch(
                 loading: false,
                 error: err,
             });
-            onError && onError(resp);
+            onError && onError(err);
         });
 }

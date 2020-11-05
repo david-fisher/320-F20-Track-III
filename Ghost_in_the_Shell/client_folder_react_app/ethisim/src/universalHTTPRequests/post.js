@@ -33,6 +33,6 @@ export default function universalPost(
                 loading: false,
                 error: err,
             });
-            onError && onError(resp);
+            onError && onError(err);
         });
 }

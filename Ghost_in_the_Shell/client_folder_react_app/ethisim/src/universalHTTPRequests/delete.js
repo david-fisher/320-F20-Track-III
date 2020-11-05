@@ -33,6 +33,6 @@ export default function universalDelete(
                 loading: false,
                 error: err,
             });
-            onError && onError(resp);
+            onError && onError(err);
         });
 }
