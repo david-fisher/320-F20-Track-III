@@ -18,7 +18,7 @@ class scenarios(models.Model):
 
 class pages(models.Model):
     class Meta:
-        unique_together = (('PAGE_ID'), ('SCENARIO'), ('VERSION_ID'))
+        unique_together = (('PAGE_ID'), ('SCENARIO'), ('Vcourse['COURSE_ID']ERSION_ID'))
     PAGE_ID = models.IntegerField()
     PAGE_CHOICES = (
         ('R', 'REFLECTION'),

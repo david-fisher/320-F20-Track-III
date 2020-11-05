@@ -177,16 +177,28 @@ class logistics_page(APIView):
     
     def get(self, request, *args, **kwargs):
         
-        logistics = []
-        
+        #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
         PROFESSOR_ID = self.request.query_params.get('professor_id')
         
-
+        #get all scenarios belonging to this professor
         scenario_query = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID).values()
+        #loop through scenarios and append required information (course, page info)
         for scenario in scenario_query:  
+
+            scenarios_for_query = scenarios_for.objects.filter(SCENARIO_ID=scenario['SCENARIO_ID']).values()
+            course_id_array = []
+            for x in scenarios_for_query:
+                print(x)
+                course_id_array.append(x['COURSE_ID_id'])
+
+            course_dict = {}
+            for x in course_id_array:
+                course = courses.objects.get(COURSE_ID = x)
+                course_dict.update({"COURSE_ID":course.COURSE_ID, "NAME": course.NAME})
+                
+
             scenario.update({
-                "COURSE_NAME": "Fuck",
-                "COURSE_ID": "This"
+                "COURSE": course_dict
             })
 
         
