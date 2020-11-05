@@ -6,6 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from tables.models import *
 from .serializer import *
 from django.core import serializers
+from django.db.models import F
+import json
 # DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Choices_forSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer, Stakeholder_inSerializer
 
 class DemographicsViewSet(viewsets.ModelViewSet):
@@ -165,7 +167,7 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
     serializer_class = Professors_teachSerializer
 
 """
-    -Get Scenario(all fields)
+    -Get Scenario(all fields) ---------------
 	-Get course name associated with scenario
 	-Get Professor (creators) names associated with scenario
 	-get page_ID and title for latest version of each page
@@ -174,21 +176,51 @@ class logistics_page(APIView):
 
     
     def get(self, request, *args, **kwargs):
+        
+        logistics = []
+        
+        PROFESSOR_ID = self.request.query_params.get('professor_id')
+        
+
+        scenario_query = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID).values()
+        for scenario in scenario_query:  
+            scenario.update({
+                "COURSE_NAME": "Fuck",
+                "COURSE_ID": "This"
+            })
+
+        
+        logistics = scenario_query
+        return Response(logistics)
+
+
+
+
+
+
+
         """logistics = {}
         for senarios in senarios.objects.all:
             logistics[]"""
-
+        #scenario_list = serializers.serialize('json', scenario_query)
         #logistics = serializers.serialize('json', self.get_queryset())
         #logistics = scenarios.objects.get(SCENARIO_ID = 12)
         #logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
-        
-        
-        PROFESSOR_ID = self.request.query_params.get('professor_id')
-        print(PROFESSOR_ID)
-        logistics = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID).values()
+        #logistics = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID)
+        #logistics = scenarios.objects.raw('SELECT * FROM "public"."tables_scenarios" INNER JOIN "public"."tables_scenarios_for" ON "public"."tables_scenarios"."SCENARIO_ID" = "public"."tables_scenarios_for"."SCENARIO_ID_id"')
+
         #logistics = serializers.serialize('json', scenarios.objects.all())
         #logistics = logistics.get(SCENARIO_ID = 12)
-
-
         
-        return Response(logistics)
+        #logistics = LogisticsSerializer(logistics.values())
+
+        """logistics.append({"SCENARIO_ID": scenario.SCENARIO_ID,
+                             "VERSION_ID": scenario.VERSION_ID,
+                             "NAME": scenario.NAME,
+                             "SUB_TITLE": scenario.SUB_TITLE,
+                             "IS_FINISHED": scenario.IS_FINISHED,
+                             "PUBLIC": scenario.PUBLIC,
+                             "NUM_CONVERSATIONS": scenario.NUM_CONVERSATIONS,
+                             "PROFESSOR_ID": scenario.PROFESSOR_ID,
+                             "FIRST_PAGE": scenario.FIRST_PAGE
+                            })"""

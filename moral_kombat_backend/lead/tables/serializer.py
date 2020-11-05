@@ -110,3 +110,18 @@ class Professors_teachSerializer(serializers.ModelSerializer):
     class Meta:
         model = professors_teach
         fields = ('PROFESSOR_ID', 'COURSE_ID')
+
+class LogisticsSerializer(serializers.ModelSerializer):
+    logistics = Scenarios_forSerializer() 
+    class Meta:
+        model = scenarios
+        fields = '__all__'
+        """fields = ('SCENARIO_ID', 
+                'VERSION_ID', 
+                'NAME',  
+                'IS_FINISHED',
+                'PUBLIC',
+                'NUM_CONVERSATIONS',
+                'PROFESSOR_ID', 
+                'FIRST_PAGE',
+                )"""
