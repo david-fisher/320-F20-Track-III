@@ -12,6 +12,10 @@ import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSide
 import AddIcon from '@material-ui/icons/Add';
 import { mockUnfinishedScenarioData } from '../shared/mockScenarioData';
 
+import universalPost from '../universalHTTPRequests/post.js'
+import universalFetch from '../universalHTTPRequests/get.js'
+//  setResponse, endpoint, onError, onSuccess, requestBody
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -80,6 +84,7 @@ const addPage = (array, id, title, componentType, scenarioData) => {
         default:
             c = <Typography>Error</Typography>;
     }
+    universalPost()
     return array.concat({ id, title, component: c });
 };
 
