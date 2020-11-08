@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Drawer, Button, Typography } from '@material-ui/core';
-import Container from '@material-ui/core/Container';
 import clsx from 'clsx';
-import { useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -86,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
     },
-    content: {
+    content1: {
         flexGrow: 1,
         padding: theme.spacing(3),
         transition: theme.transitions.create('margin', {
@@ -282,7 +280,7 @@ export default function Editor(props) {
             <Sidebar />
 
             <main
-                className={clsx(classes.content, {
+                className={clsx(classes.content1, {
                     [classes.contentShift]: open,
                 })}
             >
