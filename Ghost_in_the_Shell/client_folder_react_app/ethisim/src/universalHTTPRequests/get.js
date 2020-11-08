@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseURL } from '../../Constants/Config';
+import { baseURL } from '../Constants/Config';
 // Universal fetch request using axios
 export default function universalFetch(
     setResponse,
@@ -23,7 +23,7 @@ export default function universalFetch(
                 loading: false,
                 error: null,
             });
-            onSuccess && onSuccess();
+            onSuccess && onSuccess(resp);
         })
         .catch((err) => {
             console.log(`Fetch failed with error ${err.message}`);
@@ -32,6 +32,6 @@ export default function universalFetch(
                 loading: false,
                 error: err,
             });
-            onError && onError();
+            onError && onError(err);
         });
 }
