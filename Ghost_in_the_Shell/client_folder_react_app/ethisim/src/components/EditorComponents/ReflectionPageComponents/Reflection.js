@@ -16,10 +16,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Reflection(props) {
+    const {postFunction,getFunction,page_id,page_type,page_title,page_subtitle,
+      scenario_ID,version_ID,next_page_id,body,reflection_questions,...other} = props
+
     const classes = useStyles();
 
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+    const [title, setTitle] = useState(page_title);
+    const [bodyText, setBodyText] = useState(body);
     //Assuming list of questions will be in array form
     const [questions, setQuestions] = useState([]);
 
@@ -32,11 +35,11 @@ export default function Reflection(props) {
                 history={mockReflectionHistory.history}
                 type={mockReflectionHistory.type}
                 setTitle={setTitle}
-                setBody={setBody}
+                setBody={setBodyText}
                 setQuestions={setQuestions}
             />
             <Title title={title} setTitle={setTitle} />
-            <Body body={body} />
+            <Body body={bodyText} />
             <QuestionFields questions={questions} setQuestions={setQuestions} />
             <Button
                 className={classes.saveButton}

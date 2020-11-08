@@ -95,9 +95,56 @@ var startList = [
     { id: 2, title: 'Conversation Editor', type: 'Conversation Editor' },
 ];
 
+function handlePost(setPostValues,postReqBody){
+  const endpoint = "/pages?SCENARIO_ID"
+  function onSuccess(resp){
+
+  }
+  function onFailure(){
+    console.log("Post failed")
+  }
+
+}
+
+function handleDelete(setDeleteValues,d_id){
+  const endpoint = ""
+  function onSuccess(resp){
+
+  }
+  function onFailure(){
+    console.log("Delete failed")
+  }
+}
+
+function handleGet(setGetValues){
+  const endpoint = "/pages?PAGES_ID"
+  function onSuccess(resp){
+
+  }
+  function onFailure(){
+    console.log("Get failed")
+  }
+}
+
 export default function Editor(props) {
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
+    const [postValues,setPostValues] = useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
+    const [getValues,setGetValues] = useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
+    const [deleteValues,setDeleteValues]= useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
+
     //Fake fetch of scenarioData with components
     let fetchedComponents = mockUnfinishedScenarioData.components;
     let combinedComponents = startList.concat(fetchedComponents);
@@ -121,6 +168,7 @@ export default function Editor(props) {
     );
     const deleteByID = (d_id) => {
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
+        handleDelete(setDeleteValues,d_id);
     };
 
     function Sidebar() {
@@ -134,13 +182,13 @@ export default function Editor(props) {
             var c = null;
             switch (componentType) {
                 case 'Generic':
-                    c = <Generic />;
+                    c = <Generic {handlePost,handleGet,1,"G","Generic",title,2,1,2,"BODYTEXTGENERIC",["t1","t2"]}></Generic>;
                     break;
                 case 'Reflection':
-                    c = <Reflection />;
+                    c = <Reflection {handlePost,handleGet,1,"R","Reflection",title,2,1,2,"BODYTEXTREFLECTION",["q1?","q2?"]}></Reflection>;
                     break;
                 case 'Action':
-                    c = <Action />;
+                    c = <Action {handlePost,handleGet,1,"G","Generic",title,2,1,2,"BODYTEXTACTION","OPTION1",4,"OPTION2",3}></Action>;
                     break;
                 default:
                     c = <Typography>Error</Typography>;

@@ -32,13 +32,25 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FinalAction(props) {
     const classes = useStyles();
+    const {postFunction,getFunction,page_id,page_type,page_title,page_subtitle,scenario_ID,
+      version_ID,next_page_id,body,choice1,result1,choice2,result2,...other} = props
 
+    postReqBody = {PAGE_ID: page_id,
+      PAGE_TYPE: page_type,
+      PAGE_TITLE: page_title,
+      PAGE_SUBTITLE: page_subtitle,
+      PAGE_SCENARIO: scenario_ID,
+      VERSION_ID: version_ID,
+      CHOICES: "TEXT",
+      RESULT_PAGE: 1
+    }
     //const titleData = mockActionComponent.title;
     //const bodyData = mockActionComponent.body;
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
-    const [option1, setOption1] = useState('');
-    const [option2, setOption2] = useState('');
+    const [title, setTitle] = useState(page_title);
+    const [bodyText, setBodyText] = useState(body);
+    const [option1, setOption1] = useState(choice1);
+    const [option2, setOption2] = useState(choice2);
+
 
     const onChangeOption1 = (event) => {
         setOption1(event.target.value);
@@ -57,12 +69,12 @@ export default function FinalAction(props) {
                 history={mockActionHistory.history}
                 type={mockActionHistory.type}
                 setTitle={setTitle}
-                setBody={setBody}
+                setBody={setBodyText}
                 setOption1={setOption1}
                 setOption2={setOption2}
             />
             <Title title={title} setTitle={setTitle} />
-            <Body body={body} />
+            <Body body={bodyText} />
             <div className={classes.container}>
                 <form className={classes.form}>
                     <Typography align="center" variant="h6">

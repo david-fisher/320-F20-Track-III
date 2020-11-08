@@ -16,11 +16,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Generic(props) {
+    const {postFunction,getFunction,page_id,page_type,page_title,page_subtitle,
+      scenario_ID,version_ID,next_page_id,body,...other} = props
+
     const classes = useStyles();
     //const titleData = mockGenericComponent.title;
     //const bodyData = mockGenericComponent.body;
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+    const [title, setTitle] = useState(page_title);
+    const [bodyText, setBodyText] = useState(body);
 
     return (
         <Container component="main">
@@ -31,10 +34,10 @@ export default function Generic(props) {
                 history={mockGenericHistory.history}
                 type={mockGenericHistory.type}
                 setTitle={setTitle}
-                setBody={setBody}
+                setBody={setBodyText}
             />
             <Title title={title} setTitle={setTitle} />
-            <Body body={body} />
+            <Body body={bodyText} />
             <InformationItemList />
             <Button
                 className={classes.saveButton}
