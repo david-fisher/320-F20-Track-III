@@ -21,6 +21,16 @@ export default function Reflection(props) {
 
     const classes = useStyles();
 
+    var postReqBody = {PAGE_ID: page_id,
+      PAGE_TYPE: page_type,
+      PAGE_TITLE: page_title,
+      PAGE_SUBTITLE: page_subtitle,
+      PAGE_SCENARIO: scenario_ID,
+      VERSION_ID: version_ID,
+      REFLECTION_QUESTIONS: [],
+      RESULT_PAGE: 1
+    }
+
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
     //Assuming list of questions will be in array form

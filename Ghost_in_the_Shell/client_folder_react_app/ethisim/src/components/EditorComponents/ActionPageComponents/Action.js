@@ -41,7 +41,7 @@ export default function FinalAction(props) {
       PAGE_SUBTITLE: page_subtitle,
       PAGE_SCENARIO: scenario_ID,
       VERSION_ID: version_ID,
-      CHOICES: "TEXT",
+      CHOICES: [choice1,choice2],
       RESULT_PAGE: 1
     }
     //const titleData = mockActionComponent.title;
