@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, Button, Typography } from '@material-ui/core';
+import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
+import {
+    Drawer,
+    Box,
+    Grid,
+    Container,
+    Button,
+    Typography,
+} from '@material-ui/core';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -19,6 +26,7 @@ import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
 import { mockUnfinishedScenarioData } from '../shared/mockScenarioData';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -39,6 +47,12 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
+    },
+    exitButton: {
+        margin: theme.spacing(2),
+        borderStyle: 'solid',
+        borderColor: 'white',
+        border: 2,
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -147,6 +161,18 @@ export default function Editor(props) {
         setOpen(false);
     };
 
+    const WhiteTextTypography = withStyles({
+        root: {
+            color: '#FFFFFF',
+        },
+    })(Typography);
+
+    const BlackTextTypography = withStyles({
+        root: {
+            color: '#000000',
+        },
+    })(Typography);
+
     const [openPopup, setOpenPopup] = useState(false);
     //Fake fetch of scenarioData with components
     let fetchedComponents = mockUnfinishedScenarioData.components;
@@ -221,7 +247,9 @@ export default function Editor(props) {
                         ) : (
                             <ChevronRightIcon />
                         )}
-                        Hide Menu
+                        <BlackTextTypography variant="h6">
+                            Hide Menu
+                        </BlackTextTypography>
                     </IconButton>
 
                     <NavSideBarList
@@ -259,21 +287,36 @@ export default function Editor(props) {
                 })}
             >
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(
-                            classes.menuButton,
-                            open && classes.hide
-                        )}
+                    <Box display="flex" flexGrow={1}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            className={clsx(
+                                classes.menuButton,
+                                open && classes.hide
+                            )}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+
+                        <Typography variant="h4" noWrap>
+                            Ethisim Scenario Editor
+                        </Typography>
+                    </Box>
+
+                    <Button
+                        component={Link}
+                        to={{
+                            pathname: '/dashboard',
+                        }}
+                        className={classes.exitButton}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Ethisim Scenario Editor
-                    </Typography>
+                        <WhiteTextTypography>
+                            Return to Dashboard
+                        </WhiteTextTypography>
+                    </Button>
                 </Toolbar>
             </AppBar>
 
