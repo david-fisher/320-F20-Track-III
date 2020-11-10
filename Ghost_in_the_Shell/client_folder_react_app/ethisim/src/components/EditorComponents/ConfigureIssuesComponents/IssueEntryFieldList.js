@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import EntryField from './IssueEntryField';
 import { Container, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import SavedBanner from '../../Banners/SavedBanner';
+import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +83,7 @@ export default function IssueEntryFieldList({
 
     return (
         <Container component="main" className={classes.container}>
-            <SavedBanner
+            <SuccessBanner
                 successMessage={successBannerMessage}
                 fade={successBannerFade}
             />

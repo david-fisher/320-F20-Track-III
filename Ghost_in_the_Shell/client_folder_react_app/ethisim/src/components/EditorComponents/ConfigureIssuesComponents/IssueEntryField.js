@@ -107,7 +107,7 @@ export default function IssueEntryField({
         //Issue score is not an integer between 0 and 5
         if (
             isNaN(issueScore) ||
-            issueScore.indexOf('.') !== -1 ||
+            issueScore.toString().indexOf('.') !== -1 ||
             score > 5 ||
             score < 0
         ) {
