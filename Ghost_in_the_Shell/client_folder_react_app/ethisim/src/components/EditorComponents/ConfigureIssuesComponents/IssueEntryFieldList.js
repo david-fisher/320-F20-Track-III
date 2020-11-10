@@ -30,12 +30,23 @@ export default function IssueEntryFieldList({
 }) {
     const classes = useStyles();
 
+    console.log(issueEntryFieldList);
+
+    function setFakeID() {
+        let fakeID = Math.floor(Math.random() * 1000000);
+        while (
+            issueEntryFieldList.data.filter((data) => data.ISSUE_ID === fakeID)
+                .length !== 0
+        ) {
+            fakeID = Math.floor(Math.random() * 1000000);
+        }
+        return fakeID;
+    }
+
     const [entryCur, setEntryCur] = useState({
-        ISSUE_ID: Math.floor(Math.random() * 1000000),
+        ISSUE_ID: setFakeID(),
         isNewIssue: true,
     });
-
-    console.log(issueEntryFieldList);
 
     const addIssue = (e) => {
         e.preventDefault();
@@ -43,7 +54,7 @@ export default function IssueEntryFieldList({
         issueEntryFieldList.data = issueEntryFieldList.data.concat(newEntry);
         setIssueEntryFieldList(issueEntryFieldList);
         setEntryCur({
-            ISSUE_ID: Math.floor(Math.random() * 1000000),
+            ISSUE_ID: setFakeID(),
             isNewIssue: true,
         });
     };

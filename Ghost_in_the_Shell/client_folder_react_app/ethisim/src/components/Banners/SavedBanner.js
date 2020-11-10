@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'fixed',
         padding: theme.spacing(1),
         bottom: '0px',
-        width: '100vh',
+        width: '50%',
         border: '5px solid',
         zIndex: '5',
         borderColor: theme.palette.success.dark,
@@ -30,6 +30,28 @@ SuccessBanner.propTypes = {
     fade: PropTypes.any,
     successMessage: PropTypes.string,
 };
+
+/* To use fade correctly:
+
+    1. Set state of fade variable
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+    
+    2. Use useEffect to switch "fade" from true to false, fading out the success banner.
+
+        useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    When "Success" (successful GET/POST/PUT/DELETE request):
+    2. setSuccessBannerFade(true);
+       setSuccessBannerMessage('Success!');
+
+    useEffect will detect the change, and in setSuccessBannerFade(false), after 1 second, the banner will fade away.
+*/
 
 export default function SuccessBanner({ successMessage, fade }) {
     const classes = useStyles();

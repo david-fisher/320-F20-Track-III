@@ -103,10 +103,16 @@ export default function IssueEntryField({
             setErrorBannerFade(true);
             return;
         }
-        //Issue score is not a number or not between 0 and 1
-        if (isNaN(issueScore) || issueScore > 5 || issueScore < 0) {
+        score = Number(issueScore);
+        //Issue score is not an integer between 0 and 5
+        if (
+            isNaN(issueScore) ||
+            issueScore.indexOf('.') !== -1 ||
+            score > 5 ||
+            score < 0
+        ) {
             setErrorBannerMessage(
-                'Issue score must be a number between 5 and 0.'
+                'Issue score must be an integer between 0 and 5.'
             );
             setErrorBannerFade(true);
             return;
@@ -128,7 +134,7 @@ export default function IssueEntryField({
             post(setPost, endpointPOST, onFailure, onSuccess, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
-                IMPORTANCE_SCORE: issueScore,
+                IMPORTANCE_SCORE: score,
                 NAME: issueName,
             });
         } else {
@@ -143,7 +149,7 @@ export default function IssueEntryField({
             put(setPut, endpointPUT + issueID + '/', onFailure, onSuccess, {
                 SCENARIO_ID: scenarioID,
                 VERSION_ID: versionID,
-                IMPORTANCE_SCORE: issueScore,
+                IMPORTANCE_SCORE: score,
                 NAME: issueName,
                 ISSUE_ID: id,
             });

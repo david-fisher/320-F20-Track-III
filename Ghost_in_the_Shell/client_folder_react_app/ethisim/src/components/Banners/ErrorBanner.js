@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'fixed',
         padding: theme.spacing(1),
         bottom: '0px',
-        width: '100vh',
+        width: '50%',
         border: '5px solid',
         zIndex: '5',
         borderColor: theme.palette.error.dark,
@@ -30,6 +30,28 @@ ErrorBanner.propTypes = {
     fade: PropTypes.any,
     errorMessage: PropTypes.string,
 };
+
+/* To use fade correctly:
+
+    1. Set state of fade variable
+    const [successBannerFade, setErrorBannerFade] = useState(false);
+    
+    2. Use useEffect to switch "fade" from true to false, fading out the success banner.
+
+        useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    When "Error" (successful GET/POST/PUT/DELETE request):
+    2. setErrorBannerFade(true);
+       setErrorBannerMessage('Error!');
+
+    useEffect will detect the change, and in setErrorBannerFade(false), after 1 second, the banner will fade away.
+*/
 
 export default function ErrorBanner({ errorMessage, fade }) {
     const classes = useStyles();
