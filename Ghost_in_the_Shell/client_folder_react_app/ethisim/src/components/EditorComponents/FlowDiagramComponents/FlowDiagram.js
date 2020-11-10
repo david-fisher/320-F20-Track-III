@@ -49,6 +49,15 @@ export default function FlowDiagram(props) {
         }
     );
 
+    //Set position of elements if elements are new ({x: 0,y: 0})
+    initialElements.reduce((acc, currentValue) => {
+        if (currentValue.position.x === 0 && currentValue.position.y === 0) {
+            currentValue.position.y += acc;
+            return acc + 51.2;
+        }
+        return acc;
+    }, 0);
+
     const [elements, setElements] = useState(initialElements);
     const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
     const [currentEdgeSelected, setCurrentEdgeSelected] = useState();
