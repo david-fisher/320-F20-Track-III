@@ -7,6 +7,7 @@ import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesCompo
 import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
+import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
@@ -68,6 +69,9 @@ const addPage = (array, id, title, componentType, scenarioData) => {
         case 'Conversation Editor':
             c = <ConversationEditor />;
             break;
+        case 'Flow Diagram':
+            c = <FlowDiagram />;
+            break;
         case 'Generic':
             c = <Generic />;
             break;
@@ -88,6 +92,7 @@ var startList = [
     { id: 0, title: 'Logistics', type: 'Logistics' },
     { id: 1, title: 'Configure Issues', type: 'Configure Issues' },
     { id: 2, title: 'Conversation Editor', type: 'Conversation Editor' },
+    { id: 3, title: 'Flow Diagram', type: 'Flow Diagram' },
 ];
 
 export default function Editor(props) {
