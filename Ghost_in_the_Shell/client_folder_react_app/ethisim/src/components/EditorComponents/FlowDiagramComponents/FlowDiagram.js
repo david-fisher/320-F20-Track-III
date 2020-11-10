@@ -50,6 +50,7 @@ export default function FlowDiagram(props) {
     );
 
     //Set position of elements if elements are new ({x: 0,y: 0})
+    //Height of nodes are 51.2 pixels
     initialElements.reduce((acc, currentValue) => {
         if (currentValue.position.x === 0 && currentValue.position.y === 0) {
             currentValue.position.y += acc;
