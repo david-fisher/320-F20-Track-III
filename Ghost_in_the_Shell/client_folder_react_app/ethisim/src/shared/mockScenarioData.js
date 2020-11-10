@@ -1,4 +1,69 @@
-//Mock Version History
+const mockComponentsFlowChart = {
+    scenarioId: 2,
+    components: [
+        {
+            id: '1',
+            type: 'Generic',
+            title: 'Simulation Introduction',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '2',
+            type: 'Generic',
+            title: 'Project Task Assignment',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '3',
+            type: 'Reflection',
+            title: 'Initial Reflection',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '4',
+            type: 'Reflection',
+            title: 'Middle Reflection',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '5',
+            type: 'Reflection',
+            title: 'Final Reflection',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '6',
+            type: 'Action',
+            title: 'Initial action',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '7',
+            type: 'Action',
+            title: 'Final Action',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '8',
+            type: 'Conversation',
+            title: 'Stakeholder Conversations',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '9',
+            type: 'Generic',
+            title: 'Conclusion',
+            position: { x: 0, y: 0 },
+        },
+        {
+            id: '10',
+            type: 'Generic',
+            title: 'Consequences',
+            position: { x: 0, y: 0 },
+        },
+    ],
+};
+
 const mockGenericHistory = {
     type: 'Generic',
     history: [
@@ -235,21 +300,21 @@ const mockConversationEditorHistory = {
 
 const mockGenericComponent = {
     type: 'Generic',
-    id: 3,
+    id: 5,
     title: 'Introduction',
     body: 'Sample Introduction for Generic Component',
 };
 
 const mockReflectionComponent = {
     type: 'Reflection',
-    id: 4,
+    id: 6,
     title: 'Initial Reflection',
     body: 'Sample Introduction for Reflection Component',
 };
 
 const mockActionComponent = {
     type: 'Action',
-    id: 5,
+    id: 7,
     title: 'Initial Action',
     body: 'Sample Introduction for Action Component',
 };
@@ -305,4 +370,5 @@ export {
     mockActionComponent,
     mockReflectionComponent,
     mockConversationEditorHistory,
+    mockComponentsFlowChart,
 };
