@@ -3,6 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.urls import path
 from django.conf import settings
 from .views import *
+from django.conf.urls import url
 # DemographicsViewSet, allScenariosViewSet, StudentsViewSet, ProfessorsViewSet, ScenariosViewSet, Choices_forViewSet, Stakeholder_pageViewSet, ConversationsViewSet, Stakeholder_inViewSet, StakeholdersViewSet
 
 router = routers.DefaultRouter()
@@ -27,9 +28,11 @@ router.register('api/generic_page', generic_pageViewSet, 'generic_page')
 router.register('api/professors_teach', Professors_teachViewSet, 'professors_teach')
 router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
 # router.register('api/allScenarios', allScenariosViewSet.as_view())
+#router.register('api/logistics', logistics_page, 'logistics')
 
 urlpatterns = [
     path('allScenarios', allScenariosViewSet.as_view()),
+    #url(r'^logistics/(?P<pk>[0-9]+)$', logistics_page.as_view()),
     path('logistics', logistics_page.as_view())
 ] 
 

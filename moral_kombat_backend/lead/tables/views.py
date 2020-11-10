@@ -173,13 +173,13 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
 	-get page_ID and title for latest version of each page
 """
 class logistics_page(APIView):
+    #http_method_names = [ 'POST,' 'PUT', 'DELETE']
 
-    
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
         PROFESSOR_ID = self.request.query_params.get('professor_id')
-        
+        #TODO check that id != none
         #get all scenarios belonging to this professor
         scenario_query = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID).values()
         #loop through scenarios and append required information (course, page info)
@@ -209,7 +209,15 @@ class logistics_page(APIView):
         return Response(logistics)
 
 
-
+    def put(self, request, *args, **kwargs):
+        SCENARIO_ID = self.request.query_params.get('scenario_id')
+        extant_scenario  = scenarios.objects.get(SCENARIO_ID=SCENARIO_ID)
+        updated_scenario = request.data
+        serializer = ScenariosSerializer(extant_scenario, data=updated_scenario)
+        if serializer.is_valid(): 
+            serializer.save() 
+            return Response(serializer.data) 
+        return Response(serializer.errors)
 
 
 
