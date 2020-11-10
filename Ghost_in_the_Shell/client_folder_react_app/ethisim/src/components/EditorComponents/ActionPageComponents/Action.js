@@ -32,25 +32,39 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FinalAction(props) {
     const classes = useStyles();
-    const {postFunction,getFunction,page_id,page_type,page_title,page_subtitle,scenario_ID,
-      version_ID,next_page_id,body,choice1,result1,choice2,result2,...other} = props
+    const {postFunction,page_id,page_type,page_title,scenario_ID,
+      version_ID,next_page_id,body,choice1,r1,choice2,r2,created} = props
 
-    postReqBody = {PAGE_ID: page_id,
-      PAGE_TYPE: page_type,
-      PAGE_TITLE: page_title,
-      PAGE_SUBTITLE: page_subtitle,
-      PAGE_SCENARIO: scenario_ID,
-      VERSION_ID: version_ID,
-      CHOICES: [choice1,choice2],
-      RESULT_PAGE: 1
-    }
+    const [postValues,setPostValues] = useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
+
+
     //const titleData = mockActionComponent.title;
     //const bodyData = mockActionComponent.body;
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
     const [option1, setOption1] = useState(choice1);
     const [option2, setOption2] = useState(choice2);
+    const [result1, setResult1] = useState(r1);
+    const [result2, setResult2] = useState(r2);
 
+    var postReqBody = {PAGE_ID: page_id,
+      PAGE_TYPE: page_type,
+      PAGE_TITLE: title,
+      SCENARIO: scenario_ID,
+      VERSION_ID: version_ID,
+      BODY: bodyText,
+      CHOICES: [option1,option2],
+      RESULT_PAGES: [result1,result2]
+    }
+
+    if(created === true){
+        postFunction(setPostValues,postReqBody,scenario_ID);
+        console.log(postValues);
+    }
 
     const onChangeOption1 = (event) => {
         setOption1(event.target.value);
@@ -59,6 +73,11 @@ export default function FinalAction(props) {
     const onChangeOption2 = (event) => {
         setOption2(event.target.value);
     };
+
+    const savePage = () => {
+      postFunction(setPostValues,postReqBody,scenario_ID);
+      console.log(postValues);
+    }
 
     return (
         <Container component="main">
@@ -109,6 +128,7 @@ export default function FinalAction(props) {
                         className={classes.saveButton}
                         variant="contained"
                         color="primary"
+                        onClick={savePage}
                     >
                         Save
                     </Button>

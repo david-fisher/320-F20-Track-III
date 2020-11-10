@@ -16,25 +16,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Reflection(props) {
-    const {postFunction,getFunction,page_id,page_type,page_title,page_subtitle,
-      scenario_ID,version_ID,next_page_id,body,reflection_questions,...other} = props
+    const {postFunction,page_id,page_type,page_title,
+      scenario_ID,version_ID,next_page_id,body,reflection_questions,created} = props
 
     const classes = useStyles();
 
-    var postReqBody = {PAGE_ID: page_id,
-      PAGE_TYPE: page_type,
-      PAGE_TITLE: page_title,
-      PAGE_SUBTITLE: page_subtitle,
-      PAGE_SCENARIO: scenario_ID,
-      VERSION_ID: version_ID,
-      REFLECTION_QUESTIONS: [],
-      RESULT_PAGE: 1
-    }
+    const [postValues,setPostValues] = useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
+
+
 
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
     //Assuming list of questions will be in array form
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState(reflection_questions);
+
+    var postReqBody = {PAGE_ID: page_id,
+      PAGE_TYPE: page_type,
+      PAGE_TITLE: title,
+      SCENARIO: scenario_ID,
+      VERSION_ID: version_ID,
+      NEXT_PAGE_ID: 1,
+      BODY: bodyText,
+      REFLECTION_QUESTIONS: questions,
+    }
+
+    if(created === true){
+        postFunction(setPostValues,postReqBody,scenario_ID);
+        console.log(postValues);
+    }
+
+    const savePage = () => {
+      postFunction(setPostValues,postReqBody,scenario_ID);
+      console.log(postValues);
+    }
 
     return (
         <Container component="main">
@@ -55,6 +73,7 @@ export default function Reflection(props) {
                 className={classes.saveButton}
                 variant="contained"
                 color="primary"
+                onClick={savePage}
             >
                 Save
             </Button>

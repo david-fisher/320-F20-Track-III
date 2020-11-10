@@ -16,14 +16,46 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Generic(props) {
-    const {postFunction,getFunction,page_id,page_type,page_title,page_subtitle,
-      scenario_ID,version_ID,next_page_id,body,...other} = props
+    const {postFunction,page_id,page_type,page_title,
+      scenario_ID,version_ID,next_page_id,body,bodies,created} = props
+
+    const [postValues,setPostValues] = useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
+
+
+
+
+
 
     const classes = useStyles();
     //const titleData = mockGenericComponent.title;
     //const bodyData = mockGenericComponent.body;
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
+    const [bodiesText,setBodiesText] = useState(bodies)
+
+    var postReqBody = {PAGE_ID: page_id,
+      PAGE_TYPE: page_type,
+      PAGE_TITLE: title,
+      SCENARIO: scenario_ID,
+      VERSION_ID: version_ID,
+      NEXT_PAGE_ID: 1,
+      BODY: bodyText,
+      BODIES: bodiesText,
+    }
+
+    if(created === true){
+        postFunction(setPostValues,postReqBody,scenario_ID);
+        console.log(postValues);
+    }
+
+    const savePage = () => {
+      postFunction(setPostValues,postReqBody,scenario_ID);
+      console.log(postValues);
+    }
 
     return (
         <Container component="main">
@@ -43,6 +75,7 @@ export default function Generic(props) {
                 className={classes.saveButton}
                 variant="contained"
                 color="primary"
+                onClick={savePage}
             >
                 Save
             </Button>

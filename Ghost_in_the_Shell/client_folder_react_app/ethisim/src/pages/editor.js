@@ -14,6 +14,7 @@ import { mockUnfinishedScenarioData } from '../shared/mockScenarioData';
 
 import universalPost from '../universalHTTPRequests/post.js'
 import universalFetch from '../universalHTTPRequests/get.js'
+import universalDelete from '../universalHTTPRequests/delete.js'
 //  setResponse, endpoint, onError, onSuccess, requestBody
 
 const drawerWidth = 240;
@@ -95,45 +96,45 @@ var startList = [
     { id: 2, title: 'Conversation Editor', type: 'Conversation Editor' },
 ];
 
-function handlePost(setPostValues,postReqBody){
-  const endpoint = "/pages?SCENARIO_ID"
+function handlePost(setPostValues,postReqBody,s_id){
+  const endpoint = "/pages?SCENARIO_ID=" + s_id
   function onSuccess(resp){
 
   }
   function onFailure(){
     console.log("Post failed")
   }
-
+  universalPost(setPostValues,endpoint,null,null,postReqBody);
 }
 
 function handleDelete(setDeleteValues,d_id){
-  const endpoint = ""
+  const endpoint = "/page?page_id=" + d_id
   function onSuccess(resp){
 
   }
   function onFailure(){
     console.log("Delete failed")
   }
+  universalDelete(setDeleteValues,endpoint,null,null,{PAGE_ID:d_id})
 }
 
-function handleGet(setGetValues){
-  const endpoint = "/pages?PAGES_ID"
+function handleGet(setGetValues,g_id){
+  const endpoint = "/page?page_id=" + g_id
   function onSuccess(resp){
 
   }
   function onFailure(){
     console.log("Get failed")
   }
+  universalFetch(setGetValues,endpoint,null,null,{PAGE_ID:g_id});
 }
 
 export default function Editor(props) {
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
-    const [postValues,setPostValues] = useState({
-      data: null,
-      loading: true,
-      error: null,
-    })
+
+    const created_pages = props.page_IDS
+
     const [getValues,setGetValues] = useState({
       data: null,
       loading: true,
@@ -180,15 +181,25 @@ export default function Editor(props) {
 
         const addNewPage = (id, title, componentType) => {
             var c = null;
+            var p = null
             switch (componentType) {
                 case 'Generic':
-                    c = <Generic {handlePost,handleGet,1,"G","Generic",title,2,1,2,"BODYTEXTGENERIC",["t1","t2"]}></Generic>;
+                    p = {postFunction: handlePost, page_id: 1,page_type: "G",
+                    page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
+                    body: "BODYTEXTGENERIC",bodies: ["t1"],created: true}
+                    c = <Generic {...p}></Generic>;
                     break;
                 case 'Reflection':
-                    c = <Reflection {handlePost,handleGet,1,"R","Reflection",title,2,1,2,"BODYTEXTREFLECTION",["q1?","q2?"]}></Reflection>;
+                    p = {postFunction: handlePost, page_id: 1,page_type: "G",
+                    page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
+                    body: "BODYTEXTREFLECTION",reflection_questionts: ["q1"],created: true}
+                    c = <Reflection {...p}></Reflection>;
                     break;
                 case 'Action':
-                    c = <Action {handlePost,handleGet,1,"G","Generic",title,2,1,2,"BODYTEXTACTION","OPTION1",4,"OPTION2",3}></Action>;
+                    p = {postFunction: handlePost, page_id: 1,page_type: "G",
+                    page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
+                    body:"BODYTEXTACTION",choice1: "OPTION1",r1:4,choice2: "OPTION2",r2: 3,created: true}
+                    c = <Action {...p} ></Action>;
                     break;
                 default:
                     c = <Typography>Error</Typography>;
