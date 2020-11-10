@@ -629,7 +629,7 @@ export default function StakeHolder({
                         id="customized-dialog-title"
                         onClose={handleCloseQuestions}
                     >
-                        <h2>Questions</h2>
+                        <h2 className="questions-header">Questions</h2>
                     </DialogTitle>
                     <DialogContent>
                         <QuestionFields
@@ -644,26 +644,30 @@ export default function StakeHolder({
                 aria-labelledby="customized-dialog-title"
                 open={openPointSelection}
             >
-                <DialogTitle
-                    id="customized-dialog-title"
-                    onClose={handleClosePointSelection}
-                >
-                    <h2>Point Selection</h2>
-                    {
-                        //TODO
-                        //remove 'Add Issue' button; currently exists for testing
-                    }
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={addRow}
+                <div className="point-selection-body" style={{ width: 500 }}>
+                    <DialogTitle
+                        id="customized-dialog-title"
+                        onClose={handleClosePointSelection}
                     >
-                        Add Issue
-                    </Button>
-                </DialogTitle>
-                <DialogContent>
-                    <BasicTable removeRow={removeRow} rows={rows} />
-                </DialogContent>
+                        <h2 className="point-selection-header">
+                            Point Selection
+                        </h2>
+                        {
+                            //TODO
+                            //remove 'Add Issue' button; currently exists for testing
+                        }
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={addRow}
+                        >
+                            Add Issue
+                        </Button>
+                    </DialogTitle>
+                    <DialogContent>
+                        <BasicTable removeRow={removeRow} rows={rows} />
+                    </DialogContent>
+                </div>
             </Dialog>
         </div>
     );

@@ -12,3 +12,20 @@
     margin-top: -50px;
     margin-left: -15px;
 }
+
+.questions-header {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: -40px;
+}
+
+.point-selection-body {
+    text-align: left;
+    margin-left: 25px;
+}
+
+.point-selection-header {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
