@@ -219,6 +219,16 @@ export default function StakeHolder({
                 />
             </div>
 
+            <div id="SaveButton">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    //onClick={() => updateStakeHolder(id)}
+                >
+                    Save
+                </Button>
+            </div>
+
             <div id="DeleteButton">
                 <Button
                     variant="contained"
@@ -414,6 +424,8 @@ export default function StakeHolder({
                             onChange={handleChange}
                         />
                     </DialogContent>
+                    {/*
+                    //may use this in the future
                     <DialogActions>
                         <Button
                             autoFocus
@@ -423,6 +435,7 @@ export default function StakeHolder({
                             Save changes
                         </Button>
                     </DialogActions>
+                    */}
                 </div>
             </Dialog>
 
@@ -590,6 +603,8 @@ export default function StakeHolder({
                             onChange={handleChange}
                         />
                     </DialogContent>
+                    {/*
+                    //may use in the future
                     <DialogActions>
                         <Button
                             autoFocus
@@ -599,39 +614,8 @@ export default function StakeHolder({
                             Save changes
                         </Button>
                     </DialogActions>
+                    */}
                 </div>
-            </Dialog>
-
-            <Dialog
-                onClose={handleClosePointSelection}
-                aria-labelledby="customized-dialog-title"
-                open={openPointSelection}
-            >
-                <DialogTitle
-                    id="customized-dialog-title"
-                    onClose={handleClosePointSelection}
-                >
-                    <h2>Point Selection</h2>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={addRow}
-                    >
-                        Add Issue
-                    </Button>
-                </DialogTitle>
-                <DialogContent>
-                    <BasicTable removeRow={removeRow} rows={rows} />
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        autoFocus
-                        onClick={handleClosePointSelection}
-                        color="primary"
-                    >
-                        Save changes
-                    </Button>
-                </DialogActions>
             </Dialog>
 
             <Dialog
@@ -652,16 +636,34 @@ export default function StakeHolder({
                             questionsResponses={questionsResponses}
                         />
                     </DialogContent>
-                    <DialogActions>
-                        <Button
-                            autoFocus
-                            onClick={handleCloseQuestions}
-                            color="primary"
-                        >
-                            Save changes
-                        </Button>
-                    </DialogActions>
                 </div>
+            </Dialog>
+
+            <Dialog
+                onClose={handleClosePointSelection}
+                aria-labelledby="customized-dialog-title"
+                open={openPointSelection}
+            >
+                <DialogTitle
+                    id="customized-dialog-title"
+                    onClose={handleClosePointSelection}
+                >
+                    <h2>Point Selection</h2>
+                    {
+                        //TODO
+                        //remove 'Add Issue' button; currently exists for testing
+                    }
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={addRow}
+                    >
+                        Add Issue
+                    </Button>
+                </DialogTitle>
+                <DialogContent>
+                    <BasicTable removeRow={removeRow} rows={rows} />
+                </DialogContent>
             </Dialog>
         </div>
     );

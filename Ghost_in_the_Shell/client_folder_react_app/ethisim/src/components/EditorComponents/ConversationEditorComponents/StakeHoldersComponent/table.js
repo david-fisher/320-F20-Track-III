@@ -48,7 +48,6 @@ export default function BasicTable(props) {
                     <TableRow>
                         <TableCell>Issue</TableCell>
                         <TableCell>Score</TableCell>
-                        <TableCell>Max</TableCell>
                         <TableCell align="right"></TableCell>
                     </TableRow>
                 </TableHead>
@@ -72,21 +71,15 @@ export default function BasicTable(props) {
                             </TableCell>
 
                             <TableCell>
-                                <TextField
-                                    id="filled"
-                                    defaultValue={row.maxpoints}
-                                    variant="filled"
-                                />
-                            </TableCell>
-
-                            <TableCell>
                                 <Button
-                                    id="buttond"
+                                    id="button-save"
                                     variant="contained"
                                     color="primary"
-                                    onClick={() => props.removeRow(row.id)}
+                                    //onClick={() => props.removeRow(row.id)}
+                                    //TODO
+                                    //functionality for updating issue scores
                                 >
-                                    Delete
+                                    Save
                                 </Button>
                             </TableCell>
                         </TableRow>

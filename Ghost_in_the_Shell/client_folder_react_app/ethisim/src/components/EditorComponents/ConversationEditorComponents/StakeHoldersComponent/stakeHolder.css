@@ -21,7 +21,13 @@
 #DeleteButton {
     position: absolute;
     left: 750px;
-    top: 140px;
+    top: 198px;
+}
+
+#SaveButton {
+    position: absolute;
+    left: 750px;
+    top: 158px;
 }
 
 #PointButton {

@@ -37,13 +37,6 @@ export default function ConversationEditor() {
                 stakeHolders={stakeHolders}
                 setStakeHolders={setStakeHolders}
             />
-            <Button
-                className={classes.saveButton}
-                variant="contained"
-                color="primary"
-            >
-                Save
-            </Button>
         </div>
     );
 }
