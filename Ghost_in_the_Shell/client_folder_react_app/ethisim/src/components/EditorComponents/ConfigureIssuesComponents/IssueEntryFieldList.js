@@ -30,16 +30,32 @@ export default function IssueEntryFieldList({
 }) {
     const classes = useStyles();
 
+    console.log(issueEntryFieldList);
+
+    function setFakeID() {
+        let fakeID = Math.floor(Math.random() * 1000000);
+        while (
+            issueEntryFieldList.data.filter((data) => data.ISSUE_ID === fakeID)
+                .length !== 0
+        ) {
+            fakeID = Math.floor(Math.random() * 1000000);
+        }
+        return fakeID;
+    }
+
+    const [entryCur, setEntryCur] = useState({
+        ISSUE_ID: setFakeID(),
+        isNewIssue: true,
+    });
+
     const addIssue = (e) => {
         e.preventDefault();
-        const newEntry = {
-            id: issueEntryFieldList.data.length,
+        const newEntry = entryCur;
+        issueEntryFieldList.data = issueEntryFieldList.data.concat(newEntry);
+        setIssueEntryFieldList(issueEntryFieldList);
+        setEntryCur({
+            ISSUE_ID: setFakeID(),
             isNewIssue: true,
-        };
-        const newData = issueEntryFieldList.data.concat(newEntry);
-        setIssueEntryFieldList({
-            ...issueEntryFieldList,
-            data: newData,
         });
     };
 
@@ -86,11 +102,10 @@ export default function IssueEntryFieldList({
             </Button>
 
             <form id="form">
-                {issueEntryFieldList.data.map((entry, index) => (
+                {issueEntryFieldList.data.map((entry) => (
                     <EntryField
-                        key={index}
-                        id={index}
-                        issueID={entry.ISSUE_ID}
+                        key={entry.ISSUE_ID}
+                        id={entry.ISSUE_ID}
                         isNewIssue={entry.isNewIssue === true ? true : false}
                         issue={entry.NAME}
                         score={entry.IMPORTANCE_SCORE}

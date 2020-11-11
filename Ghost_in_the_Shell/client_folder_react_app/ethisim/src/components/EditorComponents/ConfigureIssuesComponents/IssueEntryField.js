@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
 
 IssueEntryField.propTypes = {
     id: PropTypes.number.isRequired,
-    issueID: PropTypes.number,
     issue: PropTypes.string,
     score: PropTypes.number,
     isNewIssue: PropTypes.bool,
@@ -38,7 +37,6 @@ IssueEntryField.propTypes = {
 
 export default function IssueEntryField({
     id,
-    issueID,
     issue,
     score,
     isNewIssue,
@@ -73,7 +71,7 @@ export default function IssueEntryField({
         error: null,
     });
 
-    const [issueIDValue, setIssueIDValue] = useState(issueID);
+    const [issueID, setIssueID] = useState(id);
     const [issueScore, setIssueScore] = useState(score);
     const [issueName, setIssueName] = useState(issue);
     const [newIssue, setNewIssue] = useState(isNewIssue);
@@ -123,7 +121,7 @@ export default function IssueEntryField({
             function onSuccess(resp) {
                 //if newly created issue, replace fake ID with new ID
                 if (resp.data) {
-                    setIssueIDValue(resp.data.ISSUE_ID);
+                    setIssueID(resp.data.ISSUE_ID);
                     setSuccessBannerFade(true);
                     setSuccessBannerMessage('Successfully created issue!');
                     setNewIssue(false);
@@ -148,52 +146,32 @@ export default function IssueEntryField({
                 setErrorBannerMessage('Failed to save! Please try again.');
                 setErrorBannerFade(true);
             }
-            put(
-                setPut,
-                endpointPUT + issueIDValue + '/',
-                onFailure,
-                onSuccess,
-                {
-                    SCENARIO_ID: scenarioID,
-                    VERSION_ID: versionID,
-                    IMPORTANCE_SCORE: score,
-                    NAME: issueName,
-                    ISSUE_ID: id,
-                }
-            );
+            put(setPut, endpointPUT + issueID + '/', onFailure, onSuccess, {
+                SCENARIO_ID: scenarioID,
+                VERSION_ID: versionID,
+                IMPORTANCE_SCORE: score,
+                NAME: issueName,
+                ISSUE_ID: id,
+            });
         }
     };
 
     const deleteIssue = () => {
-        //remove issue from array
+        //remove issue from array, id represents the id in issueEntryFieldList
+        //If issue is a new issue, A POST request will replace the fake ID with the ID in database
+        //ID in the array will remain the fake id, so that is why we compare with 'id' rather than 'issueID'
         if (newIssue) {
-            //id represents the id in issueEntryFieldList (index), match id with index
             let newData = issueEntryFieldList.data.filter(
-                (entry, index) => index !== id
+                (entry) => entry.ISSUE_ID !== id
             );
-            //Reset id = index
-            newData = newData.map((data, index) => {
-                return {
-                    ...data,
-                    id: index,
-                };
-            });
             setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
         } else {
             function successfullySaved() {
                 setSuccessBannerFade(true);
                 setSuccessBannerMessage('Successfully deleted issue!');
-                //id represents the id in issueEntryFieldList (index), match id with index
                 let newData = issueEntryFieldList.data.filter(
-                    (entry, index) => index !== id
+                    (entry) => entry.ISSUE_ID !== id
                 );
-                //reset id = index
-                newData = newData.map((data, index) => {
-                    return {
-                        ...data,
-                        id: index,
-                    };
-                });
                 setIssueEntryFieldList({
                     ...issueEntryFieldList,
                     data: newData,
@@ -205,12 +183,12 @@ export default function IssueEntryField({
             }
             deleteReq(
                 setDeleteReq,
-                endpointDELETE + issueIDValue + '/',
+                endpointDELETE + issueID + '/',
                 onFailure,
                 successfullySaved,
                 {
                     SCENARIO_ID: scenarioID,
-                    ISSUE_ID: issueIDValue,
+                    ISSUE_ID: issueID,
                 }
             );
         }
