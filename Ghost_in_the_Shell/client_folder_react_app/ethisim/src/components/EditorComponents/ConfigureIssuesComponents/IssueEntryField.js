@@ -72,8 +72,8 @@ export default function IssueEntryField({
     });
 
     const [issueID, setIssueID] = useState(id);
-    const [issueScore, setIssueScore] = useState(score);
-    const [issueName, setIssueName] = useState(issue);
+    const [issueScore, setIssueScore] = useState(score ? score : '');
+    const [issueName, setIssueName] = useState(issue ? issue : '');
     const [newIssue, setNewIssue] = useState(isNewIssue);
 
     const handleChangeScore = (content) => {
@@ -138,7 +138,7 @@ export default function IssueEntryField({
                 NAME: issueName,
             });
         } else {
-            function onSuccess(resp) {
+            function onSuccess() {
                 setSuccessBannerFade(true);
                 setSuccessBannerMessage('Successfully updated issue!');
             }
@@ -231,7 +231,7 @@ export default function IssueEntryField({
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            onClick={() => saveIssue(id)}
+                            onClick={() => saveIssue()}
                         >
                             Save
                         </Button>

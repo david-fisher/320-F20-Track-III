@@ -32,19 +32,26 @@ export default function IssueEntryFieldList({
 
     console.log(issueEntryFieldList);
 
-    function setFakeID() {
-        let fakeID = Math.floor(Math.random() * 1000000);
-        while (
-            issueEntryFieldList.data.filter((data) => data.ISSUE_ID === fakeID)
-                .length !== 0
-        ) {
-            fakeID = Math.floor(Math.random() * 1000000);
+    //When we select new issue button, we add new issue object into array.
+    //We set a temporary unique ID.
+    function setNewIssueID() {
+        let newID = 208;
+        let collision =
+            issueEntryFieldList.data.filter((data) => data.ISSUE_ID === newID)
+                .length !== 0;
+        while (collision) {
+            newID = Math.floor(Math.random() * 10000000);
+            const checkNewID = newID;
+            collision =
+                issueEntryFieldList.data.filter(
+                    (data) => data.ISSUE_ID === checkNewID
+                ).length !== 0;
         }
-        return fakeID;
+        return newID;
     }
 
     const [entryCur, setEntryCur] = useState({
-        ISSUE_ID: setFakeID(),
+        ISSUE_ID: setNewIssueID(),
         isNewIssue: true,
     });
 
@@ -54,7 +61,7 @@ export default function IssueEntryFieldList({
         issueEntryFieldList.data = issueEntryFieldList.data.concat(newEntry);
         setIssueEntryFieldList(issueEntryFieldList);
         setEntryCur({
-            ISSUE_ID: setFakeID(),
+            ISSUE_ID: setNewIssueID(),
             isNewIssue: true,
         });
     };
@@ -106,7 +113,7 @@ export default function IssueEntryFieldList({
                     <EntryField
                         key={entry.ISSUE_ID}
                         id={entry.ISSUE_ID}
-                        isNewIssue={entry.isNewIssue === true ? true : false}
+                        isNewIssue={entry.isNewIssue}
                         issue={entry.NAME}
                         score={entry.IMPORTANCE_SCORE}
                         setIssueEntryFieldList={setIssueEntryFieldList}
