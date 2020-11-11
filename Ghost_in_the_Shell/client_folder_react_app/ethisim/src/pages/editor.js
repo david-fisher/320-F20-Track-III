@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
-import {
-    Drawer,
-    Box,
-    Grid,
-    Container,
-    Button,
-    Typography,
-} from '@material-ui/core';
+import { Drawer, Box, Button, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -313,7 +306,7 @@ export default function Editor(props) {
                         }}
                         className={classes.exitButton}
                     >
-                        <WhiteTextTypography>
+                        <WhiteTextTypography noWrap>
                             Return to Dashboard
                         </WhiteTextTypography>
                     </Button>

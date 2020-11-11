@@ -8,10 +8,11 @@ import {
     mockUnfinishedScenario,
     mockFinishedScenario,
 } from '../shared/mockScenarioData';
+import DashboardNavbar from '../components/DashboardComponents/DashboardNavbar';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(6),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -57,31 +58,38 @@ export default function Dashboard() {
     ));
 
     return (
-        <Container className={classes.container} component="main" maxWidth="lg">
-            <Typography variant="h4">Unfinished Scenarios</Typography>
-            <Grid
-                container
-                spacing={2}
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
+        <div className={classes.container}>
+            <DashboardNavbar />
+            <Container
+                className={classes.container}
+                component="main"
+                maxWidth="lg"
             >
-                {unfinishedScenarios}
-                <AddNewScenarioCard />
-            </Grid>
-            <Typography variant="h4">Finished Scenarios</Typography>
-            <Grid
-                container
-                spacing={2}
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
-            >
-                {finishedScenarios}
-            </Grid>
-            <Box className={classes.copyright}>
-                <Copyright />
-            </Box>
-        </Container>
+                <Typography variant="h4">Unfinished Scenarios</Typography>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    {unfinishedScenarios}
+                    <AddNewScenarioCard />
+                </Grid>
+                <Typography variant="h4">Finished Scenarios</Typography>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    {finishedScenarios}
+                </Grid>
+                <Box className={classes.copyright}>
+                    <Copyright />
+                </Box>
+            </Container>
+        </div>
     );
 }
