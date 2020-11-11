@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Container, Box, Button } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import {
+    Container,
+    Box,
+    Button,
+    Typography,
+    CssBaseline,
+    AppBar,
+    Toolbar,
+} from '@material-ui/core';
 import Copyright from '../components/Copyright';
 import PropTypes from 'prop-types';
 import MaterialTable from 'material-table';
@@ -8,6 +16,7 @@ import { forwardRef } from 'react';
 import StudentResponseDialog from '../components/StudentResponsesComponents/StudentResposeDialog';
 import { mockStudents } from '../shared/mockScenarioData';
 import './data.css';
+import { Link } from 'react-router-dom';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -59,12 +68,18 @@ const tableIcons = {
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(12),
         textAlign: 'center',
     },
     button: {
         marginBottom: theme.spacing(1),
         textTransform: 'unset',
+    },
+    exitButton: {
+        margin: theme.spacing(2),
+        borderStyle: 'solid',
+        borderColor: 'white',
+        border: 2,
     },
     title: {
         textAlign: 'center',
@@ -85,13 +100,8 @@ Data.propTypes = {
 export default function Data(props) {
     const classes = useStyles();
     Data.propTypes = props.data;
-    const titleTable1 =
+    const title =
         'Student Data: ' +
-        props.location.scenarioData.scenarioName +
-        ' | ' +
-        props.location.scenarioData.className;
-    const titleTable2 =
-        'Student Issue Coverage: ' +
         props.location.scenarioData.scenarioName +
         ' | ' +
         props.location.scenarioData.className;
@@ -106,28 +116,37 @@ export default function Data(props) {
         setOpen(false);
     };
 
-    const [buttonText, setButtonText] = useState('View Student Issue Coverage');
-    const [isTable1, setIsTable1] = useState(true);
-
-    const onClickButton = () => {
-        if (isTable1) {
-            setButtonText('View Student Response Data');
-        } else {
-            setButtonText('View Student Issue Coverage');
-        }
-        setIsTable1(!isTable1);
-    };
+    const WhiteTextTypography = withStyles({
+        root: {
+            color: '#FFFFFF',
+        },
+    })(Typography);
 
     return (
         <Container component="main" className={classes.container}>
-            <Button
-                variant="outlined"
-                color="primary"
-                onClick={onClickButton}
-                className={classes.button}
-            >
-                {buttonText}
-            </Button>
+            <CssBaseline />
+            <AppBar position="fixed">
+                <Toolbar>
+                    <Box display="flex" flexGrow={1}>
+                        <Typography variant="h4" noWrap>
+                            Student Data
+                        </Typography>
+                    </Box>
+
+                    <Button
+                        component={Link}
+                        to={{
+                            pathname: '/dashboard',
+                        }}
+                        className={classes.exitButton}
+                    >
+                        <WhiteTextTypography noWrap>
+                            Return to Dashboard
+                        </WhiteTextTypography>
+                    </Button>
+                </Toolbar>
+            </AppBar>
+
             <StudentResponseDialog
                 open={open}
                 handleClickOpen={handleClickOpen}
@@ -135,61 +154,32 @@ export default function Data(props) {
                 setSelectedResponseData={setSelectedResponseData}
                 selectedResponseData={selectedResponseData}
             />
-            {isTable1 ? (
-                <MaterialTable
-                    icons={tableIcons}
-                    title={titleTable1}
-                    options={{
-                        exportButton: true,
-                    }}
-                    actions={[
-                        {
-                            icon: () => <RateReviewIcon />,
-                            tooltip: 'View Student Response',
-                            onClick: (event, rowData) => {
-                                setOpen(true);
-                                setSelectedResponseData(rowData);
-                            },
+            <MaterialTable
+                icons={tableIcons}
+                title={title}
+                options={{
+                    exportButton: true,
+                }}
+                actions={[
+                    {
+                        icon: () => <RateReviewIcon />,
+                        tooltip: 'View Student Response',
+                        onClick: (event, rowData) => {
+                            setOpen(true);
+                            setSelectedResponseData(rowData);
                         },
-                    ]}
-                    columns={[
-                        { title: 'Name', field: 'name' },
-                        { title: 'Age', field: 'age', type: 'numeric' },
-                        { title: 'Grade', field: 'grade' },
-                        { title: 'Gender', field: 'gender' },
-                        { title: 'Race', field: 'race' },
-                        { title: 'Major', field: 'major' },
-                    ]}
-                    data={mockStudents}
-                />
-            ) : (
-                <MaterialTable
-                    icons={tableIcons}
-                    title={titleTable2}
-                    options={{
-                        exportButton: true,
-                    }}
-                    actions={[
-                        {
-                            icon: () => <RateReviewIcon />,
-                            tooltip: 'View Student Response',
-                            onClick: (event, rowData) => {
-                                setOpen(true);
-                                setSelectedResponseData(rowData);
-                            },
-                        },
-                    ]}
-                    columns={[
-                        { title: 'Name', field: 'name' },
-                        { title: 'Age', field: 'age', type: 'numeric' },
-                        { title: 'Grade', field: 'grade' },
-                        { title: 'Gender', field: 'gender' },
-                        { title: 'Race', field: 'race' },
-                        { title: 'Major', field: 'major' },
-                    ]}
-                    data={mockStudents}
-                />
-            )}
+                    },
+                ]}
+                columns={[
+                    { title: 'Name', field: 'name' },
+                    { title: 'Age', field: 'age', type: 'numeric' },
+                    { title: 'Grade', field: 'grade' },
+                    { title: 'Gender', field: 'gender' },
+                    { title: 'Race', field: 'race' },
+                    { title: 'Major', field: 'major' },
+                ]}
+                data={mockStudents}
+            />
             <Box className={classes.copyright}>
                 <Copyright />
             </Box>

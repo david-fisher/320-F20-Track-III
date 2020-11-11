@@ -11,7 +11,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ReflectionResponse from './ReflectionResponseComponent/ReflectionResponse';
 import ActionResponse from './ActionResponseComponent/ActionResponse';
-import NavSideBarList from './NavBar/NavSideBarList';
+import NavSideBarList from './SideBar/NavSideBarList';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PropTypes from 'prop-types';
 import { mockFinishedScenarioStudentResponse } from '../../shared/mockScenarioData';
