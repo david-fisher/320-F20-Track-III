@@ -94,7 +94,7 @@ class ResponsesSerializer(serializers.ModelSerializer):
 class allScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO_ID', 'NAME', 'SUB_TITLE', 'IS_FINISHED', 'CREATOR')
+        fields = ('SCENARIO_ID', 'NAME', 'SUB_TITLE', 'IS_FINISHED', 'PROFESSOR_ID')
 
 class Scenarios_forSerializer(serializers.ModelSerializer):
     class Meta:
