@@ -198,11 +198,18 @@ class logistics_page(APIView):
             course_dict.update({"COURSE_ID":course.COURSE_ID, "NAME": course.NAME})
                 
         pages_query = pages.objects.filter(SCENARIO_id=scenario_dict['SCENARIO_ID']).values()
+        
+        page_array = []
+        for page in pages_query:
+            cropped_page = {}
+            cropped_page['PAGE'] = page['PAGE_ID']
+            cropped_page['PAGE_TITLE'] = page['PAGE_TITLE']
+            page_array.append(cropped_page) 
 
 
         scenario_dict.update({
             "COURSE": course_dict,
-            "PAGES": pages_query
+            "PAGES": page_array
         })
 
         
