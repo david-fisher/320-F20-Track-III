@@ -27,21 +27,23 @@ export default function Reflection(props) {
       error: null,
     })
 
-
-
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
     //Assuming list of questions will be in array form
     const [questions, setQuestions] = useState(reflection_questions);
 
+    var questionsList = []
+    for (var i=0;i<questions.length;i++){
+      questionsList.concat({PAGE_ID:page_id,
+                            REFLECTION_QUESTION: questions[i]})
+    }
     var postReqBody = {PAGE_ID: page_id,
       PAGE_TYPE: page_type,
       PAGE_TITLE: title,
-      SCENARIO: scenario_ID,
-      VERSION_ID: version_ID,
-      NEXT_PAGE_ID: 1,
+      SCENARIO_ID: scenario_ID,
+      NEXT_PAGE_ID: next_page_id,
       BODY: bodyText,
-      REFLECTION_QUESTIONS: questions,
+      REFLECTION_QUESTIONS: questionsList
     }
 
     if(created === true){

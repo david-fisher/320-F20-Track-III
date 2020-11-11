@@ -51,14 +51,15 @@ export default function FinalAction(props) {
     const [result1, setResult1] = useState(r1);
     const [result2, setResult2] = useState(r2);
 
+
     var postReqBody = {PAGE_ID: page_id,
       PAGE_TYPE: page_type,
       PAGE_TITLE: title,
-      SCENARIO: scenario_ID,
-      VERSION_ID: version_ID,
+      SCENARIO_ID: scenario_ID,
       BODY: bodyText,
-      CHOICES: [option1,option2],
-      RESULT_PAGES: [result1,result2]
+      NEXT_PAGE_ID: next_page_id,
+      CHOICES: [{PAGE_ID:page_id,CHOICE:option1,RSEULT_PAGE:result1},
+              {PAGE_ID:page_id,CHOICE:option2,RSEULT_PAGE:result2}]
     }
 
     if(created === true){

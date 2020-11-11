@@ -40,11 +40,10 @@ export default function Generic(props) {
     var postReqBody = {PAGE_ID: page_id,
       PAGE_TYPE: page_type,
       PAGE_TITLE: title,
-      SCENARIO: scenario_ID,
-      VERSION_ID: version_ID,
-      NEXT_PAGE_ID: 1,
+      SCENARIO_ID: scenario_ID,
+      NEXT_PAGE_ID: next_page_id,
       BODY: bodyText,
-      BODIES: bodiesText,
+      SUBBODY: bodiesText[0],
     }
 
     if(created === true){

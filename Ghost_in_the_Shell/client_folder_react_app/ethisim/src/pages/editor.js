@@ -61,6 +61,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
+/*
+FLOW
+1) Edit button clicked (pass in scenario id)
+ENTERS EDITOR PAGE with prop = scenario_ID
+2) GET request containing
+    JSON  Logistics &
+    [page_id:id,page_name:name,etc]
+3.1) index 0 of scenario compoennts will be : {id:0, page:scenario_ID, name:"Logistics ", component:<Logistics with JSON values>}
+3.2) index 1 of scenario components will be : {id:1, page:scenario_ID, name:"Configure Issues", component:NULL}
+3.3) index 2 of scenario compoennts will be : {id:2, page:scenario_ID, name:"FLOWCHART", component:NULL}
+4) fill out scenarioComponents list with -> id:index, page:page_id, name:page_name, component:NULL
+  filling out side nav bar is simply filling out scenarioComponets list as stated above.
+  then extracting the name for each page.
+5) fill out side nav bar
+
+6) Once a button on the side nav is clicked:
+  a) GET all information for page given 'page' from scenarioComponents
+  b) Instantiate new X page component
+  c) fill out component null with new page component
+*/
+
+/*
 const addPage = (array, id, title, componentType, scenarioData) => {
     var c = null;
     switch (componentType) {
@@ -87,7 +111,7 @@ const addPage = (array, id, title, componentType, scenarioData) => {
     }
     universalPost()
     return array.concat({ id, title, component: c });
-};
+};*/
 
 //Sidebar Components
 var startList = [
@@ -129,11 +153,12 @@ function handleGet(setGetValues,g_id){
   universalFetch(setGetValues,endpoint,null,null,{PAGE_ID:g_id});
 }
 
+
 export default function Editor(props) {
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
 
-    const created_pages = props.page_IDS
+    //const created_pages = props.page_IDS
 
     const [getValues,setGetValues] = useState({
       data: null,
@@ -147,26 +172,34 @@ export default function Editor(props) {
     })
 
     //Fake fetch of scenarioData with components
-    let fetchedComponents = mockUnfinishedScenarioData.components;
-    let combinedComponents = startList.concat(fetchedComponents);
-    let initialComponents = combinedComponents.reduce(
-        (result, currentValue) => {
-            return addPage(
-                result,
-                currentValue.id,
-                currentValue.title,
-                currentValue.type,
-                mockUnfinishedScenarioData
-            );
-        },
-        []
-    );
+    //let fetchedComponents = mockUnfinishedScenarioData.components;
+    //let combinedComponents = startList.concat(fetchedComponents);
+
+    function handleAllGets(){
+      const ids = [1,4]
+      var initComponents = []
+      for(var i =0 ; i < ids.length;i++){
+        handleGet(setGetValues,ids[i]);
+
+        console.log(getValues.data);
+        initComponents.concat(getValues.data)
+      }
+      return initComponents
+    }
+
+    //Once herlin gets the Logistics page and page_names and page_ids:
+    //Fill out side nav bar with page_names
+    //Don't forget to have page_ids associated with them
+
+    //const initialComponents = handleAllGets();
+
     const [scenarioComponents, setScenarioComponents] = useState(
         initialComponents
     );
     const [scenarioComponent, setScenarioComponent] = useState(
         scenarioComponents[0].component
     );
+
     const deleteByID = (d_id) => {
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
         handleDelete(setDeleteValues,d_id);
@@ -190,13 +223,13 @@ export default function Editor(props) {
                     c = <Generic {...p}></Generic>;
                     break;
                 case 'Reflection':
-                    p = {postFunction: handlePost, page_id: 1,page_type: "G",
+                    p = {postFunction: handlePost, page_id: 1,page_type: "A",
                     page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
                     body: "BODYTEXTREFLECTION",reflection_questionts: ["q1"],created: true}
                     c = <Reflection {...p}></Reflection>;
                     break;
                 case 'Action':
-                    p = {postFunction: handlePost, page_id: 1,page_type: "G",
+                    p = {postFunction: handlePost, page_id: 1,page_type: "R",
                     page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
                     body:"BODYTEXTACTION",choice1: "OPTION1",r1:4,choice2: "OPTION2",r2: 3,created: true}
                     c = <Action {...p} ></Action>;
@@ -209,9 +242,6 @@ export default function Editor(props) {
             );
         };
 
-        function handleAddNewComponent() {
-            setOpenPopup(true);
-        }
 
         return (
             <div>
@@ -231,7 +261,7 @@ export default function Editor(props) {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleAddNewComponent}
+                        onClick={addNewPage}
                         className={classes.addPageButton}
                     >
                         <AddIcon />
