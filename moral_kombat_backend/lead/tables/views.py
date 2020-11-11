@@ -172,43 +172,44 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
 	-Get Professor (creators) names associated with scenario
 	-get page_ID and title for latest version of each page
 """
+
 class logistics_page(APIView):
     #http_method_names = [ 'POST,' 'PUT', 'DELETE']
 
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
-        PROFESSOR_ID = self.request.query_params.get('professor_id')
+        SCENARIO_ID = self.request.query_params.get('scenario_id')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID).values()
+        scenario = scenarios.objects.get(SCENARIO_ID = SCENARIO_ID)
+        scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
-        for scenario in scenario_query:  
 
-            scenarios_for_query = scenarios_for.objects.filter(SCENARIO_ID=scenario['SCENARIO_ID']).values()
-            course_id_array = []
-            for x in scenarios_for_query:
-                print(x)
-                course_id_array.append(x['COURSE_ID_id'])
+        scenarios_for_query = scenarios_for.objects.filter(SCENARIO_ID=scenario_dict['SCENARIO_ID']).values()
+        course_id_array = []
+        for x in scenarios_for_query:
+            print(x)
+            course_id_array.append(x['COURSE_ID_id'])
 
-            course_dict = {}
-            for x in course_id_array:
-                course = courses.objects.get(COURSE_ID = x)
-                course_dict.update({"COURSE_ID":course.COURSE_ID, "NAME": course.NAME})
+        course_dict = {}
+        for x in course_id_array:
+            course = courses.objects.get(COURSE_ID = x)
+            course_dict.update({"COURSE_ID":course.COURSE_ID, "NAME": course.NAME})
                 
-            pages_query = pages.objects.filter(SCENARIO_id=scenario['SCENARIO_ID']).values()
+        pages_query = pages.objects.filter(SCENARIO_id=scenario_dict['SCENARIO_ID']).values()
 
 
-            scenario.update({
-                "COURSE": course_dict,
-                "PAGES": pages_query
-            })
+        scenario_dict.update({
+            "COURSE": course_dict,
+            "PAGES": pages_query
+        })
 
         
-        logistics = scenario_query
+        logistics = scenario_dict
         return Response(logistics)
 
-
+    #a put request for editing scenarios. must provide scenario_id in url thusly: /logistics?scenario_id=<insert id number here>
     def put(self, request, *args, **kwargs):
         SCENARIO_ID = self.request.query_params.get('scenario_id')
         extant_scenario  = scenarios.objects.get(SCENARIO_ID=SCENARIO_ID)
