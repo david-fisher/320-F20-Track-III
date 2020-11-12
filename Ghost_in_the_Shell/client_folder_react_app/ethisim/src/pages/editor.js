@@ -69,7 +69,7 @@ FLOW
 ENTERS EDITOR PAGE with prop = scenario_ID
 2) GET request containing
     JSON  Logistics &
-    [page_id:id,page_name:name,etc]
+    [{page_id:id,page_name:name},...]
 3.1) index 0 of scenario compoennts will be : {id:0, page:scenario_ID, name:"Logistics ", component:<Logistics with JSON values>}
 3.2) index 1 of scenario components will be : {id:1, page:scenario_ID, name:"Configure Issues", component:NULL}
 3.3) index 2 of scenario compoennts will be : {id:2, page:scenario_ID, name:"FLOWCHART", component:NULL}
