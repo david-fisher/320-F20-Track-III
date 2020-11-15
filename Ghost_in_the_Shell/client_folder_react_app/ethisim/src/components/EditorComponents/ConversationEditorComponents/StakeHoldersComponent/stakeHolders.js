@@ -19,6 +19,8 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
         false_id: 1,
     });
 
+    //this is supposed to get and populate the page with existing stakeholders
+    //unfortunately, this is omega bugged right now
     const getExistingStakeHolders = (e) => {
         var data = JSON.stringify({});
 
@@ -34,11 +36,26 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
         axios(config)
             .then(function (response) {
                 console.log(JSON.stringify(response.data));
+                setStakeHolders(response.data);
             })
             .catch(function (error) {
                 console.log(error);
             });
+
+        stakeHolders.forEach((item) => {
+            item.false_id = 0;
+            item.id = item.STAKEHOLDER_ID;
+            item.name = item.NAME;
+            item.bio = item.DESC;
+            item.mainConvo = item.MAIN_CONVERSATION;
+            item.scenario_id = item.SCENARIO_ID;
+            item.version_id = item.VERSION_ID;
+            //TODO
+            //item.questionsResponses = [];
+            //stakeholderIssues: ????
+        });
     };
+
     /*
     has an issue related to the POST issue
     where a stakeholder has its Math.random() generated id instead of the one generated from the db
@@ -95,6 +112,7 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
 
     //There's a weird error where the first POST request creates a new object that
     //never gets accounted for in the array :(
+    //it probably has to do with React hooks being async; perhaps make page refresh or something?
     const addStakeHolder = (e) => {
         //adding a stakeholder to the frontend
         const newStakeHolders = [...stakeHolders, stakeHolder];
@@ -128,7 +146,6 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
                     if (item.false_id == 1) {
                         item.false_id = 0;
                         item.id = response.data.STAKEHOLDER_ID;
-                        console.log(item.id);
                         item.name = response.data.NAME;
                         item.bio = response.data.DESC;
                         item.mainConvo = response.data.MAIN_CONVERSATION;
