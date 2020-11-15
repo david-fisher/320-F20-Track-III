@@ -43,21 +43,6 @@ DialogTitle.propTypes = {
   onClose: PropTypes.any.isRequired
 };
 
-const items = [
-  {
-    id: 1,
-    value: "Read Only"
-  },
-  {
-    id: 2,
-    value: "Edit Only"
-  },
-  {
-    id: 3,
-    value: "Admin"
-  }
-];
-
 function DialogTitle(props) {
   const classes = useStyles();
   const { onClose } = props;
@@ -114,7 +99,6 @@ export default function ShareDialog(props) {
           <Typography align="center" variant="h6">
             Select User Role
           </Typography>
-          <Dropdown items={items} />
         </DialogContent>
 
         <DialogActions>
