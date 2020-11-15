@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseURL } from '../Constants/Config';
+import { baseURL } from './../Constants/Config';
 // Universal delete request using axios
 export default function universalDelete(
     setResponse,

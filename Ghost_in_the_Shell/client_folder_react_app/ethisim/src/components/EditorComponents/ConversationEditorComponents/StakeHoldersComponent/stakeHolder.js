@@ -18,6 +18,10 @@ import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
+import universalGet from './../../../../universalHTTPRequests/get.js';
+import universalPut from './../../../../universalHTTPRequests/put.js';
+import universalDelete from './../../../../universalHTTPRequests/delete.js';
+import { databaseURL } from './../../../../Constants/Config.js';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -124,14 +128,7 @@ export default function StakeHolder({
         setEdit({ id: Math.floor(Math.random() * 10000) });
     };
 
-    // eslint-disable-next-line
-    function updateRow(rowID, rowBody) {
-        //TODO
-        //functional code to save items to backend
-    }
-
     //TABLE
-
     const handleClickOpenBio = () => {
         setOpenBio(true);
     };
@@ -164,6 +161,73 @@ export default function StakeHolder({
         console.log(content);
         console.log(htmlToText.fromString(content));
     };
+
+    //integration with backend
+    const [getValues, setGetValues] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
+    const [putValues, setPutValues] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
+    const handlePut = (e) => {};
+
+    function handleDelete() {
+        //pass in stakeholder id and page id
+        //delete
+    }
+
+    /*
+    function handleGet(setGetValues, g_id) {
+        const endpoint = "/page?page_id=" + g_id
+        function onSuccess(resp) {
+
+        }
+        function onFailure() {
+            console.log("Get failed")
+        }
+        universalGet(setGetValues, endpoint, null, null, { PAGE_ID: g_id });
+    }
+
+    function handlePost(setPostValues, postReqBody, s_id) {
+        const endpoint = "/pages?SCENARIO_ID=" + s_id
+        function onSuccess(resp) {
+
+        }
+        function onFailure() {
+            console.log("Post failed")
+        }
+        universalPost(setPostValues, endpoint, null, null, postReqBody);
+    }
+
+    function handlePut(setDeleteValues, p_id) {
+        const endpoint = "/page?page_id=" + p_id
+        function onSuccess(resp) {
+
+        }
+        function onFailure() {
+            console.log("Put failed")
+        }
+        universalPut(setPutValues, endpoint, null, null, { PAGE_ID: p_id })
+    }
+
+
+    function handleDelete(setDeleteValues, d_id) {
+        const endpoint = "/page?page_id=" + d_id
+        function onSuccess(resp) {
+
+        }
+        function onFailure() {
+            console.log("Delete failed")
+        }
+        universalDelete(setDeleteValues, endpoint, null, null, { PAGE_ID: d_id })
+    }
+    */
 
     return (
         <div id="parent">
@@ -223,7 +287,7 @@ export default function StakeHolder({
                 <Button
                     variant="contained"
                     color="primary"
-                    //onClick={() => updateStakeHolder(id)}
+                    onClick={() => handlePut}
                 >
                     Save
                 </Button>
@@ -233,7 +297,10 @@ export default function StakeHolder({
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => removeStakeHolder(id)}
+                    onClick={() => {
+                        removeStakeHolder(id);
+                        //TODO: handleDelete()
+                    }}
                 >
                     Delete
                 </Button>
