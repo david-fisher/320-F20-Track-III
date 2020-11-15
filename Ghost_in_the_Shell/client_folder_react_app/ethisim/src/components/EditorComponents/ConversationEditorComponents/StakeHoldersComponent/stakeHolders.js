@@ -11,37 +11,24 @@ StakeHolderFields.propTypes = {
 };
 
 export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
+    var axios = require('axios');
+
     const [stakeHolder, setEdit] = useState({
         id: Math.floor(Math.random() * 10000),
         questionsResponses: [],
+        false_id: 1,
     });
 
-    const removeStakeHolder = (stakeHolderID) => {
-        console.log(stakeHolderID);
-        const leftStakeHolders = stakeHolders.filter(
-            (s) => s.id !== stakeHolderID
-        );
-        setStakeHolders(leftStakeHolders);
-    };
-
-    /*
-    const [getValues, setGetValues] = useState({
-        data: null,
-        loading: true,
-        error: null
-    })
-
-    const handleGet = (e) => {
-        var axios = require('axios');
-        var data = JSON.stringify({ "STAKEHOLDER_ID": 12, "NAME": "Test2", "DESC": "Updated", "MAIN_CONVERSATION": "Hello World", "SCENARIO_ID_id": 1, "VERSION_ID_id": 1 });
+    const getExistingStakeHolders = (e) => {
+        var data = JSON.stringify({});
 
         var config = {
             method: 'get',
-            url: 'http://127.0.0.1:8000/api/stakeholders',
+            url: 'http://127.0.0.1:8000/api/stakeholders/',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            data: data
+            data: data,
         };
 
         axios(config)
@@ -51,23 +38,56 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
             .catch(function (error) {
                 console.log(error);
             });
-    }
-    */
+    };
 
-    function addStakeholder() {
+    //has an issue related to the POST issue
+    //where a stakeholder has its Math.random() generated id instead of the one generated from the db
+    const removeStakeHolder = (stakeHolderID) => {
+        //handling it on the frontend
+        console.log(stakeHolderID);
+        const leftStakeHolders = stakeHolders.filter(
+            (s) => s.id !== stakeHolderID
+        );
+        setStakeHolders(leftStakeHolders);
+
+        //calling the DELETE request on the backend
+        var data = JSON.stringify({});
+
+        console.log(
+            'sending DELETE request for stakeholder_id ' + stakeHolderID
+        );
+        var config = {
+            method: 'delete',
+            url:
+                'http://127.0.0.1:8000/api/stakeholders/' + stakeHolderID + '/',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
+
+    //There's a weird error where the first POST request creates a new object that
+    //never gets accounted for in the array :(
+    const addStakeHolder = (e) => {
         //adding a stakeholder to the frontend
-        //var false_id = Math.floor(Math.random() * 10000);
-        setEdit({
-            key: Math.floor(Math.random() * 10000),
-            false_id: 1,
-            questionsResponses: [],
-        });
-
         const newStakeHolders = [...stakeHolders, stakeHolder];
         setStakeHolders(newStakeHolders);
+        setEdit({
+            id: Math.floor(Math.random() * 10000),
+            questionsResponses: [],
+            false_id: 1,
+        });
 
         //handling the POST request
-        var axios = require('axios');
         var data = JSON.stringify({
             SCENARIO_ID: 'http://127.0.0.1:8000/api/scenarios/1/',
             VERSION_ID: 'http://127.0.0.1:8000/api/scenarios/1/',
@@ -84,39 +104,44 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
-
                 //modify the created stakeholder
-                //this is clearly not working right now
+                console.log(JSON.stringify(response.data));
                 stakeHolders.forEach((item) => {
                     if (item.false_id == 1) {
-                        item = {
-                            key: Math.floor(Math.random() * 10000),
-                            id: response.data.STAKEHOLDER_ID,
-                            name: response.data.NAME,
-                            bio: response.data.DESC,
-                            mainConvo: response.data.MAIN_CONVERSATION,
-                            scenario_id: response.data.SCENARIO_ID,
-                            version_id: response.data.VERSION_ID,
-                            questionsResponses: [],
-                            //TODO
-                            //stakeholderIssues: ????
-                        };
+                        item.false_id = 0;
+                        item.id = response.data.STAKEHOLDER_ID;
+                        console.log(item.id);
+                        item.name = response.data.NAME;
+                        item.bio = response.data.DESC;
+                        item.mainConvo = response.data.MAIN_CONVERSATION;
+                        item.scenario_id = response.data.SCENARIO_ID;
+                        item.version_id = response.data.VERSION_ID;
+                        item.questionsResponses = [];
+                        //TODO
+                        //stakeholderIssues: ????
                     }
                 });
             })
             .catch(function (error) {
                 console.log(error);
             });
-
         console.log(stakeHolders);
-    }
+    };
 
     return (
         <div className="stakeHolders">
             <Button
                 id="button"
-                onClick={addStakeholder}
+                onClick={getExistingStakeHolders}
+                variant="contained"
+                color="primary"
+            >
+                get
+            </Button>
+
+            <Button
+                id="button"
+                onClick={addStakeHolder}
                 variant="contained"
                 color="primary"
             >
