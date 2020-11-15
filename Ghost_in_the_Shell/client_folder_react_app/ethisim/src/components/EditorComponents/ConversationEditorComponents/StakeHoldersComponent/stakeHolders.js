@@ -39,9 +39,27 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
                 console.log(error);
             });
     };
-
-    //has an issue related to the POST issue
-    //where a stakeholder has its Math.random() generated id instead of the one generated from the db
+    /*
+    has an issue related to the POST issue
+    where a stakeholder has its Math.random() generated id instead of the one generated from the db
+    
+        first call to remove:
+            calls DELETE with the Math.random() number, regardless if the stakeholder is in the db or not
+                this will return an error message unless the Math.random() number corresponds
+                to an id in the db
+            if it's called on something that is in the db
+                it removes nothing from the frontend and puts information in boxes
+                    (e.g. stakeholder names are filled in for items that are in the db)
+            if it's called on something that is not in the db
+                it removes that item from the frontend
+        
+        after the first call:
+            the last item (unless deleted in first call) should be the only one that is not in the db
+                (also has an id that was Math.random())
+            DELETE will work as intended on items that exist in the db now
+            DELETE will return an error message on the last item unless Math.random() corresponds
+                to an item in the db
+    */
     const removeStakeHolder = (stakeHolderID) => {
         //handling it on the frontend
         console.log(stakeHolderID);
