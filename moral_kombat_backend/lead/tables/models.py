@@ -143,7 +143,7 @@ class reflections_taken(models.Model):
 
 
 class courses(models.Model):
-    COURSE = models.IntegerField(primary_key = True, editable = False)
+    COURSE = models.AutoField(default = None, primary_key = True)
     NAME = models.CharField(max_length = 1000)
 
 
