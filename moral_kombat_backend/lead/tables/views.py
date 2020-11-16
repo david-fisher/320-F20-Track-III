@@ -223,9 +223,17 @@ class logistics_page(APIView):
         updated_scenario = request.data
         serializer = ScenariosSerializer(extant_scenario, data=updated_scenario)
         if serializer.is_valid(): 
-            serializer.save() 
-            return Response(serializer.data) 
-        return Response(serializer.errors)
+            serializer.save()
+            version = serializer.data['VERSION_ID']
+            scenarios_for_dict = ScenariosSerializer(request.data).data
+            scenario_for_dict.update({'SCENARIO_ID': SCENARIO_ID})
+            scenario_for_dict.update({'VERSION_ID': version})
+            print(scenarios_for_dict)
+            serializer2 = scenario_for_serializer(data=scenario_for_dict)
+            if serializer2.is_valid():
+                serializer2.save()
+                return Response(serializer2.data) 
+        return Response(serializer2.errors)
 
 
 

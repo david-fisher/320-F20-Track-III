@@ -1,97 +1,105 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import MinValueValidator
 
 # Create your models here.
 
 class scenarios(models.Model):
     class Meta:
-        unique_together = (('SCENARIO_ID'), ('VERSION_ID'))
-    SCENARIO_ID = models.AutoField(primary_key = True, editable=False)
-    VERSION_ID = models.IntegerField(default=0, editable=False)
+        unique_together = (('SCENARIO'), ('VERSION'))
+    SCENARIO = models.AutoField(primary_key = True, editable=False)
+    VERSION = models.IntegerField(default=0, editable=False)
     NAME = models.CharField(max_length = 1000)
-    SUB_TITLE = models.CharField(max_length = 1000, default = None)
-    IS_FINISHED = models.BooleanField(default = False)
     PUBLIC = models.BooleanField(default = False)
-    NUM_CONVERSATIONS = models.IntegerField(default = 0)
-    PROFESSOR_ID = models.ForeignKey('professors', on_delete=models.RESTRICT)
-    FIRST_PAGE = models.IntegerField(default = 1)
+    NUM_CONVERSATION = models.IntegerField(default = 0)
+    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenarios1", default = 1)
+    IS_FINISHED = models.BooleanField(default = False)
+    DATE_CREATED = models.DateField(null = True)
+    # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)
+    # def __str__(self):
+    #     return "%s the scenario" % self.name
 
-#TODO: add genric page type and fix version_id
+
 class pages(models.Model):
     class Meta:
-        unique_together = (('PAGE_ID'), ('SCENARIO'), ('VERSION_ID'))
-    PAGE_ID = models.IntegerField()
+        unique_together = (('PAGE'), ('SCENARIO'))
+    PAGE = models.AutoField(primary_key = True, editable=False)
     PAGE_CHOICES = (
+        ('I', 'INTRO'),
+        ('G', 'GENERIC'),
         ('R', 'REFLECTION'),
-        ('S', 'STAKEHOLDERS'),
+        ('S', 'STAKEHOLDER'),
         ('A', 'ACTION'),
     )
     PAGE_TYPE = models.CharField(max_length = 2, choices = PAGE_CHOICES)
     PAGE_TITLE = models.CharField(max_length = 1000)
-    PAGE_BODY = models.TextField(default = None)
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages1")
-    VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages2")
-    NEXT_PAGE_ID = models.IntegerField()
+    VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages2")
+    NEXT_PAGE = models.OneToOneField('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'pages3')
+    X_COORDINATE = models.IntegerField()
+    Y_COORDINATE = models.IntegerField()
 
 
 
 class reflection_questions(models.Model):
     class Meta:
-        unique_together = (('PAGE_ID'), ('REFLECTION_QUESTION'))
-    PAGE_ID = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="reflection_questions1")
+        unique_together = (('PAGE'), ('REFLECTION_QUESTION'))
+    PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="reflection_questions1")
     REFLECTION_QUESTION = models.TextField()
 
 
 
 class generic_page(models.Model):
     class Meta:
-        unique_together = (('PAGE_ID'), ('BODY'))
-    PAGE_ID = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="generic_page1")
+        unique_together = (('PAGE'), ('BODY'))
+    PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="generic_page1")
     BODY = models.TextField()
 
 
 class stakeholder_page(models.Model):
     class Meta:
-        unique_together = (('PAGE_ID'), ('STAKEHOLDER'))
-    PAGE_ID = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="stakeholder_page1")
+        unique_together = (('PAGE'), ('STAKEHOLDER'))
+    PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="stakeholder_page1")
     STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="stakeholder_page2")
 
 
-class choices_for(models.Model):
-    class Meta:
-        unique_together = (('SCENARIO_ID'), ('VERSION_ID'), ('CHOICES'))
-    SCENARIO_ID = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="choices_for1")
-    VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="choices_for2")
-    CHOICES = models.TextField()
+# class choices_for(models.Model):
+#     class Meta:
+#         unique_together = (('SCENARIO_ID'), ('VERSION_ID'), ('CHOICES'))
+#     SCENARIO_ID = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="choices_for1")
+#     VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="choices_for2")
+#     CHOICES = models.TextField()
 
 
 
 class stakeholders(models.Model):
     class Meta:
-        unique_together = (('STAKEHOLDER_ID'), ('VERSION_ID'))
-    STAKEHOLDER_ID = models.IntegerField()
-    NAME = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="stakeholders1")
-    DESC = models.TextField()
-    MATRIX = ArrayField(ArrayField(models.IntegerField(), size = 15), size = 15)
-    SCENARIO_ID = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="stakeholders2")
-    VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="stakeholders3")
+        unique_together = (('STAKEHOLDER'), ('VERSION'))
+    STAKEHOLDER = models.AutoField(primary_key = True, editable = False)
+    SCENARIO = models.ForeignKey('scenarios', to_field = 'SCENARIO', on_delete = models.CASCADE, related_name="stakeholders2", default = 1)
+    VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="stakeholders3", default = 1)
+    NAME = models.CharField(max_length = 1000, default = None)
+    DESCRIPTION = models.TextField()
+    JOB = models.TextField()
+    # MATRIX = ArrayField(ArrayField(models.IntegerField(), size = 15), size = 15)
+    INTRODUCTION = models.TextField(default = '')
 
 
 
-
-class stakeholder_in(models.Model):
-    class Meta:
-        unique_together = (('STAKEHOLDER_ID'), ('SCENARIO_ID'), ('VERSION_ID'))
-    STAKEHOLDER_ID = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="stakeholder1")
-    SCENARIO_ID = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete =models.CASCADE, related_name="stakeholder2")
-    VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="stakeholder3")
+# class stakeholders_in(models.Model):
+#     class Meta:
+#         unique_together = (('STAKEHOLDER_ID'), ('SCENARIO_ID'))
+#     STAKEHOLDER_ID = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="stakeholder1")
+#     SCENARIO_ID = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete =models.CASCADE, related_name="stakeholder2")
+    # VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="stakeholder3")
 
 
 
 class conversations(models.Model):
     class Meta:
-        unique_together = (('STAKEHOLDER_ID'), ('QUESTION'), ('RESPONSE'))
-    STAKEHOLDER_ID = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations1")
+        unique_together = (('STAKEHOLDER'), ('CONVERSATION'))
+    STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations1")
+    CONVERSATION = models.AutoField(default = None, primary_key = True)
     QUESTION = models.TextField()
     RESPONSE = models.TextField()
 
@@ -99,61 +107,60 @@ class conversations(models.Model):
 
 class responses(models.Model):
     class Meta:
-        unique_together = (('STUDENT_ID'), ('E_ID'), ('V_ID'), ('COURSE_ID'))
-    STUDENT_ID = models.ForeignKey('students', on_delete = models.CASCADE, related_name="responses1")
-    E_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses2")
-    V_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses3")
-    COURSE_ID = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="responses4")
-    DATE = models.DateField()
+        unique_together = (('STUDENT'), ('SCENARIO'),('VERSION'),('COURSE'))
+    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="responses1")
+    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses2")
+    VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses3")
+    COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="responses4")
+    DATE_TAKEN = models.DateField()
     CHOICE = models.TextField()
 
 
 
 
 class conversations_had(models.Model):
-    STUDENT_ID = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had1")
-    COURSE_ID = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had2")
-    E_ID = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had3")
-    DATE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had4")
-    STAKEHOLDER_ID = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations_had5")
+    STUDENT = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had1")
+    COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had2")
+    SCENARIO = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had3")
+    VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="conversations_had4")
+    DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had5")
+    STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations_had6")
     SCORE = models.IntegerField()
-    QUESTION = models.TextField()
+    CONVERSATION = models.TextField()
 
 
 
 class reflections_taken(models.Model):
     class Meta:
-        unique_together = (('REFLECTIONS'), ('STUDENT_ID'), ('COURSE_ID'), ('E_ID'), ('DATE'))
+        unique_together = (('REFLECTIONS'), ('STUDENT'), ('COURSE'), ('SCENARIO'), ('VERSION'), ('DATE_TAKEN'))
     REFLECTIONS = models.TextField()
-    STUDENT_ID = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken1")
-    COURSE_ID = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken2")
-    E_ID = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken3")
-    DATE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken4")
+    STUDENT = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken1")
+    COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken2")
+    SCENARIO = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken3")
+    VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="reflections_taken4")
+    DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken5")
 
 
 
 class courses(models.Model):
-    COURSE_ID = models.IntegerField(primary_key = True)
+    COURSE = models.IntegerField(primary_key = True, editable = False)
     NAME = models.CharField(max_length = 1000)
-
-
 
 
 class scenarios_for(models.Model):
     class Meta:
-        unique_together = (('SCENARIO_ID'), ('COURSE_ID'), ('VERSION_ID'))
-    
-    SCENARIO_ID = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="scenarios_for1")
-    COURSE_ID = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="scenarios_for2")
-    VERSION_ID = models.IntegerField()
+        unique_together = (('SCENARIO'), ('COURSE'), ('VERSION'))
+    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="scenarios_for1")
+    COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="scenarios_for2")
+    VERSION = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "scenarios_for3")
 
 
 class students(models.Model):
-    STUDENT_ID = models.IntegerField(primary_key = True)
+    STUDENT = models.IntegerField(primary_key = True)
     NAME = models.CharField(max_length = 100)
 
 class demographics(models.Model):
-    STUDENT_ID = models.OneToOneField('students', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
+    STUDENT = models.OneToOneField('students', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
     AGE = models.SmallIntegerField()
     GRADE_CHOICES = (
     ('FR', 'FRESHMAN'),
@@ -175,21 +182,51 @@ class demographics(models.Model):
 
 class students_in(models.Model):
     class Meta:
-        unique_together = (('STUDENT_ID'), ('COURSE_ID'))
-    STUDENT_ID = models.ForeignKey('students', on_delete = models.CASCADE, related_name="students_in1")
-    COURSE_ID = models.ForeignKey(courses, to_field = 'COURSE_ID', on_delete = models.CASCADE, related_name="students_in2")
+        unique_together = (('STUDENT'), ('COURSE'))
+    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="students_in1")
+    COURSE = models.ForeignKey(courses, to_field = 'COURSE', on_delete = models.CASCADE, related_name="students_in2")
 
 class professors_teach(models.Model):
     class Meta:
-        unique_together = (('PROFESSOR_ID'), ('COURSE_ID'))    
-    PROFESSOR_ID = models.ForeignKey('professors', to_field = 'PROFESSOR_ID', on_delete = models.CASCADE, related_name="professors_teach1")
-    COURSE_ID = models.ForeignKey(courses, to_field = 'COURSE_ID', on_delete = models.CASCADE, related_name="professors_teach2")
+        unique_together = (('PROFESSOR'), ('COURSE'))    
+    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete = models.CASCADE, related_name="professors_teach1")
+    COURSE = models.ForeignKey(courses, to_field = 'COURSE', on_delete = models.CASCADE, related_name="professors_teach2")
 
 class professors(models.Model):
-    class Meta:
-        unique_together = (('PROFESSOR_ID'), ('NAME'))
-    PROFESSOR_ID = models.AutoField(primary_key = True, editable=False)
+    # class Meta:
+    #     unique_together = (('PROFESSOR_ID'), ('NAME'))
+    PROFESSOR = models.IntegerField(primary_key = True)
     NAME = models.CharField(max_length = 1000)
 
-    # def __str__(self):
-    #     return "%s the scenario" % self.name
+
+class Issues(models.Model):
+    class Meta:
+        unique_together = (('SCENARIO'),('ISSUE'),('VERSION'))
+    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name = "scenario_id5", default = None)
+    ISSUE = models.AutoField(default = None, primary_key = True, editable = False)
+    VERSION = models.ForeignKey('scenarios',on_delete = models.CASCADE, related_name = "version_id5", default = None)
+    NAME = models.CharField(max_length = 1000)
+    IMPORTANCE_SCORE = models.FloatField(validators = [MinValueValidator(0.0)])
+
+
+class coverage(models.Model):
+    class Meta:
+        unique_together = (('STAKEHOLDER'),('ISSUE'))
+    STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name = "coverage2", default = None)
+    ISSUE = models.ForeignKey('Issues', on_delete = models.CASCADE, related_name = "coverage1", default = None)
+    # VERSION_ID = models.ForeignKey('stakeholders',on_delete = models.CASCADE, related_name = "coverage3", default = None)
+    COVERAGE_SCORE = models.FloatField(validators = [MinValueValidator(0.0)])
+
+class action_page(models.Model):
+    class Meta:
+        unique_together = (('PAGE'),('CHOICE'))
+    PAGE = models.ForeignKey('pages',on_delete = models.CASCADE, related_name = 'action_page1')
+    CHOICE = models.TextField()
+    RESULT_PAGE = models.IntegerField()
+
+class assigned_to(models.Model):
+    class Meta:
+        unique_together = (('STUDENT'),('SCENARIO'),('VERSION'))
+    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="assigned_to1")
+    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="assigned_to2")
+    VERSION = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "assigned_to3")
