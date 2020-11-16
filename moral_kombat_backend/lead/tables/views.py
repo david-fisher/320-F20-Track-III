@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from tables.models import *
 from .serializer import *
 from django.core import serializers
-from django.db.models import F
+from rest_framework import status  
 import json
 # DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer
 
@@ -220,14 +220,12 @@ class logistics_page(APIView):
                 return Response(serializer2.data) 
         return Response(serializer2.errors)
 
-
-
-
+#change a list of issue objects at URL /multi_issue?scenario_id=<insert id number here>
 class multi_issue(APIView):
     def put(self, request, *args, **kwargs):
-        SCENARIO= self.request.query_params.get('scenario_id')
+        SCENARIO = self.request.query_params.get('scenario_id')
         if SCENARIO == None:
-            raise Http404
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_issue in request.data:
             extant_issue = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_issue['ISSUE'])
             serializer = IssuesSerializer(extant_issue, data=updated_issue)
