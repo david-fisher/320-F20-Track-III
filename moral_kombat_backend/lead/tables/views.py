@@ -246,9 +246,38 @@ class dashboard_page(APIView):
             scenario["ASSOCIATED_COURSES"] = course_dict_array
             logistics.append(scenario)
                 
-
         return Response(logistics)
 
+        """format:
+        {
+        "NAME": "",
+        "IS_FINISHED": false,
+        "PUBLIC": false,
+        "NUM_CONVERSATION": null,
+        "PROFESSOR": null
+        "COURSES":[
+            COURSE: 1
+            NAME: "325"
+        ]
+        }"""
+
+        def post(self, request, *args, **kwargs):
+            #save the scenario
+            scenario_serializer = ScenariosSerializer(data = request.data)
+            if scenario_serializer.is_valid():
+                scenario_serializer.save();
+            
+            #get array of courses from frontend
+            COURSES = request.data['COURSES']
+            for course in COURSES:
+                scenarios_for_dict = {
+                    "COURSE": course['COURSE']
+                    "SCENARIO": request.data['SCENARIO'],
+                    "VERSION": request.data['VERSION']
+                }
+                
+                
+            
 
 #change a list of issue objects at URL /multi_issue?scenario_id=<insert id number here>
 class multi_issue(APIView):
