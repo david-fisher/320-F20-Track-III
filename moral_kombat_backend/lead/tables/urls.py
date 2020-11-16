@@ -32,7 +32,8 @@ router.register('api/issues', IssuesViewSet, 'issues')
 urlpatterns = [
     path('allScenarios', allScenariosViewSet.as_view()),
     #url(r'^logistics/(?P<pk>[0-9]+)$', logistics_page.as_view()),
-    path('logistics', logistics_page.as_view())
+    path('logistics', logistics_page.as_view()),
+    path('multi_issue', multi_issue.as_view())
 ] 
 
 urlpatterns += router.urls

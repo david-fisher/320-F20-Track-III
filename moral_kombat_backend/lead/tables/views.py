@@ -226,8 +226,15 @@ class logistics_page(APIView):
 class multi_issue(APIView):
     def put(self, request, *args, **kwargs):
         SCENARIO= self.request.query_params.get('scenario_id')
-        
-        return Response(serializer2.errors)
+        if SCENARIO == None:
+            raise Http404
+        for updated_issue in request.data:
+            extant_issue = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_issue['ISSUE'])
+            serializer = IssuesSerializer(extant_issue, data=updated_issue)
+            if serializer.is_valid(): 
+                serializer.save()
+        issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
+        return Response(issues_query)
 
 
 
