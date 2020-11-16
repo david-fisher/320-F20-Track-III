@@ -220,6 +220,36 @@ class logistics_page(APIView):
                 return Response(serializer2.data) 
         return Response(serializer2.errors)
 
+#returns list of scenarios for given professor along with list of associated courses
+class dashboard_page(APIView):
+    def get(self, request, *args, **kwargs):
+        
+        #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
+        PROFESSOR = self.request.query_params.get('professor_id')
+        #TODO check that id != none
+        #get all scenarios belonging to this professor
+        scenario_query = scenarios.objects.filter(PROFESSOR = PROFESSOR).values()
+        #loop through scenarios and append required information (course, page info)
+        logistics = []
+        for scenario in scenario_query:
+            scenarios_for_query = scenarios_for.objects.filter(SCENARIO = scenario['SCENARIO']).values()
+            course_id_array = []
+            for x in scenarios_for_query:
+                course_id_array.append(x['COURSE_id'])
+
+            course_dict_array = []
+            for x in course_id_array:
+                course = courses.objects.get(COURSE= x)
+                course_dict = {"COURSE":course.COURSE, "NAME": course.NAME}
+                course_dict_array.append(course_dict)
+                    
+            scenario["ASSOCIATED_COURSES"] = course_dict_array
+            logistics.append(scenario)
+                
+
+        return Response(logistics)
+
+
 #change a list of issue objects at URL /multi_issue?scenario_id=<insert id number here>
 class multi_issue(APIView):
     def put(self, request, *args, **kwargs):
