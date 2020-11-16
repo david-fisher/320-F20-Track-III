@@ -14,7 +14,7 @@ class scenarios(models.Model):
     NUM_CONVERSATION = models.IntegerField(default = 0)
     PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenarios1", default = 1)
     IS_FINISHED = models.BooleanField(default = False)
-    DATE_CREATED = models.DateField(null = True)
+    DATE_CREATED = models.DateField.auto_now_add(null = True)
     # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)
     # def __str__(self):
     #     return "%s the scenario" % self.name
@@ -112,7 +112,7 @@ class responses(models.Model):
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses2")
     VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses3")
     COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="responses4")
-    DATE_TAKEN = models.DateField()
+    DATE_TAKEN = models.auto_now_addDateField()
     CHOICE = models.TextField()
 
 
@@ -240,7 +240,7 @@ class student_times(models.Model):
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="student_times2")
     VERSION = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
     COURSE = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
-    DATE_TAKEN = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
+    DATE_TAKEN = models.DateField.auto_now_add(null = True)
     PAGE = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
-    START_TIME = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
-    END_TIME = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
+    START_TIME = models.DateField(null = True)
+    END_TIME = models.DateField(null = True)
