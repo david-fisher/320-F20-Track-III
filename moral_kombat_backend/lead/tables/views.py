@@ -150,13 +150,14 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Professors_teachSerializer
 
-"""
-    -Get Scenario(all fields) ---------------
-	-Get course name associated with scenario
-	-Get Professor (creators) names associated with scenario
-	-get page_ID and title for latest version of each page
-"""
+class IssuesViewSet(viewsets.ModelViewSet):
+    queryset = Issues.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = IssuesSerializer
 
+#for getting/editing scenarios in dashboard
 class logistics_page(APIView):
     #http_method_names = [ 'POST,' 'PUT', 'DELETE']
 

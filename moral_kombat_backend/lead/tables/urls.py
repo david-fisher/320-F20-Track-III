@@ -25,6 +25,7 @@ router.register('api/scenarios_for', Scenarios_forViewSet, 'scenarios_for')
 router.register('api/generic_page', generic_pageViewSet, 'generic_page')
 router.register('api/professors_teach', Professors_teachViewSet, 'professors_teach')
 router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
+router.register('api/issues', IssuesViewSet, 'issues')
 # router.register('api/allScenarios', allScenariosViewSet.as_view())
 #router.register('api/logistics', logistics_page, 'logistics')
 
