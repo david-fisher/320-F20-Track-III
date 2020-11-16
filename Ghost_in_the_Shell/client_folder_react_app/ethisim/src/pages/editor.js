@@ -149,9 +149,7 @@ export default function Editor(props) {
       {id: 5, title: "Initial Reflection",component:null},
     ]
 
-    for(var i = 0; i < page_names_and_ids.length;i++){
-      setScenarioComponents(scenarioComponents.concat(page_names_and_ids[i]))
-    }
+
 
     const [scenarioComponents, setScenarioComponents] = useState(
         initialComponents
@@ -159,6 +157,11 @@ export default function Editor(props) {
     const [scenarioComponent, setScenarioComponent] = useState(
         scenarioComponents[0].component
     );
+
+    setScenarioComponents(scenarioComponents.concat(page_names_and_ids));
+    //for(var i = 0; i < page_names_and_ids.length;i++){
+      //setScenarioComponents(scenarioComponents.concat(page_names_and_ids[i]));
+    //}
 
     const deleteByID = (d_id) => {
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
@@ -168,10 +171,10 @@ export default function Editor(props) {
     function Sidebar() {
         const classes = useStyles();
 
-        const onClick = function (component,id,name) {
+        const onClick = function (component,id,title) {
             if (component.component === null){
-              p = null
-              c = null
+              var p = null
+              var c = null
               if(component.title === "Configure Issues"){
                 //getConfigureIssues
               }
@@ -180,7 +183,7 @@ export default function Editor(props) {
               }
               else{
                 handleGet(setGetValues,component.id);
-                currPageInfo = getValues.data
+                const currPageInfo = getValues.data
 
                 if(currPageInfo.PAGE_TYPE == "G"){
                   p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
@@ -209,11 +212,11 @@ export default function Editor(props) {
 
               }
               let newScenarioComponents = [...scenarioComponents]
-              newScenarioComponents.find(x => x.id === component.id).component = c
+              newScenarioComponents.find(x => x.id === id).component = c
               setScenarioComponents(newScenarioComponents)
             }
 
-            setScenarioComponent(component);
+            setScenarioComponent(scenarioComponents.find(x => x.id === id));
         };
 
         const addNewPage = (id, title, componentType) => {
