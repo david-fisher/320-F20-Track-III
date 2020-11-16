@@ -202,20 +202,26 @@ class logistics_page(APIView):
         return Response(logistics)
     
     """format:
-        {
-        "SCENARIO": 1
-        "VERSION": 0
-        "NAME": "Best Test",
+    {
+        "SCENARIO": 1,
+        "VERSION": 0,
+        "NAME": "Pizza is Good!",
         "IS_FINISHED": false,
         "PUBLIC": false,
         "NUM_CONVERSATION": 5,
         "PROFESSOR": 12345678,
-        "COURSES":[
-            {"COURSE": 1},
-            {"COURSE": 2},
-            {"COURSE": 3}
+        "COURSES": 
+        [
+            {
+                "COURSE": 2,
+                "NAME": "590G"
+            },
+            {
+                "COURSE": 1,
+                "NAME": "320"
+            }
         ]
-        }
+    }
         """
     #a put request for editing scenarios. must provide scenario_id in url thusly: /logistics?scenario_id=<insert id number here>
     def put(self, request, *args, **kwargs):
