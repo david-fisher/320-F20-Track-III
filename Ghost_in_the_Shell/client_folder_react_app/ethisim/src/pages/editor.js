@@ -114,10 +114,10 @@ const addPage = (array, id, title, componentType, scenarioData) => {
 };*/
 
 //Sidebar Components
-var startList = [
-    { id: 0, title: 'Logistics', type: 'Logistics' },
-    { id: 1, title: 'Configure Issues', type: 'Configure Issues' },
-    { id: 2, title: 'Conversation Editor', type: 'Conversation Editor' },
+var initialComponents = [
+    { id: 0, title: 'Logistics', component: <Logistics/> },
+    { id: 1, title: 'Configure Issues', component: <ConfigureIssues/> },
+    { id: 2, title: 'Conversation Editor', component: <ConversationEditor/> },
 ];
 
 function handlePost(setPostValues,postReqBody,s_id){
@@ -158,7 +158,6 @@ export default function Editor(props) {
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
 
-    //const created_pages = props.page_IDS
 
     const [getValues,setGetValues] = useState({
       data: null,
@@ -171,27 +170,12 @@ export default function Editor(props) {
       error: null,
     })
 
-    //Fake fetch of scenarioData with components
-    //let fetchedComponents = mockUnfinishedScenarioData.components;
-    //let combinedComponents = startList.concat(fetchedComponents);
+    var page_names_and_ids = [
+      {page_id: 1, page_name: "Introduction"},
+      {page_id: 2, page_name: "Initial Action"},
+      {page_id: 3, page_name: "Initial Reflection"},
+    ]
 
-    function handleAllGets(){
-      const ids = [1,4]
-      var initComponents = []
-      for(var i =0 ; i < ids.length;i++){
-        handleGet(setGetValues,ids[i]);
-
-        console.log(getValues.data);
-        initComponents.concat(getValues.data)
-      }
-      return initComponents
-    }
-
-    //Once herlin gets the Logistics page and page_names and page_ids:
-    //Fill out side nav bar with page_names
-    //Don't forget to have page_ids associated with them
-
-    //const initialComponents = handleAllGets();
 
     const [scenarioComponents, setScenarioComponents] = useState(
         initialComponents
