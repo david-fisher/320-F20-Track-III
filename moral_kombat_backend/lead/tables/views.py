@@ -8,7 +8,7 @@ from .serializer import *
 from django.core import serializers
 from django.db.models import F
 import json
-# DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Choices_forSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer, Stakeholder_inSerializer
+# DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer
 
 class DemographicsViewSet(viewsets.ModelViewSet):
     queryset = demographics.objects.all()
@@ -54,14 +54,6 @@ class PagesViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = PagesSerializer
 
-# Choices_For ViewSet
-class Choices_forViewSet(viewsets.ModelViewSet):
-    queryset = choices_for.objects.all()
-    permissions_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = Choices_forSerializer
-
 # Stakeholder_page Viewset
 class Stakeholder_pageViewSet(viewsets.ModelViewSet):
     queryset = stakeholder_page.objects.all()
@@ -93,14 +85,6 @@ class ConversationsViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = ConversationsSerializer
-
-# Stakeholders_in ViewSet
-class Stakeholder_inViewSet(viewsets.ModelViewSet):
-    queryset = stakeholder_in.objects.all()
-    permissions_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = Stakeholder_inSerializer
 
 class ReflectionsTakenViewSet(viewsets.ModelViewSet):
     queryset = reflections_taken.objects.all()
