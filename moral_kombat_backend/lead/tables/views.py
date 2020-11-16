@@ -202,7 +202,7 @@ class logistics_page(APIView):
 
     #a put request for editing scenarios. must provide scenario_id in url thusly: /logistics?scenario_id=<insert id number here>
     def put(self, request, *args, **kwargs):
-        SCENARIO_ID = self.request.query_params.get('scenario_id')
+        SCENARIO = self.request.query_params.get('scenario_id')
         extant_scenario  = scenarios.objects.get(SCENARIO_ID=SCENARIO_ID)
         updated_scenario = request.data
         serializer = ScenariosSerializer(extant_scenario, data=updated_scenario)
@@ -217,6 +217,15 @@ class logistics_page(APIView):
             if serializer2.is_valid():
                 serializer2.save()
                 return Response(serializer2.data) 
+        return Response(serializer2.errors)
+
+
+
+
+class multi_issue(APIView):
+    def put(self, request, *args, **kwargs):
+        SCENARIO= self.request.query_params.get('scenario_id')
+        
         return Response(serializer2.errors)
 
 

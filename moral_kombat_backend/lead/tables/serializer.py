@@ -22,7 +22,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
 class ScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO', 'VERSION', 'NAME', 'SUB_TITLE', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATIONS', 'PROFESSOR', 'FIRST_PAGE')
+        fields = ('SCENARIO', 'VERSION', 'NAME', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATION', 'PROFESSOR')
 
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,7 +84,7 @@ class ResponsesSerializer(serializers.ModelSerializer):
 class allScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO', 'NAME', 'SUB_TITLE', 'IS_FINISHED', 'PROFESSOR')
+        fields = ('SCENARIO', 'NAME', 'IS_FINISHED', 'PROFESSOR')
 
 class Scenarios_forSerializer(serializers.ModelSerializer):
     class Meta:
@@ -111,7 +111,6 @@ class LogisticsSerializer(serializers.ModelSerializer):
                 'NAME',  
                 'IS_FINISHED',
                 'PUBLIC',
-                'NUM_CONVERSATIONS',
+                'NUM_CONVERSATION',
                 'PROFESSOR', 
-                'FIRST_PAGE',
                 )"""
