@@ -27,7 +27,7 @@ class ScenariosSerializer(serializers.ModelSerializer):
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = pages
-        fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'PAGE_BODY', 'SCENARIO', 'VERSION', 'NEXT_PAGE')
+        fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'SCENARIO', 'VERSION', 'NEXT_PAGE')
 
 class Stakeholder_pageSerializer(serializers.ModelSerializer):
     class Meta:
