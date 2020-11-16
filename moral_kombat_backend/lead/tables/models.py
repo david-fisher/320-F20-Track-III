@@ -167,7 +167,9 @@ class demographics(models.Model):
     ('SO', 'SOPHOMORE'),
     ('JK', 'JUNIOR'),
     ('SE', 'SENIOR'),
-    ('OT', 'OTHER'),
+    ('SS', 'SUPER_SENIOR'),
+    ('GR', 'GRADUATE'),
+    ('OT', 'OTHER')
     )
     GRADE = models.CharField(max_length = 2, choices = GRADE_CHOICES)
     GENDER_CHOICES = (
@@ -230,3 +232,15 @@ class assigned_to(models.Model):
     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="assigned_to1")
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="assigned_to2")
     VERSION = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "assigned_to3")
+
+class student_times(models.Model):
+    class Meta:
+        unique_together = (('STUDENT'),('SCENARIO'),('VERSION'),('COURSE'),('DATE_TAKEN'),('PAGE'))
+    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="student_times1")
+    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="student_times2")
+    VERSION = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
+    COURSE = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
+    DATE_TAKEN = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
+    PAGE = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
+    START_TIME = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
+    END_TIME = models.ForeignKey('scenarios',on_delete = models.CASCADE,related_name = "student_times3")
