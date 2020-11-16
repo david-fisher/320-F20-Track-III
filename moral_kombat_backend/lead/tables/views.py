@@ -271,7 +271,7 @@ class dashboard_page(APIView):
             COURSES = request.data['COURSES']
             for course in COURSES:
                 scenarios_for_dict = {
-                    "COURSE": course['COURSE']
+                    "COURSE": course['COURSE'],
                     "SCENARIO": request.data['SCENARIO'],
                     "VERSION": request.data['VERSION']
                 }
