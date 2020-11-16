@@ -1,8 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import PropTypes from 'prop-types';
+import DeletePopup from '../DeleteWarnings/DeletePopup';
+//import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
     pageButton: {
@@ -12,15 +13,15 @@ const useStyles = makeStyles((theme) => ({
         borderColor: theme.palette.primary.light,
         textTransform: 'unset',
     },
-    deleteButtonContainer: {
-        display: 'flex',
-        alignItems: 'center',
-    },
     deleteButton: {
         minWidth: '40px',
         border: '3px solid',
         borderColor: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.light,
+    },
+    deleteButtonContainer: {
+        display: 'flex',
+        alignItems: 'center',
     },
 }));
 
@@ -37,10 +38,6 @@ export default function NavSideBarNode(props) {
     NavSideBarNode.propTypes = props.data;
     const data = props;
     const { onClick, deleteByID, id, title, component } = data;
-
-    function handleDelete() {
-        deleteByID(id);
-    }
 
     function pageType(title) {
         if (
@@ -77,15 +74,7 @@ export default function NavSideBarNode(props) {
                         </Button>
                     </Grid>
 
-                    <Grid item xs={2} className={classes.deleteButtonContainer}>
-                        <Button
-                            className={classes.deleteButton}
-                            color="primary"
-                            onClick={handleDelete}
-                        >
-                            <DeleteForeverIcon />
-                        </Button>
-                    </Grid>
+                    <DeletePopup id={id} deleteByID={deleteByID} />
                 </Grid>
             );
         }
