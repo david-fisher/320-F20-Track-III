@@ -119,12 +119,12 @@ class ResponsesViewSet(viewsets.ModelViewSet):
     permission_classe = [permissions.AllowAny]
     serializer_class = ResponsesSerializer
 
-#this allows for filerting scenarios by professor_ID
+#this allows for filerting scenarios by professor_id
 class allScenariosViewSet(generics.ListAPIView):
     serializer_class = allScenariosSerializer
     queryset = scenarios.objects.all()
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['PROFESSOR_ID', 'IS_FINISHED']
+    filterset_fields = ['PROFESSOR', 'IS_FINISHED']
     
 # Scenarios_for ViewSet
 class Scenarios_forViewSet(viewsets.ModelViewSet):
@@ -164,30 +164,30 @@ class logistics_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
-        SCENARIO_ID = self.request.query_params.get('scenario_id')
+        SCENARIO = self.request.query_params.get('scenario_id')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario = scenarios.objects.get(SCENARIO_ID = SCENARIO_ID)
+        scenario = scenarios.objects.get(SCENARIO = SCENARIO)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
 
-        scenarios_for_query = scenarios_for.objects.filter(SCENARIO_ID=scenario_dict['SCENARIO_ID']).values()
+        scenarios_for_query = scenarios_for.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
         course_id_array = []
         for x in scenarios_for_query:
             print(x)
-            course_id_array.append(x['COURSE_ID_id'])
+            course_id_array.append(x['COURSE_id'])
 
         course_dict = {}
         for x in course_id_array:
-            course = courses.objects.get(COURSE_ID = x)
-            course_dict.update({"COURSE_ID":course.COURSE_ID, "NAME": course.NAME})
+            course = courses.objects.get(COURSE = x)
+            course_dict.update({"COURSE":course.COURSE, "NAME": course.NAME})
                 
-        pages_query = pages.objects.filter(SCENARIO_id=scenario_dict['SCENARIO_ID']).values()
+        pages_query = pages.objects.filter(SCENARIO_id=scenario_dict['SCENARIO']).values()
         
         page_array = []
         for page in pages_query:
             cropped_page = {}
-            cropped_page['PAGE'] = page['PAGE_ID']
+            cropped_page['PAGE'] = page['PAGE']
             cropped_page['PAGE_TITLE'] = page['PAGE_TITLE']
             page_array.append(cropped_page) 
 
@@ -203,22 +203,27 @@ class logistics_page(APIView):
 
     #a put request for editing scenarios. must provide scenario_id in url thusly: /logistics?scenario_id=<insert id number here>
     def put(self, request, *args, **kwargs):
-        SCENARIO = self.request.query_params.get('scenario_id')
-        extant_scenario  = scenarios.objects.get(SCENARIO_ID=SCENARIO_ID)
-        updated_scenario = request.data
-        serializer = ScenariosSerializer(extant_scenario, data=updated_scenario)
-        if serializer.is_valid(): 
-            serializer.save()
-            version = serializer.data['VERSION_ID']
-            scenarios_for_dict = ScenariosSerializer(request.data).data
-            scenario_for_dict.update({'SCENARIO_ID': SCENARIO_ID})
-            scenario_for_dict.update({'VERSION_ID': version})
-            print(scenarios_for_dict)
-            serializer2 = scenario_for_serializer(data=scenario_for_dict)
-            if serializer2.is_valid():
-                serializer2.save()
-                return Response(serializer2.data) 
-        return Response(serializer2.errors)
+        #save the scenario
+        extant_scenario = scenarios.objects.get(SCENARIO = request.data['SCENARIO'])
+        scenario_serializer = ScenariosSerializer(extant_scenario, data = request.data)
+        if scenario_serializer.is_valid():
+            scenario_serializer.save()
+
+        #delete currently assocated classes
+        scenarios_for.objects.filter(SCENARIO = scenario_serializer['SCENARIO']).delete()
+        #get array of courses from frontend
+        COURSES = request.data['COURSES']
+        for course in COURSES:
+            scenarios_for_dict = {
+                "COURSE" : course['COURSE'],
+                "SCENARIO" : scenario_serializer['SCENARIO'],
+                "VERSION" : scenario_serializer['VERSION']
+            }
+        #save the classes associated with it in scenarios_for
+            for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
+            if for_serializer.is_valid():
+                for_serializer.save()
+
 
 #returns list of scenarios for given professor along with list of associated courses
 class dashboard_page(APIView):
@@ -243,7 +248,7 @@ class dashboard_page(APIView):
                 course_dict = {"COURSE":course.COURSE, "NAME": course.NAME}
                 course_dict_array.append(course_dict)
                     
-            scenario["ASSOCIATED_COURSES"] = course_dict_array
+            scenario["COURSES"] = course_dict_array
             logistics.append(scenario)
                 
         return Response(logistics)
@@ -282,8 +287,9 @@ class dashboard_page(APIView):
             if for_serializer.is_valid():
                 for_serializer.save()
 
-        return Response(request.data)
-                
+        scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_serializer['SCENARIO']))
+        scenario_dict['COURSES'] = request.data['COURSES']
+        return Response(scenario_dict)
                 
             
 
@@ -301,31 +307,3 @@ class multi_issue(APIView):
         issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
         return Response(issues_query)
 
-
-
-
-        """logistics = {}
-        for senarios in senarios.objects.all:
-            logistics[]"""
-        #scenario_list = serializers.serialize('json', scenario_query)
-        #logistics = serializers.serialize('json', self.get_queryset())
-        #logistics = scenarios.objects.get(SCENARIO_ID = 12)
-        #logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
-        #logistics = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID)
-        #logistics = scenarios.objects.raw('SELECT * FROM "public"."tables_scenarios" INNER JOIN "public"."tables_scenarios_for" ON "public"."tables_scenarios"."SCENARIO_ID" = "public"."tables_scenarios_for"."SCENARIO_ID_id"')
-
-        #logistics = serializers.serialize('json', scenarios.objects.all())
-        #logistics = logistics.get(SCENARIO_ID = 12)
-        
-        #logistics = LogisticsSerializer(logistics.values())
-
-        """logistics.append({"SCENARIO_ID": scenario.SCENARIO_ID,
-                             "VERSION_ID": scenario.VERSION_ID,
-                             "NAME": scenario.NAME,
-                             "SUB_TITLE": scenario.SUB_TITLE,
-                             "IS_FINISHED": scenario.IS_FINISHED,
-                             "PUBLIC": scenario.PUBLIC,
-                             "NUM_CONVERSATIONS": scenario.NUM_CONVERSATIONS,
-                             "PROFESSOR_ID": scenario.PROFESSOR_ID,
-                             "FIRST_PAGE": scenario.FIRST_PAGE
-                            })"""
