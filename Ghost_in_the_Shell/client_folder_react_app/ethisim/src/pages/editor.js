@@ -84,34 +84,6 @@ ENTERS EDITOR PAGE with prop = scenario_ID
   c) fill out component null with new page component
 */
 
-/*
-const addPage = (array, id, title, componentType, scenarioData) => {
-    var c = null;
-    switch (componentType) {
-        case 'Logistics':
-            c = <Logistics data={scenarioData} />;
-            break;
-        case 'Configure Issues':
-            c = <ConfigureIssues />;
-            break;
-        case 'Conversation Editor':
-            c = <ConversationEditor />;
-            break;
-        case 'Generic':
-            c = <Generic />;
-            break;
-        case 'Reflection':
-            c = <Reflection />;
-            break;
-        case 'Action':
-            c = <Action />;
-            break;
-        default:
-            c = <Typography>Error</Typography>;
-    }
-    universalPost()
-    return array.concat({ id, title, component: c });
-};*/
 
 //Sidebar Components
 var initialComponents = [
@@ -158,6 +130,7 @@ export default function Editor(props) {
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
 
+    const scenario_ID = props.scenario_ID
 
     const [getValues,setGetValues] = useState({
       data: null,
@@ -171,11 +144,14 @@ export default function Editor(props) {
     })
 
     var page_names_and_ids = [
-      {page_id: 1, page_name: "Introduction"},
-      {page_id: 2, page_name: "Initial Action"},
-      {page_id: 3, page_name: "Initial Reflection"},
+      {id: 3, title: "Introduction", component:null},
+      {id: 4, title: "Initial Action", component:null},
+      {id: 5, title: "Initial Reflection",component:null},
     ]
 
+    for(var i = 0; i < page_names_and_ids.length;i++){
+      setScenarioComponents(scenarioComponents.concat(page_names_and_ids[i]))
+    }
 
     const [scenarioComponents, setScenarioComponents] = useState(
         initialComponents
@@ -192,7 +168,51 @@ export default function Editor(props) {
     function Sidebar() {
         const classes = useStyles();
 
-        const onClick = function (component) {
+        const onClick = function (component,id,name) {
+            if (component.component === null){
+              p = null
+              c = null
+              if(component.title === "Configure Issues"){
+                //getConfigureIssues
+              }
+              else if(component.title === "Conversation Editor"){
+                //getConversationEditor
+              }
+              else{
+                handleGet(setGetValues,component.id);
+                currPageInfo = getValues.data
+
+                if(currPageInfo.PAGE_TYPE == "G"){
+                  p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+                  page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
+                  version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
+                  body: currPageInfo.BODY,bodies: currPageInfo.BODIES,created: false}
+                  c = <Generic {...p}></Generic>;
+
+                }
+                else if(currPageInfo.PAGE_TYPE == "A"){
+                  p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+                  page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
+                  version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
+                  body: currPageInfo.BODY,choice1:currPageInfo.CHOICES[0].CHOICE,
+                  r1:currPageInfo.CHOICES[0].RESULT_PAGE,choice2:currPageInfo.CHOICES[1].CHOICE,
+                  r2:currPageInfo.CHOICES[1].RESULT_PAGE,created: false}
+                  c = <Action {...p}></Action>;
+                }
+                else if(currPageInfo.PAGE_TYPE == "R"){
+                  p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+                  page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
+                  version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
+                  body: currPageInfo.BODY,reflection_questions:currPageInfo.REFLECTION_QUESTIONS,created: false}
+                  c = <Reflection {...p}></Reflection>;
+                }
+
+              }
+              let newScenarioComponents = [...scenarioComponents]
+              newScenarioComponents.find(x => x.id === component.id).component = c
+              setScenarioComponents(newScenarioComponents)
+            }
+
             setScenarioComponent(component);
         };
 
@@ -207,13 +227,13 @@ export default function Editor(props) {
                     c = <Generic {...p}></Generic>;
                     break;
                 case 'Reflection':
-                    p = {postFunction: handlePost, page_id: 1,page_type: "A",
+                    p = {postFunction: handlePost, page_id: 1,page_type: "R",
                     page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
-                    body: "BODYTEXTREFLECTION",reflection_questionts: ["q1"],created: true}
+                    body: "BODYTEXTREFLECTION",reflection_questions: ["q1"],created: true}
                     c = <Reflection {...p}></Reflection>;
                     break;
                 case 'Action':
-                    p = {postFunction: handlePost, page_id: 1,page_type: "R",
+                    p = {postFunction: handlePost, page_id: 1,page_type: "A",
                     page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
                     body:"BODYTEXTACTION",choice1: "OPTION1",r1:4,choice2: "OPTION2",r2: 3,created: true}
                     c = <Action {...p} ></Action>;
@@ -222,7 +242,7 @@ export default function Editor(props) {
                     c = <Typography>Error</Typography>;
             }
             setScenarioComponents(
-                scenarioComponents.concat({ id, title, component: c })
+                scenarioComponents.concat({ id:id, title: title, component: c })
             );
         };
 

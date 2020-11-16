@@ -34,9 +34,9 @@ NavSideBarNode.propTypes = {
 
 export default function NavSideBarNode(props) {
     const classes = useStyles();
-    NavSideBarNode.propTypes = props.data;
-    const data = props;
-    const { onClick, deleteByID, id, title, component } = data;
+    //NavSideBarNode.propTypes = props.data;
+    //const data = props;
+    const { onClick, deleteByID, id, title, component } = props;
 
     function handleDelete() {
         deleteByID(id);
@@ -91,7 +91,7 @@ export default function NavSideBarNode(props) {
     }
 
     function handleDisplayComponent() {
-        onClick(component);
+        onClick(component,id,title);
     }
 
     return <div>{pageType(title)}</div>;
