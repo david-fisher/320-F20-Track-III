@@ -250,31 +250,39 @@ class dashboard_page(APIView):
 
         """format:
         {
-        "NAME": "",
+        "NAME": "Best Test",
         "IS_FINISHED": false,
         "PUBLIC": false,
-        "NUM_CONVERSATION": null,
-        "PROFESSOR": null
+        "NUM_CONVERSATION": 5,
+        "PROFESSOR": 12345678,
         "COURSES":[
-            COURSE: 1
-            NAME: "325"
+            {"COURSE": 1},
+            {"COURSE": 2},
+            {"COURSE": 3}
         ]
-        }"""
+        }
+        """
 
-        def post(self, request, *args, **kwargs):
-            #save the scenario
-            scenario_serializer = ScenariosSerializer(data = request.data)
-            if scenario_serializer.is_valid():
-                scenario_serializer.save();
-            
-            #get array of courses from frontend
-            COURSES = request.data['COURSES']
-            for course in COURSES:
-                scenarios_for_dict = {
-                    "COURSE": course['COURSE'],
-                    "SCENARIO": request.data['SCENARIO'],
-                    "VERSION": request.data['VERSION']
-                }
+    def post(self, request, *args, **kwargs):
+        #save the scenario
+        scenario_serializer = ScenariosSerializer(data = request.data)
+        if scenario_serializer.is_valid():
+            scenario_serializer.save()
+        
+        #get array of courses from frontend
+        COURSES = request.data['COURSES']
+        for course in COURSES:
+            scenarios_for_dict = {
+                "COURSE" : course['COURSE'],
+                "SCENARIO" : scenario_serializer['SCENARIO'],
+                "VERSION" : scenario_serializer['VERSION']
+            }
+
+            for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
+            if for_serializer.is_valid():
+                for_serializer.save()
+
+        return Response(request.data)
                 
                 
             
