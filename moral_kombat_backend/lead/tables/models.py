@@ -35,7 +35,7 @@ class pages(models.Model):
     PAGE_TITLE = models.CharField(max_length = 1000)
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages1")
     VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages2")
-    NEXT_PAGE = models.OneToOneField('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'pages3')
+    NEXT_PAGE = models.OneToOneField('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'pages3', null=True)
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
 
@@ -224,7 +224,7 @@ class action_page(models.Model):
         unique_together = (('PAGE'),('CHOICE'))
     PAGE = models.ForeignKey('pages',on_delete = models.CASCADE, related_name = 'action_page1')
     CHOICE = models.TextField()
-    RESULT_PAGE = models.IntegerField()
+    RESULT_PAGE = models.IntegerField(null=True)
 
 class assigned_to(models.Model):
     class Meta:
