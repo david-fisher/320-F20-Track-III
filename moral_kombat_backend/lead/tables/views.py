@@ -337,6 +337,11 @@ class multi_issue(APIView):
 
 #for use in the pages flowchart, input is an array of page objects
 class flowchart(APIView):
+    #get all page objects given a scenario id
+    def get(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('scenario_id')
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        return Response(pages_query)
 
     #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
