@@ -370,16 +370,22 @@ class flowchart(APIView):
             #save updated choices within action pages  
             if updated_page['PAGE_TYPE'] == 'A':
                 for updated_choice in updated_page['ACTION']:
-                    extant_choice = action_page.objects.get(id=extant_choice['id']) 
+                    extant_choice = action_page.objects.get(id=updated_choice['id']) 
                     action_serializer = Action_pageSerializer(extant_choice, updated_choice)
-                    if not action_serializer.valid():
+                    if not action_serializer.is_valid():
+                        print("error with PUTing choices")
                         return Response(action_serializer.errors)
                     action_serializer.save()
             #save the page itself    
             extant_page = pages.objects.get(SCENARIO = SCENARIO, PAGE = updated_page['PAGE'])
             serializer = PagesSerializer(extant_page, data=updated_page)
-            if serializer.is_valid(): 
-                serializer.save()
-        #return query with newly saved pages        
-        pages_query = pages.objects.filter(SCENARIO = SCENARIO).values()
+            if not serializer.is_valid():
+                print("error with PUTing pages")
+                return Response(serializer.errors)
+            serializer.save()
+        #return query with newly saved pages     
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        for page in pages_query:
+            if page['PAGE_TYPE'] == 'A':
+                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
         return Response(pages_query)
