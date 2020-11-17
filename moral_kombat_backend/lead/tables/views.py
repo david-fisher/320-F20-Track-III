@@ -344,8 +344,8 @@ class flowchart(APIView):
         if SCENARIO == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_page in request.data:
-            extant_page = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_page['PAGE'])
-            serializer = PagesSerializer(extant_issue, data=updated_issue)
+            extant_page = pages.objects.get(SCENARIO = SCENARIO, PAGE = updated_page['PAGE'])
+            serializer = PagesSerializer(extant_page, data=updated_page)
             if serializer.is_valid(): 
                 serializer.save()
         pages_query = pages.objects.filter(SCENARIO = SCENARIO).values()
