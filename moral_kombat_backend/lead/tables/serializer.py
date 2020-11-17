@@ -107,16 +107,7 @@ class IssuesSerializer(serializers.ModelSerializer):
         model = Issues
         fields = ('SCENARIO', 'ISSUE', 'VERSION', 'NAME', 'IMPORTANCE_SCORE')
 
-class LogisticsSerializer(serializers.ModelSerializer):
-    logistics = Scenarios_forSerializer() 
+class Action_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = scenarios
-        fields = '__all__'
-        """fields = ('SCENARIO', 
-                'VERSION', 
-                'NAME',  
-                'IS_FINISHED',
-                'PUBLIC',
-                'NUM_CONVERSATION',
-                'PROFESSOR', 
-                )"""
+        model = Issues
+        fields = ('id', 'PAGE', 'CHOICE', 'RESULT_PAGE')

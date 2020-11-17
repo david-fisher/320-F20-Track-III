@@ -157,6 +157,13 @@ class IssuesViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = IssuesSerializer
 
+class Action_pageViewSet(viewsets.ModelViewSet):
+    queryset = action_page.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Action_pageSerializer
+
 #for getting/editing scenarios in dashboard
 class logistics_page(APIView):
     #http_method_names = [ 'POST,' 'PUT', 'DELETE']
@@ -341,6 +348,11 @@ class flowchart(APIView):
     def get(self, request, *args, **kwargs):
         SCENARIO = self.request.query_params.get('scenario_id')
         pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        for page in pages_query:
+            if page['PAGE_TYPE'] == 'A':
+                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE'])
+
+
         return Response(pages_query)
 
     #update the next_page field of all page objects
