@@ -335,3 +335,18 @@ class multi_issue(APIView):
         issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
         return Response(issues_query)
 
+#for use in the pages flowchart, input is an array of page objects
+class flowchart(APIView):
+
+    #update the next_page field of all page objects
+    def put(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('scenario_id')
+        if SCENARIO == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+        for updated_page in request.data:
+            extant_page = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_page['PAGE'])
+            serializer = PagesSerializer(extant_issue, data=updated_issue)
+            if serializer.is_valid(): 
+                serializer.save()
+        pages_query = pages.objects.filter(SCENARIO = SCENARIO).values()
+        return Response(pages_query)
