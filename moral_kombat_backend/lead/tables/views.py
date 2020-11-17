@@ -365,10 +365,21 @@ class flowchart(APIView):
         SCENARIO = self.request.query_params.get('scenario_id')
         if SCENARIO == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+  
         for updated_page in request.data:
+            #save updated choices within action pages  
+            if updated_page['PAGE_TYPE'] == 'A':
+                for updated_choice in updated_page['ACTION']:
+                    extant_choice = action_page.objects.get(id=extant_choice['id']) 
+                    action_serializer = Action_pageSerializer(extant_choice, updated_choice)
+                    if not action_serializer.valid():
+                        return Response(action_serializer.errors)
+                    action_serializer.save()
+            #save the page itself    
             extant_page = pages.objects.get(SCENARIO = SCENARIO, PAGE = updated_page['PAGE'])
             serializer = PagesSerializer(extant_page, data=updated_page)
             if serializer.is_valid(): 
                 serializer.save()
+        #return query with newly saved pages        
         pages_query = pages.objects.filter(SCENARIO = SCENARIO).values()
         return Response(pages_query)
