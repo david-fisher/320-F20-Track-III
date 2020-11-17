@@ -338,8 +338,12 @@ class multi_issue(APIView):
         for updated_issue in request.data:
             extant_issue = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_issue['ISSUE'])
             serializer = IssuesSerializer(extant_issue, data=updated_issue)
-            if serializer.is_valid(): 
+            if not serializer.is_valid(): 
+                return Response(serializer.errors)
+            try:
                 serializer.save()
+            except:
+                print('something went wrong with the PUT')
         issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
         return Response(issues_query)
 
@@ -351,7 +355,7 @@ class flowchart(APIView):
         pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
         for page in pages_query:
             if page['PAGE_TYPE'] == 'A':
-                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE'])
+                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
 
 
         return Response(pages_query)
