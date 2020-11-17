@@ -241,11 +241,13 @@ class logistics_page(APIView):
                 "SCENARIO" : request.data['SCENARIO'],
                 "VERSION" : request.data['VERSION']
             }
+            print(scenarios_for_dict)
         #save the classes associated with it in scenarios_for
             for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
             if for_serializer.is_valid():
                 for_serializer.save()
-
+                print('saved!')
+            print(for_serializer.errors)
         scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = request.data['SCENARIO'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         return Response(scenario_dict)

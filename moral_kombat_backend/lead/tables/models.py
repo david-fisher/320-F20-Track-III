@@ -8,7 +8,7 @@ class scenarios(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
     SCENARIO = models.AutoField(primary_key = True, editable=False)
-    VERSION = models.IntegerField(default=0, editable=False)
+    VERSION = models.IntegerField(default=1, editable=False)
     NAME = models.CharField(max_length = 1000)
     PUBLIC = models.BooleanField(default = False)
     NUM_CONVERSATION = models.IntegerField(default = 0)
