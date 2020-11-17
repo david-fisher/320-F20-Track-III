@@ -305,8 +305,9 @@ class dashboard_page(APIView):
     def post(self, request, *args, **kwargs):
         #save the scenario
         scenario_serializer = ScenariosSerializer(data = request.data)
-        if scenario_serializer.is_valid():
-            scenario_serializer.save()
+        if not (scenario_serializer.is_valid()):
+            return Response(scenario_serializer.errors)
+        scenario_serializer.save()
         scenario_dict = scenario_serializer.data
         
         #get array of courses from frontend

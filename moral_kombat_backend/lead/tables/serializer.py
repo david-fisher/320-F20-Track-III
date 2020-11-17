@@ -109,5 +109,5 @@ class IssuesSerializer(serializers.ModelSerializer):
 
 class Action_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Issues
+        model = action_page
         fields = ('id', 'PAGE', 'CHOICE', 'RESULT_PAGE')
