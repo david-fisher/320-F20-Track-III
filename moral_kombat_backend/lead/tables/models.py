@@ -33,6 +33,7 @@ class pages(models.Model):
     )
     PAGE_TYPE = models.CharField(max_length = 2, choices = PAGE_CHOICES)
     PAGE_TITLE = models.CharField(max_length = 1000)
+    PAGE_BODY = models.TextField()
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages1")
     VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages2")
     NEXT_PAGE = models.OneToOneField('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'pages3', null=True)

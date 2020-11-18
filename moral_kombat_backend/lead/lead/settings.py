@@ -94,9 +94,9 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'aikxhbva',
-        'USER': 'aikxhbva',
-        'PASSWORD': 'UP3Btp2s_pFDAmogBlyiVER6lqIJeOK6',
+        'NAME': 'cagxyqmx',
+        'USER': 'cagxyqmx',
+        'PASSWORD': 'Xft9tsKl9NJLoNJZfJOq_dUBS9i1VTgM',
         'HOST': 'ruby.db.elephantsql.com',
         'PORT': '5432',
     }

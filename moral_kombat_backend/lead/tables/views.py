@@ -459,7 +459,7 @@ class pages_page(APIView):
             return Response(page_data, status=status.HTTP_200_OK)
         
         # Check page.PAGE_TYPE = 'GENERIC'
-        if (page_type == 'G'):
+        if (page_type == 'G' or page_type == 'I'):
             generic_query = generic_page.objects.filter(PAGE = PAGE_ID).values()
             page_data.update(
                 {
@@ -490,10 +490,6 @@ class pages_page(APIView):
     def post(self, request):
 
         # Takes the scenario_id from the URL if the url has ?scenario_id=<id> at the end, no parameter passed return error 400
-
-        SCENARIO_ID = self.request.query_params.get('scenario_id')
-        if SCENARIO_ID != request.data["SCENARIO"]:
-            return Response(data="Failure: Scenario IDs does not match", status=status.HTTP_400_BAD_REQUEST)
 
         page_type = request.data["PAGE_TYPE"]
 
@@ -532,7 +528,7 @@ class pages_page(APIView):
             return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
         # If the request is a generic page  
-        if (page_type == 'G'):
+        if (page_type == 'G' or page_type == 'I'):
             pages_serializer = PagesSerializer(data=request.data)
             if pages_serializer.is_valid():
                 pages_serializer.save()
