@@ -76,7 +76,7 @@ export default function ConfigureIssues(props) {
                     </Typography>
                 </div>
                 <Button variant="contained" color="primary" onClick={getData}>
-                    <RefreshIcon className={classes.iconRefresh} />
+                    <RefreshIcon className={classes.iconRefreshLarge} />
                 </Button>
             </div>
         );
