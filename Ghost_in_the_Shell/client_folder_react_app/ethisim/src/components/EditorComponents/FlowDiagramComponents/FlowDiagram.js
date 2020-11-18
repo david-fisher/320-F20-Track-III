@@ -24,6 +24,7 @@ import LoadingSpinner from '../../LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
 import SuccessBanner from '../../Banners/SuccessBanner';
+import ErrorBanner from '../../Banners/ErrorBanner';
 
 const useStyles = makeStyles((theme) => ({
     errorContainer: {
@@ -204,6 +205,11 @@ export default function FlowDiagram(props) {
             setSuccessBannerMessage('Successfully Saved!');
         }
 
+        function onError() {
+            setErrorBannerFade(true);
+            setErrorBannerMessage('Failed to Save!');
+        }
+
         const updatedElements = elements.reduce((array, currentElement) => {
             if (isNode(currentElement)) {
                 let nodeElement = {
@@ -259,7 +265,7 @@ export default function FlowDiagram(props) {
                     });
                 } else {
                     //Set next page ID for all other node types
-                    elements.forEach((currElement) => {
+                    elements.some((currElement) => {
                         //currElement.source is type string, convert to number
                         if (
                             isEdge(currElement) &&
@@ -267,7 +273,9 @@ export default function FlowDiagram(props) {
                         ) {
                             //Set NEXT_PAGE id to type number
                             nodeElement.NEXT_PAGE = Number(currElement.target);
+                            return true;
                         }
+                        return false;
                     });
                 }
                 return array.concat(nodeElement);
@@ -278,7 +286,7 @@ export default function FlowDiagram(props) {
         put(
             setElementsPUT,
             endpointPUT + tempScenarioID,
-            null,
+            onError,
             onSuccess,
             updatedElements
         );
@@ -286,6 +294,9 @@ export default function FlowDiagram(props) {
 
     const [successBannerFade, setSuccessBannerFade] = useState(false);
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+
     useEffect(() => {
         const timeout = setTimeout(() => {
             setSuccessBannerFade(false);
@@ -332,6 +343,10 @@ export default function FlowDiagram(props) {
             <SuccessBanner
                 successMessage={successBannerMessage}
                 fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
             />
             <ReactFlow
                 elements={elements}
