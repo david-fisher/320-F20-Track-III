@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { Typography, Grid, Card, CardContent, Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import ShareIcon from '@material-ui/icons/Share';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PropTypes from 'prop-types';
+import ShareButton from './ShareButton';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -107,16 +107,7 @@ export default function ScenarioCard({
                 </Button>
             </Grid>
             <Grid className={classes.button} item xs={sizeOfShareButton}>
-                <Button
-                    className={classes.buttonText}
-                    variant="contained"
-                    color="primary"
-                >
-                    <ShareIcon />
-                    <Typography variant="subtitle1" noWrap>
-                        Share
-                    </Typography>
-                </Button>
+                <ShareButton />
             </Grid>
             {dataButton}
         </Grid>
