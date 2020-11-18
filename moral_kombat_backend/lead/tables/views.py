@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from tables.models import *
 from .serializer import *
 from django.core import serializers
-from django.db.models import F
+from rest_framework import status  
 import json
 # DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer
 
@@ -38,6 +38,11 @@ class ScenariosViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = ScenariosSerializer
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SingleScenarioViewSet(viewsets.ModelViewSet):
     def get(self, request):
@@ -119,12 +124,12 @@ class ResponsesViewSet(viewsets.ModelViewSet):
     permission_classe = [permissions.AllowAny]
     serializer_class = ResponsesSerializer
 
-#this allows for filerting scenarios by professor_ID
+#this allows for filerting scenarios by professor_id
 class allScenariosViewSet(generics.ListAPIView):
     serializer_class = allScenariosSerializer
     queryset = scenarios.objects.all()
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['PROFESSOR_ID', 'IS_FINISHED']
+    filterset_fields = ['PROFESSOR', 'IS_FINISHED']
     
 # Scenarios_for ViewSet
 class Scenarios_forViewSet(viewsets.ModelViewSet):
@@ -150,109 +155,435 @@ class Professors_teachViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Professors_teachSerializer
 
-"""
-    -Get Scenario(all fields) ---------------
-	-Get course name associated with scenario
-	-Get Professor (creators) names associated with scenario
-	-get page_ID and title for latest version of each page
-"""
+class IssuesViewSet(viewsets.ModelViewSet):
+    queryset = Issues.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = IssuesSerializer
 
+class Action_pageViewSet(viewsets.ModelViewSet):
+    queryset = action_page.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Action_pageSerializer
+
+#for getting/editing scenarios in dashboard
 class logistics_page(APIView):
     #http_method_names = [ 'POST,' 'PUT', 'DELETE']
 
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
-        SCENARIO_ID = self.request.query_params.get('scenario_id')
+        SCENARIO = self.request.query_params.get('scenario_id')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario = scenarios.objects.get(SCENARIO_ID = SCENARIO_ID)
+        scenario = scenarios.objects.get(SCENARIO = SCENARIO)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
 
-        scenarios_for_query = scenarios_for.objects.filter(SCENARIO_ID=scenario_dict['SCENARIO_ID']).values()
+        scenarios_for_query = scenarios_for.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
         course_id_array = []
         for x in scenarios_for_query:
             print(x)
-            course_id_array.append(x['COURSE_ID_id'])
+            course_id_array.append(x['COURSE_id'])
 
-        course_dict = {}
+        course_dict_array = []
         for x in course_id_array:
-            course = courses.objects.get(COURSE_ID = x)
-            course_dict.update({"COURSE_ID":course.COURSE_ID, "NAME": course.NAME})
+            course = courses.objects.get(COURSE = x)
+            course_dict_array.append({"COURSE":course.COURSE, "NAME": course.NAME})
                 
-        pages_query = pages.objects.filter(SCENARIO_id=scenario_dict['SCENARIO_ID']).values()
+        pages_query = pages.objects.filter(SCENARIO_id=scenario_dict['SCENARIO']).values()
         
         page_array = []
         for page in pages_query:
             cropped_page = {}
-            cropped_page['PAGE'] = page['PAGE_ID']
+            cropped_page['PAGE'] = page['PAGE']
             cropped_page['PAGE_TITLE'] = page['PAGE_TITLE']
             page_array.append(cropped_page) 
 
 
         scenario_dict.update({
-            "COURSE": course_dict,
+            "COURSES": course_dict_array,
             "PAGES": page_array
         })
 
         
         logistics = scenario_dict
         return Response(logistics)
-
+    
+    """format:
+    {
+        "SCENARIO": 1,
+        "VERSION": 0,
+        "NAME": "Pizza is Good!",
+        "IS_FINISHED": false,
+        "PUBLIC": false,
+        "NUM_CONVERSATION": 5,
+        "PROFESSOR": 12345678,
+        "COURSES": 
+        [
+            {
+                "COURSE": 2,
+                "NAME": "590G"
+            },
+            {
+                "COURSE": 1,
+                "NAME": "320"
+            }
+        ]
+    }
+        """
     #a put request for editing scenarios. must provide scenario_id in url thusly: /logistics?scenario_id=<insert id number here>
     def put(self, request, *args, **kwargs):
-        SCENARIO = self.request.query_params.get('scenario_id')
-        extant_scenario  = scenarios.objects.get(SCENARIO_ID=SCENARIO_ID)
-        updated_scenario = request.data
-        serializer = ScenariosSerializer(extant_scenario, data=updated_scenario)
-        if serializer.is_valid(): 
-            serializer.save()
-            version = serializer.data['VERSION_ID']
-            scenarios_for_dict = ScenariosSerializer(request.data).data
-            scenario_for_dict.update({'SCENARIO_ID': SCENARIO_ID})
-            scenario_for_dict.update({'VERSION_ID': version})
+        #save the scenario
+        extant_scenario = scenarios.objects.get(SCENARIO = request.data['SCENARIO'])
+        scenario_serializer = ScenariosSerializer(extant_scenario, data = request.data)
+        if scenario_serializer.is_valid():
+            scenario_serializer.save()
+
+        #delete currently assocated classes
+        scenarios_for.objects.filter(SCENARIO = request.data['SCENARIO']).delete()
+        #get array of courses from frontend
+        COURSES = request.data['COURSES']
+        for course in COURSES:
+            scenarios_for_dict = {
+                "COURSE" : course['COURSE'],
+                "SCENARIO" : request.data['SCENARIO'],
+                "VERSION" : request.data['VERSION']
+            }
             print(scenarios_for_dict)
-            serializer2 = scenario_for_serializer(data=scenario_for_dict)
-            if serializer2.is_valid():
-                serializer2.save()
-                return Response(serializer2.data) 
-        return Response(serializer2.errors)
+        #save the classes associated with it in scenarios_for
+            for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
+            if for_serializer.is_valid():
+                for_serializer.save()
+                print('saved!')
+            print(for_serializer.errors)
+        scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = request.data['SCENARIO'])).data
+        scenario_dict['COURSES'] = request.data['COURSES']
+        return Response(scenario_dict)
+
+#returns list of scenarios for given professor along with list of associated courses
+class dashboard_page(APIView):
+    def get(self, request, *args, **kwargs):
+        
+        #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
+        PROFESSOR = self.request.query_params.get('professor_id')
+        #TODO check that id != none
+        #get all scenarios belonging to this professor
+        scenario_query = scenarios.objects.filter(PROFESSOR = PROFESSOR).values()
+        #loop through scenarios and append required information (course, page info)
+        logistics = []
+        for scenario in scenario_query:
+            scenarios_for_query = scenarios_for.objects.filter(SCENARIO = scenario['SCENARIO']).values()
+            course_id_array = []
+            for x in scenarios_for_query:
+                course_id_array.append(x['COURSE_id'])
+
+            course_dict_array = []
+            for x in course_id_array:
+                course = courses.objects.get(COURSE= x)
+                course_dict = {"COURSE":course.COURSE, "NAME": course.NAME}
+                course_dict_array.append(course_dict)
+                    
+            scenario["COURSES"] = course_dict_array
+            logistics.append(scenario)
+                
+        return Response(logistics)
+
+        """format:
+        {
+        "NAME": "Best Test",
+        "IS_FINISHED": false,
+        "PUBLIC": false,
+        "NUM_CONVERSATION": 5,
+        "PROFESSOR": 12345678,
+        "COURSES":[
+            {"COURSE": 1},
+            {"COURSE": 2},
+            {"COURSE": 3}
+        ]
+        }
+        """
+
+    def post(self, request, *args, **kwargs):
+        #save the scenario
+        scenario_serializer = ScenariosSerializer(data = request.data)
+        if not (scenario_serializer.is_valid()):
+            return Response(scenario_serializer.errors)
+        scenario_serializer.save()
+        scenario_dict = scenario_serializer.data
+        
+        #get array of courses from frontend
+        COURSES = request.data['COURSES']
+        for course in COURSES:
+            scenarios_for_dict = {
+                "COURSE" : course['COURSE'],
+                "SCENARIO" : scenario_dict['SCENARIO'],
+                "VERSION" : scenario_dict['VERSION']
+            }
+
+            for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
+            if for_serializer.is_valid():
+                for_serializer.save()
+
+        scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_dict['SCENARIO'])).data
+        scenario_dict['COURSES'] = request.data['COURSES']
+        return Response(scenario_dict)
 
 
+                
+            
 
-
+#change a list of issue objects at URL /multi_issue?scenario_id=<insert id number here>
 class multi_issue(APIView):
     def put(self, request, *args, **kwargs):
-        SCENARIO= self.request.query_params.get('scenario_id')
+        SCENARIO = self.request.query_params.get('scenario_id')
+        if SCENARIO == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+        for updated_issue in request.data:
+            extant_issue = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_issue['ISSUE'])
+            serializer = IssuesSerializer(extant_issue, data=updated_issue)
+            if not serializer.is_valid(): 
+                return Response(serializer.errors)
+            try:
+                serializer.save()
+            except:
+                print('something went wrong with the PUT')
+        issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
+        return Response(issues_query)
+
+#for use in the pages flowchart, input is an array of page objects
+class flowchart(APIView):
+    #get all page objects given a scenario id
+    def get(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('scenario_id')
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        for page in pages_query:
+            if page['PAGE_TYPE'] == 'A':
+                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
+
+
+        return Response(pages_query)
+
+    #update the next_page field of all page objects
+    def put(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('scenario_id')
+        if SCENARIO == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+  
+        for updated_page in request.data:
+            #save updated choices within action pages  
+            if updated_page['PAGE_TYPE'] == 'A':
+                for updated_choice in updated_page['ACTION']:
+                    extant_choice = action_page.objects.get(id=updated_choice['id']) 
+                    action_serializer = Action_pageSerializer(extant_choice, updated_choice)
+                    if not action_serializer.is_valid():
+                        print("error with PUTing choices")
+                        return Response(action_serializer.errors)
+                    action_serializer.save()
+            #save the page itself    
+            extant_page = pages.objects.get(SCENARIO = SCENARIO, PAGE = updated_page['PAGE'])
+            serializer = PagesSerializer(extant_page, data=updated_page)
+            if not serializer.is_valid():
+                print("error with PUTing pages")
+                return Response(serializer.errors)
+            serializer.save()
+        #return query with newly saved pages     
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        for page in pages_query:
+            if page['PAGE_TYPE'] == 'A':
+                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
+        return Response(pages_query)
+
+
+
+# Pages viewset
+class Page_reflectionViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_reflectionSerializer
+
+class Page_actionViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_actionSerializer   
+
+class Page_genericViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_genericSerializer
+
+class Page_StakeholderViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_stakeholderSerializer
+    
+
+
+class pages_page(APIView):
+    # Define get method for pages
+    # @api_view(['GET'])
+    def get(self, request, *args, **kwargs):
+
+        # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
+        PAGE_ID = self.request.query_params.get('page_id')
+
+        # Get all fields from this page_id if ti doesn't exist return error 404
+        try:
+            page = pages.objects.get(PAGE = PAGE_ID)
+        except pages.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         
-        return Response(serializer2.errors)
-
-
-
-
-        """logistics = {}
-        for senarios in senarios.objects.all:
-            logistics[]"""
-        #scenario_list = serializers.serialize('json', scenario_query)
-        #logistics = serializers.serialize('json', self.get_queryset())
-        #logistics = scenarios.objects.get(SCENARIO_ID = 12)
-        #logistics = [scenarios.SCENARIO_ID for scenarios in scenarios.objects.all()]
-        #logistics = scenarios.objects.filter(PROFESSOR_ID=PROFESSOR_ID)
-        #logistics = scenarios.objects.raw('SELECT * FROM "public"."tables_scenarios" INNER JOIN "public"."tables_scenarios_for" ON "public"."tables_scenarios"."SCENARIO_ID" = "public"."tables_scenarios_for"."SCENARIO_ID_id"')
-
-        #logistics = serializers.serialize('json', scenarios.objects.all())
-        #logistics = logistics.get(SCENARIO_ID = 12)
+        # Convers Django Model Object into a dictionary
+        page_data = PagesSerializer(page).data
         
-        #logistics = LogisticsSerializer(logistics.values())
+        page_type = page.PAGE_TYPE
+        # Check page.PAGE_TYPE = 'REFLECTION'
+        if (page_type == 'R'):
+            reflection_query = reflection_questions.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "REFLECTION_QUESTIONS": reflection_query
+                }
+            )
+            
+            return Response(page_data, status=status.HTTP_200_OK)
 
-        """logistics.append({"SCENARIO_ID": scenario.SCENARIO_ID,
-                             "VERSION_ID": scenario.VERSION_ID,
-                             "NAME": scenario.NAME,
-                             "SUB_TITLE": scenario.SUB_TITLE,
-                             "IS_FINISHED": scenario.IS_FINISHED,
-                             "PUBLIC": scenario.PUBLIC,
-                             "NUM_CONVERSATIONS": scenario.NUM_CONVERSATIONS,
-                             "PROFESSOR_ID": scenario.PROFESSOR_ID,
-                             "FIRST_PAGE": scenario.FIRST_PAGE
-                            })"""
+        # Check page.PAGE_TYPE = 'ACTION'
+        if (page_type == 'A'):
+            action_query = action_page.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "CHOICES": action_query
+                }
+            )
+
+            return Response(page_data, status=status.HTTP_200_OK)
+        
+        # Check page.PAGE_TYPE = 'GENERIC'
+        if (page_type == 'G' or page_type == 'I'):
+            generic_query = generic_page.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "BODIES":generic_query
+                }
+            )
+
+            return Response(page_data, status=status.HTTP_200_OK)
+        
+        # Check page.PAGE_TYPE = 'STAKEHOLDER'
+        if (page_type == 'S'):
+            stakeholder_query = stakeholder_page.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "STAKEHOLDERS": stakeholder_query
+                }
+            )
+
+            return Response(page_data, status=status.HTTP_200_OK)
+        
+        # Neither of these pages, something went wrong or missing implementation
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    # Define POST function for pages
+    # @api_view(['POST'])
+    def post(self, request):
+
+        # Takes the scenario_id from the URL if the url has ?scenario_id=<id> at the end, no parameter passed return error 400
+
+        page_type = request.data["PAGE_TYPE"]
+
+        # If the request is a reflection page  
+        if (page_type == 'R'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['REFLECTION_QUESTIONS']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Reflection_questionsSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+            
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # If the request is an action page  
+        if (page_type == 'A'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['CHOICES']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Action_pageSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+            
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        # If the request is a generic page  
+        if (page_type == 'G' or page_type == 'I'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['BODIES']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Generic_pageSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+            
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # If the request is a stakeholder page 
+        if (page_type == 'S'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['STAKEHOLDERS']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Stakeholder_pageSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST) 
+
+
+    # @api_view(['DELETE'])
+    def delete(self, request):
+
+        # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
+        PAGE_ID = self.request.query_params.get('page_id')
+
+        # Check if the page exists.
+        try: 
+            page = pages.objects.get(PAGE=PAGE_ID)
+        except pages.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        # Delete the page
+        if (request.method == "DELETE"):
+            operation = page.delete()
+            page_data = {}
+            if (operation):
+                page_data["success"] = "delete successful"
+            else:
+                page_data["failure"] = "delete failed"
+            
+            return Response(data=page_data)

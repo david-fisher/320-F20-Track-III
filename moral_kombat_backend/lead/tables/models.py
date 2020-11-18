@@ -8,7 +8,7 @@ class scenarios(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
     SCENARIO = models.AutoField(primary_key = True, editable=False)
-    VERSION = models.IntegerField(default=0, editable=False)
+    VERSION = models.IntegerField(default=1, editable=False)
     NAME = models.CharField(max_length = 1000)
     PUBLIC = models.BooleanField(default = False)
     NUM_CONVERSATION = models.IntegerField(default = 0)
@@ -33,9 +33,10 @@ class pages(models.Model):
     )
     PAGE_TYPE = models.CharField(max_length = 2, choices = PAGE_CHOICES)
     PAGE_TITLE = models.CharField(max_length = 1000)
+    PAGE_BODY = models.TextField()
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages1")
     VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages2")
-    NEXT_PAGE = models.OneToOneField('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'pages3')
+    NEXT_PAGE = models.OneToOneField('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'pages3', null=True)
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
 
@@ -143,7 +144,7 @@ class reflections_taken(models.Model):
 
 
 class courses(models.Model):
-    COURSE = models.IntegerField(primary_key = True, editable = False)
+    COURSE = models.AutoField(default = None, primary_key = True)
     NAME = models.CharField(max_length = 1000)
 
 
@@ -224,7 +225,7 @@ class action_page(models.Model):
         unique_together = (('PAGE'),('CHOICE'))
     PAGE = models.ForeignKey('pages',on_delete = models.CASCADE, related_name = 'action_page1')
     CHOICE = models.TextField()
-    RESULT_PAGE = models.IntegerField()
+    RESULT_PAGE = models.IntegerField(null=True)
 
 class assigned_to(models.Model):
     class Meta:

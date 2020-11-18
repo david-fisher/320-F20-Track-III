@@ -25,13 +25,17 @@ router.register('api/scenarios_for', Scenarios_forViewSet, 'scenarios_for')
 router.register('api/generic_page', generic_pageViewSet, 'generic_page')
 router.register('api/professors_teach', Professors_teachViewSet, 'professors_teach')
 router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
-# router.register('api/allScenarios', allScenariosViewSet.as_view())
-#router.register('api/logistics', logistics_page, 'logistics')
+router.register('api/issues', IssuesViewSet, 'issues')
+router.register('api/action_page', Action_pageViewSet, 'action_page')
 
 urlpatterns = [
     path('allScenarios', allScenariosViewSet.as_view()),
-    #url(r'^logistics/(?P<pk>[0-9]+)$', logistics_page.as_view()),
-    path('logistics', logistics_page.as_view())
+    path('logistics', logistics_page.as_view()),
+    path('page', pages_page.as_view()),
+    path('multi_issue', multi_issue.as_view()),
+    path('dashboard', dashboard_page.as_view()),
+    path('flowchart', flowchart.as_view())
+    
 ] 
 
 urlpatterns += router.urls

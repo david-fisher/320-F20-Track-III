@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'tables',
     'django_filters',
     'rest_framework',
+    'corsheaders',
 
 ]
 
@@ -52,6 +53,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  
+    'django.middleware.common.CommonMiddleware', 
+]
+CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3030',
+] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://localhost:3030',
 ]
 
 ROOT_URLCONF = 'lead.urls'
@@ -83,10 +94,10 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'gyknqjsa',
-        'USER': 'gyknqjsa',
-        'PASSWORD': 'HFmu2N5UABxyhFIfiAMyjeQmGvFK1Ysx',
-        'HOST': 'lallah.db.elephantsql.com',
+        'NAME': 'cagxyqmx',
+        'USER': 'cagxyqmx',
+        'PASSWORD': 'Xft9tsKl9NJLoNJZfJOq_dUBS9i1VTgM',
+        'HOST': 'ruby.db.elephantsql.com',
         'PORT': '5432',
     }
 }

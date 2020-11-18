@@ -27,7 +27,8 @@ class ScenariosSerializer(serializers.ModelSerializer):
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = pages
-        fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'PAGE_BODY', 'SCENARIO', 'VERSION', 'NEXT_PAGE')
+        fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'PAGE_BODY', 'SCENARIO', 'VERSION', 'NEXT_PAGE', 'X_COORDINATE',
+    'Y_COORDINATE')
 
 class Stakeholder_pageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -101,16 +102,37 @@ class Professors_teachSerializer(serializers.ModelSerializer):
         model = professors_teach
         fields = ('PROFESSOR', 'COURSE')
 
-class LogisticsSerializer(serializers.ModelSerializer):
-    logistics = Scenarios_forSerializer() 
+class IssuesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = scenarios
+        model = Issues
+        fields = ('SCENARIO', 'ISSUE', 'VERSION', 'NAME', 'IMPORTANCE_SCORE')
+
+class Action_pageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = action_page
+        fields = ('id', 'PAGE', 'CHOICE', 'RESULT_PAGE')
+
+# Serializers for page types
+class Pages_reflectionSerializer(serializers.ModelSerializer):
+    reflection_question = Reflection_questionsSerializer()
+    class Meta:
+        model = pages
         fields = '__all__'
-        """fields = ('SCENARIO', 
-                'VERSION', 
-                'NAME',  
-                'IS_FINISHED',
-                'PUBLIC',
-                'NUM_CONVERSATION',
-                'PROFESSOR', 
-                )"""
+
+class Pages_actionSerializer(serializers.ModelSerializer):
+    action_page = Action_pageSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'
+
+class Pages_genericSerializer(serializers.ModelSerializer):
+    generic_page = Generic_pageSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'
+
+class Pages_stakeholderSerializer(serializers.ModelSerializer):
+    stakeholder_page = Stakeholder_pageSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'
