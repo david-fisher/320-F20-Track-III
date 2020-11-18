@@ -75,12 +75,15 @@ export default function IssueEntryField({
     const [issueScore, setIssueScore] = useState(score ? score : '');
     const [issueName, setIssueName] = useState(issue ? issue : '');
     const [newIssue, setNewIssue] = useState(isNewIssue);
+    const [unsaved, setUnsaved] = useState(isNewIssue);
 
     const handleChangeScore = (content) => {
+        setUnsaved(true);
         setIssueScore(content.target.value);
     };
 
     const handleChangeName = (content) => {
+        setUnsaved(true);
         setIssueName(content.target.value);
     };
 
@@ -121,6 +124,7 @@ export default function IssueEntryField({
             function onSuccess(resp) {
                 //if newly created issue, replace fake ID with new ID
                 if (resp.data) {
+                    setUnsaved(false);
                     setIssueID(resp.data.ISSUE);
                     setSuccessBannerFade(true);
                     setSuccessBannerMessage('Successfully created issue!');
@@ -139,6 +143,7 @@ export default function IssueEntryField({
             });
         } else {
             function onSuccess() {
+                setUnsaved(false);
                 setSuccessBannerFade(true);
                 setSuccessBannerMessage('Successfully updated issue!');
             }
@@ -167,6 +172,7 @@ export default function IssueEntryField({
             setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
         } else {
             function successfullySaved() {
+                setUnsaved(false);
                 setSuccessBannerFade(true);
                 setSuccessBannerMessage('Successfully deleted issue!');
                 let newData = issueEntryFieldList.data.filter(
@@ -181,7 +187,7 @@ export default function IssueEntryField({
                 setErrorBannerMessage('Failed to save! Please try again.');
                 setErrorBannerFade(true);
             }
-            console.log(endpointDELETE + issueID + '/');
+
             deleteReq(
                 setDeleteReq,
                 endpointDELETE + issueID + '/',
@@ -197,7 +203,7 @@ export default function IssueEntryField({
 
     return (
         <div>
-            {newIssue ? (
+            {unsaved ? (
                 <Typography variant="h6" align="center" color="error">
                     Unsaved
                 </Typography>
