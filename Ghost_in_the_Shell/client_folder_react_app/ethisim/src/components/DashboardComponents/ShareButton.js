@@ -12,8 +12,7 @@ import {
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
-import Dropdown from "./Dropdown";
-//import './dropdown.css';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,19 +42,10 @@ DialogTitle.propTypes = {
   onClose: PropTypes.any.isRequired
 };
 
-const items = [
-  {
-    id: 1,
-    value: "Read Only"
-  },
-  {
-    id: 2,
-    value: "Edit Only"
-  },
-  {
-    id: 3,
-    value: "Admin"
-  }
+const UserRole = [
+  { title: 'Read Only'},
+  { title: 'Edit Only'},
+  { title: 'Admin'},
 ];
 
 function DialogTitle(props) {
@@ -111,10 +101,16 @@ export default function ShareDialog(props) {
       >
         <DialogTitle onClose={handleClose}></DialogTitle>
         <DialogContent dividers>
-          <Typography align="center" variant="h6">
+          <Typography align="left" variant="h6">
             Select User Role
           </Typography>
-          <Dropdown items={items} />
+          <Autocomplete
+            id="User_Role"
+            options={UserRole}
+            getOptionLabel={(option) => option.title}
+            style={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="User Role Options" variant="outlined" />}
+          />
         </DialogContent>
 
         <DialogActions>
