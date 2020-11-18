@@ -23,13 +23,23 @@ import put from '../../../universalHTTPRequests/put';
 import LoadingSpinner from '../../LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
+import SuccessBanner from '../../Banners/SuccessBanner';
 
 const useStyles = makeStyles((theme) => ({
+    errorContainer: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
     container: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         height: '90vh',
+    },
+    margin: {
+        marginBottom: '15px',
     },
     title: {
         textAlign: 'center',
@@ -47,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
     },
     iconError: {
-        paddingRight: theme.spacing(2),
         fontSize: '75px',
     },
     iconRefreshLarge: {
@@ -62,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 const endpointGET = '/flowchart?scenario_id=';
 //Needs scenario id
 const endpointPUT = '/flowchart?scenario_id=';
-const tempScenarioID = '14';
+const tempScenarioID = '1';
 
 export default function FlowDiagram(props) {
     const classes = useStyles();
@@ -79,10 +88,10 @@ export default function FlowDiagram(props) {
     });
 
     const [elements, setElements] = useState([]);
+
     let getData = () => {
         function onSuccess(resp) {
-            console.log(resp);
-            const initialElements = resp.data.map((componentData) => {
+            let initialElements = resp.data.map((componentData) => {
                 return initializeElements(componentData);
             });
 
@@ -102,14 +111,33 @@ export default function FlowDiagram(props) {
             //Add edges
             initialElements.forEach((currentElement) => {
                 //TODO
-                if (currentElement.type === 'actionNode NOT YET IMPLEMENTED') {
+                if (currentElement.type === 'actionNode') {
+                    //Only 2 action options
+                    if (currentElement.ACTION[0].RESULT_PAGE) {
+                        initialElements = addEdge(
+                            {
+                                source: currentElement.id.toString() + '__a',
+                                target: currentElement.ACTION[0].RESULT_PAGE.toString(),
+                            },
+                            initialElements
+                        );
+                    }
+                    if (currentElement.ACTION[1].RESULT_PAGE) {
+                        initialElements = addEdge(
+                            {
+                                source: currentElement.id.toString() + '__b',
+                                target: currentElement.ACTION[1].RESULT_PAGE.toString(),
+                            },
+                            initialElements
+                        );
+                    }
                 } else if (currentElement.NEXT_PAGE_id) {
-                    addEdge(
+                    initialElements = addEdge(
                         {
                             source: currentElement.id.toString(),
-                            target: currentElement.NEXT_PAGE.toString(),
+                            target: currentElement.NEXT_PAGE_id.toString(),
                         },
-                        elements
+                        initialElements
                     );
                 }
             });
@@ -170,9 +198,12 @@ export default function FlowDiagram(props) {
         setElements(elementsCopy);
     };
 
-    console.log(elements);
-
     const save = () => {
+        function onSuccess() {
+            setSuccessBannerFade(true);
+            setSuccessBannerMessage('Successfully Saved!');
+        }
+
         const updatedElements = elements.reduce((array, currentElement) => {
             if (isNode(currentElement)) {
                 let nodeElement = {
@@ -182,36 +213,50 @@ export default function FlowDiagram(props) {
                     SCENARIO: currentElement.SCENARIO_id,
                     VERSION: currentElement.VERSION_id,
                     NEXT_PAGE: null,
-                    X_COORDINATE: currentElement.position.x,
-                    Y_COORDINATE: currentElement.position.y,
+                    X_COORDINATE: Math.floor(currentElement.position.x),
+                    Y_COORDINATE:
+                        Math.floor(currentElement.position.x) !== 0
+                            ? Math.floor(currentElement.position.y)
+                            : 0,
                 };
-                //TODO
-                if (currentElement.type === 'actionNodeNOTYETIMPLEMENTED') {
-                    // eslint-disable-next-line
-                    const nextPagesActionArray = elements.reduce(
-                        (array, currElement) => {
-                            if (
-                                currElement.isEdge &&
-                                currElement.source === currentElement.id + '__a'
-                            ) {
-                                return array.concat({
-                                    PAGE: currentElement.id,
-                                    RESULT_PAGE: currElement.target,
-                                });
-                            } else if (
-                                currElement.isEdge &&
-                                currElement.source === currentElement.id + '__b'
-                            ) {
-                                nodeElement.NEXT_PAGE = currElement.target;
-                                return array.concat({
-                                    PAGE: currentElement.id,
-                                    RESULT_PAGE: currElement.target,
-                                });
-                            }
-                            return array;
-                        },
-                        []
+
+                if (currentElement.type === 'actionNode') {
+                    nodeElement.ACTION = currentElement.ACTION.map(
+                        (actionData) => {
+                            return {
+                                id: actionData.id,
+                                PAGE: actionData.PAGE_id,
+                                CHOICE: actionData.CHOICE,
+                                RESULT_PAGE: null,
+                            };
+                        }
                     );
+
+                    elements.forEach((currElement) => {
+                        //First option
+                        if (
+                            isEdge(currElement) &&
+                            currElement.source === currentElement.id + '__a'
+                        ) {
+                            nodeElement.ACTION[0] = {
+                                id: currentElement.ACTION[0].id,
+                                CHOICE: currentElement.ACTION[0].CHOICE,
+                                PAGE: currentElement.id,
+                                RESULT_PAGE: Number(currElement.target),
+                            };
+                            //Second option
+                        } else if (
+                            isEdge(currElement) &&
+                            currElement.source === currentElement.id + '__b'
+                        ) {
+                            nodeElement.ACTION[1] = {
+                                id: currentElement.ACTION[1].id,
+                                CHOICE: currentElement.ACTION[1].CHOICE,
+                                PAGE: currentElement.id,
+                                RESULT_PAGE: Number(currElement.target),
+                            };
+                        }
+                    });
                 } else {
                     //Set next page ID for all other node types
                     elements.forEach((currElement) => {
@@ -229,33 +274,46 @@ export default function FlowDiagram(props) {
             }
             return array;
         }, []);
-        console.log(updatedElements);
+
         put(
             setElementsPUT,
             endpointPUT + tempScenarioID,
             null,
-            null,
+            onSuccess,
             updatedElements
         );
     };
 
-    //console.log(elements);
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
     if (fetchedElements.loading) {
         return <LoadingSpinner />;
     }
 
     if (fetchedElements.error) {
         return (
-            <div className={classes.issue}>
+            <div className={classes.errorContainer}>
                 <div className={classes.container}>
                     <ErrorIcon className={classes.iconError} />
                     <Typography align="center" variant="h3">
                         Error in fetching issues.
                     </Typography>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={getData}
+                    >
+                        <RefreshIcon className={classes.iconRefreshLarge} />
+                    </Button>
                 </div>
-                <Button variant="contained" color="primary" onClick={getData}>
-                    <RefreshIcon className={classes.iconRefresh} />
-                </Button>
             </div>
         );
     }
@@ -263,6 +321,18 @@ export default function FlowDiagram(props) {
     return (
         <div className={classes.container}>
             <Typography variant="h2">Order Scenario Pages</Typography>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={getData}
+                className={classes.margin}
+            >
+                <RefreshIcon className={classes.iconRefreshSmall} />
+            </Button>
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
             <ReactFlow
                 elements={elements}
                 style={graphStyles}
