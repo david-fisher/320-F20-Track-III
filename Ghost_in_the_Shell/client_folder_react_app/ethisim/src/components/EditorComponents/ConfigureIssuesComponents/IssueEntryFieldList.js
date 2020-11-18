@@ -35,23 +35,23 @@ export default function IssueEntryFieldList({
     //When we select new issue button, we add new issue object into array.
     //We set a temporary unique ID.
     function setNewIssueID() {
-        let newID = 208;
+        let newID = Math.floor(Math.random() * 10000000);
         let collision =
-            issueEntryFieldList.data.filter((data) => data.ISSUE_ID === newID)
+            issueEntryFieldList.data.filter((data) => data.ISSUE === newID)
                 .length !== 0;
         while (collision) {
             newID = Math.floor(Math.random() * 10000000);
             const checkNewID = newID;
             collision =
                 issueEntryFieldList.data.filter(
-                    (data) => data.ISSUE_ID === checkNewID
+                    (data) => data.ISSUE === checkNewID
                 ).length !== 0;
         }
         return newID;
     }
 
     const [entryCur, setEntryCur] = useState({
-        ISSUE_ID: setNewIssueID(),
+        ISSUE: setNewIssueID(),
         isNewIssue: true,
     });
 
@@ -61,7 +61,7 @@ export default function IssueEntryFieldList({
         issueEntryFieldList.data = issueEntryFieldList.data.concat(newEntry);
         setIssueEntryFieldList(issueEntryFieldList);
         setEntryCur({
-            ISSUE_ID: setNewIssueID(),
+            ISSUE: setNewIssueID(),
             isNewIssue: true,
         });
     };
@@ -111,8 +111,8 @@ export default function IssueEntryFieldList({
             <form id="form">
                 {issueEntryFieldList.data.map((entry) => (
                     <EntryField
-                        key={entry.ISSUE_ID}
-                        id={entry.ISSUE_ID}
+                        key={entry.ISSUE}
+                        id={entry.ISSUE}
                         isNewIssue={entry.isNewIssue}
                         issue={entry.NAME}
                         score={entry.IMPORTANCE_SCORE}

@@ -7,11 +7,11 @@ import deleteReq from '../../../universalHTTPRequests/delete';
 import post from '../../../universalHTTPRequests/post';
 import put from '../../../universalHTTPRequests/put';
 
-const endpointPOST = '/api/Issues/';
+const endpointPOST = '/api/issues/';
 //Need issueID
-const endpointPUT = '/api/Issues/';
+const endpointPUT = '/api/issues/';
 //Need issueID
-const endpointDELETE = '/api/Issues/';
+const endpointDELETE = '/api/issues/';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -121,7 +121,7 @@ export default function IssueEntryField({
             function onSuccess(resp) {
                 //if newly created issue, replace fake ID with new ID
                 if (resp.data) {
-                    setIssueID(resp.data.ISSUE_ID);
+                    setIssueID(resp.data.ISSUE);
                     setSuccessBannerFade(true);
                     setSuccessBannerMessage('Successfully created issue!');
                     setNewIssue(false);
@@ -132,8 +132,8 @@ export default function IssueEntryField({
                 setErrorBannerFade(true);
             }
             post(setPost, endpointPOST, onFailure, onSuccess, {
-                SCENARIO_ID: scenarioID,
-                VERSION_ID: versionID,
+                SCENARIO: scenarioID,
+                VERSION: versionID,
                 IMPORTANCE_SCORE: score,
                 NAME: issueName,
             });
@@ -147,11 +147,11 @@ export default function IssueEntryField({
                 setErrorBannerFade(true);
             }
             put(setPut, endpointPUT + issueID + '/', onFailure, onSuccess, {
-                SCENARIO_ID: scenarioID,
-                VERSION_ID: versionID,
+                SCENARIO: scenarioID,
+                VERSION: versionID,
                 IMPORTANCE_SCORE: score,
                 NAME: issueName,
-                ISSUE_ID: id,
+                ISSUE: id,
             });
         }
     };
@@ -162,7 +162,7 @@ export default function IssueEntryField({
         //ID in the array will remain the fake id, so that is why we compare with 'id' rather than 'issueID'
         if (newIssue) {
             let newData = issueEntryFieldList.data.filter(
-                (entry) => entry.ISSUE_ID !== id
+                (entry) => entry.ISSUE !== id
             );
             setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
         } else {
@@ -170,7 +170,7 @@ export default function IssueEntryField({
                 setSuccessBannerFade(true);
                 setSuccessBannerMessage('Successfully deleted issue!');
                 let newData = issueEntryFieldList.data.filter(
-                    (entry) => entry.ISSUE_ID !== id
+                    (entry) => entry.ISSUE !== id
                 );
                 setIssueEntryFieldList({
                     ...issueEntryFieldList,
@@ -181,14 +181,15 @@ export default function IssueEntryField({
                 setErrorBannerMessage('Failed to save! Please try again.');
                 setErrorBannerFade(true);
             }
+            console.log(endpointDELETE + issueID + '/');
             deleteReq(
                 setDeleteReq,
                 endpointDELETE + issueID + '/',
                 onFailure,
                 successfullySaved,
                 {
-                    SCENARIO_ID: scenarioID,
-                    ISSUE_ID: issueID,
+                    SCENARIO: scenarioID,
+                    ISSUE: issueID,
                 }
             );
         }

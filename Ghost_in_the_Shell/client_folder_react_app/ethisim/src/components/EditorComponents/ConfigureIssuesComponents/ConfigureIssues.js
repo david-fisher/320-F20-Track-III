@@ -13,7 +13,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 const tempScenarioID = 1;
 
 //Need scenarioID
-const endpointGET = '/api/Issues/?SCENARIO_ID=';
+const endpointGET = '/api/issues/?SCENARIO_ID=';
 
 const useStyles = makeStyles((theme) => ({
     issue: {
