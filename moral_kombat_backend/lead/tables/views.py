@@ -13,71 +13,7 @@ from rest_framework.decorators import api_view
 from tables.models import *
 from .serializer import *
 from django.db import connection
-# DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Choices_forSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer, Stakeholder_inSerializer
 
-# class DemographicsViewSet(viewsets.ModelViewSet):
-#     queryset = demographics.objects.all()
-#     permission_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = DemographicsSerializer
-
-# class StudentsViewSet(viewsets.ModelViewSet):
-#     queryset = students.objects.all()
-#     permission_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = StudentSerializer
-
-# class ProfessorsViewSet(viewsets.ModelViewSet):
-#     queryset = professors.objects.all()
-#     permission_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = ProfessorSerializer
-
-
-# class ScenariosViewSet(viewsets.ModelViewSet):
-#     queryset = scenarios.objects.all()
-#     permissions_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = ScenariosSerializer
-
-
-# # @api_view(['PUT', ])
-# # def api_update_creator(request, slug):
-
-# class PagesViewSet(viewsets.ModelViewSet):
-#     queryset = pages.objects.all()
-#     permissions_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = PagesSerializer
-
-# # Choices_For ViewSet
-# class Choices_forViewSet(viewsets.ModelViewSet):
-#     queryset = choices_for.objects.all()
-#     permissions_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = Choices_forSerializer
-
-# # Stakeholder_page Viewset
-# class Stakeholder_pageViewSet(viewsets.ModelViewSet):
-#     queryset = stakeholder_page.objects.all()
-#     permissions_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = Stakeholder_pageSerializer
-
-
-# class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
-#     queryset = reflection_questions.objects.all()
-#     permissions_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = Reflection_questionsSerializer
 
 # Stakeholders ViewSet
 class StakeholdersViewSet(viewsets.ModelViewSet):
@@ -208,91 +144,7 @@ class multi_coverage(APIView):
         return Response(coverage_query)
 
 
-# Stakeholders_in ViewSet
-# class Stakeholder_inViewSet(viewsets.ModelViewSet):
-#     queryset = stakeholder_in.objects.all()
-#     permissions_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = Stakeholder_inSerializer
 
-# class ReflectionsTakenViewSet(viewsets.ModelViewSet):
-#     queryset = reflections_taken.objects.all()
-#     permission_class = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = ReflectionsTakenSerializer
-
-
-# class ConversationsHadViewSet(viewsets.ModelViewSet):
-#     queryset = conversations_had.objects.all()
-#     permission_class = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = ConversationsHadSerializer
-
-
-# class StudentsInViewSet(viewsets.ModelViewSet):
-#     queryset = students_in.objects.all()
-#     permission_class = [permissions.AllowAny]
-#     serializer_class = StudentsInSerializer
-
-
-# class CoursesViewSet(viewsets.ModelViewSet):
-#     queryset = courses.objects.all()
-#     permission_classes = [permissions.AllowAny]
-#     serializer_class = CoursesSerializer
-
-
-# class ResponsesViewSet(viewsets.ModelViewSet):
-#     queryset = responses.objects.all()
-#     permission_classe = [permissions.AllowAny]
-#     serializer_class = ResponsesSerializer
-
-# class Scenarios_forViewSet(viewsets.ModelViewSet):
-#     queryset = scenarios_for.objects.all()
-#     permissions_class = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = Scenarios_forSerializer
-
-# # Event_page ViewSet
-# class generic_pageViewSet(viewsets.ModelViewSet):
-#     queryset = generic_page.objects.all()
-#     permissions_class = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = generic_pageSerializer
-
-# class ProfessorsTeachViewSet(viewsets.ModelViewSet):
-#     queryset = professors_teach.objects.all()
-#     permission_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = PROFESSORS_TEACH_SERIALIZER
-
-# class IssuesViewSet(viewsets.ModelViewSet):
-#     queryset = Issues.objects.all()
-#     permission_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = IssuesSerializer
-#     filter_backends = [DjangoFilterBackend]
-#     filterset_fields = ['SCENARIO_ID', "NAME"]
-
-
-# class allScenariosViewSet(generics.ListAPIView):
-#     serializer_class = allScenariosSerializer
-#     queryset = scenarios.objects.all()
-#     filter_backends = [DjangoFilterBackend]
-#     filterset_fields = ['PROFESSOR_ID', 'IS_FINISHED']
-
-# class ScenariosforViewSet(viewsets.ModelViewSet):
-#     queryset = scenarios.objects.all()
-#     permissions_class = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = ScenariosforSerializer
 
 class CoverageViewSet(viewsets.ModelViewSet):
     queryset = coverage.objects.all()
@@ -391,21 +243,6 @@ class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Reflection_questionsSerializer
 
-# Stakeholders ViewSet
-class StakeholdersViewSet(viewsets.ModelViewSet):
-    queryset = stakeholders.objects.all()
-    permissions_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = StakeholdersSerializer
-
-# Conversations ViewSet
-class ConversationsViewSet(viewsets.ModelViewSet):
-    queryset = conversations.objects.all()
-    permissions_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = ConversationsSerializer
 
 class ReflectionsTakenViewSet(viewsets.ModelViewSet):
     queryset = reflections_taken.objects.all()
