@@ -39,6 +39,11 @@ class ScenariosViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ScenariosSerializer
 
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class SingleScenarioViewSet(viewsets.ModelViewSet):
     def get(self, request):
         scenario = scenarios.objects.all()
@@ -326,6 +331,8 @@ class dashboard_page(APIView):
         scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_dict['SCENARIO'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         return Response(scenario_dict)
+
+
                 
             
 
