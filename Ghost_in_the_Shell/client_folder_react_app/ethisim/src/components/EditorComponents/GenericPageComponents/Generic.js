@@ -37,13 +37,12 @@ export default function Generic(props) {
     const [bodyText, setBodyText] = useState(body);
     const [bodiesText,setBodiesText] = useState(bodies)
 
-    var postReqBody = {PAGE_ID: page_id,
+    var postReqBody = {PAGE: page_id,
       PAGE_TYPE: page_type,
       PAGE_TITLE: title,
-      SCENARIO_ID: scenario_ID,
+      SCENARIO: scenario_ID,
       NEXT_PAGE_ID: next_page_id,
-      BODY: bodyText,
-      SUBBODY: bodiesText[0],
+      PAGE_BODY: bodyText,
     }
 
     if(created === true){

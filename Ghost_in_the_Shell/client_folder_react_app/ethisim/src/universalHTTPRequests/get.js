@@ -13,11 +13,13 @@ export default function universalFetch(
         loading: true,
         error: null,
     });
+    console.log("sets response")
     axios
         .get(baseURL + endpoint)
         .then((resp) => {
             console.log('Response received');
-            console.log(resp);
+            console.log(resp.data)
+            console.log("fesag")
             setResponse({
                 data: resp.data,
                 loading: false,

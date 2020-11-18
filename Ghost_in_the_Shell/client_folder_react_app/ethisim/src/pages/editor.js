@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, Button, Typography } from '@material-ui/core';
 import Logistics from '../components/EditorComponents/LogisticsPageComponents/Logistics';
@@ -84,16 +84,23 @@ ENTERS EDITOR PAGE with prop = scenario_ID
   c) fill out component null with new page component
 */
 
-
+function sleep(ms){
+  const date= Date.now();
+  let currD =null;
+  do{
+    currD = Date.now()
+  }while(currD - date < ms);
+}
 //Sidebar Components
 var initialComponents = [
-    { id: 0, title: 'Logistics', component: <Logistics/> },
+    { id: 0, title: 'Logistics', component: null},
     { id: 1, title: 'Configure Issues', component: <ConfigureIssues/> },
     { id: 2, title: 'Conversation Editor', component: <ConversationEditor/> },
+    {id: 3, title: "Introduction", component:null},
 ];
 
 function handlePost(setPostValues,postReqBody,s_id){
-  const endpoint = "/pages?SCENARIO_ID=" + s_id
+  const endpoint = "/pages?scenario_id=" + s_id
   function onSuccess(resp){
 
   }
@@ -103,40 +110,123 @@ function handlePost(setPostValues,postReqBody,s_id){
   universalPost(setPostValues,endpoint,null,null,postReqBody);
 }
 
-function handleDelete(setDeleteValues,d_id){
-  const endpoint = "/page?page_id=" + d_id
-  function onSuccess(resp){
-
-  }
-  function onFailure(){
-    console.log("Delete failed")
-  }
-  universalDelete(setDeleteValues,endpoint,null,null,{PAGE_ID:d_id})
-}
-
-function handleGet(setGetValues,g_id){
-  const endpoint = "/page?page_id=" + g_id
-  function onSuccess(resp){
-
-  }
-  function onFailure(){
-    console.log("Get failed")
-  }
-  universalFetch(setGetValues,endpoint,null,null,{PAGE_ID:g_id});
-}
 
 
 export default function Editor(props) {
+
+    function handleLogisticsGet(setGetValues,s_ID){
+      const endpoint = "/logistics?scenario_id=" + s_ID
+      function onSuccess(resp){
+        console.log("succeeded to get logistics info")
+        var p = null
+        var c = null
+        setShouldFetch(shouldFetch+1);
+        var logitics_and_pages = resp.data
+        p = {postFunction: handlePost, scenario_ID: logitics_and_pages.SCENARIO,
+        version_ID: logitics_and_pages.VERSION,title: logitics_and_pages.NAME,
+        is_finished: logitics_and_pages.IS_FINISHED,public:logitics_and_pages.PUBLIC,
+        num_convos: logistcs_and_pages.NUM_CONVERSATION,
+        professors:[logistcs_and_pages.PROFESSOR],courses:logistics_and_pages.COURSES}
+        c = <Logistics {...p}></Logistics>
+        initialComponents[0].component = c
+
+        var pages = logistics_and_pages.PAGES
+        for(let i = 0; i < pages.length;i++){
+          initialComponents.concat({id:pages[i].PAGE,title:pages[i].PAGE_TITLE,component:null})
+        }
+      }
+      function onFailure(){
+        console.log("failed to get logistics info")
+      }
+    }
+
+    function handleDelete(setDeleteValues,d_id){
+      const endpoint = "/page?page_id=" + d_id
+      function onSuccess(resp){
+        console.log("response delete data is successful ")
+        setShouldFetch(shouldFetch + 1);
+      }
+      function onFailure(){
+        console.log("Delete failed")
+      }
+      universalDelete(setDeleteValues,endpoint,null,null,{PAGE:d_id})
+    }
+
+    function handlePageGet(setGetValues,g_id){
+      const endpoint = "/page?page_id=" + g_id
+      function onSuccess(resp){
+        var p = null
+        var c = null
+        console.log("response get data is successful ")
+        setShouldFetch(shouldFetch + 1);
+        if(resp.data !== null){
+
+
+          var currPageInfo = resp.data
+          console.log("weawreat")
+          //sleep(10000)
+          console.log(currPageInfo)
+          console.log("demostrated page body")
+          if (currPageInfo.PAGE_TYPE === "I"){
+            currPageInfo.PAGE_TYPE = "G"
+          }
+          if(currPageInfo.PAGE_TYPE === "G"){
+            p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+            page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
+            version_ID: currPageInfo.VERSION, next_page_id: currPageInfo.NEXT_PAGE,
+            body: currPageInfo.PAGE_BODY,bodies: currPageInfo.BODIES,created: false}
+            c = <Generic {...p}></Generic>;
+
+          }
+          else if(currPageInfo.PAGE_TYPE === "A"){
+            p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+            page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
+            next_page_id: currPageInfo.NEXT_PAGE,
+            body: currPageInfo.PAGE_BODY,choice1:currPageInfo.CHOICES[0].CHOICE,
+            r1:currPageInfo.CHOICES[0].RESULT_PAGE,choice2:currPageInfo.CHOICES[1].CHOICE,
+            r2:currPageInfo.CHOICES[1].RESULT_PAGE,created: false}
+            c = <Action {...p}></Action>;
+          }
+          else if(currPageInfo.PAGE_TYPE === "R"){
+            p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+            page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
+            version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
+            body: currPageInfo.PAGE_BODY,reflection_questions:currPageInfo.REFLECTION_QUESTIONS,created: false}
+            c = <Reflection {...p}></Reflection>;
+          }
+      }
+      let newScenarioComponents = [...scenarioComponents]
+      newScenarioComponents.find(x => x.id === g_id).component = c
+
+      setScenarioComponents(newScenarioComponents);
+      setScenarioComponent(scenarioComponents.find(x => x.id === g_id).component);
+
+
+      }
+      function onFailure(){
+        console.log("Get failed")
+      }
+      universalFetch(setGetValues,endpoint,onFailure,onSuccess,{PAGE:g_id});
+    }
+
+    function handleConfigurerGet(setGetValues){
+
+    }
+
+    function handleConversationEditorGet(setGetValues){
+
+    }
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
 
-    const scenario_ID = props.scenario_ID
-
+    //const scenario_ID = props.scenario_ID
+    const scenario_ID = 1
     const [getValues,setGetValues] = useState({
       data: null,
       loading: true,
       error: null,
     })
+
     const [deleteValues,setDeleteValues]= useState({
       data: null,
       loading: true,
@@ -144,80 +234,62 @@ export default function Editor(props) {
     })
 
     var page_names_and_ids = [
-      {id: 3, title: "Introduction", component:null},
+
       {id: 4, title: "Initial Action", component:null},
-      {id: 5, title: "Initial Reflection",component:null},
+      {id: 6, title: "Initial Reflection",component:null},
     ]
 
 
+    useEffect(()=>{
+        handleLogisticsGet(setGetValues,scenario_ID);
+    },[])
 
-    const [scenarioComponents, setScenarioComponents] = useState(
-        initialComponents
-    );
-    const [scenarioComponent, setScenarioComponent] = useState(
-        scenarioComponents[0].component
-    );
+    const [scenarioComponents, setScenarioComponents] = useState(initialComponents);
 
-    setScenarioComponents(scenarioComponents.concat(page_names_and_ids));
-    //for(var i = 0; i < page_names_and_ids.length;i++){
-      //setScenarioComponents(scenarioComponents.concat(page_names_and_ids[i]));
-    //}
+
+    const [scenarioComponent, setScenarioComponent] = useState(scenarioComponents[0].component);
+
+
+    const [shouldFetch, setShouldFetch] = useState(0);
+
+    let onClick= (component,id,title) => {
+          console.log("button was clicked")
+          if (component === null){
+            console.log("detects component is null")
+            var p = null
+            var c = null
+            if(title === "Configure Issues"){
+              //getConfigureIssues
+            }
+            else if(title === "Conversation Editor"){
+              //getConversationEditor
+            }
+            else{
+              var currPageInfo = {data:1,
+                                  loading:0,error:false}
+              handlePageGet(currPageInfo,setGetValues,id)
+
+          }}
+
+
+          //console.log(typeof scenarioComponents[0])
+          //if(scenarioComponents.find(x=>x.id===id) != null){
+          setScenarioComponent(scenarioComponents.find(x => x.id === id).component);
+          //}
+
+    }
+
+    //useEffect(setScenarioComponent,[shouldFetch])
+    //useEffect(onClick,[shouldFetch]);
 
     const deleteByID = (d_id) => {
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
-        handleDelete(setDeleteValues,d_id);
+        //handleDelete(setDeleteValues,d_id);
     };
 
     function Sidebar() {
         const classes = useStyles();
 
-        const onClick = function (component,id,title) {
-            if (component.component === null){
-              var p = null
-              var c = null
-              if(component.title === "Configure Issues"){
-                //getConfigureIssues
-              }
-              else if(component.title === "Conversation Editor"){
-                //getConversationEditor
-              }
-              else{
-                handleGet(setGetValues,component.id);
-                const currPageInfo = getValues.data
-
-                if(currPageInfo.PAGE_TYPE == "G"){
-                  p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
-                  page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
-                  version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
-                  body: currPageInfo.BODY,bodies: currPageInfo.BODIES,created: false}
-                  c = <Generic {...p}></Generic>;
-
-                }
-                else if(currPageInfo.PAGE_TYPE == "A"){
-                  p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
-                  page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
-                  version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
-                  body: currPageInfo.BODY,choice1:currPageInfo.CHOICES[0].CHOICE,
-                  r1:currPageInfo.CHOICES[0].RESULT_PAGE,choice2:currPageInfo.CHOICES[1].CHOICE,
-                  r2:currPageInfo.CHOICES[1].RESULT_PAGE,created: false}
-                  c = <Action {...p}></Action>;
-                }
-                else if(currPageInfo.PAGE_TYPE == "R"){
-                  p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
-                  page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
-                  version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
-                  body: currPageInfo.BODY,reflection_questions:currPageInfo.REFLECTION_QUESTIONS,created: false}
-                  c = <Reflection {...p}></Reflection>;
-                }
-
-              }
-              let newScenarioComponents = [...scenarioComponents]
-              newScenarioComponents.find(x => x.id === id).component = c
-              setScenarioComponents(newScenarioComponents)
-            }
-
-            setScenarioComponent(scenarioComponents.find(x => x.id === id));
-        };
 
         const addNewPage = (id, title, componentType) => {
             var c = null;
@@ -288,7 +360,7 @@ export default function Editor(props) {
     return (
         <div className={classes.root}>
             <Sidebar />
-            <main className={classes.content}>{scenarioComponent}</main>
+            {(getValues.data || scenarioComponent != null) && <main className={classes.content}>{scenarioComponent}</main>}
         </div>
     );
 }

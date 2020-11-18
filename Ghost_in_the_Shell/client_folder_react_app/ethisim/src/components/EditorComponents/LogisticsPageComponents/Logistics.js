@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Logistics(props) {
+
+  const {postFunction,scenario_ID,version_ID,title,is_finished,
+    public,num_convos,professors,courses} = props
+
     const classes = useStyles();
     //temporary until backend implements id's
     const { scenarioName, className } = mockUnfinishedScenario;
