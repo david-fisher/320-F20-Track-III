@@ -18,6 +18,7 @@ import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
+import DeletePopupConversationEditor from '../../../DeleteWarnings/DeletePopupConversationEditor';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -219,15 +220,9 @@ export default function StakeHolder({
                 />
             </div>
 
-            <div id="DeleteButton">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => removeStakeHolder(id)}
-                >
-                    Delete
-                </Button>
-            </div>
+            <DeletePopupConversationEditor
+                remove={() => removeStakeHolder(id)}
+            />
 
             <div id="PointButton">
                 <Button

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import DeletePopupIssues from '../../DeleteWarnings/DeletePopupIssues';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -56,16 +57,10 @@ export default function IssueEntryField(props) {
                             Save
                         </Button>
                     </div>
-                    <div>
-                        <Button
-                            className={classes.button}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => props.onDelete(props.entry.id)}
-                        >
-                            Delete
-                        </Button>
-                    </div>
+
+                    <DeletePopupIssues
+                        remove={() => props.onDelete(props.entry.id)}
+                    />
                 </Box>
             </Box>
         </div>

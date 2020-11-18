@@ -4,6 +4,7 @@ import AuthorField from './Author';
 import { isBrowser } from 'react-device-detect';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { mockUnfinishedScenario } from '../../../shared/mockScenarioData';
+import DeletePopupScenarioLogistics from '../../DeleteWarnings/DeletePopupScenarioLogistics';
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -157,12 +158,10 @@ export default function Logistics(props) {
                 <form className={classes.buttons} noValidate autoComplete="off">
                     <Button variant="contained">View Student Responses</Button>
                     <Button variant="contained" color="primary">
-                        Delete Scenario
-                    </Button>
-                    <Button variant="contained" color="primary">
                         View Version History
                     </Button>
                 </form>
+                <DeletePopupScenarioLogistics />
             </div>
         </Container>
     );
@@ -237,12 +236,10 @@ export default function Logistics(props) {
                             View Student Responses
                         </Button>
                         <Button variant="contained" color="primary">
-                            Delete Scenario
-                        </Button>
-                        <Button variant="contained" color="primary">
                             View Version History
                         </Button>
                     </form>
+                    <DeletePopupScenarioLogistics />
                 </div>
                 <Button
                     className={classes.saveButton}

@@ -1,20 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import PropTypes from 'prop-types';
-
-const useStyles = makeStyles((theme) => ({
-    margin: {
-        margin: theme.spacing(0.5),
-        marginTop: theme.spacing(0),
-        height: '5vh',
-        textTransform: 'unset',
-    },
-}));
+import DeletePopupInformationItem from '../../DeleteWarnings/DeletePopupInformationItem';
 
 let handleChange = (content) => {
     //TODO Implement
@@ -29,7 +19,6 @@ InformationItem.propTypes = {
 };
 
 export default function InformationItem(props) {
-    const classes = useStyles();
     InformationItem.propTypes = props.data;
 
     return (
@@ -176,21 +165,9 @@ export default function InformationItem(props) {
             >
                 <Box p={1}>
                     <div>
-                        <Button
-                            className={classes.margin}
-                            variant="contained"
-                            color="primary"
-                        >
-                            Save
-                        </Button>
-                        <Button
-                            className={classes.margin}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => props.onDelete(props.iItem.id)}
-                        >
-                            Delete
-                        </Button>
+                        <DeletePopupInformationItem
+                            remove={() => props.onDelete(props.iItem.id)}
+                        />
                     </div>
                 </Box>
             </Box>

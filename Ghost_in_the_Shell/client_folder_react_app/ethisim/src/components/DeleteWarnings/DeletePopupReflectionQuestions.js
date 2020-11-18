@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -7,59 +7,47 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import PropTypes from 'prop-types';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-    deleteButton: {
-        minWidth: '40px',
-        border: '3px solid',
-        borderColor: theme.palette.primary.main,
-        backgroundColor: theme.palette.primary.light,
-    },
-    deleteButtonContainer: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-}));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-DeletePopup.propTypes = {
-    id: PropTypes.number.isRequired,
-    deleteByID: PropTypes.any.isRequired,
+const useStyles = makeStyles((theme) => ({
+    margin: {
+        margin: theme.spacing(0.5),
+        marginTop: theme.spacing(0),
+        width: 50,
+    },
+}));
+
+DeletePopupReflectionQuestions.propTypes = {
+    remove: PropTypes.any.isRequired,
 };
 
-export default function DeletePopup(props) {
-    DeletePopup.propTypes = props.data;
-    const classes = useStyles();
+export default function DeletePopupReflectionQuestions(props) {
+    DeletePopupReflectionQuestions.propTypes = props.data;
     const data = props;
-    const { deleteByID, id } = data;
-
+    const { remove } = data;
+    const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
 
-    function handleDelete() {
-        deleteByID(id);
-    }
-
     return (
-        <Grid item xs={2} className={classes.deleteButtonContainer}>
+        <div>
             <Button
-                className={classes.deleteButton}
+                className={classes.margin}
+                variant="contained"
                 color="primary"
                 onClick={handleClickOpen}
             >
-                <DeleteForeverIcon />
+                Delete
             </Button>
             <Dialog
                 open={open}
@@ -74,11 +62,11 @@ export default function DeletePopup(props) {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Once this action is performed it cannot be undone
+                        Once this action is performed it cannot be undone!
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDelete} color="primary">
+                    <Button onClick={remove} color="primary">
                         Yes
                     </Button>
                     <Button onClick={handleClose} color="primary">
@@ -86,6 +74,6 @@ export default function DeletePopup(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Grid>
+        </div>
     );
 }

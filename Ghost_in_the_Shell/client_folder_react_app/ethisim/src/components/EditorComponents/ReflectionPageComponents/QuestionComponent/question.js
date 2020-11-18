@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
+import DeletePopupReflectionQuestions from '../../../DeleteWarnings/DeletePopupReflectionQuestions';
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -78,14 +79,9 @@ export default function QuestionField({
                         </Button>
                     </div>
                     <div>
-                        <Button
-                            className={classes.margin}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => removeQuestion(id)}
-                        >
-                            Delete
-                        </Button>
+                        <DeletePopupReflectionQuestions
+                            remove={() => removeQuestion(id)}
+                        />
                     </div>
                 </Box>
             </Box>

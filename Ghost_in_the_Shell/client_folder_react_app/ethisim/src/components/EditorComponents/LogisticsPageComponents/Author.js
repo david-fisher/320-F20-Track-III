@@ -1,22 +1,9 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Button, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-
-const useStyles = makeStyles((theme) => ({
-    margin: {
-        margin: theme.spacing(0.5),
-        marginTop: theme.spacing(0),
-        textTransform: 'unset',
-    },
-    buttonContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-}));
+import DeletePopupLogistics from '../../DeleteWarnings/DeletePopupLogistics';
 
 Author.propTypes = {
     author: PropTypes.string,
@@ -33,8 +20,6 @@ export default function Author({
     id,
     removeAuthor,
 }) {
-    const classes = useStyles();
-
     const [authorValue, setAuthorValue] = useState(author);
     const onChangeAuthor = (event) => {
         setAuthorValue(event.target.value);
@@ -68,16 +53,7 @@ export default function Author({
                     </Box>
                 </Grid>
                 <Grid item xs={2}>
-                    <Box p={1} className={classes.buttonContainer}>
-                        <Button
-                            className={classes.margin}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => removeAuthor(id)}
-                        >
-                            Delete
-                        </Button>
-                    </Box>
+                    <DeletePopupLogistics remove={() => removeAuthor(id)} />
                 </Grid>
             </Grid>
         </div>

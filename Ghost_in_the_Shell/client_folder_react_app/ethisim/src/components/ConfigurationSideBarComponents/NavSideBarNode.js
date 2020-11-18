@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeletePopup from '../DeleteWarnings/DeletePopup';
+import DeletePopupSidebar from '../DeleteWarnings/DeletePopupSidebar';
 //import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,7 +74,7 @@ export default function NavSideBarNode(props) {
                         </Button>
                     </Grid>
 
-                    <DeletePopup id={id} deleteByID={deleteByID} />
+                    <DeletePopupSidebar id={id} deleteByID={deleteByID} />
                 </Grid>
             );
         }
