@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AuthorField from './Author';
+import Author from './Author';
 import { isBrowser } from 'react-device-detect';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
-import { mockUnfinishedScenario } from '../../../shared/mockScenarioData';
+import axios from 'axios';
+import { ContactsOutlined } from '@material-ui/icons';
+
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -33,74 +35,82 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
-    saveButton: {
-        margin: theme.spacing(2),
-        float: 'right',
-        textTransform: 'unset',
-    },
 }));
 
-export default function Logistics(props) {
+export default function Logistics() {
     const classes = useStyles();
     //temporary until backend implements id's
-    const { scenarioName, className } = mockUnfinishedScenario;
-    const [scenarioNameValue, setScenarioNameValue] = useState(scenarioName);
-    const [classNameValue, setClassNameValue] = useState(className);
+    const [id, setId] = useState(17);
+    const [authors, setAuthor] = useState([<Author key={id} />]);
+    const [title,setTitle] = useState('');
+    const [course,setCourse] = useState('');
+    const [shouldFetch, setShouldFetch] = useState(0);
 
-    const onChangeScenarioName = (event) => {
-        setScenarioNameValue(event.target.value);
+    const addAuthor = (event) => {
+        setAuthor(authors.concat(<Author key={id + 1} />));
+        setId(id + 1);
+        event.preventDefault();
     };
 
-    const onChangeClassName = (event) => {
-        setClassNameValue(event.target.value);
-    };
 
-    const initialAuthors = mockUnfinishedScenario.authors;
-    //Assume authors is an array of strings representing author names
-    const [authors, setAuthors] = useState(initialAuthors);
 
-    //Set fake ID for list item
-    let initialAuthorsWithID = authors.map(function (author) {
-        return {
-            author: author,
-            id: Math.floor(Math.random() * 10000),
-        };
-    });
 
-    const [authorsWithID, setAuthorsWithID] = useState(initialAuthorsWithID);
+  const [NewScenario, setEdit] = useState({
+        SCENARIO: 0,
+        VERSION: 0,
+        NAME: "" , 
+        PUBLIC: false,
+        NUM_CONVERSATION: 0,
+        PROFESSOR: 0,
+        IS_FINISHED: false, 
+        DATE_CREATED: " ",
+        COURSES: [],
+    
+});
 
-    let resetAuthorsWithID = (authorsWithID) => {
-        let initialAuthorsWithID = authors.map(function (author) {
-            return {
-                author: author,
-                id: Math.floor(Math.random() * 10000),
-            };
-        });
-        setAuthorsWithID(initialAuthorsWithID);
-    };
 
-    useEffect(resetAuthorsWithID, [authors]);
+let getData = function get() {
+ const res = axios.get('http://localhost:8000/logistics?scenario_id=' + id).then(function (response) {
+  //console.log(response.data);
+  NewScenario.SCENARIO = response.data.SCENARIO;
+  NewScenario.VERSION= response.data.VERSION;
+  NewScenario.NAME = response.data.NAME;
+  NewScenario.PUBLIC = response.data.PUBLIC;
+  NewScenario.NUM_CONVERSATION = response.data.NUM_CONVERSATION;
+  NewScenario.PROFESSOR = response.data.PROFESSOR;
+  NewScenario.IS_FINISHED = response.data.IS_FINISHED;
+  NewScenario.DATE_CREATED = response.data.DATA_CREATED;
+  NewScenario.COURSES = response.data.COURSES;
+  setEdit(NewScenario);
+  console.log("doggy");
+  console.log(NewScenario);
+  console.log(NewScenario.NAME);
+});
+}
 
-    const removeAuthor = (authorID) => {
-        const leftAuthors = authorsWithID.filter(
-            (author) => author.id !== authorID
-        );
-        setAuthorsWithID(leftAuthors);
-    };
+useEffect(getData, [shouldFetch]);
 
-    const addAuthor = (e) => {
-        let newAuthors = authorsWithID.map((data) => data.author);
-        newAuthors = [...newAuthors, ''];
-        setAuthors(newAuthors);
-        const newAuthorsWithID = [
-            ...authorsWithID,
-            {
-                id: Math.floor(Math.random() * 10000),
-                author: '',
-            },
-        ];
-        setAuthorsWithID(newAuthorsWithID);
-    };
+const handleSave = () => {
+    console.log("Sending Put");
+    console.log( NewScenario);
+    axios.put(`http://localhost:8000/logistics?scenario_id=` + id,  NewScenario )
+    .then(res => {
+      console.log(res.data);
+    })
+
+}
+
+const handleOnChange = event => {
+    console.log("changed name");
+    NewScenario.NAME = event.target.value 
+    setEdit(NewScenario);
+  };
+
+  
+
+  
+
+
 
     //default if it's a browser
     var body = (
@@ -110,29 +120,12 @@ export default function Logistics(props) {
             </Typography>
             <form className={classes.textfields} noValidate autoComplete="off">
                 Simulation Title
-                <TextField
-                    id="Simulation Title"
-                    value={scenarioNameValue}
-                    onChange={onChangeScenarioName}
-                />
+                <TextField id="Simulation Title" value= {title} label="" onChange= {handleOnChange} />
                 Course Name
-                <TextField
-                    id="Course Name"
-                    value={classNameValue}
-                    onChange={onChangeClassName}
-                />
+                <TextField id="Course Name" value= {course} label=""  />
                 Authors
             </form>
-            {authorsWithID.map((data) => (
-                <AuthorField
-                    key={data.id}
-                    id={data.id}
-                    removeAuthor={removeAuthor}
-                    author={data.author}
-                    listOfAuthors={authorsWithID}
-                    setListOfAuthors={setAuthorsWithID}
-                />
-            ))}
+            {authors}
             <div className={classes.subdiv}>
                 <form className={classes.buttons} noValidate autoComplete="off">
                     <Button
@@ -145,10 +138,13 @@ export default function Logistics(props) {
                     <Button variant="contained" color="primary">
                         Save Authors
                     </Button>
+                    <Button variant="contained" color="primary">
+                        Put
+                    </Button>
                 </form>
             </div>
             <Typography align="left" variant="h6">
-                Scenario ID: 1342431
+                Scenario ID: {id}
             </Typography>
             <Typography align="left" variant="h6">
                 Shareable Link: wwww.ethisim.com
@@ -169,46 +165,33 @@ export default function Logistics(props) {
 
     //convert this to "isMobile" later; using "isBrowser" for testing purposes
     if (isBrowser) {
+        
         body = (
             <Container component="main">
                 <Typography align="center" variant="h2">
                     Logistics
                 </Typography>
+                
                 <form
                     className={classes.textfields}
                     noValidate
                     autoComplete="off"
+                   
                 >
                     Simulation Title
-                    <TextField
-                        id="Simulation Title"
-                        value={scenarioNameValue}
-                        onChange={onChangeScenarioName}
-                    />
-                    Course Name
-                    <TextField
-                        id="Course Name"
-                        value={classNameValue}
-                        onChange={onChangeClassName}
-                    />
-                    Authors
+                    <TextField id="Simulation Title" value= {NewScenario.NAME} label="" onChange= {handleOnChange} />
+                Course Name
+                <TextField id="Course Name" value= {course} label="" />
+                Authors
                 </form>
-                {authorsWithID.map((data) => (
-                    <AuthorField
-                        key={data.id}
-                        id={data.id}
-                        removeAuthor={removeAuthor}
-                        author={data.author}
-                        listOfAuthors={authorsWithID}
-                        setListOfAuthors={setAuthorsWithID}
-                    />
-                ))}
+                {authors}
                 <div className={classes.subdiv}>
                     <form
                         className={classes.buttons}
                         noValidate
                         autoComplete="off"
                     >
+                        
                         <Button
                             variant="contained"
                             color="primary"
@@ -220,14 +203,17 @@ export default function Logistics(props) {
                             Save Authors
                         </Button>
                     </form>
+                    
                 </div>
                 <Typography align="left" variant="h6">
-                    Scenario ID: 1342431
+                    Scenario ID: {id}
                 </Typography>
+                
                 <Typography align="left" variant="h6">
                     Shareable Link: wwww.ethisim.com
                 </Typography>
                 <div className={classes.subdiv}>
+                    
                     <form
                         className={classes.buttons}
                         noValidate
@@ -237,20 +223,13 @@ export default function Logistics(props) {
                             View Student Responses
                         </Button>
                         <Button variant="contained" color="primary">
-                            Delete Scenario
-                        </Button>
-                        <Button variant="contained" color="primary">
                             View Version History
                         </Button>
+                        <Button variant="contained" color="primary"  onClick={handleSave}>
+                        SAVE
+                    </Button>
                     </form>
                 </div>
-                <Button
-                    className={classes.saveButton}
-                    variant="contained"
-                    color="primary"
-                >
-                    Save
-                </Button>
             </Container>
         );
     }

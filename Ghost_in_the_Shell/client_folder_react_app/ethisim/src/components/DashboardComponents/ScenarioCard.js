@@ -7,6 +7,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -34,31 +35,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 ScenarioCard.propTypes = {
-    id: PropTypes.number,
-    scenarioName: PropTypes.string,
-    className: PropTypes.string,
-    scenarioData: PropTypes.any,
-    finished: PropTypes.bool,
+    SCENARIO: PropTypes.number,
+    VERSION: PropTypes.number,
+    NAME: PropTypes.string,
+    PUBLIC: PropTypes.bool,
+    NUM_CONVERSATION: PropTypes.number,
+    PROFESSOR: PropTypes.number,
+    IS_FINISHED: PropTypes.bool,
+    DATE_CREATED: PropTypes.string,
+    COURSES : PropTypes.array,
 };
 
-export default function ScenarioCard({
-    id,
-    scenarioName,
-    className,
-    finished,
-    scenarioData,
-}) {
+export default function ScenarioCard(props) {
     const classes = useStyles();
-
+    ScenarioCard.propTypes = props.data;
+    const data = props.data;
+    const { SCENARIO,
+            VERSION,
+            NAME, 
+            PUBLIC,
+            NUM_CONVERSATION,
+            PROFESSOR,
+            IS_FINISHED, 
+            DATE_CREATED,
+            COURSES } = data;
+        
     //If scenario is unfinished, we show the buttons "Edit," "Delete," "Share"
     //If scenario is finished, we show the button "Edit," "Delete," "Share," "View Student Data"
-    const sizeOfShareButton = finished ? 6 : 12;
-    const dataButton = finished ? (
+    const sizeOfShareButton = IS_FINISHED ? 6 : 12;
+    const dataButton = IS_FINISHED ? (
         <Grid
             component={Link}
             to={{
-                pathname: '/data/' + id,
-                scenarioData,
+                pathname: '/data/' + data.id,
+                data: data,
             }}
             className={classes.button}
             item
@@ -76,20 +86,21 @@ export default function ScenarioCard({
             </Button>
         </Grid>
     ) : null;
-
+         
     const buttons = (
         <Grid className={classes.buttonContainer} container>
             <Grid className={classes.button} item xs={6}>
                 <Button
                     component={Link}
                     to={{
-                        pathname: '/editor/' + id,
-                        scenarioData,
+                        pathname: '/editor/' + SCENARIO,
+                        data: data,
                     }}
                     className={classes.buttonText}
                     variant="contained"
                     color="primary"
                 >
+                    
                     <EditIcon />
                     <Typography variant="subtitle1">Edit</Typography>
                 </Button>
@@ -99,10 +110,11 @@ export default function ScenarioCard({
                     className={classes.buttonText}
                     variant="contained"
                     color="primary"
+                    onClick = {function(){ {props.delete(SCENARIO,IS_FINISHED)} }}
                 >
                     <DeleteForeverIcon />
                     <Typography variant="subtitle1" noWrap>
-                        Delete
+                        Delete 
                     </Typography>
                 </Button>
             </Grid>
@@ -123,11 +135,11 @@ export default function ScenarioCard({
     );
 
     return (
-        <Grid key={id} item xs>
+        <Grid key={SCENARIO} item xs>
             <Card>
                 <CardContent className={classes.scenarioContainer}>
                     <Typography variant="h6" display="block" noWrap>
-                        {scenarioName}
+                        {NAME}
                     </Typography>
                     <Typography
                         variant="subtitle1"
@@ -135,7 +147,7 @@ export default function ScenarioCard({
                         display="block"
                         noWrap
                     >
-                        {className}
+                        {SCENARIO}
                     </Typography>
                 </CardContent>
             </Card>
