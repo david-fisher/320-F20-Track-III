@@ -101,7 +101,7 @@ export default function IssueEntryField({
             return;
         }
         //Issue score is null
-        if (!issueScore) {
+        if (!issueScore || !issueScore.trim()) {
             setErrorBannerMessage('Issue score is not filled in!');
             setErrorBannerFade(true);
             return;
