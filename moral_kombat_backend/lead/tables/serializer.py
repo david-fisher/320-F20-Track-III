@@ -115,5 +115,5 @@ class Action_pageSerializer(serializers.ModelSerializer):
 class coverageSerializer(serializers.ModelSerializer):
     class Meta:
         model = coverage
-        fields = ('STAKEHOLDER_ID', 'ISSUE_ID', 'VERSION_ID', 'COVERAGE_SCORE')
+        fields = ('STAKEHOLDER', 'ISSUE', 'COVERAGE_SCORE')
 

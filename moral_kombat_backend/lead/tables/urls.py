@@ -41,6 +41,9 @@ urlpatterns = [
     path('multi_issue', multi_issue.as_view()),
     path('dashboard', dashboard_page.as_view()),
     path('flowchart', flowchart.as_view()),
+    path('coverages', coverages_page.as_view()),
+    path('stakeholder', stakeholders_page.as_view()),
+
 ] 
 
 urlpatterns += router.urls

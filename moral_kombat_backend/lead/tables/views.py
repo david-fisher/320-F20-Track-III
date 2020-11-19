@@ -13,6 +13,7 @@ from rest_framework.decorators import api_view
 from tables.models import *
 from .serializer import *
 from django.db import connection
+from rest_framework.parsers import JSONParser
 
 
 # Stakeholders ViewSet
@@ -150,6 +151,8 @@ class CoverageViewSet(viewsets.ModelViewSet):
     queryset = coverage.objects.all()
     permission_classe = [permissions.AllowAny]
     serializer_class = coverageSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['STAKEHOLDER']
 
 # class StakeholderListView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
 #     # queryset = stakeholders.objects.all()
@@ -314,6 +317,8 @@ class IssuesViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = IssuesSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['SCENARIO_ID', "NAME"]
 
 class Action_pageViewSet(viewsets.ModelViewSet):
     queryset = action_page.objects.all()
@@ -554,3 +559,243 @@ class flowchart(APIView):
             if page['PAGE_TYPE'] == 'A':
                 page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
         return Response(pages_query)
+
+
+class coverages_page(APIView):
+    def put(self, request, *args, **kwargs):
+        # """
+        # docstring
+        # """
+        data = JSONParser().parse(request)
+
+        if type(data) == list:
+            response = []
+            for item in data:
+                stkholderid = item['STAKEHOLDER']
+                issueid = item['ISSUE']
+                updatingItem = coverage.objects.get(
+                    STAKEHOLDER=stkholderid, ISSUE=issueid)
+                serializer = coverageSerializer(
+                    updatingItem, data=item)
+                if serializer.is_valid():
+                    serializer.save()
+                    response.append(serializer.data)
+                else:
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            stkholderid = data['STAKEHOLDER']
+            issueid = data['ISSUE']
+            updatingItem = coverage.objects.get(
+                STAKEHOLDER=stkholderid, ISSUE=issueid)
+            serializer = coverageSerializer(
+                updatingItem, data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class stakeholders_page(APIView):
+    
+    def add_detail(self, stkholders):
+
+        for stkholder in stkholders:
+            id = stkholder['STAKEHOLDER']
+
+            queryset = conversations.objects.filter(STAKEHOLDER=id)
+            conList = ConversationsSerializer(queryset, many=True).data
+            stkholder['CONVERSATIONS'] = conList
+
+            queryset = coverage.objects.filter(STAKEHOLDER=id)
+            links = coverageSerializer(queryset, many=True).data
+            issuesList = []
+            for link in links:
+                issueID = link['ISSUE']
+                issuesList.append(IssuesSerializer(
+                    issues.objects.get(ISSUE=issueID)).data)
+            stkholder['ISSUES'] = issuesList
+
+        return stkholders
+
+    def get(self, request, *args, **kwargs):
+        '''
+        return format
+        [
+            {
+                "STAKEHOLDER": 3,
+                "NAME": "Mon",
+                "DESCRIPTION": "This is Mon",
+                "JOB": "Driver",
+                "INTRODUCTION": "Mon is a driver",
+                "SCENARIO": 1,
+                "VERSION": 1,
+                "CONVERSATIONS": [
+                    {
+                        "CONVERSATION": 4,
+                        "QUESTION": "Question 1",
+                        "RESPONSE": "Answer 1",
+                        "STAKEHOLDER": 3
+                    }
+                ],
+                "ISSUES": [
+                    {
+                        "ISSUE": 4,
+                        "NAME": "Issue 3",
+                        "IMPORTANCE_SCORE": 10.0,
+                        "SCENARIO": 1,
+                        "VERSION": 1
+                    }
+                ]
+            },
+        ]
+        parse scenario_id and stakeholder_id from the request URL
+        example
+        http://127.0.0.1:8000/stakeholders?scenario_id=3
+        http://127.0.0.1:8000/stakeholders?stakeholder_id=0
+        '''
+        SCENARIO_ID = self.request.query_params.get('scenario_id')
+        STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
+        # STAKEHOLDER_ID = self.request.GET.get('stakeholder_id')
+
+        # handle request for scenario_id
+        # get all stakeholder in scenario with id = scenario_id
+        if SCENARIO_ID != None:
+            # checking valid scenario ID
+            try:
+                # return empty if scenario doesn't have any stakeholder
+                # return list of stakeholder belong to that scenario
+                scenarios.objects.get(SCENARIO=SCENARIO_ID)
+                queryset = stakeholders.objects.filter(
+                    SCENARIO=SCENARIO_ID)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
+                data = self.add_detail(data)
+                return Response(data, status=status.HTTP_200_OK)
+
+            # return an error for non-existed scenario id
+            except scenarios.DoesNotExist:
+                message = {'MESSAGE': 'INVALID SCENARIO ID'}
+                return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+        # handle request for stakeholder_id
+        # get the stakeholder id = stakeholder_id
+        if STAKEHOLDER_ID != None:
+            try:
+                queryset = stakeholders.objects.filter(
+                    STAKEHOLDER=STAKEHOLDER_ID)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
+                data = self.add_detail(data)
+                return Response(data, status=status.HTTP_200_OK)
+
+            except stakeholders.DoesNotExist:
+                message = {'MESSAGE': 'INVALID STAKEHOLDER ID'}
+                return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+        queryset = stakeholders.objects.all()
+        data = StakeholdersSerializer(queryset, many=True).data
+        return Response(data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+    
+        serializer = StakeholdersSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            stkholderid = serializer.data['STAKEHOLDER']
+            scenarioid = serializer.data['SCENARIO']
+            queryset = Issues.objects.filter(SCENARIO=scenarioid)
+            data = IssuesSerializer(queryset, many=True).data
+            for item in data:
+                itemdict = {}
+                itemdict['STAKEHOLDER'] = stkholderid
+                itemdict['ISSUE'] = item['ISSUE']
+                itemdict['COVERAGE_SCORE'] = 0
+                print(itemdict)
+                itemSerializer = coverageSerializer(data=itemdict)
+                if itemSerializer.is_valid():
+                    itemSerializer.save()
+                else:
+                    return Response(itemSerializer.errors,
+                                    status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+
+        STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
+
+        if STAKEHOLDER_ID != None:
+            try:
+                response = stakeholders.objects.get(
+                    STAKEHOLDER_ID=STAKEHOLDER_ID)
+                response.delete()
+                return Response({'message': 'DELETED'}, status=status.HTTP_202_ACCEPTED)
+            except stakeholders.DoesNotExist:
+                return Response({'message': 'NOT FOUND'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'message': 'MISSING ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, *args, **kwargs):
+        '''
+        put can take one object or a list
+        for one object put
+        {
+            "STAKEHOLDER": 1,
+            "NAME": "Stakeholder 1a",
+            "DESCRIPTION": "Description 1",
+            "JOB": "Job 1",
+            "INTRODUCTION": "Introduction 1",
+            "SCENARIO": 1,
+            "VERSION": 1
+        }
+        for list put
+        [
+            {
+                "STAKEHOLDER": 1,
+                "NAME": "Stakeholder 1a",
+                "DESCRIPTION": "Description 1",
+                "JOB": "Job 1",
+                "INTRODUCTION": "Introduction 1",
+                "SCENARIO": 1,
+                "VERSION": 1
+            },
+            {
+                "STAKEHOLDER": 2,
+                "NAME": "Stakeholder 2a",
+                "DESCRIPTION": "Description 2",
+                "JOB": "Job 2",
+                "INTRODUCTION": "Introduction 2",
+                "SCENARIO": 1,
+                "VERSION": 1
+            }
+        ]
+        '''
+        data = JSONParser().parse(request)
+
+        if type(data) == list:
+            response = []
+            for item in data:
+                id = item['STAKEHOLDER']
+                updatingItem = stakeholders.objects.get(STAKEHOLDER=id)
+                stkholderSerializer = StakeholdersSerializer(
+                    updatingItem, data=item)
+                if stkholderSerializer.is_valid():
+                    stkholderSerializer.save()
+                    response.append(stkholderSerializer.data)
+                else:
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            id = data['STAKEHOLDER']
+            updatingItem = stakeholders.objects.get(STAKEHOLDER=id)
+            stkholderSerializer = StakeholdersSerializer(
+                updatingItem, data=data)
+            if stkholderSerializer.is_valid():
+                stkholderSerializer.save()
+                return Response(stkholderSerializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(stkholderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
