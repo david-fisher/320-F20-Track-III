@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
 import { Typography, Container, Button } from '@material-ui/core';
@@ -26,10 +26,6 @@ export default function Generic(props) {
     })
 
 
-
-
-
-
     const classes = useStyles();
     //const titleData = mockGenericComponent.title;
     //const bodyData = mockGenericComponent.body;
@@ -43,15 +39,19 @@ export default function Generic(props) {
       SCENARIO: scenario_ID,
       NEXT_PAGE_ID: next_page_id,
       PAGE_BODY: bodyText,
+      BODIES: bodiesText
     }
 
+    useEffect(()=>{
     if(created === true){
+        //created = false
         postFunction(setPostValues,postReqBody,scenario_ID);
         console.log(postValues);
     }
+  },[])
 
     const savePage = () => {
-      postFunction(setPostValues,postReqBody,scenario_ID);
+      //postFunction(setPostValues,postReqBody,scenario_ID);
       console.log(postValues);
     }
 

@@ -93,7 +93,7 @@ function sleep(ms){
 }
 //Sidebar Components
 var initialComponents = [
-    { id: 0, title: 'Logistics', component: null},
+    { id: 0, title: 'Logistics', component: <Logistics/>},
     { id: 1, title: 'Configure Issues', component: <ConfigureIssues/> },
     { id: 2, title: 'Conversation Editor', component: <ConversationEditor/> },
     {id: 3, title: "Introduction", component:null},
@@ -173,7 +173,7 @@ export default function Editor(props) {
           if(currPageInfo.PAGE_TYPE === "G"){
             p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
             page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
-            version_ID: currPageInfo.VERSION, next_page_id: currPageInfo.NEXT_PAGE,
+            version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
             body: currPageInfo.PAGE_BODY,bodies: currPageInfo.BODIES,created: false}
             c = <Generic {...p}></Generic>;
 
@@ -240,12 +240,12 @@ export default function Editor(props) {
     ]
 
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         handleLogisticsGet(setGetValues,scenario_ID);
-    },[])
+    },[])*/
 
     const [scenarioComponents, setScenarioComponents] = useState(
-      initialComponents
+      initialComponents.concat(page_names_and_ids)
     //initialComponents.concat(page_names_and_ids)
   );
 
@@ -270,7 +270,7 @@ export default function Editor(props) {
             else{
               var currPageInfo = {data:1,
                                   loading:0,error:false}
-              handlePageGet(currPageInfo,setGetValues,id)
+              handlePageGet(setGetValues,id)
 
           }}
 
@@ -301,13 +301,13 @@ export default function Editor(props) {
                 case 'Generic':
                     p = {postFunction: handlePost, page_id: 1,page_type: "G",
                     page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
-                    body: "BODYTEXTGENERIC",bodies: ["t1"],created: true}
+                    body: "BODYTEXTGENERIC",bodies: ["t1","t1"],created: true}
                     c = <Generic {...p}></Generic>;
                     break;
                 case 'Reflection':
                     p = {postFunction: handlePost, page_id: 1,page_type: "R",
                     page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
-                    body: "BODYTEXTREFLECTION",reflection_questions: ["q1"],created: true}
+                    body: "BODYTEXTREFLECTION",reflection_questions: ["q1","q2"],created: true}
                     c = <Reflection {...p}></Reflection>;
                     break;
                 case 'Action':
@@ -324,6 +324,9 @@ export default function Editor(props) {
             );
         };
 
+        function handleAddNewComponent(){
+          setOpenPopup(true)
+        }
 
         return (
             <div>
@@ -343,7 +346,7 @@ export default function Editor(props) {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={addNewPage}
+                        onClick={handleAddNewComponent}
                         className={classes.addPageButton}
                     >
                         <AddIcon />

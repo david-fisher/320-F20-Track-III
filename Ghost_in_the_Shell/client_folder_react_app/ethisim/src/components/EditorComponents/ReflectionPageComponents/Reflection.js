@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
 import VersionControl from '../../VersionControl';
@@ -34,23 +34,23 @@ export default function Reflection(props) {
 
     var questionsList = []
     for (var i=0;i<questions.length;i++){
-      questionsList.concat({PAGE_ID:page_id,
-                            REFLECTION_QUESTION: questions[i]})
+      questionsList.concat({REFLECTION_QUESTION: questions[i]})
     }
-    var postReqBody = {PAGE_ID: page_id,
+    var postReqBody = {PAGE: page_id,
       PAGE_TYPE: page_type,
       PAGE_TITLE: title,
-      SCENARIO_ID: scenario_ID,
-      NEXT_PAGE_ID: next_page_id,
+      SCENARIO: scenario_ID,
+      NEXT_PAGE: next_page_id,
       BODY: bodyText,
       REFLECTION_QUESTIONS: questionsList
     }
-
+    useEffect(()=>{
     if(created === true){
+        //created = false
         postFunction(setPostValues,postReqBody,scenario_ID);
         console.log(postValues);
     }
-
+  },[])
     const savePage = () => {
       postFunction(setPostValues,postReqBody,scenario_ID);
       console.log(postValues);

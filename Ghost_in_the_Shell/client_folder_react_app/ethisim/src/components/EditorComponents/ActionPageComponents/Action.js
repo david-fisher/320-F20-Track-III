@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../GeneralPageComponents/Body';
@@ -52,20 +52,23 @@ export default function FinalAction(props) {
     const [result2, setResult2] = useState(r2);
 
 
-    var postReqBody = {PAGE_ID: page_id,
+    var postReqBody = {PAGE: page_id,
       PAGE_TYPE: page_type,
       PAGE_TITLE: title,
-      SCENARIO_ID: scenario_ID,
+      SCENARIO: scenario_ID,
       BODY: bodyText,
-      NEXT_PAGE_ID: next_page_id,
-      CHOICES: [{PAGE_ID:page_id,CHOICE:option1,RSEULT_PAGE:result1},
-              {PAGE_ID:page_id,CHOICE:option2,RSEULT_PAGE:result2}]
+      NEXT_PAGE: next_page_id,
+      CHOICES: [{CHOICE:option1,RESULT_PAGE:result1},
+              {CHOICE:option2,RESULT_PAGE:result2}]
     }
 
+    useEffect(()=>{
     if(created === true){
+        //created = false
         postFunction(setPostValues,postReqBody,scenario_ID);
         console.log(postValues);
     }
+  },[])
 
     const onChangeOption1 = (event) => {
         setOption1(event.target.value);
