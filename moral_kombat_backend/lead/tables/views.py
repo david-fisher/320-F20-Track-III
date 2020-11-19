@@ -311,6 +311,7 @@ class dashboard_page(APIView):
         #save the scenario
         scenario_serializer = ScenariosSerializer(data = request.data)
         if not (scenario_serializer.is_valid()):
+            print("scenario saved incorrectly")
             return Response(scenario_serializer.errors)
         scenario_serializer.save()
         scenario_dict = scenario_serializer.data
@@ -319,14 +320,18 @@ class dashboard_page(APIView):
         COURSES = request.data['COURSES']
         for course in COURSES:
             scenarios_for_dict = {
-                "COURSE" : course['COURSE'],
                 "SCENARIO" : scenario_dict['SCENARIO'],
+                "COURSE" : course['COURSE'],
                 "VERSION" : scenario_dict['VERSION']
             }
-
+            print(scenarios_for_dict)
+            print(scenario_dict)
             for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
-            if for_serializer.is_valid():
-                for_serializer.save()
+            if not for_serializer.is_valid():
+                print("scenarios_for saved incorrectly")
+                return Response(for_serializer.errors)
+
+            for_serializer.save()
 
         scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_dict['SCENARIO'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
