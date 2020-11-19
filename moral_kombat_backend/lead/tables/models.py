@@ -35,7 +35,7 @@ class pages(models.Model):
     PAGE_TITLE = models.CharField(max_length = 1000)
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="pages1")
     VERSION = models.IntegerField(default=1, editable=False)
-    NEXT_PAGE = models.OneToOneField('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'pages3', null=True)
+    NEXT_PAGE = models.IntegerField(null=True)
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
 
