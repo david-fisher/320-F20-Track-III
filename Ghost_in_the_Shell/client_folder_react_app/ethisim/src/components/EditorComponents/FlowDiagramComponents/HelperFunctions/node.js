@@ -26,6 +26,15 @@ export function actionNode({ data }) {
     );
 }
 
+export function introNode({ data }) {
+    return (
+        <>
+            {data.label}
+            <Handle type="source" position="bottom" />
+        </>
+    );
+}
+
 export function reflectionNode({ data }) {
     return (
         <>
@@ -50,7 +59,7 @@ export function conversationNode({ data }) {
     return (
         <>
             <Handle type="target" position="top" />
-            {data.label}
+            {'Stakeholder Conversations'}
             <Handle type="source" position="bottom" />
         </>
     );
