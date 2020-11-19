@@ -132,11 +132,11 @@ export default function FlowDiagram(props) {
                             initialElements
                         );
                     }
-                } else if (currentElement.NEXT_PAGE_id) {
+                } else if (currentElement.NEXT_PAGE) {
                     initialElements = addEdge(
                         {
                             source: currentElement.id.toString(),
-                            target: currentElement.NEXT_PAGE_id.toString(),
+                            target: currentElement.NEXT_PAGE.toString(),
                         },
                         initialElements
                     );
@@ -231,7 +231,7 @@ export default function FlowDiagram(props) {
                         (actionData) => {
                             return {
                                 id: actionData.id,
-                                PAGE: actionData.PAGE_id,
+                                PAGE: actionData.PAGE,
                                 CHOICE: actionData.CHOICE,
                                 RESULT_PAGE: null,
                             };
@@ -283,6 +283,7 @@ export default function FlowDiagram(props) {
             return array;
         }, []);
 
+        console.log(updatedElements);
         put(
             setElementsPUT,
             endpointPUT + tempScenarioID,
