@@ -72,7 +72,7 @@ export default function IssueEntryField({
     });
 
     const [issueID, setIssueID] = useState(id);
-    const [issueScore, setIssueScore] = useState(score ? score : '');
+    const [issueScore, setIssueScore] = useState(score !== null ? score : '');
     const [issueName, setIssueName] = useState(issue ? issue : '');
     const [newIssue, setNewIssue] = useState(isNewIssue);
     const [unsaved, setUnsaved] = useState(isNewIssue);
