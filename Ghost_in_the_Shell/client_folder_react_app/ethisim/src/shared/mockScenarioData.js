@@ -357,6 +357,172 @@ const mockFinishedScenarioData = {
     finished: true,
 };
 
+const mockFinishedScenarioStudentResponse = {
+    id: 0,
+    actions: [
+        {
+            id: 0,
+            title: 'Initial Action',
+            option1: 'Go ahead with the project.',
+            option2: 'Wait and talk with stakeholders.',
+            choice: 2,
+        },
+        {
+            id: 1,
+            title: 'Final  Action',
+            option1: 'Go ahead with the project.',
+            option2: 'Wait and talk with team members.',
+            choice: 2,
+        },
+    ],
+    reflections: [
+        {
+            id: 0,
+            title: 'Initial Reflection',
+            questionResponses: [
+                {
+                    question:
+                        'What are some ethical issues that may arise from this project task assignment?',
+                    response: 'I believe user privacy will be a major issue.',
+                },
+                {
+                    question:
+                        'Have you ever thought of the ethical issues you answered above in your day-to-day life?',
+                    response: 'No.',
+                },
+            ],
+        },
+        {
+            id: 1,
+            title: 'Final Reflection',
+            questionResponses: [
+                {
+                    question:
+                        'What is some information you believe that you still need to know in order to proceed?',
+                    response:
+                        'I still need information about how this technology could impact vulnerable people.',
+                },
+                {
+                    question: 'What ethical issues did you explore?',
+                    response:
+                        'I explored how my project task assignment could affect user privacy, short-term and long-term company profits, personal wealth, and environmental issues.',
+                },
+            ],
+        },
+    ],
+};
+
+const mockStudents = [
+    {
+        name: 'Enoch Hsiao',
+        age: 19,
+        grade: 'Sophomore',
+        gender: 'Male',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 0,
+    },
+    {
+        name: 'John Smith',
+        age: 20,
+        grade: 'Sophomore',
+        gender: 'Male',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 1,
+    },
+    {
+        name: 'Susie Lee',
+        age: 21,
+        grade: 'Junior',
+        gender: 'Female',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 2,
+    },
+    {
+        name: 'Rebecca Curr',
+        age: 19,
+        grade: 'Freshman',
+        gender: 'Female',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 3,
+    },
+    {
+        name: 'Sean Parker',
+        age: 22,
+        grade: 'Senior',
+        gender: 'Male',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 4,
+    },
+    {
+        name: 'Vicenzo lar',
+        age: 20,
+        grade: 'Junior',
+        gender: 'Male',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 5,
+    },
+    {
+        name: 'Filler1',
+        age: 20,
+        grade: 'Junior',
+        gender: 'Female',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 6,
+    },
+    {
+        name: 'Filler2',
+        age: 20,
+        grade: 'Junior',
+        gender: 'Female',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 7,
+    },
+    {
+        name: 'Filler3',
+        age: 20,
+        grade: 'Junior',
+        gender: 'Female',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 8,
+    },
+    {
+        name: 'Filler4',
+        age: 20,
+        grade: 'Junior',
+        gender: 'Female',
+        race: 'N/A',
+        major: 'Computer Science',
+        id: 9,
+    },
+    {
+        name: 'Filler5',
+        age: 20,
+        grade: 'Junior',
+        gender: 'Male',
+        race: 'N/A',
+        major: 'Math',
+        id: 10,
+    },
+    {
+        name: 'Filler6',
+        age: 20,
+        grade: 'Junior',
+        gender: 'Male',
+        race: 'N/A',
+        major: 'Math',
+        id: 11,
+    },
+];
+
 export {
     mockUnfinishedScenarioData,
     mockFinishedScenarioData,
@@ -370,5 +536,7 @@ export {
     mockActionComponent,
     mockReflectionComponent,
     mockConversationEditorHistory,
+    mockFinishedScenarioStudentResponse,
+    mockStudents,
     mockComponentsFlowChart,
 };
