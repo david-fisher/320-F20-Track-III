@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from tables.models import *
+from .models import *
 from .serializer import *
 from django.core import serializers
 from rest_framework import status  
