@@ -31,6 +31,7 @@ router.register('api/action_page', Action_pageViewSet, 'action_page')
 urlpatterns = [
     path('allScenarios', allScenariosViewSet.as_view()),
     path('logistics', logistics_page.as_view()),
+    path('page', pages_page.as_view()),
     path('multi_issue', multi_issue.as_view()),
     path('dashboard', dashboard_page.as_view()),
     path('flowchart', flowchart.as_view())

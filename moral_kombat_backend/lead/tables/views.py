@@ -401,3 +401,194 @@ class flowchart(APIView):
             if page['PAGE_TYPE'] == 'A':
                 page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
         return Response(pages_query)
+
+
+
+# Pages viewset
+class Page_reflectionViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_reflectionSerializer
+
+class Page_actionViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_actionSerializer   
+
+class Page_genericViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_genericSerializer
+
+class Page_StakeholderViewSet(generics.CreateAPIView):
+    model = pages
+    serializer_class = Pages_stakeholderSerializer
+    
+
+
+class pages_page(APIView):
+    # Define get method for pages
+    # @api_view(['GET'])
+    def get(self, request, *args, **kwargs):
+
+        # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
+        PAGE_ID = self.request.query_params.get('page_id')
+
+        # Get all fields from this page_id if ti doesn't exist return error 404
+        try:
+            page = pages.objects.get(PAGE = PAGE_ID)
+        except pages.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        # Convers Django Model Object into a dictionary
+        page_data = PagesSerializer(page).data
+        
+        page_type = page.PAGE_TYPE
+        # Check page.PAGE_TYPE = 'REFLECTION'
+        if (page_type == 'R'):
+            reflection_query = reflection_questions.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "REFLECTION_QUESTIONS": reflection_query
+                }
+            )
+            
+            return Response(page_data, status=status.HTTP_200_OK)
+
+        # Check page.PAGE_TYPE = 'ACTION'
+        if (page_type == 'A'):
+            action_query = action_page.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "CHOICES": action_query
+                }
+            )
+
+            return Response(page_data, status=status.HTTP_200_OK)
+        
+        # Check page.PAGE_TYPE = 'GENERIC'
+        if (page_type == 'G' or page_type == 'I'):
+            generic_query = generic_page.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "BODIES":generic_query
+                }
+            )
+
+            return Response(page_data, status=status.HTTP_200_OK)
+        
+        # Check page.PAGE_TYPE = 'STAKEHOLDER'
+        if (page_type == 'S'):
+            stakeholder_query = stakeholder_page.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "STAKEHOLDERS": stakeholder_query
+                }
+            )
+
+            return Response(page_data, status=status.HTTP_200_OK)
+        
+        # Neither of these pages, something went wrong or missing implementation
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    # Define POST function for pages
+    # @api_view(['POST'])
+    def post(self, request):
+
+        # Takes the scenario_id from the URL if the url has ?scenario_id=<id> at the end, no parameter passed return error 400
+
+        page_type = request.data["PAGE_TYPE"]
+
+        # If the request is a reflection page  
+        if (page_type == 'R'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['REFLECTION_QUESTIONS']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Reflection_questionsSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+            
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # If the request is an action page  
+        if (page_type == 'A'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['CHOICES']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Action_pageSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+            
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        # If the request is a generic page  
+        if (page_type == 'G' or page_type == 'I'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['BODIES']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Generic_pageSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+            
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # If the request is a stakeholder page 
+        if (page_type == 'S'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['STAKEHOLDERS']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Stakeholder_pageSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST) 
+
+
+    # @api_view(['DELETE'])
+    def delete(self, request):
+
+        # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
+        PAGE_ID = self.request.query_params.get('page_id')
+
+        # Check if the page exists.
+        try: 
+            page = pages.objects.get(PAGE=PAGE_ID)
+        except pages.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        # Delete the page
+        if (request.method == "DELETE"):
+            operation = page.delete()
+            page_data = {}
+            if (operation):
+                page_data["success"] = "delete successful"
+            else:
+                page_data["failure"] = "delete failed"
+            
+            return Response(data=page_data)

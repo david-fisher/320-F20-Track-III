@@ -1,0 +1,63 @@
+#parent {
+    position: relative;
+    padding-top: 300px;
+    top: 10px;
+    left: 15px;
+}
+/*biography textfield*/
+
+#Bio {
+    position: absolute;
+    left: 200px;
+    top: 70px;
+}
+
+#MainConversationField {
+    position: absolute;
+    left: 200px;
+    top: 160px;
+}
+
+#DeleteButton {
+    position: absolute;
+    left: 750px;
+    top: 140px;
+}
+
+#PointButton {
+    position: absolute;
+    top: 250px;
+    left: 537px;
+}
+
+/*StakeHolder name*/
+#SHname {
+    position: absolute;
+    width: 140px;
+    height: 20px;
+    top: 20px;
+}
+
+#stakeimg {
+    position: absolute;
+    height: 120px;
+    top: 80px;
+    margin-bottom: 110px;
+}
+
+#stakequestion {
+    position: absolute;
+    top: 250px;
+    left: 200px;
+}
+
+/*upload button*/
+#upl {
+    position: absolute;
+    top: 210px;
+    left: 15px;
+}
+
+#mainconvoeditor {
+    min-width: 1000;
+}
