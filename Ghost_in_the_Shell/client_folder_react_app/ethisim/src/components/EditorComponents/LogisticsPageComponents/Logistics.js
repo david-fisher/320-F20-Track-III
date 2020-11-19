@@ -43,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Logistics(props) {
 
   const {postFunction,scenario_ID,version_ID,title,is_finished,
-    public,num_convos,professors,courses} = props
+    public_scenario,num_convos,professors,courses} = props
 
     const classes = useStyles();
     //temporary until backend implements id's
     const { scenarioName, className } = mockUnfinishedScenario;
-    const [scenarioNameValue, setScenarioNameValue] = useState(scenarioName);
+    const [scenarioNameValue, setScenarioNameValue] = useState(title);
     const [classNameValue, setClassNameValue] = useState(className);
 
     const onChangeScenarioName = (event) => {
@@ -59,7 +59,7 @@ export default function Logistics(props) {
         setClassNameValue(event.target.value);
     };
 
-    const initialAuthors = mockUnfinishedScenario.authors;
+    const initialAuthors = professors[0];
     //Assume authors is an array of strings representing author names
     const [authors, setAuthors] = useState(initialAuthors);
 

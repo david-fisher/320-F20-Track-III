@@ -124,13 +124,13 @@ export default function Editor(props) {
         var logitics_and_pages = resp.data
         p = {postFunction: handlePost, scenario_ID: logitics_and_pages.SCENARIO,
         version_ID: logitics_and_pages.VERSION,title: logitics_and_pages.NAME,
-        is_finished: logitics_and_pages.IS_FINISHED,public:logitics_and_pages.PUBLIC,
-        num_convos: logistcs_and_pages.NUM_CONVERSATION,
-        professors:[logistcs_and_pages.PROFESSOR],courses:logistics_and_pages.COURSES}
+        is_finished: logitics_and_pages.IS_FINISHED,public_scenario:logitics_and_pages.PUBLIC,
+        num_convos:logitics_and_pages.NUM_CONVERSATION,
+        professors:[logitics_and_pages.PROFESSOR],courses:logitics_and_pages.COURSES}
         c = <Logistics {...p}></Logistics>
         initialComponents[0].component = c
 
-        var pages = logistics_and_pages.PAGES
+        var pages = logitics_and_pages.PAGES
         for(let i = 0; i < pages.length;i++){
           initialComponents.concat({id:pages[i].PAGE,title:pages[i].PAGE_TITLE,component:null})
         }
@@ -244,7 +244,10 @@ export default function Editor(props) {
         handleLogisticsGet(setGetValues,scenario_ID);
     },[])
 
-    const [scenarioComponents, setScenarioComponents] = useState(initialComponents);
+    const [scenarioComponents, setScenarioComponents] = useState(
+      initialComponents
+    //initialComponents.concat(page_names_and_ids)
+  );
 
 
     const [scenarioComponent, setScenarioComponent] = useState(scenarioComponents[0].component);
