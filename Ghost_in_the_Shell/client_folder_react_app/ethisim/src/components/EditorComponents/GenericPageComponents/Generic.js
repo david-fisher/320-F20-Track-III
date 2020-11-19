@@ -55,7 +55,7 @@ export default function Generic(props) {
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
     const [bodiesText, setBodiesText] = useState(bodies);
-
+    /*
     var postReqBody = {
         PAGE: page_id,
         PAGE_TYPE: page_type,
@@ -64,6 +64,19 @@ export default function Generic(props) {
         NEXT_PAGE_ID: next_page_id,
         PAGE_BODY: bodyText,
         BODIES: bodiesText,
+    };*/
+
+    var postReqBody = {
+        PAGE: page_id,
+        PAGE_TYPE: page_type,
+        PAGE_TITLE: title,
+        PAGE_BODY: bodyText,
+        SCENARIO: scenario_ID,
+        VERSION: 1,
+        NEXT_PAGE: next_page_id,
+        BODY: bodyText,
+        X_COORDINATE: 0,
+        Y_COORDINATE: 0,
     };
 
     useEffect(() => {
@@ -75,7 +88,7 @@ export default function Generic(props) {
     }, []);
 
     const savePage = () => {
-        //postFunction(setPostValues,postReqBody,scenario_ID);
+        postFunction(setPostValues,postReqBody,scenario_ID);
         console.log(postValues);
     };
 

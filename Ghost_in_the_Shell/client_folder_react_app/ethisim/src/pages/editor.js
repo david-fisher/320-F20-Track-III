@@ -100,7 +100,7 @@ var initialComponents = [
 ];
 
 function handlePost(setPostValues,postReqBody,s_id){
-  const endpoint = "/pages?scenario_id=" + s_id
+  const endpoint = "/page?scenario_id=" + s_id
   function onSuccess(resp){
 
   }
@@ -236,7 +236,7 @@ export default function Editor(props) {
     var page_names_and_ids = [
 
       {id: 4, title: "Initial Action", component:null},
-      {id: 6, title: "Initial Reflection",component:null},
+      {id: 5, title: "Initial Reflection",component:null},
     ]
 
 
@@ -299,20 +299,20 @@ export default function Editor(props) {
             var p = null
             switch (componentType) {
                 case 'Generic':
-                    p = {postFunction: handlePost, page_id: 1,page_type: "G",
-                    page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
+                    p = {postFunction: handlePost, page_id: 100,page_type: "G",
+                    page_title: title,scenario_ID: 1, version_ID: 1, next_page_id: 2,
                     body: "BODYTEXTGENERIC",bodies: ["t1","t1"],created: true}
                     c = <Generic {...p}></Generic>;
                     break;
                 case 'Reflection':
-                    p = {postFunction: handlePost, page_id: 1,page_type: "R",
-                    page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
+                    p = {postFunction: handlePost, page_id: 120,page_type: "R",
+                    page_title: title,scenario_ID: 1, version_ID: 1, next_page_id: 2,
                     body: "BODYTEXTREFLECTION",reflection_questions: ["q1","q2"],created: true}
                     c = <Reflection {...p}></Reflection>;
                     break;
                 case 'Action':
-                    p = {postFunction: handlePost, page_id: 1,page_type: "A",
-                    page_title: title,scenario_ID: 2, version_ID: 1, next_page_id: 2,
+                    p = {postFunction: handlePost, page_id: 140,page_type: "A",
+                    page_title: title,scenario_ID: 1, version_ID: 1, next_page_id: 2,
                     body:"BODYTEXTACTION",choice1: "OPTION1",r1:4,choice2: "OPTION2",r2: 3,created: true}
                     c = <Action {...p} ></Action>;
                     break;

@@ -80,6 +80,7 @@ export default function Action(props) {
     const [result1, setResult1] = useState(r1);
     const [result2, setResult2] = useState(r2);
 
+    /*
     var postReqBody = {
         PAGE: page_id,
         PAGE_TYPE: page_type,
@@ -91,6 +92,18 @@ export default function Action(props) {
             { CHOICE: option1, RESULT_PAGE: result1 },
             { CHOICE: option2, RESULT_PAGE: result2 },
         ],
+    };*/
+    var postReqBody = {
+        PAGE: page_id,
+        PAGE_TYPE: page_type,
+        PAGE_TITLE: title,
+        PAGE_BODY: bodyText,
+        SCENARIO: scenario_ID,
+        VERSION: 1,
+        NEXT_PAGE: next_page_id,
+        BODY: bodyText,
+        X_COORDINATE: 0,
+        Y_COORDINATE: 0,
     };
 
     useEffect(() => {

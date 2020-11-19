@@ -64,11 +64,28 @@ export default function Reflection(props) {
         PAGE: page_id,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
+        PAGE_BODY: bodyText,
         SCENARIO: scenario_ID,
+        VERSION: 1,
+        NEXT_PAGE: next_page_id,
+        BODY: bodyText,
+        X_COORDINATE: 0,
+        Y_COORDINATE: 0,
+    };
+    /*
+    var postReqBody = {
+        PAGE: page_id,
+        PAGE_TYPE: page_type,
+        PAGE_TITLE: title,
+        PAGE_BODY: bodyText
+        SCENARIO: scenario_ID,
+        VERSION: 1,
         NEXT_PAGE: next_page_id,
         BODY: bodyText,
         REFLECTION_QUESTIONS: questionsList,
-    };
+        X_COORDINATE: 0,
+        Y_COORDINATE: 0,
+    };*/
     useEffect(() => {
         if (created === true) {
             //created = false
