@@ -1,5 +1,5 @@
 import axios from 'axios';
-//import { baseURL } from './../Constants/Config';
+import { baseURL } from './../Constants/Config';
 // Universal fetch request using axios
 export default function universalFetch(
     setResponse,
@@ -14,7 +14,6 @@ export default function universalFetch(
         loading: true,
         error: null,
     });
-    const baseURL = 'http://127.0.0.1:8000/api/';
     axios
         .post(baseURL + endpoint, requestBody)
         .then((resp) => {
