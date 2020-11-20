@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button } from '@material-ui/core';
+import {
+    Typography,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    DialogContent,
+} from '@material-ui/core';
 import ReactFlow, {
     removeElements,
     isEdge,
@@ -25,6 +32,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     errorContainer: {
@@ -81,57 +89,65 @@ export default function FlowDiagram(props) {
         loading: true,
         error: null,
     });
-    // eslint-disable-next-line
+
     const [elementsPUT, setElementsPUT] = useState({
         data: null,
-        loading: true,
+        loading: false,
         error: null,
     });
 
     const [elements, setElements] = useState([]);
+    const [unsaved, setUnsaved] = useState(false);
 
+    function positionElements(elements) {
+        let introductionElement = elements.filter((componentData) => {
+            return componentData.PAGE_TYPE === 'I';
+        });
+        let genericElements = elements.filter((componentData) => {
+            return componentData.PAGE_TYPE === 'G';
+        });
+        let reflectionElements = elements.filter((componentData) => {
+            return componentData.PAGE_TYPE === 'R';
+        });
+        let actionElements = elements.filter((componentData) => {
+            return componentData.PAGE_TYPE === 'A';
+        });
+        let stakeholderConversationElement = elements.filter(
+            (componentData) => {
+                return componentData.PAGE_TYPE === 'S';
+            }
+        );
+
+        let initialElements = introductionElement.concat(
+            genericElements,
+            reflectionElements,
+            actionElements,
+            stakeholderConversationElement
+        );
+
+        initialElements = initialElements.map((componentData) => {
+            return initializeElements(componentData);
+        });
+
+        //Set position of elements if elements are new ({x: 0,y: 0})
+        //Height of nodes are 51.2 pixels
+        initialElements.reduce((acc, currentValue) => {
+            if (
+                currentValue.position.x === 0 &&
+                currentValue.position.y === 0
+            ) {
+                currentValue.position.y += acc;
+                return acc + 51.2;
+            }
+            return acc;
+        }, 0);
+
+        return initialElements;
+    }
     let getData = () => {
+        setUnsaved(false);
         function onSuccess(resp) {
-            let introductionElement = resp.data.filter((componentData) => {
-                return componentData.PAGE_TYPE === 'I';
-            });
-            let genericElements = resp.data.filter((componentData) => {
-                return componentData.PAGE_TYPE === 'G';
-            });
-            let reflectionElements = resp.data.filter((componentData) => {
-                return componentData.PAGE_TYPE === 'R';
-            });
-            let actionElements = resp.data.filter((componentData) => {
-                return componentData.PAGE_TYPE === 'A';
-            });
-            let stakeholderConversationElement = resp.data.filter(
-                (componentData) => {
-                    return componentData.PAGE_TYPE === 'S';
-                }
-            );
-
-            let initialElements = introductionElement.concat(
-                genericElements,
-                reflectionElements,
-                actionElements,
-                stakeholderConversationElement
-            );
-            initialElements = initialElements.map((componentData) => {
-                return initializeElements(componentData);
-            });
-
-            //Set position of elements if elements are new ({x: 0,y: 0})
-            //Height of nodes are 51.2 pixels
-            initialElements.reduce((acc, currentValue) => {
-                if (
-                    currentValue.position.x === 0 &&
-                    currentValue.position.y === 0
-                ) {
-                    currentValue.position.y += acc;
-                    return acc + 51.2;
-                }
-                return acc;
-            }, 0);
+            let initialElements = positionElements(resp.data);
 
             //Add edges
             initialElements.forEach((currentElement) => {
@@ -188,6 +204,7 @@ export default function FlowDiagram(props) {
     const graphStyles = { width: '100%', height: '100%', border: 'solid' };
 
     const onConnect = (params) => {
+        setUnsaved(true);
         setElements((elements) => addEdge(params, elements));
     };
 
@@ -199,6 +216,7 @@ export default function FlowDiagram(props) {
     };
 
     const deleteEdge = () => {
+        setUnsaved(true);
         if (currentEdgeSelected != null) {
             setElements((elements) =>
                 removeElements(currentEdgeSelected, elements)
@@ -210,6 +228,7 @@ export default function FlowDiagram(props) {
 
     //Update of nodes position
     const onNodeDrag = (event, element) => {
+        setUnsaved(true);
         //ID's in flow diagram library are stored as strings
         const index = elements.findIndex(
             (ele) => ele.id === Number(element.id)
@@ -225,6 +244,20 @@ export default function FlowDiagram(props) {
 
     const save = () => {
         function onSuccess() {
+            console.log(elements);
+            let resetElements = elements.reduce((array, currentElement) => {
+                if (isNode(currentElement) && currentElement.position.x === 0) {
+                    return array.concat({
+                        ...currentElement,
+                        X_COORDINATE: 0,
+                        Y_COORDINATE: 0,
+                        position: { x: 0, y: 0 },
+                    });
+                }
+                return array.concat(currentElement);
+            }, []);
+            setElements(positionElements(resetElements));
+            setUnsaved(false);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully Saved!');
         }
@@ -330,7 +363,93 @@ export default function FlowDiagram(props) {
         return () => clearTimeout(timeout);
     }, [successBannerFade]);
 
-    if (fetchedElements.loading) {
+    //RESET Pop-up Dialog
+    const [openReset, setOpenReset] = useState(false);
+    const [openRefresh, setOpenRefresh] = useState(false);
+
+    const refresh = () => {
+        if (unsaved) {
+            setOpenRefresh(true);
+        } else {
+            getData();
+        }
+    };
+
+    const handleCloseRefresh = (refresh) => {
+        setOpenRefresh(false);
+        //remove all edges and reset x and y coordinates to 0
+        if (refresh) {
+            getData();
+        }
+    };
+
+    const handleClickOpenReset = () => {
+        setOpenReset(true);
+    };
+
+    const handleCloseReset = (reset) => {
+        setOpenReset(false);
+        //remove all edges and reset x and y coordinates to 0
+        if (reset) {
+            setUnsaved(true);
+            let resetElements = elements.reduce((array, currentElement) => {
+                if (isNode(currentElement)) {
+                    return array.concat({
+                        ...currentElement,
+                        X_COORDINATE: 0,
+                        Y_COORDINATE: 0,
+                        position: { x: 0, y: 0 },
+                    });
+                }
+                return array;
+            }, []);
+            setElements(positionElements(resetElements));
+        }
+    };
+
+    ConfirmationDialog.propTypes = {
+        onClose: PropTypes.any,
+        open: PropTypes.bool,
+        title: PropTypes.string,
+        content: PropTypes.string,
+    };
+
+    function ConfirmationDialog({ onClose, open, title, content }) {
+        const handleCancel = () => {
+            onClose();
+        };
+
+        const handleOk = () => {
+            onClose(true);
+        };
+
+        return (
+            <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                maxWidth="xs"
+                aria-labelledby="confirmation-dialog-title"
+                open={open}
+            >
+                <DialogTitle id="confirmation-dialog-title">
+                    {title}
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Typography>{content}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleCancel} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleOk} color="primary">
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+
+    if (fetchedElements.loading || elementsPUT.loading) {
         return <LoadingSpinner />;
     }
 
@@ -356,15 +475,20 @@ export default function FlowDiagram(props) {
 
     return (
         <div className={classes.container}>
-            <Typography variant="h2">Order Scenario Pages</Typography>
+            <Typography variant="h3">Order Scenario Pages</Typography>
             <Button
                 variant="contained"
                 color="primary"
-                onClick={getData}
+                onClick={refresh}
                 className={classes.margin}
             >
                 <RefreshIcon className={classes.iconRefreshSmall} />
             </Button>
+            {unsaved ? (
+                <Typography variant="h6" align="center" color="error">
+                    Unsaved
+                </Typography>
+            ) : null}
             <SuccessBanner
                 successMessage={successBannerMessage}
                 fade={successBannerFade}
@@ -372,6 +496,24 @@ export default function FlowDiagram(props) {
             <ErrorBanner
                 errorMessage={errorBannerMessage}
                 fade={errorBannerFade}
+            />
+            <ConfirmationDialog
+                id="confirmRefresh"
+                keepMounted
+                open={openRefresh}
+                onClose={handleCloseRefresh}
+                title={'Unsaved Changes'}
+                content={
+                    'You have unsaved changes. Would you still like to refresh?'
+                }
+            />
+            <ConfirmationDialog
+                id="confirmReset"
+                keepMounted
+                open={openReset}
+                onClose={handleCloseReset}
+                title={'Reset Flow Diagram'}
+                content={'Would you like to reset the flow diagram?'}
             />
             <ReactFlow
                 elements={elements}
@@ -390,6 +532,16 @@ export default function FlowDiagram(props) {
                     >
                         <Typography variant="h6" display="block" noWrap>
                             Save Changes
+                        </Typography>
+                    </Button>
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        onClick={handleClickOpenReset}
+                    >
+                        <Typography variant="h6" display="block" noWrap>
+                            Reset
                         </Typography>
                     </Button>
                     <Button
