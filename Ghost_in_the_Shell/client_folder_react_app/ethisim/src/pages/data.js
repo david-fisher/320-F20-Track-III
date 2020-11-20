@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
     Container,
@@ -14,9 +14,12 @@ import PropTypes from 'prop-types';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
 import StudentResponseDialog from '../components/StudentResponsesComponents/StudentResposeDialog';
-import { mockStudents } from '../shared/mockScenarioData';
 import './data.css';
 import { Link } from 'react-router-dom';
+import get from '../universalHTTPRequests/get';
+import LoadingSpinner from '../components/LoadingSpinner';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import ErrorIcon from '@material-ui/icons/Error';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -90,23 +93,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 Data.propTypes = {
-    id: PropTypes.number.isRequired,
-    scenarioName: PropTypes.string.isRequired,
-    className: PropTypes.string.isRequired,
-    scenarioData: PropTypes.any.isRequired,
-    location: PropTypes.any.isRequired,
+    location: PropTypes.any,
 };
 
-export default function Data(props) {
+//Needs scenario id
+const endpointGET = '/student_info?scenario_id=';
+const tempScenarioID = '1';
+
+export default function Data({ location }) {
     const classes = useStyles();
-    Data.propTypes = props.data;
+
     const title =
         'Student Data: ' +
-        props.location.scenarioData.scenarioName +
+        location.scenarioData.scenarioName +
         ' | ' +
-        props.location.scenarioData.className;
+        location.scenarioData.className;
     const [open, setOpen] = useState(false);
     const [selectedResponseData, setSelectedResponseData] = useState({});
+
+    const [studentList, setStudentList] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
+    let getData = () => {
+        get(setStudentList, endpointGET + tempScenarioID);
+    };
+
+    useEffect(getData, []);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -121,6 +136,26 @@ export default function Data(props) {
             color: '#FFFFFF',
         },
     })(Typography);
+
+    if (studentList.loading) {
+        return <LoadingSpinner />;
+    }
+
+    if (studentList.error) {
+        return (
+            <div className={classes.issue}>
+                <div className={classes.container}>
+                    <ErrorIcon className={classes.iconError} />
+                    <Typography align="center" variant="h3">
+                        Error in fetching issues.
+                    </Typography>
+                </div>
+                <Button variant="contained" color="primary" onClick={getData}>
+                    <RefreshIcon className={classes.iconRefreshLarge} />
+                </Button>
+            </div>
+        );
+    }
 
     return (
         <Container component="main" className={classes.container}>
@@ -171,14 +206,14 @@ export default function Data(props) {
                     },
                 ]}
                 columns={[
-                    { title: 'Name', field: 'name' },
-                    { title: 'Age', field: 'age', type: 'numeric' },
-                    { title: 'Grade', field: 'grade' },
-                    { title: 'Gender', field: 'gender' },
-                    { title: 'Race', field: 'race' },
-                    { title: 'Major', field: 'major' },
+                    { title: 'Name', field: 'NAME' },
+                    { title: 'Age', field: 'AGE', type: 'numeric' },
+                    { title: 'Grade', field: 'GRADE' },
+                    { title: 'Gender', field: 'GENDER' },
+                    { title: 'Race', field: 'RACE' },
+                    { title: 'Major', field: 'MAJOR' },
                 ]}
-                data={mockStudents}
+                data={studentList.data}
             />
             <Box className={classes.copyright}>
                 <Copyright />
