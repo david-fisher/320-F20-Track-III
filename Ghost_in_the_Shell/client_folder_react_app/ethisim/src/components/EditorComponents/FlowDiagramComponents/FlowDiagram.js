@@ -118,11 +118,16 @@ export default function FlowDiagram(props) {
             }
         );
 
+        let edges = elements.filter((componentData) => {
+            return isEdge(componentData);
+        });
+
         let initialElements = introductionElement.concat(
             genericElements,
             reflectionElements,
             actionElements,
-            stakeholderConversationElement
+            stakeholderConversationElement,
+            edges
         );
 
         initialElements = initialElements.map((componentData) => {
@@ -144,45 +149,49 @@ export default function FlowDiagram(props) {
 
         return initialElements;
     }
+
+    function addEdges(elements) {
+        //Add edges
+        elements.forEach((currentElement) => {
+            //TODO
+            if (currentElement.type === 'actionNode') {
+                //Only 2 action options
+                if (currentElement.ACTION[0].RESULT_PAGE) {
+                    elements = addEdge(
+                        {
+                            source: currentElement.id.toString() + '__a',
+                            target: currentElement.ACTION[0].RESULT_PAGE.toString(),
+                        },
+                        elements
+                    );
+                }
+                if (currentElement.ACTION[1].RESULT_PAGE) {
+                    elements = addEdge(
+                        {
+                            source: currentElement.id.toString() + '__b',
+                            target: currentElement.ACTION[1].RESULT_PAGE.toString(),
+                        },
+                        elements
+                    );
+                }
+            } else if (currentElement.NEXT_PAGE) {
+                elements = addEdge(
+                    {
+                        source: currentElement.id.toString(),
+                        target: currentElement.NEXT_PAGE.toString(),
+                    },
+                    elements
+                );
+            }
+        });
+
+        return elements;
+    }
+
     let getData = () => {
         setUnsaved(false);
         function onSuccess(resp) {
-            let initialElements = positionElements(resp.data);
-
-            //Add edges
-            initialElements.forEach((currentElement) => {
-                //TODO
-                if (currentElement.type === 'actionNode') {
-                    //Only 2 action options
-                    if (currentElement.ACTION[0].RESULT_PAGE) {
-                        initialElements = addEdge(
-                            {
-                                source: currentElement.id.toString() + '__a',
-                                target: currentElement.ACTION[0].RESULT_PAGE.toString(),
-                            },
-                            initialElements
-                        );
-                    }
-                    if (currentElement.ACTION[1].RESULT_PAGE) {
-                        initialElements = addEdge(
-                            {
-                                source: currentElement.id.toString() + '__b',
-                                target: currentElement.ACTION[1].RESULT_PAGE.toString(),
-                            },
-                            initialElements
-                        );
-                    }
-                } else if (currentElement.NEXT_PAGE) {
-                    initialElements = addEdge(
-                        {
-                            source: currentElement.id.toString(),
-                            target: currentElement.NEXT_PAGE.toString(),
-                        },
-                        initialElements
-                    );
-                }
-            });
-            setElements(initialElements);
+            setElements(addEdges(positionElements(resp.data)));
         }
         get(setFetchedElements, endpointGET + tempScenarioID, null, onSuccess);
     };
@@ -244,7 +253,6 @@ export default function FlowDiagram(props) {
 
     const save = () => {
         function onSuccess() {
-            console.log(elements);
             let resetElements = elements.reduce((array, currentElement) => {
                 if (isNode(currentElement) && currentElement.position.x === 0) {
                     return array.concat({
@@ -396,6 +404,7 @@ export default function FlowDiagram(props) {
                 if (isNode(currentElement)) {
                     return array.concat({
                         ...currentElement,
+                        NEXT_PAGE: null,
                         X_COORDINATE: 0,
                         Y_COORDINATE: 0,
                         position: { x: 0, y: 0 },
