@@ -92,7 +92,31 @@ export default function FlowDiagram(props) {
 
     let getData = () => {
         function onSuccess(resp) {
-            let initialElements = resp.data.map((componentData) => {
+            let introductionElement = resp.data.filter((componentData) => {
+                return componentData.PAGE_TYPE === 'I';
+            });
+            let genericElements = resp.data.filter((componentData) => {
+                return componentData.PAGE_TYPE === 'G';
+            });
+            let reflectionElements = resp.data.filter((componentData) => {
+                return componentData.PAGE_TYPE === 'R';
+            });
+            let actionElements = resp.data.filter((componentData) => {
+                return componentData.PAGE_TYPE === 'A';
+            });
+            let stakeholderConversationElement = resp.data.filter(
+                (componentData) => {
+                    return componentData.PAGE_TYPE === 'S';
+                }
+            );
+
+            let initialElements = introductionElement.concat(
+                genericElements,
+                reflectionElements,
+                actionElements,
+                stakeholderConversationElement
+            );
+            initialElements = initialElements.map((componentData) => {
                 return initializeElements(componentData);
             });
 
@@ -231,7 +255,7 @@ export default function FlowDiagram(props) {
                         (actionData) => {
                             return {
                                 id: actionData.id,
-                                PAGE: actionData.PAGE,
+                                PAGE: actionData.PAGE_id,
                                 CHOICE: actionData.CHOICE,
                                 RESULT_PAGE: null,
                             };

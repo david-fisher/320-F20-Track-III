@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
         bottom: '0px',
         width: '50%',
         border: '5px solid',
-        zIndex: '5',
+        zIndex: '100',
         borderColor: theme.palette.error.dark,
         backgroundColor: theme.palette.error.main,
         display: 'flex',
