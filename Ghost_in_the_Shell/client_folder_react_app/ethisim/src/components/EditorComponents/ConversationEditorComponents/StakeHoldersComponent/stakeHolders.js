@@ -3,6 +3,7 @@ import StakeHolder from './stakeHolder';
 import Button from '@material-ui/core/Button';
 import './stakeHolders.css';
 import PropTypes from 'prop-types';
+//import Time from 'react-time';
 //import LoadingSpinner from './../../../../components/LoadingSpinner';
 
 StakeHolderFields.propTypes = {
@@ -11,13 +12,21 @@ StakeHolderFields.propTypes = {
 };
 
 export default function StakeHolderFields() {
+    /*
+     * This section is code that is essentially the middleware between the frontend and backend
+     * Handles API calls between frontend and backend
+     */
+
+    //tracks current state of stakeholders to be represented on the frontend
     const [stakeHolders, setStakeHolders] = useState([]);
+    //used to track if we are waiting on a HTTP GET/POST/PUT request
+    //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
-
     var axios = require('axios');
-    const endpointPost = 'stakeholders/';
 
+    //converts backend passed objects into ones the frontend uses to render
     function convertParameters(item) {
+        item.false_id = 0;
         item.id = item.STAKEHOLDER_ID;
         item.name = item.NAME;
         item.bio = item.DESC;
@@ -35,7 +44,12 @@ export default function StakeHolderFields() {
         delete item.VERSION_ID;
     }
 
+    //handles GETting existing stakeholders from the backend and representing
+    //    that information in the frontend
     function getExistingStakeHolders() {
+        if (!checkTime) {
+            return;
+        }
         setLoading(true);
         //TODO: implement  get for specific scenarios
         var config = {
@@ -62,7 +76,12 @@ export default function StakeHolderFields() {
         setLoading(false);
     }
 
+    //handles DELETEing a stakeholder from the backend and removing the corresponding
+    //    stakeholder from the frontend
     const removeStakeHolder = (stakeHolderID) => {
+        if (!checkTime()) {
+            return;
+        }
         //handling it on the frontend
         console.log(stakeHolderID);
         const leftStakeHolders = stakeHolders.filter(
@@ -95,7 +114,11 @@ export default function StakeHolderFields() {
             });
     };
 
+    //handles POSTing a new stakeholder to the backend and adding that stakeholder to the frontend
     const addStakeHolder = (e) => {
+        if (!checkTime()) {
+            return;
+        }
         //TODO: figure out how to distinguish which scenario this newly put item is from
         setLoading(true);
 
@@ -131,6 +154,39 @@ export default function StakeHolderFields() {
             });
         setLoading(false);
     };
+
+    /*
+     * This section is about managing time to prevent sending a combination of multiple
+     *    HTTP GET/POST/PUT/DELETE calls before a response is returned
+     */
+    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
+    //gets the current time in hms and converts it to an int
+    function getCurrentTimeInt() {
+        var time_string = Date();
+        let d = Date();
+        var h = d.substring(16, 18);
+        var m = d.substring(19, 21);
+        var s = d.substring(22, 24);
+        return 60 * (60 * h + m) + s;
+    }
+
+    //checks if at least 1 second has elapsed since last action
+    //if someone waits a multiple of exactly 24 hours since their last action they will
+    //    not be able to take an action for an additional second
+    function checkTime() {
+        var ret = false;
+        //current time difference is at least 1 second, but that SHOULD be ample time for
+        //the database to get back to the frontend
+        if (getCurrentTimeInt() - currentTime != 0) {
+            ret = true;
+        }
+        setCurrentTime(getCurrentTimeInt());
+        return ret;
+    }
+
+    /*
+     * This code is the frontend rendering; what the users see
+     */
 
     if (isLoading) {
         return <div> currently loading...</div>;
