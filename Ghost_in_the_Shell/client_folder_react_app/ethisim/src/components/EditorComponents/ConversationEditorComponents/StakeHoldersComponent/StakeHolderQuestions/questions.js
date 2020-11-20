@@ -86,6 +86,13 @@ export default function QuestionFields({ questionsResponses }) {
                     />
                 ))}
             </form>
+            <Button
+                variant="contained"
+                color="primary"
+                //onClick={updateRow}
+            >
+                Save Changes
+            </Button>
         </div>
     );
 }

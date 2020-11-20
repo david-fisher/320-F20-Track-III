@@ -1,82 +1,96 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StakeHolder from './stakeHolder';
 import Button from '@material-ui/core/Button';
 import './stakeHolders.css';
 import PropTypes from 'prop-types';
 import universalPost from './../../../../universalHTTPRequests/post.js';
+//import LoadingSpinner from './../../../../components/LoadingSpinner';
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
     setStakeHolders: PropTypes.any,
 };
 
-export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
-    var axios = require('axios');
+export default function StakeHolderFields() {
+    const [stakeHolders, setStakeHolders] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
-    const [stakeHolder, setEdit] = useState({
+    const [tempStakeHolder, setEdit] = useState({
         id: Math.floor(Math.random() * 10000),
         questionsResponses: [],
         false_id: 1,
     });
 
-    //this is supposed to get and populate the page with existing stakeholders
-    //unfortunately, this is omega bugged right now
-    const getExistingStakeHolders = (e) => {
-        var data = JSON.stringify({});
+    const [shouldFetch, setShouldFetch] = useState(0);
+    const [postValue, setPost] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
 
+    var axios = require('axios');
+    const endpointPost = 'stakeholders/';
+
+    const handleNewStakeHolder = (e) => {
+        function onSuccessPost(resp) {
+            console.log('Successfully POSTed new StakeHolder');
+            console.log(resp.data);
+            setShouldFetch(shouldFetch + 1);
+        }
+        function onFailurePost(resp) {
+            console.log('Failed to POST new StakeHolder');
+        }
+
+        universalPost(
+            setPost,
+            endpointPost,
+            onFailurePost,
+            onSuccessPost,
+            null
+        );
+    };
+
+    function getExistingStakeHolders() {
+        setLoading(true);
         var config = {
             method: 'get',
             url: 'http://127.0.0.1:8000/api/stakeholders/',
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: data,
+            data: null,
         };
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
-                setStakeHolders(response.data);
+                console.log(response.data);
+                const gottedStakeHolderData = response.data;
+                gottedStakeHolderData.map((item) => {
+                    item.false_id = 0;
+                    item.id = item.STAKEHOLDER_ID;
+                    item.name = item.NAME;
+                    item.bio = item.DESC;
+                    item.mainConvo = item.MAIN_CONVERSATION;
+                    item.scenario_id = item.SCENARIO_ID;
+                    item.version_id = item.VERSION_ID;
+
+                    delete item.STAKEHOLDER_ID;
+                    delete item.NAME;
+                    delete item.DESC;
+                    delete item.MAIN_CONVERSATION;
+                    delete item.SCENARIO_ID;
+                    delete item.VERSION_ID;
+                    //item.questionsResponses = [];
+                    //stakeholderIssues: ????
+                });
+                setStakeHolders(gottedStakeHolderData);
             })
             .catch(function (error) {
                 console.log(error);
             });
+        setLoading(false);
+    }
 
-        stakeHolders.forEach((item) => {
-            item.false_id = 0;
-            item.id = item.STAKEHOLDER_ID;
-            item.name = item.NAME;
-            item.bio = item.DESC;
-            item.mainConvo = item.MAIN_CONVERSATION;
-            item.scenario_id = item.SCENARIO_ID;
-            item.version_id = item.VERSION_ID;
-            //TODO
-            //item.questionsResponses = [];
-            //stakeholderIssues: ????
-        });
-    };
-
-    /*
-    has an issue related to the POST issue
-    where a stakeholder has its Math.random() generated id instead of the one generated from the db
-    
-        first call to remove:
-            calls DELETE with the Math.random() number, regardless if the stakeholder is in the db or not
-                this will return an error message unless the Math.random() number corresponds
-                to an id in the db
-            if it's called on something that is in the db
-                it removes nothing from the frontend and puts information in boxes
-                    (e.g. stakeholder names are filled in for items that are in the db)
-            if it's called on something that is not in the db
-                it removes that item from the frontend
-        
-        after the first call:
-            the last item (unless deleted in first call) should be the only one that is not in the db
-                (also has an id that was Math.random())
-            DELETE will work as intended on items that exist in the db now
-            DELETE will return an error message on the last item unless Math.random() corresponds
-                to an item in the db
-    */
     const removeStakeHolder = (stakeHolderID) => {
         //handling it on the frontend
         console.log(stakeHolderID);
@@ -115,13 +129,13 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
     //it probably has to do with React hooks being async; perhaps make page refresh or something?
     const addStakeHolder = (e) => {
         //adding a stakeholder to the frontend
-        const newStakeHolders = [...stakeHolders, stakeHolder];
-        setStakeHolders(newStakeHolders);
         setEdit({
             id: Math.floor(Math.random() * 10000),
             questionsResponses: [],
             false_id: 1,
         });
+        const newStakeHolders = [...stakeHolders, tempStakeHolder];
+        setStakeHolders(newStakeHolders);
 
         //handling the POST request
         var data = JSON.stringify({
@@ -139,8 +153,9 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
         };
 
         axios(config)
+            //successful request
             .then(function (response) {
-                //modify the created stakeholder
+                //modify the stakeholder created on the frontend
                 console.log(JSON.stringify(response.data));
                 stakeHolders.forEach((item) => {
                     if (item.false_id == 1) {
@@ -156,12 +171,20 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
                         //stakeholderIssues: ????
                     }
                 });
+
+                setShouldFetch(shouldFetch + 1);
             })
+            //nonsuccessful request
             .catch(function (error) {
                 console.log(error);
             });
+
         console.log(stakeHolders);
     };
+
+    if (isLoading) {
+        return <div> currently loading...</div>;
+    }
 
     return (
         <div className="stakeHolders">
@@ -176,7 +199,7 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
 
             <Button
                 id="button"
-                onClick={addStakeHolder}
+                onClick={handleNewStakeHolder}
                 variant="contained"
                 color="primary"
             >
@@ -197,6 +220,12 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
                     />
                 ))}
             </form>
+
+            <div id="SaveButton">
+                <Button variant="contained" color="primary">
+                    Save Stakeholder Changes
+                </Button>
+            </div>
         </div>
     );
 }

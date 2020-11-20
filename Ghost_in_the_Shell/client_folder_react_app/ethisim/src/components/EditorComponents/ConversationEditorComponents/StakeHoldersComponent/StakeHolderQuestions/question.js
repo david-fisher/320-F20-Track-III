@@ -115,16 +115,6 @@ export default function QuestionField({
                             className={classes.margin}
                             variant="contained"
                             color="primary"
-                            onClick={updateRow}
-                        >
-                            Save
-                        </Button>
-                    </div>
-                    <div>
-                        <Button
-                            className={classes.margin}
-                            variant="contained"
-                            color="primary"
                             onClick={() => removeQuestion(id)}
                         >
                             Delete

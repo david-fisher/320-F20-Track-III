@@ -42,51 +42,51 @@ export default function BasicTable(props) {
     BasicTable.propTypes = props.data;
 
     return (
-        <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Issue</TableCell>
-                        <TableCell>Score</TableCell>
-                        <TableCell align="right"></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {props.rows.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell component="th" scope="row">
-                                <TextField
-                                    id="filled"
-                                    defaultValue={row.issuename}
-                                    variant="filled"
-                                />
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField
-                                    id="filled"
-                                    defaultValue={row.score}
-                                    variant="filled"
-                                />
-                            </TableCell>
-
-                            <TableCell>
-                                <Button
-                                    id="button-save"
-                                    variant="contained"
-                                    color="primary"
-                                    //onClick={() => props.removeRow(row.id)}
-                                    //TODO
-                                    //functionality for updating issue scores
-                                >
-                                    Save
-                                </Button>
-                            </TableCell>
+        <div>
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Issue</TableCell>
+                            <TableCell>Score</TableCell>
+                            <TableCell align="right"></TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                        {props.rows.map((row) => (
+                            <TableRow key={row.id}>
+                                <TableCell component="th" scope="row">
+                                    <TextField
+                                        id="filled"
+                                        defaultValue={row.issuename}
+                                        variant="filled"
+                                    />
+                                </TableCell>
+
+                                <TableCell>
+                                    <TextField
+                                        id="filled"
+                                        defaultValue={row.score}
+                                        variant="filled"
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            <Button
+                id="button-save"
+                variant="contained"
+                color="primary"
+                //onClick={() => props.removeRow(row.id)}
+                //TODO
+                //functionality for updating issue scores
+            >
+                Save Changes
+            </Button>
+        </div>
     );
 }
 

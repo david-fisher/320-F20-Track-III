@@ -283,16 +283,6 @@ export default function StakeHolder({
                 />
             </div>
 
-            <div id="SaveButton">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handlePut}
-                >
-                    Save
-                </Button>
-            </div>
-
             <div id="DeleteButton">
                 <Button
                     variant="contained"
@@ -491,18 +481,6 @@ export default function StakeHolder({
                             onChange={handleChange}
                         />
                     </DialogContent>
-                    {/*
-                    //may use this in the future
-                    <DialogActions>
-                        <Button
-                            autoFocus
-                            onClick={handleCloseBio}
-                            color="primary"
-                        >
-                            Save changes
-                        </Button>
-                    </DialogActions>
-                    */}
                 </div>
             </Dialog>
 
@@ -670,18 +648,6 @@ export default function StakeHolder({
                             onChange={handleChange}
                         />
                     </DialogContent>
-                    {/*
-                    //may use in the future
-                    <DialogActions>
-                        <Button
-                            autoFocus
-                            onClick={handleCloseMainConvo}
-                            color="primary"
-                        >
-                            Save changes
-                        </Button>
-                    </DialogActions>
-                    */}
                 </div>
             </Dialog>
 
