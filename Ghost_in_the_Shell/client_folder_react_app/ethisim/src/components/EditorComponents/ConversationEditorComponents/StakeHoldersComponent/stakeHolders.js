@@ -95,12 +95,11 @@ export default function StakeHolderFields() {
         if (!checkTime()) {
             return;
         }
-        //TODO: figure out how to distinguish which scenario this newly put item is from
         setLoading(true);
-
+        //TODO: figure out how to distinguish which scenario this newly put item is from
+        //currently has scenario 2 arbitrarily
         var data = JSON.stringify({
-            SCENARIO_ID: 'http://127.0.0.1:8000/api/scenarios/1/',
-            VERSION_ID: 'http://127.0.0.1:8000/api/scenarios/1/',
+            SCENARIO: 2,
         });
 
         var config = {
@@ -116,6 +115,37 @@ export default function StakeHolderFields() {
             .then(function (response) {
                 console.log(JSON.stringify(response.data));
                 setStakeHolders([...stakeHolders, response.data]);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        setLoading(false);
+    };
+
+    const saveStakeHolders = (e) => {
+        if (!checkTime()) {
+            return;
+        }
+        setLoading(true);
+        var data = [...stakeHolders];
+
+        //TODO figure out how to track the scenario ID
+        //currently has arbitrary value of 2
+        var config = {
+            method: 'put',
+            url: 'http://127.0.0.1:8000/multi_stake?SCENARIO=2',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                console.log(
+                    'Successfully PUT local stakeholders to the database'
+                );
             })
             .catch(function (error) {
                 console.log(error);
@@ -156,6 +186,7 @@ export default function StakeHolderFields() {
      * This code is the frontend rendering; what the users see
      */
 
+    //TODO figure out something better than raw text
     if (isLoading) {
         return <div> currently loading...</div>;
     }
@@ -183,12 +214,12 @@ export default function StakeHolderFields() {
             <form id="form">
                 {stakeHolders.map((stakeHolder) => (
                     <StakeHolder
-                        key={stakeHolder.STAKEHOLDER_ID}
+                        key={stakeHolder.STAKEHOLDER}
                         removeStakeHolder={removeStakeHolder}
-                        id={stakeHolder.STAKEHOLDER_ID}
+                        id={stakeHolder.STAKEHOLDER}
                         name={stakeHolder.NAME}
-                        bio={stakeHolder.DESC}
-                        mainConvo={stakeHolder.MAIN_CONVERSATION}
+                        bio={stakeHolder.DESCRIPTION}
+                        mainConvo={stakeHolder.INTRODUCTION}
                         questionsResponses={stakeHolder.questionsResponses}
                         stakeHolderIssues={stakeHolder.stakeHolderIssues}
                     />
@@ -196,7 +227,11 @@ export default function StakeHolderFields() {
             </form>
 
             <div id="SaveButton">
-                <Button variant="contained" color="primary">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={saveStakeHolders}
+                >
                     Save Stakeholder Changes
                 </Button>
             </div>
