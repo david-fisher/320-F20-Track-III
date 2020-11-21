@@ -24,26 +24,6 @@ export default function StakeHolderFields() {
     const [isLoading, setLoading] = useState(false);
     var axios = require('axios');
 
-    //converts backend passed objects into ones the frontend uses to render
-    function convertParameters(item) {
-        item.false_id = 0;
-        item.id = item.STAKEHOLDER_ID;
-        item.name = item.NAME;
-        item.bio = item.DESC;
-        item.mainConvo = item.MAIN_CONVERSATION;
-        item.scenario_id = item.SCENARIO_ID;
-        item.version_id = item.VERSION_ID;
-        //item.questionsResponses = [];
-        //stakeholderIssues: ????
-
-        delete item.STAKEHOLDER_ID;
-        delete item.NAME;
-        delete item.DESC;
-        delete item.MAIN_CONVERSATION;
-        delete item.SCENARIO_ID;
-        delete item.VERSION_ID;
-    }
-
     //handles GETting existing stakeholders from the backend and representing
     //    that information in the frontend
     function getExistingStakeHolders() {
@@ -64,11 +44,7 @@ export default function StakeHolderFields() {
         axios(config)
             .then(function (response) {
                 console.log(response.data);
-                const gottedStakeHolderData = response.data;
-                gottedStakeHolderData.map((item) => {
-                    convertParameters(item);
-                });
-                setStakeHolders(gottedStakeHolderData);
+                setStakeHolders(response.data);
             })
             .catch(function (error) {
                 console.log(error);
@@ -139,15 +115,7 @@ export default function StakeHolderFields() {
         axios(config)
             .then(function (response) {
                 console.log(JSON.stringify(response.data));
-                const tempStakeHolder = response.data;
-                tempStakeHolder.false_id = 1;
-                const updatedStakeHolders = [...stakeHolders, tempStakeHolder];
-                updatedStakeHolders.map((item) => {
-                    if (item.false_id == 1) {
-                        convertParameters(item);
-                    }
-                });
-                setStakeHolders(updatedStakeHolders);
+                setStakeHolders([...stakeHolders, response.data]);
             })
             .catch(function (error) {
                 console.log(error);
@@ -215,12 +183,12 @@ export default function StakeHolderFields() {
             <form id="form">
                 {stakeHolders.map((stakeHolder) => (
                     <StakeHolder
-                        key={stakeHolder.id}
+                        key={stakeHolder.STAKEHOLDER_ID}
                         removeStakeHolder={removeStakeHolder}
-                        id={stakeHolder.id}
-                        name={stakeHolder.name}
-                        bio={stakeHolder.bio}
-                        mainConvo={stakeHolder.mainConvo}
+                        id={stakeHolder.STAKEHOLDER_ID}
+                        name={stakeHolder.NAME}
+                        bio={stakeHolder.DESC}
+                        mainConvo={stakeHolder.MAIN_CONVERSATION}
                         questionsResponses={stakeHolder.questionsResponses}
                         stakeHolderIssues={stakeHolder.stakeHolderIssues}
                     />
