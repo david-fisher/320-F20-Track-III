@@ -18,9 +18,6 @@ import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
-import universalGet from './../../../../universalHTTPRequests/get.js';
-import universalPut from './../../../../universalHTTPRequests/put.js';
-import universalDelete from './../../../../universalHTTPRequests/delete.js';
 import { databaseURL } from './../../../../Constants/Config.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -87,16 +84,24 @@ StakeHolder.propTypes = {
     id: PropTypes.number,
     removeStakeHolder: PropTypes.any,
     stakeHolder: PropTypes.any,
+    stakeHolders: PropTypes.any,
+    setStakeHolders: PropTypes.func,
+    getCurrentTimeInt: PropTypes.func,
+    checkTime: PropTypes.func,
 };
 
 export default function StakeHolder({
     name,
     bio,
     mainConvo,
-    questionsResponses,
-    stakeHolderIssues,
     id,
     removeStakeHolder,
+    updateNameJob,
+    job,
+    stakeHolders,
+    setStakeHolders,
+    getCurrentTimeInt,
+    checkTime,
 }) {
     const classes = useStyles();
 
@@ -104,6 +109,13 @@ export default function StakeHolder({
     const [openMainConvo, setOpenMainConvo] = useState(false);
     const [openPointSelection, setOpenPointSelection] = useState(false);
     const [openQuestions, setOpenQuestions] = useState(false);
+    const [isLoading, setLoading] = useState(false);
+    const [qRData, setQRData] = useState([]);
+    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
+    const [stakeHolderName, setStakeHolderName] = useState(name);
+    const [stakeHolderJob, setStakeHolderJob] = useState(job);
+
+    const baseURL = 'http://127.0.0.1:8000/';
 
     //TABLE
     const [rows, setRows] = useState([]);
@@ -150,6 +162,7 @@ export default function StakeHolder({
     };
 
     const handleClickOpenQuestions = () => {
+        getQRs();
         setOpenQuestions(true);
     };
     const handleCloseQuestions = () => {
@@ -157,82 +170,91 @@ export default function StakeHolder({
     };
 
     let handleChange = (content, editor) => {
-        //TODO Implement
         console.log(content);
         console.log(htmlToText.fromString(content));
     };
 
-    //integration with backend
-    const [getValues, setGetValues] = useState({
-        data: null,
-        loading: true,
-        error: null,
-    });
-
-    const [putValues, setPutValues] = useState({
-        data: null,
-        loading: true,
-        error: null,
-    });
-
-    const handlePut = (e) => {};
-
-    function handleDelete() {
-        //pass in stakeholder id and page id
-        //delete
+    const onChangeName = (e) => {
+        setStakeHolderName(e.target.value);
+        updateNameJob(e.target.value);
     }
 
     /*
-    function handleGet(setGetValues, g_id) {
-        const endpoint = "/page?page_id=" + g_id
-        function onSuccess(resp) {
-
-        }
-        function onFailure() {
-            console.log("Get failed")
-        }
-        universalGet(setGetValues, endpoint, null, null, { PAGE_ID: g_id });
+                sh.NAME = name;
+                sh.JOB = job;
+                */
+    function updateNameJob(shname){
+        const updatedStakeHolders = [...stakeHolders];
+        setStakeHolders(updatedStakeHolders.map((sh) => {
+            if (sh.STAKEHOLDER == id){
+                console.log("IT'S WORKING");
+                return {
+                    ...sh,
+                    NAME: shname,
+                    JOB: stakeHolderJob,
+                }
+                
+            }
+            else {
+                return sh;
+            }
+        }));
     }
 
-    function handlePost(setPostValues, postReqBody, s_id) {
-        const endpoint = "/pages?SCENARIO_ID=" + s_id
-        function onSuccess(resp) {
-
-        }
-        function onFailure() {
-            console.log("Post failed")
-        }
-        universalPost(setPostValues, endpoint, null, null, postReqBody);
+    const onChangeJob = (e) => {
+        setStakeHolderJob(e.target.value);
     }
 
-    function handlePut(setDeleteValues, p_id) {
-        const endpoint = "/page?page_id=" + p_id
-        function onSuccess(resp) {
+    function getQRs() {
+        if (!checkTime(setCurrentTime, currentTime)) {
+            return;
+        }
+        setLoading(true);
 
-        }
-        function onFailure() {
-            console.log("Put failed")
-        }
-        universalPut(setPutValues, endpoint, null, null, { PAGE_ID: p_id })
+        //axios call here
+        var axios = require('axios');
+        var data = {};
+
+        var config = {
+            method: 'get',
+            url: baseURL + 'api/conversations?STAKEHOLDER=57' + id,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                setQRData(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        setLoading(false);
     }
 
-
-    function handleDelete(setDeleteValues, d_id) {
-        const endpoint = "/page?page_id=" + d_id
-        function onSuccess(resp) {
-
-        }
-        function onFailure() {
-            console.log("Delete failed")
-        }
-        universalDelete(setDeleteValues, endpoint, null, null, { PAGE_ID: d_id })
+    if (isLoading) {
+        return <div> currently loading...</div>;
     }
-    */
 
     return (
         <div id="parent">
             <div id="SHname">
-                <TextField label="StakeHolder Name" value={name} />
+                <TextField 
+                    label="StakeHolder Name" 
+                    value={stakeHolderName} 
+                    onChange = {onChangeName}
+                />
+            </div>
+            <div id="SHjob">
+                <TextField 
+                    label="StakeHolder Job" 
+                    value={stakeHolderJob} 
+                    onChange = {onChangeJob}
+                />
             </div>
             <img id="stakeimg" src={shemptylogo} alt=" "></img>
             <label id="upl" htmlFor="contained-button-file">
@@ -289,7 +311,6 @@ export default function StakeHolder({
                     color="primary"
                     onClick={() => {
                         removeStakeHolder(id);
-                        //TODO: handleDelete()
                     }}
                 >
                     Delete
@@ -666,7 +687,10 @@ export default function StakeHolder({
                     </DialogTitle>
                     <DialogContent>
                         <QuestionFields
-                            questionsResponses={questionsResponses}
+                            qrs = {qRData}
+                            stakeholder_id = {id}
+                            getCurrentTimeInt = {getCurrentTimeInt}
+                            checkTime = {checkTime}
                         />
                     </DialogContent>
                 </div>

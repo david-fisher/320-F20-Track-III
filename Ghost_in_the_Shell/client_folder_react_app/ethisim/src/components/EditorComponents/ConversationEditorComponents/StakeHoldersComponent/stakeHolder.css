@@ -8,54 +8,62 @@
 
 #Bio {
     position: absolute;
-    left: 200px;
-    top: 70px;
+    left: 180px;
+    top: 80px;
 }
 
 #MainConversationField {
     position: absolute;
-    left: 200px;
+    left: 180px;
     top: 160px;
 }
 
-#DeleteButton {
-    position: absolute;
-    left: 750px;
-    top: 198px;
-}
-
-#PointButton {
-    position: absolute;
-    top: 250px;
-    left: 537px;
-}
-
 /*StakeHolder name*/
-#SHname {
+#SHname{
     position: absolute;
     width: 140px;
     height: 20px;
     top: 20px;
 }
 
+#SHjob{
+    position: absolute;
+    width: 140px;
+    height: 20px;
+    top: 20px;
+    left: 160px;
+}
+
 #stakeimg {
     position: absolute;
     height: 120px;
-    top: 80px;
+    top: 90px;
     margin-bottom: 110px;
-}
-
-#stakequestion {
-    position: absolute;
-    top: 250px;
-    left: 200px;
 }
 
 /*upload button*/
 #upl {
     position: absolute;
-    top: 210px;
-    left: 15px;
+    top: 220px;
+    left: 20px;
+}
+
+#stakequestion {
+    position: absolute;
+    top: 250px;
+    left: 180px;
+}
+
+#PointButton {
+    position: absolute;
+    top: 250px;
+    left: 380px;
+}
+
+#DeleteButton {
+    position: absolute;
+    top: 250px;
+    left: 580px;
 }
 
 #mainconvoeditor {

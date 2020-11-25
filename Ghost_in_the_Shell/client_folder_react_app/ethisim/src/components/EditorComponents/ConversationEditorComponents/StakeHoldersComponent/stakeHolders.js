@@ -12,6 +12,7 @@ StakeHolderFields.propTypes = {
 };
 
 export default function StakeHolderFields() {
+    const scenario = 2;
     /*
      * This section is code that is essentially the middleware between the frontend and backend
      * Handles API calls between frontend and backend
@@ -24,17 +25,20 @@ export default function StakeHolderFields() {
     const [isLoading, setLoading] = useState(false);
     var axios = require('axios');
 
+    //the base url for api calls; will be imported eventually 
+    const baseURL = 'http://127.0.0.1:8000/';
+
     //handles GETting existing stakeholders from the backend and representing
     //    that information in the frontend
     function getExistingStakeHolders() {
-        if (!checkTime) {
+        if (!checkTime(setCurrentTime, currentTime)) {
             return;
         }
         setLoading(true);
         //TODO: implement  get for specific scenarios
         var config = {
             method: 'get',
-            url: 'http://127.0.0.1:8000/api/stakeholders/',
+            url: baseURL + 'api/stakeholders/',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -55,13 +59,14 @@ export default function StakeHolderFields() {
     //handles DELETEing a stakeholder from the backend and removing the corresponding
     //    stakeholder from the frontend
     const removeStakeHolder = (stakeHolderID) => {
-        if (!checkTime()) {
+        if (!checkTime(setCurrentTime, currentTime)) {
             return;
         }
+        
         //handling it on the frontend
         console.log(stakeHolderID);
         const leftStakeHolders = stakeHolders.filter(
-            (s) => s.id !== stakeHolderID
+            (s) => s.STAKEHOLDER !== stakeHolderID
         );
         setStakeHolders(leftStakeHolders);
 
@@ -74,7 +79,7 @@ export default function StakeHolderFields() {
         var config = {
             method: 'delete',
             url:
-                'http://127.0.0.1:8000/api/stakeholders/' + stakeHolderID + '/',
+                baseURL + 'api/stakeholders/' + stakeHolderID + '/',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -89,28 +94,30 @@ export default function StakeHolderFields() {
                 console.log(error);
             });
     };
+    console.log(stakeHolders);
 
     //handles POSTing a new stakeholder to the backend and adding that stakeholder to the frontend
     const addStakeHolder = (e) => {
-        if (!checkTime()) {
+        if (!checkTime(setCurrentTime, currentTime)) {
             return;
         }
         setLoading(true);
         //TODO: figure out how to distinguish which scenario this newly put item is from
         //currently has scenario 2 arbitrarily
         var data = JSON.stringify({
-            SCENARIO: 2,
+            SCENARIO: scenario,
         });
 
         var config = {
             method: 'post',
-            url: 'http://127.0.0.1:8000/api/stakeholders/',
+            url: baseURL + 'api/stakeholders/',
             headers: {
                 'Content-Type': 'application/json',
             },
             data: data,
         };
 
+        var newStakeHolder;
         axios(config)
             .then(function (response) {
                 console.log(JSON.stringify(response.data));
@@ -119,11 +126,12 @@ export default function StakeHolderFields() {
             .catch(function (error) {
                 console.log(error);
             });
+        
         setLoading(false);
     };
 
     const saveStakeHolders = (e) => {
-        if (!checkTime()) {
+        if (!checkTime(setCurrentTime, currentTime)) {
             return;
         }
         setLoading(true);
@@ -133,7 +141,7 @@ export default function StakeHolderFields() {
         //currently has arbitrary value of 2
         var config = {
             method: 'put',
-            url: 'http://127.0.0.1:8000/multi_stake?SCENARIO=2',
+            url: baseURL + 'multi_stake?SCENARIO=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -171,14 +179,14 @@ export default function StakeHolderFields() {
     //checks if at least 1 second has elapsed since last action
     //if someone waits a multiple of exactly 24 hours since their last action they will
     //    not be able to take an action for an additional second
-    function checkTime() {
+    function checkTime(setTime, t) {
         var ret = false;
         //current time difference is at least 1 second, but that SHOULD be ample time for
         //the database to get back to the frontend
-        if (getCurrentTimeInt() - currentTime != 0) {
+        if (getCurrentTimeInt() - t != 0) {
             ret = true;
         }
-        setCurrentTime(getCurrentTimeInt());
+        setTime(getCurrentTimeInt());
         return ret;
     }
 
@@ -218,10 +226,13 @@ export default function StakeHolderFields() {
                         removeStakeHolder={removeStakeHolder}
                         id={stakeHolder.STAKEHOLDER}
                         name={stakeHolder.NAME}
+                        job={stakeHolder.JOB}
                         bio={stakeHolder.DESCRIPTION}
                         mainConvo={stakeHolder.INTRODUCTION}
-                        questionsResponses={stakeHolder.questionsResponses}
-                        stakeHolderIssues={stakeHolder.stakeHolderIssues}
+                        getCurrentTimeInt = {getCurrentTimeInt}
+                        checkTime = {checkTime}
+                        stakeHolders = {stakeHolders}
+                        setStakeHolders = {setStakeHolders}
                     />
                 ))}
             </form>

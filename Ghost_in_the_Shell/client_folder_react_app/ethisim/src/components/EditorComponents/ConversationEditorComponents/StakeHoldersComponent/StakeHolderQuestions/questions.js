@@ -6,16 +6,23 @@ import PropTypes from 'prop-types';
 
 QuestionFields.propTypes = {
     questionsResponses: PropTypes.any,
+    qrs: PropTypes.any,
+    stakeholder_id: PropTypes.number,
+    getCurrentTime: PropTypes.func,
+    checkTime: PropTypes.func,
 };
 
-export default function QuestionFields({ questionsResponses }) {
+export default function QuestionFields({qrs, stakeholder_id, getCurrentTimeInt, checkTime }) {
+    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
+    const [isLoading, setLoading] = useState(false);
+    
     //questionsResponses is an array of object in format {question: string, response: string}
-    //Set fake ID for list item
-    let initialQuestionsWithID = questionsResponses.map(function (data) {
+    let initialQuestionsWithID = qrs.map(function (data) {
         return {
-            question: data.question,
-            response: data.response,
-            id: Math.floor(Math.random() * 10000),
+            question: data.QUESTION,
+            response: data.RESPONSE,
+            stakeholder_id: data.STAKEHOLDER,
+            conversation_id: data.CONVERSATION,
         };
     });
 
@@ -23,18 +30,29 @@ export default function QuestionFields({ questionsResponses }) {
         initialQuestionsWithID
     );
 
+    /*
     let resetQuestionsWithID = (questionsWithID) => {
         let initialQuestionsWithID = questionsResponses.map(function (data) {
             return {
-                question: data.question,
-                response: data.response,
-                id: Math.floor(Math.random() * 10000),
+                question: data.QUESTION,
+                response: data.RESPONSE,
+                stakeholder_id: data.STAKEHOLDER,
+                conversation_id: data.CONVERSATION,
             };
         });
         setQuestionsWithID(initialQuestionsWithID);
     };
 
     useEffect(resetQuestionsWithID, [questionsResponses]);
+    */
+
+    const temp = (e) => {
+        if (!checkTime(setCurrentTime, currentTime)) {
+            return;
+        }
+        setLoading(true);
+        setLoading(false);
+    }
 
     const removeQuestion = (questionID) => {
         console.log(questionID);
@@ -55,12 +73,6 @@ export default function QuestionFields({ questionsResponses }) {
         ];
         setQuestionsWithID(newQuestionsWithID);
     };
-
-    // eslint-disable-next-line
-    function updateItem(iItemID, iItemBody) {
-        //TODO
-        //functional code to save items to backend
-    }
 
     return (
         <div className="questions">
@@ -89,7 +101,6 @@ export default function QuestionFields({ questionsResponses }) {
             <Button
                 variant="contained"
                 color="primary"
-                //onClick={updateRow}
             >
                 Save Changes
             </Button>
