@@ -15,7 +15,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import deleteReq from '../universalHTTPRequests/delete';
 import post from '../universalHTTPRequests/post';
-import put from '../universalHTTPRequests/put';
 import get from '../universalHTTPRequests/get';
 import LoadingSpinner from '../components/LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -24,15 +23,12 @@ import SuccessBanner from '../components/Banners/SuccessBanner';
 import ErrorBanner from '../components/Banners/ErrorBanner';
 import Tags from '../components/DashboardComponents/DropDown';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-
+import DashboardNavBar from '../components/DashboardComponents/DashboardNavbar';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(15),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -42,13 +38,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 const endpointGet = '/dashboard?professor_id=12345678';
 const endpointGetCourses = '/api/courses/';
 const endpointPost = '/dashboard';
 const endpointDelete = '/api/scenarios/';
-
-
 
 const styles = (theme) => ({
     root: {
@@ -62,8 +55,6 @@ const styles = (theme) => ({
         color: theme.palette.grey[500],
     },
 });
-
-
 
 const DialogTitle = withStyles(styles)((props) => {
     const { children, classes, onClose, ...other } = props;
@@ -96,40 +87,52 @@ const DialogActions = withStyles((theme) => ({
     },
 }))(MuiDialogActions);
 
-
 //Passing props with React Router in Material UI: https://stackoverflow.com/questions/30115324/pass-props-in-link-react-router
 export default function Dashboard() {
     // post on success, concatenating a scenario card to array
     //delete on success, concatenating a scenario card to array
 
-//when posting a new scenario setting fake id, now deleting that scenario, have to replace id with id in database
+    //when posting a new scenario setting fake id, now deleting that scenario, have to replace id with id in database
 
-//post returns new id of scenario, when you concatenating to array set the id to that
-
-
+    //post returns new id of scenario, when you concatenating to array set the id to that
 
     const [scenarios, setScenarios] = useState(null);
     const [finishedScenarios, setFinishedScenarios] = useState(null);
     const [unfinishedScenarios, setUnfinishedScenarios] = useState(null);
-    const [menuCourseItems, setMenuCourseItems] = useState(
-           [ {
-                "COURSE": 0,
-                "NAME": " "
-            },
-        ]
-    );
+    const [menuCourseItems, setMenuCourseItems] = useState([
+        {
+            COURSE: 0,
+            NAME: ' ',
+        },
+    ]);
     const [open, setOpen] = React.useState(false);
-    const [fetchScenariosResponse, setFetchScenariosResponse] = useState({data: null, loading: false, error: null});
-    const [fetchCourseResponse, setFetchCourseResponse] = useState({data: null, loading: false, error: null});
-    const [deleteReqValue, setDeleteReq] = useState({   data: null,  loading: false, error: null, });
+    const [fetchScenariosResponse, setFetchScenariosResponse] = useState({
+        data: null,
+        loading: false,
+        error: null,
+    });
+    const [fetchCourseResponse, setFetchCourseResponse] = useState({
+        data: null,
+        loading: false,
+        error: null,
+    });
+    const [deleteReqValue, setDeleteReq] = useState({
+        data: null,
+        loading: false,
+        error: null,
+    });
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
     const [errorBannerMessage, setErrorBannerMessage] = useState('');
     const [errorBannerFade, setErrorBannerFade] = useState(false);
     const [shouldFetch, setShouldFetch] = useState(0);
-    const [postValue, setPost] = useState({ data: null, loading: true, error: null, });
+    const [postValue, setPost] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
     const [NewScenerio, setEdit] = useState({
-        NAME: " ",
+        NAME: ' ',
         IS_FINISHED: false,
         PUBLIC: false,
         NUM_CONVERSATIONS: 0,
@@ -137,7 +140,7 @@ export default function Dashboard() {
         COURSES: [],
     });
 
-//For Banners
+    //For Banners
     useEffect(() => {
         const timeout = setTimeout(() => {
             setSuccessBannerFade(false);
@@ -154,95 +157,92 @@ export default function Dashboard() {
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
 
-//For Dialogue Box
+    //For Dialogue Box
     const handleClickOpen = () => {
         setOpen(true);
         NewScenerio.PUBLIC = false;
-        setEdit(NewScenerio); 
+        setEdit(NewScenerio);
         getCourses();
     };
 
     const handleCloseSave = () => {
-       
         function onSuccessPost(resp) {
-                console.log("Success Scenario Post");
-                setShouldFetch( shouldFetch + 1);
-                setSuccessBannerMessage('Successfully created Scenario!');
-                setSuccessBannerFade(true);
-               
+            console.log('Success Scenario Post');
+            setShouldFetch(shouldFetch + 1);
+            setSuccessBannerMessage('Successfully created Scenario!');
+            setSuccessBannerFade(true);
         }
         function onFailurePost() {
-            console.log("Fail Scenario Post");
-            
-            setErrorBannerMessage('Failed to save! Please try again.');
+            console.log('Fail Scenario Post');
+
+            setErrorBannerMessage(
+                'Failed to Create Scenario! Please try again.'
+            );
             setErrorBannerFade(true);
-            
         }
-        console.log("POST INFO");
+        console.log('POST INFO');
         console.log(NewScenerio);
 
-        post(setPost, endpointPost, onFailurePost, onSuccessPost,  NewScenerio
-        );
+        post(setPost, endpointPost, onFailurePost, onSuccessPost, NewScenerio);
         setOpen(false);
     };
 
     const handleClose = () => {
         setOpen(false);
     };
-//For new Scenario Post
-    const handleOnChangeName = event => {
-        NewScenerio.NAME = event.target.value 
+    //For new Scenario Post
+    const handleOnChangeName = (event) => {
+        NewScenerio.NAME = event.target.value;
         setEdit(NewScenerio);
-        
     };
 
     const handleOnChangePublic = (info) => {
-        NewScenerio.PUBLIC = !(NewScenerio.PUBLIC)
-        setEdit(NewScenerio); 
+        NewScenerio.PUBLIC = !NewScenerio.PUBLIC;
+        setEdit(NewScenerio);
     };
 
-//Update Classes
+    //Update Classes
     const updateSelectedClasses = (selectedClasses) => {
         //set new scenario courses to selected classes
         let sel = [];
         let temp = [];
-        temp = selectedClasses.map(element => sel.push({COURSE: element.COURSE}) );
+        temp = selectedClasses.map((element) =>
+            sel.push({ COURSE: element.COURSE })
+        );
         NewScenerio.COURSES = sel;
-        setEdit(NewScenerio); 
+        setEdit(NewScenerio);
     };
-//Delete Scenario
+    //Delete Scenario
     const deleteScenario = (scenarioID, isFinished) => {
-
         function successfullyDeleted(resp) {
-            if(isFinished){
-           /* setSuccessBannerFade(true);
-            setSuccessBannerMessage('Successfully deleted issue!');
-            */
-            let newData = [ ]
-               finishedScenarios && finishedScenarios.filter(
-                (entry) => entry.SCENARIO !== scenarioID
-            );
-            setFinishedScenarios(newData);
-           setShouldFetch( shouldFetch + 1);
-        }else{
-           /*
-            setSuccessBannerFade(true);
-            setSuccessBannerMessage('Successfully deleted issue!');
-           */
-            let newData = [ ]
-            unfinishedScenarios &&  unfinishedScenarios.filter(
-                (entry) => entry.SCENARIO !== scenarioID
-            );
-            setUnfinishedScenarios(newData);
-            setShouldFetch( shouldFetch + 1);
-        }
+            if (isFinished) {
+                setSuccessBannerFade(true);
+                setSuccessBannerMessage('Successfully Deleted Scenario!');
 
+                let newData = [];
+                finishedScenarios &&
+                    finishedScenarios.filter(
+                        (entry) => entry.SCENARIO !== scenarioID
+                    );
+                setFinishedScenarios(newData);
+                setShouldFetch(shouldFetch + 1);
+            } else {
+                setSuccessBannerFade(true);
+                setSuccessBannerMessage('Successfully Deleted Scenario!');
+
+                let newData = [];
+                unfinishedScenarios &&
+                    unfinishedScenarios.filter(
+                        (entry) => entry.SCENARIO !== scenarioID
+                    );
+                setUnfinishedScenarios(newData);
+                setShouldFetch(shouldFetch + 1);
+            }
         }
         function onFailure() {
-            console.log('Fail Delete Scenario');
-           /* setErrorBannerMessage('Failed to Delete! Please try again.');
-            setErrorBannerFade(true);*/
-        
+            console.log('Fail To Delete Scenario');
+            setErrorBannerMessage('Failed to Delete! Please try again.');
+            setErrorBannerFade(true);
         }
 
         deleteReq(
@@ -252,174 +252,195 @@ export default function Dashboard() {
             successfullyDeleted,
             null
         );
-         
     };
-//Get Scenario
+    //Get Scenario
     let getData = () => {
-
         function onSuccess(response) {
-            
             setScenarios(response.data);
-                let finishedScenarios = response.data.filter(
-                    (data) => data.IS_FINISHED
-                );
-                let unfinishedScenarios = response.data.filter(
-                    (data) => !data.IS_FINISHED
-                );
-                finishedScenarios = finishedScenarios.map((data) => (
-                    <ScenarioCard
-                        data={data}
-                        key={data.SCENARIO}
-                        finished={data.IS_FINISHED}
-                        delete = {deleteScenario}
-                    />
-                ));
-                unfinishedScenarios = unfinishedScenarios.map((data) => (
-                    <ScenarioCard
-                        data={data}
-                        key={data.SCENARIO}
-                        finished={data.IS_FINISHED}
-                        delete = {deleteScenario}
-                    />
-                ));
-                setFinishedScenarios(finishedScenarios);
-                setUnfinishedScenarios(unfinishedScenarios);
-           
+            let finishedScenarios = response.data.filter(
+                (data) => data.IS_FINISHED
+            );
+            let unfinishedScenarios = response.data.filter(
+                (data) => !data.IS_FINISHED
+            );
+            finishedScenarios = finishedScenarios.map((data) => (
+                <ScenarioCard
+                    data={data}
+                    key={data.SCENARIO}
+                    finished={data.IS_FINISHED}
+                    delete={deleteScenario}
+                />
+            ));
+            unfinishedScenarios = unfinishedScenarios.map((data) => (
+                <ScenarioCard
+                    data={data}
+                    key={data.SCENARIO}
+                    finished={data.IS_FINISHED}
+                    delete={deleteScenario}
+                />
+            ));
+            setFinishedScenarios(finishedScenarios);
+            setUnfinishedScenarios(unfinishedScenarios);
         }
 
         function onFailure() {
-            console.log("Failed Get Scenarios Request");
-           /* setErrorBannerMessage('Failed to save! Please try again.');
-            setErrorBannerFade(true);*/
+            console.log('Failed Get Scenarios Request');
+            setErrorBannerMessage('Failed to Get! Please try again.');
+            setErrorBannerFade(true);
         }
         get(setFetchScenariosResponse, endpointGet, onFailure, onSuccess);
-        
     };
-//Get Courses
+    //Get Courses
     let getCourses = () => {
-
         function onSuccessCourse(response) {
             setMenuCourseItems(response.data);
         }
 
         function onFailureCourse() {
-            console.log("Failed Get Courses Request");
-           /* setErrorBannerMessage('Failed to save! Please try again.');
-            setErrorBannerFade(true);*/
+            console.log('Failed Get Courses Request');
+            setErrorBannerMessage('Failed to get Courses! Please try again.');
+            setErrorBannerFade(true);
         }
-        get(setFetchCourseResponse, endpointGetCourses, onFailureCourse, onSuccessCourse);
-        
+        get(
+            setFetchCourseResponse,
+            endpointGetCourses,
+            onFailureCourse,
+            onSuccessCourse
+        );
     };
 
-
-//Reload Page
+    //Reload Page
     useEffect(getData, [shouldFetch]);
     const classes = useStyles();
 
     if (fetchScenariosResponse.loading) {
-
-        return  <LoadingSpinner />;
+        return <LoadingSpinner />;
     }
-   
+
     if (fetchScenariosResponse.error) {
         return (
             <div className={classes.issue}>
                 <div className={classes.container}>
+                    <ErrorBanner
+                        fade={errorBannerFade}
+                        errorMessage={errorBannerMessage}
+                    />
                     <ErrorIcon className={classes.iconError} />
                     <Typography align="center" variant="h3">
                         Error in fetching Scenarios.
                     </Typography>
-                </div >
+                </div>
                 <div className={classes.container}>
-                <Button variant="contained" color="primary" onClick={getData}>
-                    <RefreshIcon className={classes.iconRefresh} />
-                </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={getData}
+                    >
+                        <RefreshIcon className={classes.iconRefresh} />
+                    </Button>
                 </div>
             </div>
         );
     }
-   
-    return ( <div>
-        <Container className={classes.container} component="main" maxWidth="lg">
-            <Typography variant="h4">Unfinished Scenarios</Typography>
-             <SuccessBanner fade = {successBannerFade} successMessage = {successBannerMessage}/>
-            <Grid 
-                container
-                spacing={2}
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
+
+    return (
+        <div>
+            <DashboardNavBar />
+            <Container
+                className={classes.container}
+                component="main"
+                maxWidth="lg"
             >
-
-                {unfinishedScenarios}
-                <AddNewScenarioCard onClick={handleClickOpen} />
-            </Grid>
-            <Typography variant="h4">Finished Scenarios</Typography>
-            <Grid
-                container
-                spacing={2}
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
-            >     
-                {finishedScenarios}
-            </Grid>
-            <Box className={classes.copyright}>
-                <Copyright />
-            </Box>
-        </Container>
-
-        <Dialog
-onClose={handleClose}
-aria-labelledby="customized-dialog-title"
-open={open}
-maxWidth="false"
->
-<div style={{ width: 600 }}>
-    <DialogTitle
-        id="customized-dialog-title"
-        onClose={handleClose}
-    >
-      Create New Scenario
-    </DialogTitle>
-    <DialogContent>
-        <form style={{ marginBottom: 20 }}>
-    <TextField      
-                    label="Name"
-                    style={{ width: 500}}
-                    multiline
-                    rows={1}
-                    variant="outlined"
-                    onChange= {handleOnChangeName}
+                <Typography variant="h4">Unfinished Scenarios</Typography>
+                <SuccessBanner
+                    fade={successBannerFade}
+                    successMessage={successBannerMessage}
                 />
-      </form>
+                <ErrorBanner
+                    fade={errorBannerFade}
+                    errorMessage={errorBannerMessage}
+                />
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    {unfinishedScenarios}
+                    <AddNewScenarioCard onClick={handleClickOpen} />
+                </Grid>
+                <Typography variant="h4">Finished Scenarios</Typography>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    {finishedScenarios}
+                </Grid>
+                <Box className={classes.copyright}>
+                    <Copyright />
+                </Box>
+            </Container>
 
-     <form style={{ marginBottom: 10}} >
-     <Tags courses = {menuCourseItems}  update = {updateSelectedClasses} />
-     </form>
+            <Dialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+                maxWidth="false"
+            >
+                <div style={{ width: 600 }}>
+                    <DialogTitle
+                        id="customized-dialog-title"
+                        onClose={handleClose}
+                    >
+                        Create New Scenario
+                    </DialogTitle>
+                    <DialogContent>
+                        <form style={{ marginBottom: 20 }}>
+                            <TextField
+                                label="Name"
+                                style={{ width: 500 }}
+                                multiline
+                                rows={1}
+                                variant="outlined"
+                                onChange={handleOnChangeName}
+                            />
+                        </form>
 
-     <form style={{ marginLeft: -15 }}>
-      <FormControlLabel
-          control={
-          <Checkbox 
-            onChange={handleOnChangePublic}
-            color="primary" 
-          />}
-          label="Public"
-          labelPlacement="start"
-        />       
-     </form>
+                        <form style={{ marginBottom: 10 }}>
+                            <Tags
+                                courses={menuCourseItems}
+                                update={updateSelectedClasses}
+                            />
+                        </form>
 
-     </DialogContent>
+                        <form style={{ marginLeft: -15 }}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        onChange={handleOnChangePublic}
+                                        color="primary"
+                                    />
+                                }
+                                label="Public"
+                                labelPlacement="start"
+                            />
+                        </form>
+                    </DialogContent>
                     <DialogActions>
-                        <Button autoFocus onClick={handleCloseSave} color="primary">
+                        <Button
+                            autoFocus
+                            onClick={handleCloseSave}
+                            color="primary"
+                        >
                             Save changes
                         </Button>
                     </DialogActions>
                 </div>
             </Dialog>
-
-
         </div>
     );
-    }
+}

@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
 Tags.propTypes = {
     update: PropTypes.func,
     courses: PropTypes.array,
+    current: PropTypes.array,
 };
 
 export default function Tags(props) {
     const classes = useStyles();
-
     const onTagsChange = (event, values) => {
         props.update(values);
     };
@@ -44,6 +44,7 @@ export default function Tags(props) {
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.NAME}
                 onChange={onTagsChange}
+                defaultValue={props.current}
                 renderOption={(option, { selected, inputValue }) => {
                     console.log('inputvalue', selected, inputValue);
                     return (

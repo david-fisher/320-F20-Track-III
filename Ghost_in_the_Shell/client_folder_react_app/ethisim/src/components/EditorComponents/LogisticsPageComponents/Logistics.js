@@ -3,9 +3,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Author from './Author';
 import { isBrowser } from 'react-device-detect';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
-import axios from 'axios';
-import { ContactsOutlined } from '@material-ui/icons';
-
+import put from '../../../universalHTTPRequests/put';
+import get from '../../../universalHTTPRequests/get';
+import LoadingSpinner from '../../LoadingSpinner';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import ErrorIcon from '@material-ui/icons/Error';
+import SuccessBanner from '../../Banners/SuccessBanner';
+import ErrorBanner from '../../Banners/ErrorBanner';
+import Tags from './DropDown';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -38,182 +45,317 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Logistics() {
+    const endpointGetCourses = '/api/courses/';
+    const endPointPut = '/logistics';
+
     const classes = useStyles();
     //temporary until backend implements id's
-    const [id, setId] = useState(17);
+    const [fetchCourseResponse, setFetchCourseResponse] = useState({
+        data: null,
+        loading: false,
+        error: null,
+    });
+    const [id, setId] = useState(23);
+    const [done, setDone] = useState(false);
     const [authors, setAuthor] = useState([<Author key={id} />]);
-    const [title,setTitle] = useState('');
-    const [course,setCourse] = useState('');
     const [shouldFetch, setShouldFetch] = useState(0);
+    const [shouldRender, setShouldRender] = useState(false);
+    const [fetchLogisticsResponse, setFetchLogisticsResponse] = useState({
+        data: null,
+        loading: false,
+        error: null,
+    });
+    const [menuCourseItems, setMenuCourseItems] = useState(null);
+    const [responseSave, setResponseSave] = useState(null);
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
 
+    //For Banners
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
+    ///Authors not implemented
     const addAuthor = (event) => {
         setAuthor(authors.concat(<Author key={id + 1} />));
         setId(id + 1);
         event.preventDefault();
     };
 
+    const handleOnChangePublic = (event) => {
+        setEdit({ ...NewScenario, PUBLIC: event.target.checked });
+        //setEdit(NewScenario);
+        console.log(NewScenario.PUBLIC);
+    };
 
+    const handleOnChangeFinish = (event) => {
+        setEdit({ ...NewScenario, IS_FINISHED: event.target.checked });
+        //setEdit(NewScenario);
+        console.log(NewScenario.IS_FINISHED);
+    };
 
+    const makeNewCourses = (response) => {
+        let sel = [];
 
-  const [NewScenario, setEdit] = useState({
+        console.log('Orphans must die');
+        console.log(NewScenario.COURSES);
+
+        for (let i = 0; i < response.length; i++) {
+            for (let j = 0; j < NewScenario.COURSES.length; j++) {
+                if (response[i].NAME == NewScenario.COURSES[j].NAME) {
+                    sel.push(response[i]);
+                }
+            }
+        }
+
+        NewScenario.COURSES = sel;
+        setEdit(NewScenario);
+    };
+
+    const [NewScenario, setEdit] = useState({
         SCENARIO: 0,
         VERSION: 0,
-        NAME: "" , 
+        NAME: '',
         PUBLIC: false,
         NUM_CONVERSATION: 0,
         PROFESSOR: 0,
-        IS_FINISHED: false, 
-        DATE_CREATED: " ",
+        IS_FINISHED: false,
+        DATE_CREATED: ' ',
         COURSES: [],
-    
-});
+    });
 
+    let getData = () => {
+        function onSuccess(response) {
+            NewScenario.SCENARIO = response.data.SCENARIO;
+            NewScenario.VERSION = response.data.VERSION;
+            NewScenario.NAME = response.data.NAME;
+            NewScenario.PUBLIC = response.data.PUBLIC;
+            NewScenario.NUM_CONVERSATION = response.data.NUM_CONVERSATION;
+            NewScenario.PROFESSOR = response.data.PROFESSOR;
+            NewScenario.IS_FINISHED = response.data.IS_FINISHED;
+            NewScenario.DATE_CREATED = response.data.DATA_CREATED;
+            NewScenario.COURSES = response.data.COURSES;
+            setEdit(NewScenario);
+            getCourses();
+            setDone(true);
+        }
 
-let getData = function get() {
- const res = axios.get('http://localhost:8000/logistics?scenario_id=' + id).then(function (response) {
-  //console.log(response.data);
-  NewScenario.SCENARIO = response.data.SCENARIO;
-  NewScenario.VERSION= response.data.VERSION;
-  NewScenario.NAME = response.data.NAME;
-  NewScenario.PUBLIC = response.data.PUBLIC;
-  NewScenario.NUM_CONVERSATION = response.data.NUM_CONVERSATION;
-  NewScenario.PROFESSOR = response.data.PROFESSOR;
-  NewScenario.IS_FINISHED = response.data.IS_FINISHED;
-  NewScenario.DATE_CREATED = response.data.DATA_CREATED;
-  NewScenario.COURSES = response.data.COURSES;
-  setEdit(NewScenario);
-  console.log("doggy");
-  console.log(NewScenario);
-  console.log(NewScenario.NAME);
-});
-}
+        function onFailure() {
+            console.log('Failed Get Logistics Request');
+        }
+        get(
+            setFetchLogisticsResponse,
+            '/logistics?scenario_id=' + id,
+            onFailure,
+            onSuccess
+        );
+    };
 
-useEffect(getData, [shouldFetch]);
+    let getCourses = () => {
+        function onSuccessCourse(response) {
+            setMenuCourseItems(response.data);
+            makeNewCourses(response.data);
+            setShouldRender(true);
+        }
 
-const handleSave = () => {
-    console.log("Sending Put");
-    console.log( NewScenario);
-    axios.put(`http://localhost:8000/logistics?scenario_id=` + id,  NewScenario )
-    .then(res => {
-      console.log(res.data);
-    })
+        function onFailureCourse() {
+            console.log('Failed Get Courses Request');
+            setErrorBannerMessage('Failed to save! Please try again.');
+            setErrorBannerFade(true);
+        }
+        get(
+            setFetchCourseResponse,
+            endpointGetCourses,
+            onFailureCourse,
+            onSuccessCourse
+        );
+    };
 
-}
+    useEffect(getData, [shouldFetch]);
 
-const handleOnChange = event => {
-    console.log("changed name");
-    NewScenario.NAME = event.target.value 
-    setEdit(NewScenario);
-  };
-
-  
-
-  
-
-
-
-    //default if it's a browser
-    var body = (
-        <Container component="main">
-            <Typography align="center" variant="h2">
-                Logistics
-            </Typography>
-            <form className={classes.textfields} noValidate autoComplete="off">
-                Simulation Title
-                <TextField id="Simulation Title" value= {title} label="" onChange= {handleOnChange} />
-                Course Name
-                <TextField id="Course Name" value= {course} label=""  />
-                Authors
-            </form>
-            {authors}
-            <div className={classes.subdiv}>
-                <form className={classes.buttons} noValidate autoComplete="off">
+    if (fetchLogisticsResponse.error || fetchCourseResponse.error) {
+        return (
+            <div className={classes.issue}>
+                <div className={classes.container}>
+                    <ErrorIcon className={classes.iconError} />
+                    <Typography align="center" variant="h3">
+                        Error in fetching Logistics.
+                    </Typography>
+                </div>
+                <div className={classes.container}>
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={addAuthor}
+                        onClick={getData}
                     >
-                        Add Author
+                        <RefreshIcon className={classes.iconRefresh} />
                     </Button>
-                    <Button variant="contained" color="primary">
-                        Save Authors
-                    </Button>
-                    <Button variant="contained" color="primary">
-                        Put
-                    </Button>
-                </form>
+                </div>
             </div>
-            <Typography align="left" variant="h6">
-                Scenario ID: {id}
-            </Typography>
-            <Typography align="left" variant="h6">
-                Shareable Link: wwww.ethisim.com
-            </Typography>
-            <div className={classes.subdiv}>
-                <form className={classes.buttons} noValidate autoComplete="off">
-                    <Button variant="contained">View Student Responses</Button>
-                    <Button variant="contained" color="primary">
-                        Delete Scenario
-                    </Button>
-                    <Button variant="contained" color="primary">
-                        View Version History
-                    </Button>
-                </form>
-            </div>
-        </Container>
-    );
+        );
+    }
 
-    //convert this to "isMobile" later; using "isBrowser" for testing purposes
-    if (isBrowser) {
-        
-        body = (
+    //staying laoding ofe
+    if (fetchLogisticsResponse.loading || NewScenario.NAME == '') {
+        return <LoadingSpinner />;
+    }
+
+    if (fetchCourseResponse.error) {
+        return (
+            <div className={classes.issue}>
+                <div className={classes.container}>
+                    <ErrorBanner
+                        fade={errorBannerFade}
+                        errorMessage={errorBannerMessage}
+                    />
+                    <ErrorIcon className={classes.iconError} />
+                    <Typography align="center" variant="h3">
+                        Error in fetching Courses.
+                    </Typography>
+                </div>
+                <div className={classes.container}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={getData}
+                    >
+                        <RefreshIcon className={classes.iconRefresh} />
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    const handleSave = () => {
+        function onSuccessLogistic(response) {
+            console.log('Success Put');
+            setSuccessBannerMessage('Successfully Saved!');
+            setSuccessBannerFade(true);
+        }
+
+        function onFailureLogistic() {
+            console.log('Failed Put Logistics Request');
+            setErrorBannerMessage('Failed to save! Please try again.');
+            setErrorBannerFade(true);
+        }
+
+        put(
+            setResponseSave,
+            endPointPut,
+            onFailureLogistic,
+            onSuccessLogistic,
+            NewScenario
+        );
+    };
+
+    const handleOnChange = (event) => {
+        console.log('changed name');
+        NewScenario.NAME = event.target.value;
+        setEdit(NewScenario);
+    };
+
+    const updateSelectedClasses = (selectedClasses) => {
+        //set new scenario courses to selected classes
+        let sel = [];
+        let temp = [];
+        temp = selectedClasses.map((element) =>
+            sel.push({ COURSE: element.COURSE })
+        );
+        NewScenario.COURSES = sel;
+        setEdit(NewScenario);
+    };
+
+    return (
+        <div>
             <Container component="main">
                 <Typography align="center" variant="h2">
                     Logistics
                 </Typography>
-                
+                <SuccessBanner
+                    fade={successBannerFade}
+                    successMessage={successBannerMessage}
+                />
+                <ErrorBanner
+                    fade={errorBannerFade}
+                    errorMessage={errorBannerMessage}
+                />
                 <form
                     className={classes.textfields}
                     noValidate
                     autoComplete="off"
-                   
                 >
                     Simulation Title
-                    <TextField id="Simulation Title" value= {NewScenario.NAME} label="" onChange= {handleOnChange} />
-                Course Name
-                <TextField id="Course Name" value= {course} label="" />
-                Authors
+                    <TextField
+                        id="Simulation Title"
+                        defaultValue={NewScenario.NAME}
+                        label=""
+                        onChange={handleOnChange}
+                    />
+                    Courses
+                    {shouldRender ? (
+                        <Tags
+                            courses={menuCourseItems}
+                            current={NewScenario.COURSES}
+                            update={updateSelectedClasses}
+                        />
+                    ) : null}
+                    Authors
                 </form>
+
                 {authors}
+                <Button variant="contained" color="primary" onClick={addAuthor}>
+                    Add Author
+                </Button>
+                <form style={{ marginLeft: -15, marginTop: 10 }}>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={NewScenario.PUBLIC}
+                                onChange={handleOnChangePublic}
+                                color="primary"
+                            />
+                        }
+                        label="Public"
+                        labelPlacement="start"
+                    />
+
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={NewScenario.IS_FINISHED}
+                                onChange={handleOnChangeFinish}
+                                color="primary"
+                            />
+                        }
+                        label="Is Finished"
+                        labelPlacement="start"
+                    />
+                </form>
                 <div className={classes.subdiv}>
                     <form
                         className={classes.buttons}
                         noValidate
                         autoComplete="off"
-                    >
-                        
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={addAuthor}
-                        >
-                            Add Author
-                        </Button>
-                        <Button variant="contained" color="primary">
-                            Save Authors
-                        </Button>
-                    </form>
-                    
+                    ></form>
                 </div>
                 <Typography align="left" variant="h6">
-                    Scenario ID: {id}
+                    Scenario ID: {NewScenario.SCENARIO}
                 </Typography>
-                
-                <Typography align="left" variant="h6">
-                    Shareable Link: wwww.ethisim.com
-                </Typography>
+
                 <div className={classes.subdiv}>
-                    
                     <form
                         className={classes.buttons}
                         noValidate
@@ -225,14 +367,16 @@ const handleOnChange = event => {
                         <Button variant="contained" color="primary">
                             View Version History
                         </Button>
-                        <Button variant="contained" color="primary"  onClick={handleSave}>
-                        SAVE
-                    </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSave}
+                        >
+                            SAVE
+                        </Button>
                     </form>
                 </div>
             </Container>
-        );
-    }
-
-    return body;
+        </div>
+    );
 }
