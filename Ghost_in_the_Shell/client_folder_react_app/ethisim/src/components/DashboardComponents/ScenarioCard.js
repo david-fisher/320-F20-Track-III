@@ -12,8 +12,8 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ClassIcon from '@material-ui/icons/Class';
-import ShareIcon from '@material-ui/icons/Share';
 import { withStyles } from '@material-ui/core/styles';
+import ShareButton from './ShareButton';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -104,7 +104,7 @@ export default function ScenarioCard(props) {
         <Grid
             component={Link}
             to={{
-                pathname: '/data/' + data.id,
+                pathname: '/data/' + SCENARIO,
                 data: data,
             }}
             className={classes.button}
@@ -161,28 +161,16 @@ export default function ScenarioCard(props) {
                     className={classes.buttonText}
                     variant="contained"
                     color="primary"
+                    onClick={handleClickOpen}
                 >
                     <ClassIcon />
-                    <Typography
-                        variant="subtitle1"
-                        onClick={handleClickOpen}
-                        noWrap
-                    >
+                    <Typography variant="subtitle1" noWrap>
                         View Classes
                     </Typography>
                 </Button>
             </Grid>
             <Grid className={classes.button} item xs={6}>
-                <Button
-                    className={classes.buttonText}
-                    variant="contained"
-                    color="primary"
-                >
-                    <ShareIcon />
-                    <Typography variant="subtitle1" noWrap>
-                        Share
-                    </Typography>
-                </Button>
+                <ShareButton />
             </Grid>
 
             {dataButton}

@@ -90,7 +90,8 @@ export default function Logistics() {
         loading: false,
         error: null,
     });
-    const [id, setId] = useState(23);
+    //TODO temporary ID
+    const [id, setId] = useState(2);
     const [authors, setAuthor] = useState([<Author key={id} />]);
     // eslint-disable-next-line
     const [shouldFetch, setShouldFetch] = useState(0);

@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //TODO when Shibboleth gets implemented
-const endpointGet = '/dashboard?professor_id=12345678';
+const endpointGet = '/dashboard?professor_id=1';
 const endpointGetCourses = '/api/courses/';
 const endpointPost = '/dashboard';
 const endpointDelete = '/api/scenarios/';
