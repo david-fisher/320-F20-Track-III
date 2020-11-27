@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Author from './Author';
-import { isBrowser } from 'react-device-detect';
-import { Button, TextField, Typography, Container } from '@material-ui/core';
+import {
+    Button,
+    TextField,
+    Typography,
+    Container,
+    Divider,
+} from '@material-ui/core';
 import put from '../../../universalHTTPRequests/put';
 import get from '../../../universalHTTPRequests/get';
 import LoadingSpinner from '../../LoadingSpinner';
@@ -42,9 +47,39 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
+    bannerContainer: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    errorContainer: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    container: {
+        padding: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    iconError: {
+        paddingRight: theme.spacing(2),
+        fontSize: '75px',
+    },
+    iconRefreshLarge: {
+        fontSize: '75px',
+    },
+    iconRefreshSmall: {
+        fontSize: '30px',
+    },
 }));
 
 export default function Logistics() {
+    //Need scenario id
+    const endpointGetLogistics = '/logistics?scenario_id=';
     const endpointGetCourses = '/api/courses/';
     const endPointPut = '/logistics';
 
@@ -56,8 +91,8 @@ export default function Logistics() {
         error: null,
     });
     const [id, setId] = useState(23);
-    const [done, setDone] = useState(false);
     const [authors, setAuthor] = useState([<Author key={id} />]);
+    // eslint-disable-next-line
     const [shouldFetch, setShouldFetch] = useState(0);
     const [shouldRender, setShouldRender] = useState(false);
     const [fetchLogisticsResponse, setFetchLogisticsResponse] = useState({
@@ -66,11 +101,14 @@ export default function Logistics() {
         error: null,
     });
     const [menuCourseItems, setMenuCourseItems] = useState(null);
+    // eslint-disable-next-line
     const [responseSave, setResponseSave] = useState(null);
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
     const [errorBannerMessage, setErrorBannerMessage] = useState('');
     const [errorBannerFade, setErrorBannerFade] = useState(false);
+    const [errorName, setErrorName] = useState(false);
+    const [errorCourses, setErrorCourses] = useState(false);
 
     //For Banners
     useEffect(() => {
@@ -88,6 +126,7 @@ export default function Logistics() {
 
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
+
     ///Authors not implemented
     const addAuthor = (event) => {
         setAuthor(authors.concat(<Author key={id + 1} />));
@@ -110,12 +149,11 @@ export default function Logistics() {
     const makeNewCourses = (response) => {
         let sel = [];
 
-        console.log('Orphans must die');
         console.log(NewScenario.COURSES);
 
         for (let i = 0; i < response.length; i++) {
             for (let j = 0; j < NewScenario.COURSES.length; j++) {
-                if (response[i].NAME == NewScenario.COURSES[j].NAME) {
+                if (response[i].NAME === NewScenario.COURSES[j].NAME) {
                     sel.push(response[i]);
                 }
             }
@@ -150,7 +188,6 @@ export default function Logistics() {
             NewScenario.COURSES = response.data.COURSES;
             setEdit(NewScenario);
             getCourses();
-            setDone(true);
         }
 
         function onFailure() {
@@ -158,7 +195,7 @@ export default function Logistics() {
         }
         get(
             setFetchLogisticsResponse,
-            '/logistics?scenario_id=' + id,
+            endpointGetLogistics + id,
             onFailure,
             onSuccess
         );
@@ -186,13 +223,17 @@ export default function Logistics() {
 
     useEffect(getData, [shouldFetch]);
 
-    if (fetchLogisticsResponse.error || fetchCourseResponse.error) {
+    if (fetchLogisticsResponse.error) {
         return (
-            <div className={classes.issue}>
+            <div className={classes.errorContainer}>
+                <ErrorBanner
+                    fade={errorBannerFade}
+                    errorMessage={errorBannerMessage}
+                />
                 <div className={classes.container}>
                     <ErrorIcon className={classes.iconError} />
                     <Typography align="center" variant="h3">
-                        Error in fetching Logistics.
+                        Error in fetching scenario logistics.
                     </Typography>
                 </div>
                 <div className={classes.container}>
@@ -201,29 +242,24 @@ export default function Logistics() {
                         color="primary"
                         onClick={getData}
                     >
-                        <RefreshIcon className={classes.iconRefresh} />
+                        <RefreshIcon className={classes.iconRefreshLarge} />
                     </Button>
                 </div>
             </div>
         );
-    }
-
-    //staying laoding ofe
-    if (fetchLogisticsResponse.loading || NewScenario.NAME == '') {
-        return <LoadingSpinner />;
     }
 
     if (fetchCourseResponse.error) {
         return (
-            <div className={classes.issue}>
+            <div className={classes.errorContainer}>
+                <ErrorBanner
+                    fade={errorBannerFade}
+                    errorMessage={errorBannerMessage}
+                />
                 <div className={classes.container}>
-                    <ErrorBanner
-                        fade={errorBannerFade}
-                        errorMessage={errorBannerMessage}
-                    />
                     <ErrorIcon className={classes.iconError} />
                     <Typography align="center" variant="h3">
-                        Error in fetching Courses.
+                        Error in fetching scenario courses.
                     </Typography>
                 </div>
                 <div className={classes.container}>
@@ -232,11 +268,16 @@ export default function Logistics() {
                         color="primary"
                         onClick={getData}
                     >
-                        <RefreshIcon className={classes.iconRefresh} />
+                        <RefreshIcon className={classes.iconRefreshLarge} />
                     </Button>
                 </div>
             </div>
         );
+    }
+
+    //Loading for both GET requests
+    if (fetchLogisticsResponse.loading || fetchCourseResponse.loading) {
+        return <LoadingSpinner />;
     }
 
     const handleSave = () => {
@@ -252,13 +293,31 @@ export default function Logistics() {
             setErrorBannerFade(true);
         }
 
-        put(
-            setResponseSave,
-            endPointPut,
-            onFailureLogistic,
-            onSuccessLogistic,
-            NewScenario
-        );
+        let validInput = true;
+
+        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
+            setErrorName(true);
+            validInput = false;
+        } else {
+            setErrorName(false);
+        }
+
+        if (NewScenario.COURSES.length === 0) {
+            setErrorCourses(true);
+            validInput = false;
+        } else {
+            setErrorCourses(false);
+        }
+
+        if (validInput) {
+            put(
+                setResponseSave,
+                endPointPut,
+                onFailureLogistic,
+                onSuccessLogistic,
+                NewScenario
+            );
+        }
     };
 
     const handleOnChange = (event) => {
@@ -270,20 +329,14 @@ export default function Logistics() {
     const updateSelectedClasses = (selectedClasses) => {
         //set new scenario courses to selected classes
         let sel = [];
-        let temp = [];
-        temp = selectedClasses.map((element) =>
-            sel.push({ COURSE: element.COURSE })
-        );
+        selectedClasses.map((element) => sel.push({ COURSE: element.COURSE }));
         NewScenario.COURSES = sel;
         setEdit(NewScenario);
     };
 
     return (
         <div>
-            <Container component="main">
-                <Typography align="center" variant="h2">
-                    Logistics
-                </Typography>
+            <div className={classes.bannerContainer}>
                 <SuccessBanner
                     fade={successBannerFade}
                     successMessage={successBannerMessage}
@@ -292,18 +345,34 @@ export default function Logistics() {
                     fade={errorBannerFade}
                     errorMessage={errorBannerMessage}
                 />
+            </div>
+            <Container component="main">
+                <Typography align="center" variant="h2">
+                    Logistics
+                </Typography>
                 <form
                     className={classes.textfields}
                     noValidate
                     autoComplete="off"
                 >
                     Simulation Title
-                    <TextField
-                        id="Simulation Title"
-                        defaultValue={NewScenario.NAME}
-                        label=""
-                        onChange={handleOnChange}
-                    />
+                    {errorName ? (
+                        <TextField
+                            error
+                            helperText="Scenario name must be filled in"
+                            id="Scenario Title"
+                            defaultValue={NewScenario.NAME}
+                            label=""
+                            onChange={handleOnChange}
+                        />
+                    ) : (
+                        <TextField
+                            id="Scenario Title"
+                            defaultValue={NewScenario.NAME}
+                            label=""
+                            onChange={handleOnChange}
+                        />
+                    )}
                     Courses
                     {shouldRender ? (
                         <Tags
@@ -312,6 +381,17 @@ export default function Logistics() {
                             update={updateSelectedClasses}
                         />
                     ) : null}
+                    {errorCourses ? (
+                        <Typography
+                            style={{ marginLeft: 15 }}
+                            variant="caption"
+                            display="block"
+                            color="error"
+                        >
+                            At least one course must be selected
+                        </Typography>
+                    ) : null}
+                    <Divider style={{ margin: '20px 0' }} />
                     Authors
                 </form>
 
@@ -372,7 +452,7 @@ export default function Logistics() {
                             color="primary"
                             onClick={handleSave}
                         >
-                            SAVE
+                            Save Scenario Info
                         </Button>
                     </form>
                 </div>

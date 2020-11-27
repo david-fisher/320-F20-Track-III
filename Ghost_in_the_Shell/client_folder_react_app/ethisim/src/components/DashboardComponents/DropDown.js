@@ -1,13 +1,9 @@
-/* eslint-disable no-use-before-define */
-import React, { useState } from 'react';
-import Chip from '@material-ui/core/Chip';
+import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-// import Autocomplete from "@material-ui/lab/Autocomplete";
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
 import PropTypes from 'prop-types';
 
@@ -69,7 +65,6 @@ export default function Tags(props) {
                     />
                 )}
             />
-            <Divider style={{ margin: '20px 0' }} />
         </div>
     );
 }

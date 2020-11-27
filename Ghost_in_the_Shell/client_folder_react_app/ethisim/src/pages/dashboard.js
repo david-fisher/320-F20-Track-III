@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Box, Typography, Grid } from '@material-ui/core';
+import { Container, Box, Typography, Grid, Divider } from '@material-ui/core';
 import ScenarioCard from '../components/DashboardComponents/ScenarioCard';
 import AddNewScenarioCard from '../components/DashboardComponents/AddNewScenarioCard';
 import Copyright from '../components/Copyright';
@@ -36,8 +36,31 @@ const useStyles = makeStyles((theme) => ({
     copyright: {
         margin: theme.spacing(2),
     },
+    issue: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    errorContainer: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    iconError: {
+        paddingRight: theme.spacing(2),
+        fontSize: '75px',
+    },
+    iconRefreshLarge: {
+        fontSize: '75px',
+    },
+    iconRefreshSmall: {
+        fontSize: '30px',
+    },
 }));
 
+//TODO when Shibboleth gets implemented
 const endpointGet = '/dashboard?professor_id=12345678';
 const endpointGetCourses = '/api/courses/';
 const endpointPost = '/dashboard';
@@ -95,8 +118,6 @@ export default function Dashboard() {
     //when posting a new scenario setting fake id, now deleting that scenario, have to replace id with id in database
 
     //post returns new id of scenario, when you concatenating to array set the id to that
-
-    const [scenarios, setScenarios] = useState(null);
     const [finishedScenarios, setFinishedScenarios] = useState(null);
     const [unfinishedScenarios, setUnfinishedScenarios] = useState(null);
     const [menuCourseItems, setMenuCourseItems] = useState([
@@ -111,11 +132,13 @@ export default function Dashboard() {
         loading: false,
         error: null,
     });
+    // eslint-disable-next-line
     const [fetchCourseResponse, setFetchCourseResponse] = useState({
         data: null,
         loading: false,
         error: null,
     });
+    // eslint-disable-next-line
     const [deleteReqValue, setDeleteReq] = useState({
         data: null,
         loading: false,
@@ -125,18 +148,21 @@ export default function Dashboard() {
     const [successBannerFade, setSuccessBannerFade] = useState(false);
     const [errorBannerMessage, setErrorBannerMessage] = useState('');
     const [errorBannerFade, setErrorBannerFade] = useState(false);
+    const [errorName, setErrorName] = useState(false);
+    const [errorCourses, setErrorCourses] = useState(false);
     const [shouldFetch, setShouldFetch] = useState(0);
+    // eslint-disable-next-line
     const [postValue, setPost] = useState({
         data: null,
         loading: true,
         error: null,
     });
-    const [NewScenerio, setEdit] = useState({
+    const [NewScenario, setEdit] = useState({
         NAME: ' ',
         IS_FINISHED: false,
         PUBLIC: false,
         NUM_CONVERSATIONS: 0,
-        PROFESSOR: 12345678,
+        PROFESSOR: 1,
         COURSES: [],
     });
 
@@ -160,8 +186,8 @@ export default function Dashboard() {
     //For Dialogue Box
     const handleClickOpen = () => {
         setOpen(true);
-        NewScenerio.PUBLIC = false;
-        setEdit(NewScenerio);
+        NewScenario.PUBLIC = false;
+        setEdit(NewScenario);
         getCourses();
     };
 
@@ -181,10 +207,34 @@ export default function Dashboard() {
             setErrorBannerFade(true);
         }
         console.log('POST INFO');
-        console.log(NewScenerio);
+        console.log(NewScenario);
 
-        post(setPost, endpointPost, onFailurePost, onSuccessPost, NewScenerio);
-        setOpen(false);
+        let validInput = true;
+
+        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
+            setErrorName(true);
+            validInput = false;
+        } else {
+            setErrorName(false);
+        }
+
+        if (NewScenario.COURSES.length === 0) {
+            setErrorCourses(true);
+            validInput = false;
+        } else {
+            setErrorCourses(false);
+        }
+
+        if (validInput) {
+            post(
+                setPost,
+                endpointPost,
+                onFailurePost,
+                onSuccessPost,
+                NewScenario
+            );
+            setOpen(false);
+        }
     };
 
     const handleClose = () => {
@@ -192,26 +242,24 @@ export default function Dashboard() {
     };
     //For new Scenario Post
     const handleOnChangeName = (event) => {
-        NewScenerio.NAME = event.target.value;
-        setEdit(NewScenerio);
+        NewScenario.NAME = event.target.value;
+        setEdit(NewScenario);
     };
 
     const handleOnChangePublic = (info) => {
-        NewScenerio.PUBLIC = !NewScenerio.PUBLIC;
-        setEdit(NewScenerio);
+        NewScenario.PUBLIC = !NewScenario.PUBLIC;
+        setEdit(NewScenario);
     };
 
     //Update Classes
     const updateSelectedClasses = (selectedClasses) => {
         //set new scenario courses to selected classes
         let sel = [];
-        let temp = [];
-        temp = selectedClasses.map((element) =>
-            sel.push({ COURSE: element.COURSE })
-        );
-        NewScenerio.COURSES = sel;
-        setEdit(NewScenerio);
+        selectedClasses.map((element) => sel.push({ COURSE: element.COURSE }));
+        NewScenario.COURSES = sel;
+        setEdit(NewScenario);
     };
+
     //Delete Scenario
     const deleteScenario = (scenarioID, isFinished) => {
         function successfullyDeleted(resp) {
@@ -228,7 +276,7 @@ export default function Dashboard() {
                 setShouldFetch(shouldFetch + 1);
             } else {
                 setSuccessBannerFade(true);
-                setSuccessBannerMessage('Successfully Deleted Scenario!');
+                setSuccessBannerMessage('Successfully deleted scenario!');
 
                 let newData = [];
                 unfinishedScenarios &&
@@ -241,7 +289,9 @@ export default function Dashboard() {
         }
         function onFailure() {
             console.log('Fail To Delete Scenario');
-            setErrorBannerMessage('Failed to Delete! Please try again.');
+            setErrorBannerMessage(
+                'Failed to delete scenario! Please try again.'
+            );
             setErrorBannerFade(true);
         }
 
@@ -256,7 +306,6 @@ export default function Dashboard() {
     //Get Scenario
     let getData = () => {
         function onSuccess(response) {
-            setScenarios(response.data);
             let finishedScenarios = response.data.filter(
                 (data) => data.IS_FINISHED
             );
@@ -285,7 +334,7 @@ export default function Dashboard() {
 
         function onFailure() {
             console.log('Failed Get Scenarios Request');
-            setErrorBannerMessage('Failed to Get! Please try again.');
+            setErrorBannerMessage('Failed to get scenarios! Please try again.');
             setErrorBannerFade(true);
         }
         get(setFetchScenariosResponse, endpointGet, onFailure, onSuccess);
@@ -298,7 +347,7 @@ export default function Dashboard() {
 
         function onFailureCourse() {
             console.log('Failed Get Courses Request');
-            setErrorBannerMessage('Failed to get Courses! Please try again.');
+            setErrorBannerMessage('Failed to get courses! Please try again.');
             setErrorBannerFade(true);
         }
         get(
@@ -320,7 +369,7 @@ export default function Dashboard() {
     if (fetchScenariosResponse.error) {
         return (
             <div className={classes.issue}>
-                <div className={classes.container}>
+                <div className={classes.errorContainer}>
                     <ErrorBanner
                         fade={errorBannerFade}
                         errorMessage={errorBannerMessage}
@@ -330,13 +379,13 @@ export default function Dashboard() {
                         Error in fetching Scenarios.
                     </Typography>
                 </div>
-                <div className={classes.container}>
+                <div className={classes.errorContainer}>
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={getData}
                     >
-                        <RefreshIcon className={classes.iconRefresh} />
+                        <RefreshIcon className={classes.iconRefreshLarge} />
                     </Button>
                 </div>
             </div>
@@ -389,7 +438,7 @@ export default function Dashboard() {
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={open}
-                maxWidth="false"
+                maxWidth={false}
             >
                 <div style={{ width: 600 }}>
                     <DialogTitle
@@ -400,14 +449,27 @@ export default function Dashboard() {
                     </DialogTitle>
                     <DialogContent>
                         <form style={{ marginBottom: 20 }}>
-                            <TextField
-                                label="Name"
-                                style={{ width: 500 }}
-                                multiline
-                                rows={1}
-                                variant="outlined"
-                                onChange={handleOnChangeName}
-                            />
+                            {errorName ? (
+                                <TextField
+                                    error
+                                    label="Scenario Name"
+                                    helperText="Scenario Name must be filled in"
+                                    style={{ width: 500 }}
+                                    multiline
+                                    rows={1}
+                                    variant="outlined"
+                                    onChange={handleOnChangeName}
+                                />
+                            ) : (
+                                <TextField
+                                    label="Scenario Name"
+                                    style={{ width: 500 }}
+                                    multiline
+                                    rows={1}
+                                    variant="outlined"
+                                    onChange={handleOnChangeName}
+                                />
+                            )}
                         </form>
 
                         <form style={{ marginBottom: 10 }}>
@@ -415,9 +477,21 @@ export default function Dashboard() {
                                 courses={menuCourseItems}
                                 update={updateSelectedClasses}
                             />
+                            {errorCourses ? (
+                                <Typography
+                                    style={{ marginLeft: 15 }}
+                                    variant="caption"
+                                    display="block"
+                                    color="error"
+                                >
+                                    At least one course must be selected
+                                </Typography>
+                            ) : null}
                         </form>
 
-                        <form style={{ marginLeft: -15 }}>
+                        <Divider style={{ margin: '20px 0' }} />
+
+                        <form style={{ marginLeft: -13 }}>
                             <FormControlLabel
                                 control={
                                     <Checkbox

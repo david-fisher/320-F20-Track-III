@@ -10,9 +10,9 @@ import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import ClassIcon from '@material-ui/icons/Class';
 import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -77,23 +77,11 @@ const DialogContent = withStyles((theme) => ({
     },
 }))(MuiDialogContent);
 
-const DialogActions = withStyles((theme) => ({
-    root: {
-        margin: 0,
-        padding: theme.spacing(1),
-    },
-}))(MuiDialogActions);
-
 ScenarioCard.propTypes = {
     SCENARIO: PropTypes.number,
-    VERSION: PropTypes.number,
     NAME: PropTypes.string,
-    PUBLIC: PropTypes.bool,
-    NUM_CONVERSATION: PropTypes.number,
-    PROFESSOR: PropTypes.number,
     IS_FINISHED: PropTypes.bool,
     DATE_CREATED: PropTypes.string,
-    COURSES: PropTypes.array,
 };
 
 export default function ScenarioCard(props) {
@@ -101,17 +89,7 @@ export default function ScenarioCard(props) {
     const classes = useStyles();
     ScenarioCard.propTypes = props.data;
     const data = props.data;
-    const {
-        SCENARIO,
-        VERSION,
-        NAME,
-        PUBLIC,
-        NUM_CONVERSATION,
-        PROFESSOR,
-        IS_FINISHED,
-        DATE_CREATED,
-        COURSES,
-    } = data;
+    const { SCENARIO, NAME, IS_FINISHED, DATE_CREATED } = data;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -122,7 +100,6 @@ export default function ScenarioCard(props) {
     };
     //If scenario is unfinished, we show the buttons "Edit," "Delete," "Share"
     //If scenario is finished, we show the button "Edit," "Delete," "Share," "View Student Data"
-    const sizeOfShareButton = IS_FINISHED ? 6 : 12;
     const dataButton = IS_FINISHED ? (
         <Grid
             component={Link}
@@ -132,7 +109,7 @@ export default function ScenarioCard(props) {
             }}
             className={classes.button}
             item
-            xs={6}
+            xs={12}
         >
             <Button
                 className={classes.buttonText}
@@ -170,9 +147,7 @@ export default function ScenarioCard(props) {
                     variant="contained"
                     color="primary"
                     onClick={function () {
-                        {
-                            props.delete(SCENARIO, IS_FINISHED);
-                        }
+                        props.delete(SCENARIO, IS_FINISHED);
                     }}
                 >
                     <DeleteForeverIcon />
@@ -181,12 +156,13 @@ export default function ScenarioCard(props) {
                     </Typography>
                 </Button>
             </Grid>
-            <Grid className={classes.button} item xs={sizeOfShareButton}>
+            <Grid className={classes.button} item xs={6}>
                 <Button
                     className={classes.buttonText}
                     variant="contained"
                     color="primary"
                 >
+                    <ClassIcon />
                     <Typography
                         variant="subtitle1"
                         onClick={handleClickOpen}
@@ -196,7 +172,7 @@ export default function ScenarioCard(props) {
                     </Typography>
                 </Button>
             </Grid>
-            <Grid className={classes.button} item xs={sizeOfShareButton}>
+            <Grid className={classes.button} item xs={6}>
                 <Button
                     className={classes.buttonText}
                     variant="contained"
@@ -238,14 +214,14 @@ export default function ScenarioCard(props) {
                     onClose={handleClose}
                     aria-labelledby="customized-dialog-title"
                     open={open}
-                    maxWidth="false"
+                    maxWidth={false}
                 >
                     <div style={{ width: 400, height: 400 }}>
                         <DialogTitle
                             id="customized-dialog-title"
                             onClose={handleClose}
                         >
-                            View Classes For Simulation {NAME}
+                            View Classes for {NAME}
                         </DialogTitle>
                         <DialogContent>
                             {data.COURSES.map((data) => (
@@ -256,7 +232,7 @@ export default function ScenarioCard(props) {
                                     <Button
                                         className={classes.buttonText}
                                         variant="contained"
-                                        color="seccondary"
+                                        color="primary"
                                     >
                                         <Typography variant="subtitle1" noWrap>
                                             {data.NAME}

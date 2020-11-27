@@ -73,7 +73,7 @@ export default function Author({
                             className={classes.margin}
                             variant="contained"
                             color="primary"
-                            onClick={() => removeAuthor(id)}
+                            onClick={() => {}}
                         >
                             Delete
                         </Button>
