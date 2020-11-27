@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { Typography, Grid, Card, CardContent, Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import ShareIcon from '@material-ui/icons/Share';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PropTypes from 'prop-types';
@@ -13,6 +12,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ClassIcon from '@material-ui/icons/Class';
+import ShareIcon from '@material-ui/icons/Share';
 import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
