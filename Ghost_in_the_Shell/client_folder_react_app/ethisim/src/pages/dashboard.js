@@ -375,18 +375,25 @@ export default function Dashboard() {
             );
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
-                    data={data}
                     key={data.SCENARIO}
+                    scenarioID={data.SCENARIO}
+                    scenarioName={data.NAME}
+                    dateCreated={data.DATE_CREATED}
                     finished={data.IS_FINISHED}
-                    delete={deleteScenario}
+                    courses={data.COURSES}
+                    onDelete={deleteScenario}
                 />
             ));
             unfinishedScenarios = unfinishedScenarios.map((data) => (
                 <ScenarioCard
-                    data={data}
                     key={data.SCENARIO}
+                    data={data}
+                    scenarioID={data.SCENARIO}
+                    scenarioName={data.NAME}
+                    dateCreated={data.DATE_CREATED}
                     finished={data.IS_FINISHED}
-                    delete={deleteScenario}
+                    courses={data.COURSES}
+                    onDelete={deleteScenario}
                 />
             ));
             setFinishedScenarios(finishedScenarios);

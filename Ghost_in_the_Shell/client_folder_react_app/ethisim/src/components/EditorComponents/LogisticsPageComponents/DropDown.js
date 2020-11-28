@@ -40,11 +40,11 @@ export default function Tags(props) {
                 options={props.courses}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.NAME}
-                getOptionSelected={(option, value) =>
-                    option.COURSE === value.COURSE
-                }
+                getOptionSelected={(option, value) => {
+                    return option.COURSE === value.COURSE;
+                }}
                 onChange={onTagsChange}
-                defaultValue={props.current}
+                value={props.current}
                 renderOption={(option, { selected, inputValue }) => {
                     return (
                         <React.Fragment>

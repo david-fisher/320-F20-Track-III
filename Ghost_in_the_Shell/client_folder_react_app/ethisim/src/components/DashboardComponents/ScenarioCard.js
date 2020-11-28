@@ -83,18 +83,26 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 ScenarioCard.propTypes = {
-    SCENARIO: PropTypes.number,
-    NAME: PropTypes.string,
-    IS_FINISHED: PropTypes.bool,
-    DATE_CREATED: PropTypes.string,
+    data: PropTypes.any,
+    scenarioID: PropTypes.number,
+    scenarioName: PropTypes.string,
+    isFinished: PropTypes.bool,
+    dateCreated: PropTypes.string,
+    courses: PropTypes.any,
+    onDelete: PropTypes.any,
 };
 
-export default function ScenarioCard(props) {
+export default function ScenarioCard({
+    data,
+    scenarioID,
+    scenarioName,
+    isFinished,
+    dateCreated,
+    courses,
+    onDelete,
+}) {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
-    ScenarioCard.propTypes = props.data;
-    const data = props.data;
-    const { SCENARIO, NAME, IS_FINISHED, DATE_CREATED } = data;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -107,11 +115,11 @@ export default function ScenarioCard(props) {
     //If scenario is unfinished, we show the buttons "Edit," "Delete," "View Classes," "Share"
     //If scenario is finished, we show the button "Edit," "Delete," "View Classes," "Share," "View Student Data"
 
-    const dataButton = IS_FINISHED ? (
+    const dataButton = isFinished ? (
         <Grid
             component={Link}
             to={{
-                pathname: '/data/' + SCENARIO,
+                pathname: '/data/' + scenarioID,
                 data: data,
             }}
             className={classes.button}
@@ -137,7 +145,7 @@ export default function ScenarioCard(props) {
                 <Button
                     component={Link}
                     to={{
-                        pathname: '/editor/' + SCENARIO,
+                        pathname: '/editor/' + scenarioID,
                         data: data,
                     }}
                     className={classes.buttonText}
@@ -154,7 +162,7 @@ export default function ScenarioCard(props) {
                     variant="contained"
                     color="primary"
                     onClick={function () {
-                        props.delete(SCENARIO, IS_FINISHED);
+                        onDelete(scenarioID, isFinished);
                     }}
                 >
                     <DeleteForeverIcon />
@@ -185,11 +193,11 @@ export default function ScenarioCard(props) {
     );
 
     return (
-        <Grid key={SCENARIO} item xs>
+        <Grid key={scenarioID} item xs>
             <Card>
                 <CardContent className={classes.scenarioContainer}>
                     <Typography variant="h6" display="block" noWrap>
-                        {NAME}
+                        {scenarioName}
                     </Typography>
                     <Typography
                         variant="subtitle1"
@@ -197,7 +205,7 @@ export default function ScenarioCard(props) {
                         display="block"
                         noWrap
                     >
-                        Date created: {DATE_CREATED}
+                        Date created: {dateCreated}
                     </Typography>
                 </CardContent>
             </Card>
@@ -217,10 +225,10 @@ export default function ScenarioCard(props) {
                             id="customized-dialog-title"
                             onClose={handleClose}
                         >
-                            {NAME}
+                            {scenarioName}
                         </DialogTitle>
                         <DialogContent dividers>
-                            {data.COURSES.map((data) => (
+                            {courses.map((data) => (
                                 <form
                                     style={{ marginBottom: 20 }}
                                     key={data.COURSE}

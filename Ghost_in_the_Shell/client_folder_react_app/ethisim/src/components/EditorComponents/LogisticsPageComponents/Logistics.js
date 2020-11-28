@@ -141,6 +141,7 @@ export default function Logistics() {
         setAuthorsWithID(newAuthorsWithID);
     };
 
+    // eslint-disable-next-line
     const [shouldFetch, setShouldFetch] = useState(0);
     const [shouldRender, setShouldRender] = useState(false);
     const [fetchLogisticsResponse, setFetchLogisticsResponse] = useState({
@@ -149,6 +150,7 @@ export default function Logistics() {
         error: null,
     });
     const [menuCourseItems, setMenuCourseItems] = useState(null);
+    // eslint-disable-next-line
     const [responseSave, setResponseSave] = useState({
         data: null,
         loading: false,
@@ -160,6 +162,10 @@ export default function Logistics() {
     const [errorBannerFade, setErrorBannerFade] = useState(false);
     const [errorName, setErrorName] = useState(false);
     const [errorCourses, setErrorCourses] = useState(false);
+    const [currentCourses, setCurrentCourses] = useState([]);
+    const [scenarioName, setScenarioName] = useState('');
+    const [isPublic, setIsPublic] = useState(false);
+    const [isFinished, setIsFinished] = useState(false);
 
     //For Banners
     useEffect(() => {
@@ -179,15 +185,13 @@ export default function Logistics() {
     }, [errorBannerFade]);
 
     const handleOnChangePublic = (event) => {
+        setIsPublic(event.target.checked);
         setEdit({ ...NewScenario, PUBLIC: event.target.checked });
-        //setEdit(NewScenario);
-        console.log(NewScenario.PUBLIC);
     };
 
     const handleOnChangeFinish = (event) => {
+        setIsFinished(event.target.checked);
         setEdit({ ...NewScenario, IS_FINISHED: event.target.checked });
-        //setEdit(NewScenario);
-        console.log(NewScenario.IS_FINISHED);
     };
 
     const makeNewCourses = (response) => {
@@ -204,6 +208,7 @@ export default function Logistics() {
         }
 
         NewScenario.COURSES = sel;
+        setCurrentCourses(sel);
         setEdit(NewScenario);
     };
 
@@ -230,6 +235,9 @@ export default function Logistics() {
             NewScenario.IS_FINISHED = response.data.IS_FINISHED;
             NewScenario.DATE_CREATED = response.data.DATA_CREATED;
             NewScenario.COURSES = response.data.COURSES;
+            setScenarioName(response.data.NAME);
+            setIsFinished(response.data.IS_FINISHED);
+            setIsPublic(response.data.PUBLIC);
             setEdit(NewScenario);
             getCourses();
         }
@@ -243,6 +251,7 @@ export default function Logistics() {
                 error: null,
             });
         }
+
         //Smooth loading animation, loading animation will not reset during both GET requests (GET logistics and GET courses)
         setFetchCourseResponse({
             data: null,
@@ -284,16 +293,9 @@ export default function Logistics() {
             console.log('Success Put');
             setSuccessBannerMessage('Successfully Saved!');
             setSuccessBannerFade(true);
-            setShouldFetch(shouldFetch + 1);
         }
 
         function onFailureLogistic() {
-            //POST req failed, loading animation should end
-            setFetchCourseResponse({
-                data: null,
-                loading: false,
-                error: null,
-            });
             console.log('Failed Put Logistics Request');
             setErrorBannerMessage('Failed to save! Please try again.');
             setErrorBannerFade(true);
@@ -316,12 +318,6 @@ export default function Logistics() {
         }
 
         if (validInput) {
-            //Smooth loading animation, loading animation will not reset during POST request and both GET requests (GET logistics and GET courses)
-            setFetchCourseResponse({
-                data: null,
-                loading: true,
-                error: null,
-            });
             put(
                 setResponseSave,
                 endPointPut,
@@ -335,14 +331,18 @@ export default function Logistics() {
     const handleOnChange = (event) => {
         console.log('changed name');
         NewScenario.NAME = event.target.value;
+        setScenarioName(event.target.value);
         setEdit(NewScenario);
     };
 
     const updateSelectedClasses = (selectedClasses) => {
         //set new scenario courses to selected classes
         let sel = [];
-        selectedClasses.map((element) => sel.push({ COURSE: element.COURSE }));
+        selectedClasses.map((element) =>
+            sel.push({ COURSE: element.COURSE, NAME: element.NAME })
+        );
         NewScenario.COURSES = sel;
+        setCurrentCourses(sel);
         setEdit(NewScenario);
     };
 
@@ -398,12 +398,8 @@ export default function Logistics() {
         );
     }
 
-    //Loading for POST request and both GET requests
-    if (
-        fetchLogisticsResponse.loading ||
-        fetchCourseResponse.loading ||
-        responseSave.loading
-    ) {
+    //Loading for both GET requests
+    if (fetchLogisticsResponse.loading || fetchCourseResponse.loading) {
         return <LoadingSpinner />;
     }
 
@@ -434,14 +430,14 @@ export default function Logistics() {
                             error
                             helperText="Scenario name must be filled in"
                             id="Scenario Title"
-                            defaultValue={NewScenario.NAME}
+                            value={scenarioName}
                             label=""
                             onChange={handleOnChange}
                         />
                     ) : (
                         <TextField
                             id="Scenario Title"
-                            defaultValue={NewScenario.NAME}
+                            value={scenarioName}
                             label=""
                             onChange={handleOnChange}
                         />
@@ -450,7 +446,7 @@ export default function Logistics() {
                     {shouldRender ? (
                         <Tags
                             courses={menuCourseItems}
-                            current={NewScenario.COURSES}
+                            current={currentCourses}
                             update={updateSelectedClasses}
                         />
                     ) : null}
@@ -485,7 +481,7 @@ export default function Logistics() {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={NewScenario.PUBLIC}
+                                checked={isPublic}
                                 onChange={handleOnChangePublic}
                                 color="primary"
                             />
@@ -497,7 +493,7 @@ export default function Logistics() {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={NewScenario.IS_FINISHED}
+                                checked={isFinished}
                                 onChange={handleOnChangeFinish}
                                 color="primary"
                             />

@@ -41,7 +41,6 @@ export default function Tags(props) {
                 getOptionLabel={(option) => option.NAME}
                 onChange={onTagsChange}
                 renderOption={(option, { selected, inputValue }) => {
-                    console.log('inputvalue', selected, inputValue);
                     return (
                         <React.Fragment>
                             <Checkbox
