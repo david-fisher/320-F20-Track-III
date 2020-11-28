@@ -103,8 +103,10 @@ export default function ScenarioCard(props) {
     const handleClose = () => {
         setOpen(false);
     };
-    //If scenario is unfinished, we show the buttons "Edit," "Delete," "Share"
-    //If scenario is finished, we show the button "Edit," "Delete," "Share," "View Student Data"
+
+    //If scenario is unfinished, we show the buttons "Edit," "Delete," "View Classes," "Share"
+    //If scenario is finished, we show the button "Edit," "Delete," "View Classes," "Share," "View Student Data"
+
     const dataButton = IS_FINISHED ? (
         <Grid
             component={Link}

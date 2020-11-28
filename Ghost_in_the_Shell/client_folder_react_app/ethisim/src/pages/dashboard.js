@@ -116,6 +116,8 @@ const DialogActions = withStyles((theme) => ({
 
 //Passing props with React Router in Material UI: https://stackoverflow.com/questions/30115324/pass-props-in-link-react-router
 export default function Dashboard() {
+    const classes = useStyles();
+
     // post on success, concatenating a scenario card to array
     //delete on success, concatenating a scenario card to array
 
@@ -159,7 +161,7 @@ export default function Dashboard() {
     // eslint-disable-next-line
     const [postValue, setPost] = useState({
         data: null,
-        loading: true,
+        loading: false,
         error: null,
     });
     const [NewScenario, setNewScenario] = useState({
@@ -188,7 +190,7 @@ export default function Dashboard() {
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
 
-    //For Dialogue Box
+    //For create new scenario dialogue box
     const handleClickOpen = () => {
         setOpen(true);
         NewScenario.PUBLIC = false;
@@ -197,7 +199,6 @@ export default function Dashboard() {
     };
 
     const handleCloseSave = () => {
-        console.log(2);
         function onSuccessPost(resp) {
             console.log('Success Scenario Post');
             setShouldFetch(shouldFetch + 1);
@@ -206,12 +207,18 @@ export default function Dashboard() {
         }
         function onFailurePost() {
             console.log('Fail Scenario Post');
-
             setErrorBannerMessage(
                 'Failed to Create Scenario! Please try again.'
             );
             setErrorBannerFade(true);
+            //Post failed, loading animation should end
+            setFetchScenariosResponse({
+                data: null,
+                loading: false,
+                error: null,
+            });
         }
+
         console.log('POST INFO');
         console.log(NewScenario);
 
@@ -247,6 +254,12 @@ export default function Dashboard() {
                 PROFESSOR: 1,
                 COURSES: [],
             });
+            //for smooth loading animation once save changes button is clicked, no delay
+            setFetchScenariosResponse({
+                data: null,
+                loading: true,
+                error: null,
+            });
             post(
                 setPost,
                 endpointPost,
@@ -260,7 +273,6 @@ export default function Dashboard() {
 
     //X button on dialog for creating new scenario
     const handleClose = () => {
-        console.log(1);
         setNewScenario({
             NAME: ' ',
             IS_FINISHED: false,
@@ -301,7 +313,6 @@ export default function Dashboard() {
             if (isFinished) {
                 setSuccessBannerFade(true);
                 setSuccessBannerMessage('Successfully Deleted Scenario!');
-
                 let newData = [];
                 finishedScenarios &&
                     finishedScenarios.filter(
@@ -322,13 +333,27 @@ export default function Dashboard() {
                 setShouldFetch(shouldFetch + 1);
             }
         }
+
         function onFailure() {
             console.log('Fail To Delete Scenario');
             setErrorBannerMessage(
                 'Failed to delete scenario! Please try again.'
             );
             setErrorBannerFade(true);
+            //Delete req failed, loading animation should end
+            setFetchScenariosResponse({
+                data: null,
+                loading: false,
+                error: null,
+            });
         }
+
+        //for smooth loading animation once save changes button is clicked, no delay
+        setFetchScenariosResponse({
+            data: null,
+            loading: true,
+            error: null,
+        });
 
         deleteReq(
             setDeleteReq,
@@ -338,6 +363,7 @@ export default function Dashboard() {
             null
         );
     };
+
     //Get Scenario
     let getData = () => {
         function onSuccess(response) {
@@ -396,7 +422,6 @@ export default function Dashboard() {
 
     //Reload Page
     useEffect(getData, [shouldFetch]);
-    const classes = useStyles();
 
     if (fetchScenariosResponse.loading) {
         return <LoadingSpinner />;

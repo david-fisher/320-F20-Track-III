@@ -276,6 +276,12 @@ export default function Logistics() {
         }
 
         function onFailureLogistic() {
+            //POST req failed, loading animation should end
+            setFetchCourseResponse({
+                data: null,
+                loading: false,
+                error: null,
+            });
             console.log('Failed Put Logistics Request');
             setErrorBannerMessage('Failed to save! Please try again.');
             setErrorBannerFade(true);
