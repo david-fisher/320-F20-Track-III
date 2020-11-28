@@ -8,10 +8,9 @@ import QuestionFields from './QuestionComponent/questions';
 import { mockReflectionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js'
-
+import universalDelete from '../../../universalHTTPRequests/delete.js'
 
 Reflection.propTypes = {
-    addWithUpdatedID: PropTypes.func,
     page_id: PropTypes.any.isRequired,
     page_type: PropTypes.any.isRequired,
     page_title: PropTypes.any.isRequired,
@@ -33,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Reflection(props) {
     const {
-        addWithUpdatedID,
+        scenarioComponents,
+        setScenarioComponents,
         page_id,
         page_type,
         page_title,
@@ -52,6 +52,11 @@ export default function Reflection(props) {
         loading: true,
         error: null,
     });
+    const [deleteValues,setDeleteValues]= useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
     const [pageID,setPageID] = useState(page_id)
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
@@ -92,12 +97,24 @@ export default function Reflection(props) {
 
     function handlePost(setPostValues,postReqBody,s_id,first_time){
       const endpoint = "/page?scenario_id=" + s_id
+      console.log("AASSnewScenarioIS")
+      console.log(scenarioComponents)
       function onSuccess(resp){
-
+          const deleteEndPoint = "/page?page_id=" + pageID
+          universalDelete(setDeleteValues,deleteEndPoint,null,null,{PAGE:pageID})
+          setPageID(resp.PAGE)
+          postReqBody.PAGE = pageID
+          let newScenarioComponents = [...scenarioComponents]
+          console.log("newScenarioIS")
+          console.log(scenarioComponents)
+          newScenarioComponents.find(x => x.title === title).id = pageID
+          setScenarioComponents(newScenarioComponents);
       }
       function onSuccess2(resp){
         setPageID(resp.PAGE)
-        addWithUpdatedID(pageID)
+        let newScenarioComponents = [...scenarioComponents]
+        newScenarioComponents.find(x => x.title === title).id = pageID
+        setScenarioComponents(newScenarioComponents);
       }
       function onFailure(){
         console.log("Post failed")
@@ -113,6 +130,8 @@ export default function Reflection(props) {
     useEffect(() => {
         if (justCreated === true) {
             //created = false
+            console.log("page id is:")
+            console.log(pageID)
             handlePost(setPostValues, postReqBody, scenario_ID,true);
             console.log(postValues);
             setJustCreated(false);
@@ -136,7 +155,7 @@ export default function Reflection(props) {
                 setQuestions={setQuestions}
             />
             <Title title={title} setTitle={setTitle} />
-            <Body body={bodyText} />
+            <Body body={bodyText} onChange={(e) => setBodyText(e.target.value)}/>
             <QuestionFields questions={questions} setQuestions={setQuestions} />
             <Button
                 className={classes.saveButton}

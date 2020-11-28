@@ -8,7 +8,7 @@ import { mockGenericHistory } from '../../../shared/mockScenarioData';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js'
-
+import universalDelete from '../../../universalHTTPRequests/delete.js'
 //{ id:id, title: title, component: c }
 const useStyles = makeStyles((theme) => ({
     saveButton: {
@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 Generic.propTypes = {
-    addWithUpdatedID: PropTypes.func,
     page_id: PropTypes.any.isRequired,
     page_type: PropTypes.any.isRequired,
     page_title: PropTypes.any.isRequired,
@@ -33,7 +32,8 @@ Generic.propTypes = {
 
 export default function Generic(props) {
     const {
-        addWithUpdatedID,
+        scenarioComponents,
+        setScenarioComponents,
         page_id,
         page_type,
         page_title,
@@ -50,7 +50,11 @@ export default function Generic(props) {
         loading: true,
         error: null,
     });
-
+    const [deleteValues,setDeleteValues]= useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
     const classes = useStyles();
     //const titleData = mockGenericComponent.title;
     //const bodyData = mockGenericComponent.body;
@@ -59,7 +63,7 @@ export default function Generic(props) {
     const [bodyText, setBodyText] = useState(body);
     const [bodiesText, setBodiesText] = useState(bodies);
     const [justCreated,setJustCreated] = useState(created)
-
+    console.log(pageID)
     var postReqBody = {
         PAGE: pageID,
         PAGE_TYPE: page_type,
@@ -90,11 +94,19 @@ export default function Generic(props) {
     function handlePost(setPostValues,postReqBody,s_id,first_time){
       const endpoint = "/page?scenario_id=" + s_id
       function onSuccess(resp){
-
+          const deleteEndPoint = "/page?page_id=" + pageID
+          universalDelete(setDeleteValues,deleteEndPoint,null,null,{PAGE:pageID})
+          setPageID(resp.PAGE)
+          postReqBody.PAGE = pageID
+          let newScenarioComponents = [...scenarioComponents]
+          newScenarioComponents.find(x => x.title === title).id = pageID
+          setScenarioComponents(newScenarioComponents);
       }
       function onSuccess2(resp){
         setPageID(resp.PAGE)
-        addWithUpdatedID(pageID)
+        let newScenarioComponents = [...scenarioComponents]
+        newScenarioComponents.find(x => x.title === title).id = pageID
+        setScenarioComponents(newScenarioComponents);
       }
       function onFailure(){
         console.log("Post failed")
@@ -109,6 +121,8 @@ export default function Generic(props) {
 
     useEffect(() => {
         if (justCreated === true) {
+          console.log("page id is:")
+          console.log(pageID)
           handlePost(setPostValues, postReqBody, scenario_ID,true);
           console.log(postValues);
           setJustCreated(false);
@@ -132,7 +146,7 @@ export default function Generic(props) {
                 setBody={setBodyText}
             />
             <Title title={title} setTitle={setTitle} />
-            <Body body={bodyText} />
+            <Body body={bodyText} onChange={(e) => setBodyText(e.target.value)} />
             <InformationItemList />
             <Button
                 className={classes.saveButton}

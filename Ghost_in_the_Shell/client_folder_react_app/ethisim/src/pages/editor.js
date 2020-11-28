@@ -284,19 +284,19 @@ export default function Editor(props) {
             var p = null
             switch (componentType) {
                 case 'Generic':
-                    p = {addWithUpdatedID: addWithUpdatedID, page_id: 100,page_type: "G",
+                    p = {scenarioComponents: scenarioComponents,setScenarioComponents: setScenarioComponents, page_id: 100,page_type: "G",
                     page_title: title,scenario_ID: scenario_ID, version_ID: 1, next_page_id: 2,
                     body: "BODYTEXTGENERIC",bodies: ["t1","t1"],created: true}
                     c = <Generic {...p}></Generic>;
                     break;
                 case 'Reflection':
-                    p = {addWithUpdatedID: addWithUpdatedID, page_id: 120,page_type: "R",
+                    p = {scenarioComponents: scenarioComponents,setScenarioComponents: setScenarioComponents, page_id: 120,page_type: "R",
                     page_title: title,scenario_ID: scenario_ID, version_ID: 1, next_page_id: 2,
                     body: "BODYTEXTREFLECTION",reflection_questions: ["q1","q2"],created: true}
                     c = <Reflection {...p}></Reflection>;
                     break;
                 case 'Action':
-                    p = {addWithUpdatedID: addWithUpdatedID, page_id: 140,page_type: "A",
+                    p = {scenarioComponents: scenarioComponents,setScenarioComponents: setScenarioComponents, page_id: 140,page_type: "A",
                     page_title: title,scenario_ID: scenario_ID, version_ID: 1, next_page_id: 2,
                     body:"BODYTEXTACTION",choice1: "OPTION1",r1:4,choice2: "OPTION2",r2: 3,created: true}
                     c = <Action {...p} ></Action>;

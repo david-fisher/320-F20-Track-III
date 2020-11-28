@@ -7,9 +7,9 @@ import VersionControl from '../../VersionControl';
 import { mockActionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js'
+import universalDelete from '../../../universalHTTPRequests/delete.js'
 
 Action.propTypes = {
-    addWithUpdatedID: PropTypes.func,
     page_id: PropTypes.any.isRequired,
     page_type: PropTypes.any.isRequired,
     page_title: PropTypes.any.isRequired,
@@ -51,7 +51,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Action(props) {
     const classes = useStyles();
     const {
-        addWithUpdatedID,
+        scenarioComponents,
+        setScenarioComponents,
         page_id,
         page_type,
         page_title,
@@ -71,7 +72,11 @@ export default function Action(props) {
         loading: true,
         error: null,
     });
-
+    const [deleteValues,setDeleteValues]= useState({
+      data: null,
+      loading: true,
+      error: null,
+    })
     //const titleData = mockActionComponent.title;
     //const bodyData = mockActionComponent.body;
     const [pageID,setPageID] = useState(page_id)
@@ -113,12 +118,23 @@ export default function Action(props) {
 
     function handlePost(setPostValues,postReqBody,s_id,first_time){
       const endpoint = "/page?scenario_id=" + s_id
+      console.log("pageID is: ")
+      console.log(pageID)
       function onSuccess(resp){
-
+          const deleteEndPoint = "/page?page_id=" + pageID
+          universalDelete(setDeleteValues,deleteEndPoint,null,null,{PAGE:pageID})
+          setPageID(resp.PAGE)
+          postReqBody.PAGE = pageID
+          let newScenarioComponents = [...scenarioComponents]
+          newScenarioComponents.find(x => x.title === title).id = pageID
+          setScenarioComponents(newScenarioComponents);
       }
       function onSuccess2(resp){
         setPageID(resp.PAGE)
-        addWithUpdatedID(pageID)
+        postReqBody.PAGE = pageID
+        let newScenarioComponents = [...scenarioComponents]
+        newScenarioComponents.find(x => x.title === title).id = pageID
+        setScenarioComponents(newScenarioComponents);
       }
       function onFailure(){
         console.log("Post failed")
@@ -148,6 +164,11 @@ export default function Action(props) {
         setOption2(event.target.value);
     };
 
+    const onChangeBody = (event) =>{
+      setBodyText(event.target.value);
+      postReqBody.PAGE_BODY = bodyText
+    }
+
     const savePage = () => {
         handlePost(setPostValues,postReqBody,scenario_ID,false);
         console.log(postValues);
@@ -167,7 +188,7 @@ export default function Action(props) {
                 setOption2={setOption2}
             />
             <Title title={title} setTitle={setTitle} />
-            <Body body={bodyText} />
+            <Body body={bodyText} onChange={(e) => setBodyText(e.target.value)}/>
             <div className={classes.container}>
                 <form className={classes.form}>
                     <Typography align="center" variant="h6">
