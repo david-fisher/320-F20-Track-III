@@ -618,3 +618,5 @@ class student_info(APIView):
         #     demographic['NAME'] = name
         #     data.append(demographic)
         return Response(data)
+
+

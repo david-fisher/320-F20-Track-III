@@ -54,14 +54,13 @@ class ConversationsSerializer(serializers.ModelSerializer):
 class ReflectionsTakenSerializer(serializers.ModelSerializer):
     class Meta:
         model = reflections_taken
-        fields = ('REFLECTIONS', 'STUDENT', 'COURSE', 'E', 'DATE')
+        fields = '__all__'
 
 
 class ConversationsHadSerializer(serializers.ModelSerializer):
     class Meta:
         model = conversations_had
-        fields = ('STUDENT', 'COURSE', 'E', 'DATE',
-                  'STAKEHOLDER', 'SCORE', 'QUESTION')
+        fields = '__all__'
 
 
 class StudentsInSerializer(serializers.ModelSerializer):
@@ -79,7 +78,7 @@ class CoursesSerializer(serializers.ModelSerializer):
 class ResponsesSerializer(serializers.ModelSerializer):
     class Meta:
         model = responses
-        fields = ('STUDENT', 'E', 'V', 'COURSE', 'DATE', 'CHOICE')
+        fields = '__all__'
 
 
 class allScenariosSerializer(serializers.ModelSerializer):
