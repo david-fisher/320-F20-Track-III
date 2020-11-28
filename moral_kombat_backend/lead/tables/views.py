@@ -592,3 +592,29 @@ class pages_page(APIView):
                 page_data["failure"] = "delete failed"
             
             return Response(data=page_data)
+
+class student_info(APIView):
+    def get(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('scenario_id')
+        responses_query = responses.objects.filter(SCENARIO_id = SCENARIO).values()
+        data = []
+        for response in responses_query:
+            demographics_query = demographics.objects.filter(STUDENT_id = response['STUDENT_id']).values()
+            # demographic = []
+            for dem in demographics_query:
+                student_query = students.objects.filter(STUDENT = dem['STUDENT_id']).values()
+                for x in student_query:
+                    name = x['NAME']
+            dem['NAME'] = name
+            data.append(dem)
+                
+
+
+        # for demographic in demographics_query:
+        #     student_query = students.objects.filter(STUDENT = demographic['STUDENT_id']).values()
+        #     for x in student_query:
+        #         name = x['NAME']
+
+        #     demographic['NAME'] = name
+        #     data.append(demographic)
+        return Response(data)
