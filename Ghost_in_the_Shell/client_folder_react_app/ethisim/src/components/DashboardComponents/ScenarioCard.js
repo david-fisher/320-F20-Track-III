@@ -190,7 +190,7 @@ export default function ScenarioCard(props) {
                         display="block"
                         noWrap
                     >
-                        {DATE_CREATED}
+                        Date created: {DATE_CREATED}
                     </Typography>
                 </CardContent>
             </Card>
