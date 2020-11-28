@@ -1,22 +1,52 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Drawer, Button, Typography } from '@material-ui/core';
+import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
+import { Drawer, Box, Button, Typography } from '@material-ui/core';
+import clsx from 'clsx';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Logistics from '../components/EditorComponents/LogisticsPageComponents/Logistics';
 import Generic from '../components/EditorComponents/GenericPageComponents/Generic';
 import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesComponents/ConfigureIssues';
 import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
+import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
 import { mockUnfinishedScenarioData } from '../shared/mockScenarioData';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+    },
+    appBar: {
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    exitButton: {
+        margin: theme.spacing(2),
+        borderStyle: 'solid',
+        borderColor: 'white',
+        border: 2,
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -38,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: theme.spacing(1),
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
     },
     title: {
@@ -54,6 +84,30 @@ const useStyles = makeStyles((theme) => ({
         border: 'solid 3px',
         borderColor: theme.palette.primary.light,
     },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+    },
+    content1: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: -drawerWidth,
+    },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+    },
 }));
 
 const addPage = (array, id, title, componentType, scenarioData) => {
@@ -67,6 +121,9 @@ const addPage = (array, id, title, componentType, scenarioData) => {
             break;
         case 'Conversation Editor':
             c = <ConversationEditor />;
+            break;
+        case 'Flow Diagram':
+            c = <FlowDiagram />;
             break;
         case 'Generic':
             c = <Generic />;
@@ -88,10 +145,32 @@ var startList = [
     { id: 0, title: 'Logistics', type: 'Logistics' },
     { id: 1, title: 'Configure Issues', type: 'Configure Issues' },
     { id: 2, title: 'Conversation Editor', type: 'Conversation Editor' },
+    { id: 3, title: 'Flow Diagram', type: 'Flow Diagram' },
 ];
 
 export default function Editor(props) {
     const classes = useStyles();
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(false);
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
+
+    const WhiteTextTypography = withStyles({
+        root: {
+            color: '#FFFFFF',
+        },
+    })(Typography);
+
+    const BlackTextTypography = withStyles({
+        root: {
+            color: '#000000',
+        },
+    })(Typography);
+
     const [openPopup, setOpenPopup] = useState(false);
     //Fake fetch of scenarioData with components
     let fetchedComponents = mockUnfinishedScenarioData.components;
@@ -153,12 +232,24 @@ export default function Editor(props) {
             <div>
                 <Drawer
                     className={classes.drawer}
-                    variant="permanent"
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
                     classes={{
                         paper: classes.drawerPaper,
                     }}
-                    anchor="left"
                 >
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'ltr' ? (
+                            <ChevronLeftIcon />
+                        ) : (
+                            <ChevronRightIcon />
+                        )}
+                        <BlackTextTypography variant="h6">
+                            Hide Menu
+                        </BlackTextTypography>
+                    </IconButton>
+
                     <NavSideBarList
                         onClick={onClick}
                         deleteByID={deleteByID}
@@ -185,9 +276,58 @@ export default function Editor(props) {
     }
 
     return (
-        <div className={classes.root}>
+        <div className={classes.container}>
+            <CssBaseline />
+            <AppBar
+                position="fixed"
+                className={clsx(classes.appBar, {
+                    [classes.appBarShift]: open,
+                })}
+            >
+                <Toolbar>
+                    <Box display="flex" flexGrow={1}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            className={clsx(
+                                classes.menuButton,
+                                open && classes.hide
+                            )}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+
+                        <Typography variant="h4" noWrap>
+                            Ethisim Scenario Editor
+                        </Typography>
+                    </Box>
+
+                    <Button
+                        component={Link}
+                        to={{
+                            pathname: '/dashboard',
+                        }}
+                        className={classes.exitButton}
+                    >
+                        <WhiteTextTypography noWrap>
+                            Return to Dashboard
+                        </WhiteTextTypography>
+                    </Button>
+                </Toolbar>
+            </AppBar>
+
             <Sidebar />
-            <main className={classes.content}>{scenarioComponent}</main>
+
+            <main
+                className={clsx(classes.content1, {
+                    [classes.contentShift]: open,
+                })}
+            >
+                <div className={classes.drawerHeader} />
+                {scenarioComponent}
+            </main>
         </div>
     );
 }
