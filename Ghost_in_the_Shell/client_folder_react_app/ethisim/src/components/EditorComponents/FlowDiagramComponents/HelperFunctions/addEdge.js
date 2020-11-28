@@ -17,7 +17,6 @@ export default function addEdge(params, elements) {
         id,
         source,
         target,
-        animated: true,
         arrowHeadType: 'arrowclosed',
         style: { strokeWidth: '5px', arrowWidth: '2px' },
     };
