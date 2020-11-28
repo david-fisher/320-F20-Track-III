@@ -49,7 +49,7 @@ export default function IssueEntryField({
 }) {
     const classes = useStyles();
     //TODO replace once scenario dashboard page is implemented with backend
-    const scenarioID = 1;
+    const scenarioID = 2;
     const versionID = 2;
 
     // eslint-disable-next-line
@@ -72,7 +72,7 @@ export default function IssueEntryField({
     });
 
     const [issueID, setIssueID] = useState(id);
-    const [issueScore, setIssueScore] = useState(score !== null ? score : '');
+    const [issueScore, setIssueScore] = useState(score ? score.toString() : '');
     const [issueName, setIssueName] = useState(issue ? issue : '');
     const [newIssue, setNewIssue] = useState(isNewIssue);
     const [unsaved, setUnsaved] = useState(isNewIssue);
@@ -88,6 +88,9 @@ export default function IssueEntryField({
     };
 
     const saveIssue = () => {
+        console.log(issueName);
+        console.log(issueScore);
+
         //Issue name is null or white space and issue score is null
         if ((!issueName || !issueName.trim()) && !issueScore) {
             setErrorBannerMessage('Issue score and name is not filled in!');
@@ -120,6 +123,7 @@ export default function IssueEntryField({
             setErrorBannerFade(true);
             return;
         }
+
         if (newIssue) {
             function onSuccess(resp) {
                 //if newly created issue, replace fake ID with new ID

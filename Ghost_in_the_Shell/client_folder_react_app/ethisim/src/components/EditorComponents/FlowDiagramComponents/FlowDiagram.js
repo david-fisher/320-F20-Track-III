@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 const endpointGET = '/flowchart?scenario_id=';
 //Needs scenario id
 const endpointPUT = '/flowchart?scenario_id=';
-const tempScenarioID = '1';
+const tempScenarioID = '2';
 
 export default function FlowDiagram(props) {
     const classes = useStyles();
