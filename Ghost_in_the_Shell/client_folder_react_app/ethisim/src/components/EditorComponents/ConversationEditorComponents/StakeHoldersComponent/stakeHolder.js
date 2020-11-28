@@ -86,8 +86,6 @@ StakeHolder.propTypes = {
     stakeHolder: PropTypes.any,
     stakeHolders: PropTypes.any,
     setStakeHolders: PropTypes.func,
-    getCurrentTimeInt: PropTypes.func,
-    checkTime: PropTypes.func,
 };
 
 export default function StakeHolder({
@@ -96,12 +94,9 @@ export default function StakeHolder({
     mainConvo,
     id,
     removeStakeHolder,
-    updateNameJob,
     job,
     stakeHolders,
     setStakeHolders,
-    getCurrentTimeInt,
-    checkTime,
 }) {
     const classes = useStyles();
 
@@ -109,11 +104,11 @@ export default function StakeHolder({
     const [openMainConvo, setOpenMainConvo] = useState(false);
     const [openPointSelection, setOpenPointSelection] = useState(false);
     const [openQuestions, setOpenQuestions] = useState(false);
-    const [isLoading, setLoading] = useState(false);
-    const [qRData, setQRData] = useState([]);
-    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
     const [stakeHolderName, setStakeHolderName] = useState(name);
     const [stakeHolderJob, setStakeHolderJob] = useState(job);
+    const [stakeHolderBiography, setStakeHolderBiography] = useState(bio);
+    const [stakeHolderConversation, setStakeHolderConversation] = useState(mainConvo);
+    const [qRData, setQRData] = useState([]);
 
     const baseURL = 'http://127.0.0.1:8000/';
 
@@ -145,12 +140,14 @@ export default function StakeHolder({
         setOpenBio(true);
     };
     const handleCloseBio = () => {
+        updateBasicText(stakeHolderName, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
         setOpenBio(false);
     };
     const handleClickOpenMainConvo = () => {
         setOpenMainConvo(true);
     };
     const handleCloseMainConvo = () => {
+        updateBasicText(stakeHolderName, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
         setOpenMainConvo(false);
     };
 
@@ -169,55 +166,46 @@ export default function StakeHolder({
         setOpenQuestions(false);
     };
 
-    let handleChange = (content, editor) => {
+    let handleChangeBiography = (content, editor) => {
+        setStakeHolderBiography(content);
         console.log(content);
-        console.log(htmlToText.fromString(content));
+    };
+
+    let handleChangeConversation = (content, editor) => {
+        setStakeHolderConversation(content);
+        console.log(content);
     };
 
     const onChangeName = (e) => {
         setStakeHolderName(e.target.value);
-        updateNameJob(e.target.value);
-    }
-
-    /*
-                sh.NAME = name;
-                sh.JOB = job;
-                */
-    function updateNameJob(shname){
-        const updatedStakeHolders = [...stakeHolders];
-        setStakeHolders(updatedStakeHolders.map((sh) => {
-            if (sh.STAKEHOLDER == id){
-                console.log("IT'S WORKING");
-                return {
-                    ...sh,
-                    NAME: shname,
-                    JOB: stakeHolderJob,
-                }
-                
-            }
-            else {
-                return sh;
-            }
-        }));
+        updateBasicText(e.target.value, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
     }
 
     const onChangeJob = (e) => {
         setStakeHolderJob(e.target.value);
+        updateBasicText(stakeHolderName, e.target.value, stakeHolderBiography, stakeHolderConversation);
+    }
+
+    function updateBasicText(shname, shjob, shbio, shconvo){
+        const updatedStakeHolders = [...stakeHolders];
+            setStakeHolders(updatedStakeHolders.map((sh) => {
+                if (sh.STAKEHOLDER == id){
+                    sh.NAME = shname;
+                    sh.JOB = shjob;
+                    sh.DESCRIPTION = shbio;
+                    sh.INTRODUCTION = shconvo;
+                }
+                return sh;
+            }));
     }
 
     function getQRs() {
-        if (!checkTime(setCurrentTime, currentTime)) {
-            return;
-        }
-        setLoading(true);
-
-        //axios call here
         var axios = require('axios');
         var data = {};
 
         var config = {
             method: 'get',
-            url: baseURL + 'api/conversations?STAKEHOLDER=57' + id,
+            url: baseURL + 'api/conversations/?STAKEHOLDER=' + id,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -233,11 +221,6 @@ export default function StakeHolder({
                 console.log(error);
             });
 
-        setLoading(false);
-    }
-
-    if (isLoading) {
-        return <div> currently loading...</div>;
     }
 
     return (
@@ -349,6 +332,7 @@ export default function StakeHolder({
                         onClose={handleCloseBio}
                     >
                         Biography
+                        (Changes are automatically saved upon closing)
                     </DialogTitle>
                     <DialogContent>
                         <SunEditor
@@ -499,7 +483,7 @@ export default function StakeHolder({
                                     ],
                                 ],
                             }}
-                            onChange={handleChange}
+                            onChange={handleChangeBiography}
                         />
                     </DialogContent>
                 </div>
@@ -517,6 +501,7 @@ export default function StakeHolder({
                         onClose={handleCloseMainConvo}
                     >
                         Main Coversation
+                        (Changes are automatically saved upon closing)
                     </DialogTitle>
                     <DialogContent>
                         <SunEditor
@@ -666,7 +651,7 @@ export default function StakeHolder({
                                     ],
                                 ],
                             }}
-                            onChange={handleChange}
+                            onChange={handleChangeConversation}
                         />
                     </DialogContent>
                 </div>
@@ -689,8 +674,6 @@ export default function StakeHolder({
                         <QuestionFields
                             qrs = {qRData}
                             stakeholder_id = {id}
-                            getCurrentTimeInt = {getCurrentTimeInt}
-                            checkTime = {checkTime}
                         />
                     </DialogContent>
                 </div>

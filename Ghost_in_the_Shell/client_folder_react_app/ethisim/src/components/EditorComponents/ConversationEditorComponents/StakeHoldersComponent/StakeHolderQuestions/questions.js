@@ -8,15 +8,11 @@ QuestionFields.propTypes = {
     questionsResponses: PropTypes.any,
     qrs: PropTypes.any,
     stakeholder_id: PropTypes.number,
-    getCurrentTime: PropTypes.func,
-    checkTime: PropTypes.func,
+
 };
 
-export default function QuestionFields({qrs, stakeholder_id, getCurrentTimeInt, checkTime }) {
-    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
-    const [isLoading, setLoading] = useState(false);
+export default function QuestionFields({qrs, stakeholder_id, }) {
     
-    //questionsResponses is an array of object in format {question: string, response: string}
     let initialQuestionsWithID = qrs.map(function (data) {
         return {
             question: data.QUESTION,
@@ -29,6 +25,30 @@ export default function QuestionFields({qrs, stakeholder_id, getCurrentTimeInt, 
     const [questionsWithID, setQuestionsWithID] = useState(
         initialQuestionsWithID
     );
+
+    const baseURL = 'http://127.0.0.1:8000/';
+
+    const handleSave = (e) => {
+        var axios = require('axios');
+        var data = [{}]
+
+        var config = {
+            method: 'put',
+            url: 'http://127.0.0.1:8000/multi_conv?STAKEHOLDER=68',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log("Successfully saved conversations for this stakeholder");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
     /*
     let resetQuestionsWithID = (questionsWithID) => {
@@ -45,14 +65,6 @@ export default function QuestionFields({qrs, stakeholder_id, getCurrentTimeInt, 
 
     useEffect(resetQuestionsWithID, [questionsResponses]);
     */
-
-    const temp = (e) => {
-        if (!checkTime(setCurrentTime, currentTime)) {
-            return;
-        }
-        setLoading(true);
-        setLoading(false);
-    }
 
     const removeQuestion = (questionID) => {
         console.log(questionID);
@@ -101,6 +113,7 @@ export default function QuestionFields({qrs, stakeholder_id, getCurrentTimeInt, 
             <Button
                 variant="contained"
                 color="primary"
+                onClick={handleSave}
             >
                 Save Changes
             </Button>

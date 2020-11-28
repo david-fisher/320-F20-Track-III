@@ -31,10 +31,6 @@ export default function StakeHolderFields() {
     //handles GETting existing stakeholders from the backend and representing
     //    that information in the frontend
     function getExistingStakeHolders() {
-        if (!checkTime(setCurrentTime, currentTime)) {
-            return;
-        }
-        setLoading(true);
         //TODO: implement  get for specific scenarios
         var config = {
             method: 'get',
@@ -53,7 +49,6 @@ export default function StakeHolderFields() {
             .catch(function (error) {
                 console.log(error);
             });
-        setLoading(false);
     }
 
     //handles DELETEing a stakeholder from the backend and removing the corresponding
@@ -62,7 +57,8 @@ export default function StakeHolderFields() {
         if (!checkTime(setCurrentTime, currentTime)) {
             return;
         }
-        
+        setLoading(true);
+
         //handling it on the frontend
         console.log(stakeHolderID);
         const leftStakeHolders = stakeHolders.filter(
@@ -93,8 +89,9 @@ export default function StakeHolderFields() {
             .catch(function (error) {
                 console.log(error);
             });
+        
+        setLoading(false);
     };
-    console.log(stakeHolders);
 
     //handles POSTing a new stakeholder to the backend and adding that stakeholder to the frontend
     const addStakeHolder = (e) => {
@@ -102,6 +99,7 @@ export default function StakeHolderFields() {
             return;
         }
         setLoading(true);
+
         //TODO: figure out how to distinguish which scenario this newly put item is from
         //currently has scenario 2 arbitrarily
         var data = JSON.stringify({
@@ -131,10 +129,6 @@ export default function StakeHolderFields() {
     };
 
     const saveStakeHolders = (e) => {
-        if (!checkTime(setCurrentTime, currentTime)) {
-            return;
-        }
-        setLoading(true);
         var data = [...stakeHolders];
 
         //TODO figure out how to track the scenario ID
@@ -156,9 +150,10 @@ export default function StakeHolderFields() {
                 );
             })
             .catch(function (error) {
+                //TODO
+                //what happens when we fail to save?
                 console.log(error);
             });
-        setLoading(false);
     };
 
     /*
@@ -229,8 +224,6 @@ export default function StakeHolderFields() {
                         job={stakeHolder.JOB}
                         bio={stakeHolder.DESCRIPTION}
                         mainConvo={stakeHolder.INTRODUCTION}
-                        getCurrentTimeInt = {getCurrentTimeInt}
-                        checkTime = {checkTime}
                         stakeHolders = {stakeHolders}
                         setStakeHolders = {setStakeHolders}
                     />
