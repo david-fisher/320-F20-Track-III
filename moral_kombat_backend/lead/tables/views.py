@@ -311,7 +311,6 @@ class dashboard_page(APIView):
         #save the scenario
         scenario_serializer = ScenariosSerializer(data = request.data)
         if not (scenario_serializer.is_valid()):
-            print("scenario saved incorrectly")
             return Response(scenario_serializer.errors)
         scenario_serializer.save()
         scenario_dict = scenario_serializer.data
@@ -320,18 +319,14 @@ class dashboard_page(APIView):
         COURSES = request.data['COURSES']
         for course in COURSES:
             scenarios_for_dict = {
-                "SCENARIO" : scenario_dict['SCENARIO'],
                 "COURSE" : course['COURSE'],
+                "SCENARIO" : scenario_dict['SCENARIO'],
                 "VERSION" : scenario_dict['VERSION']
             }
-            print(scenarios_for_dict)
-            print(scenario_dict)
-            for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
-            if not for_serializer.is_valid():
-                print("scenarios_for saved incorrectly")
-                return Response(for_serializer.errors)
 
-            for_serializer.save()
+            for_serializer = Scenarios_forSerializer(data=scenarios_for_dict)
+            if for_serializer.is_valid():
+                for_serializer.save()
 
         scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_dict['SCENARIO'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
@@ -592,31 +587,3 @@ class pages_page(APIView):
                 page_data["failure"] = "delete failed"
             
             return Response(data=page_data)
-
-class student_info(APIView):
-    def get(self, request, *args, **kwargs):
-        SCENARIO = self.request.query_params.get('scenario_id')
-        responses_query = responses.objects.filter(SCENARIO_id = SCENARIO).values()
-        data = []
-        for response in responses_query:
-            demographics_query = demographics.objects.filter(STUDENT_id = response['STUDENT_id']).values()
-            # demographic = []
-            for dem in demographics_query:
-                student_query = students.objects.filter(STUDENT = dem['STUDENT_id']).values()
-                for x in student_query:
-                    name = x['NAME']
-            dem['NAME'] = name
-            data.append(dem)
-                
-
-
-        # for demographic in demographics_query:
-        #     student_query = students.objects.filter(STUDENT = demographic['STUDENT_id']).values()
-        #     for x in student_query:
-        #         name = x['NAME']
-
-        #     demographic['NAME'] = name
-        #     data.append(demographic)
-        return Response(data)
-
-

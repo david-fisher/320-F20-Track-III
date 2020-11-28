@@ -34,8 +34,7 @@ urlpatterns = [
     path('page', pages_page.as_view()),
     path('multi_issue', multi_issue.as_view()),
     path('dashboard', dashboard_page.as_view()),
-    path('flowchart', flowchart.as_view()),
-    path('student_info',student_info.as_view())
+    path('flowchart', flowchart.as_view())
     
 ] 
 

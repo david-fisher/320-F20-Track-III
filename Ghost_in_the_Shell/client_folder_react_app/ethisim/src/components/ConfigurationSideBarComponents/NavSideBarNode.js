@@ -47,7 +47,8 @@ export default function NavSideBarNode(props) {
             title === 'Logistics' ||
             title === 'Conversation Editor' ||
             title === 'Configure Issues' ||
-            title === 'Introduction'
+            title === 'Introduction' ||
+            title === 'Flow Diagram'
         ) {
             return (
                 <Grid container direction="row" justify="flex-start">
@@ -92,7 +93,7 @@ export default function NavSideBarNode(props) {
     }
 
     function handleDisplayComponent() {
-        onClick(component,id,title);
+        onClick(component, id, title);
     }
 
     return <div>{pageType(title)}</div>;
