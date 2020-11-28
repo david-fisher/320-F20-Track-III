@@ -161,6 +161,7 @@ export default function Logistics() {
     const [errorBannerMessage, setErrorBannerMessage] = useState('');
     const [errorBannerFade, setErrorBannerFade] = useState(false);
     const [errorName, setErrorName] = useState(false);
+    const [errorNameText, setErrorNameText] = useState('');
     const [errorCourses, setErrorCourses] = useState(false);
     const [currentCourses, setCurrentCourses] = useState([]);
     const [scenarioName, setScenarioName] = useState('');
@@ -305,6 +306,13 @@ export default function Logistics() {
 
         if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
             setErrorName(true);
+            setErrorNameText('Scenario name cannot be empty');
+            validInput = false;
+        } else if (NewScenario.NAME.length >= 1000) {
+            setErrorName(true);
+            setErrorNameText(
+                'Scenario name must have less than 1000 characters'
+            );
             validInput = false;
         } else {
             setErrorName(false);
@@ -428,17 +436,15 @@ export default function Logistics() {
                     {errorName ? (
                         <TextField
                             error
-                            helperText="Scenario name must be filled in"
-                            id="Scenario Title"
+                            helperText={errorNameText}
                             value={scenarioName}
-                            label=""
+                            rows={1}
                             onChange={handleOnChange}
                         />
                     ) : (
                         <TextField
-                            id="Scenario Title"
                             value={scenarioName}
-                            label=""
+                            rows={1}
                             onChange={handleOnChange}
                         />
                     )}

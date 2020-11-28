@@ -63,7 +63,6 @@ export default function Tags(props) {
                     <TextField
                         {...params}
                         variant="outlined"
-                        label="Courses"
                         placeholder="Courses"
                         fullWidth
                     />

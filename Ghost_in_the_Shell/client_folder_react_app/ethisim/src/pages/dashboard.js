@@ -126,12 +126,7 @@ export default function Dashboard() {
     //post returns new id of scenario, when you concatenating to array set the id to that
     const [finishedScenarios, setFinishedScenarios] = useState(null);
     const [unfinishedScenarios, setUnfinishedScenarios] = useState(null);
-    const [menuCourseItems, setMenuCourseItems] = useState([
-        {
-            COURSE: 0,
-            NAME: ' ',
-        },
-    ]);
+    const [menuCourseItems, setMenuCourseItems] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [fetchScenariosResponse, setFetchScenariosResponse] = useState({
         data: null,
@@ -527,7 +522,6 @@ export default function Dashboard() {
                                     label="Scenario Name"
                                     helperText={errorNameText}
                                     style={{ width: 500 }}
-                                    multiline
                                     rows={1}
                                     variant="outlined"
                                     onChange={handleOnChangeName}
@@ -536,7 +530,6 @@ export default function Dashboard() {
                                 <TextField
                                     label="Scenario Name"
                                     style={{ width: 500 }}
-                                    multiline
                                     rows={1}
                                     variant="outlined"
                                     onChange={handleOnChangeName}
