@@ -14,7 +14,7 @@ Action.propTypes = {
     page_title: PropTypes.any.isRequired,
     scenario_ID: PropTypes.any.isRequired,
     version_ID: PropTypes.any.isRequired,
-    next_page_id: PropTypes.any.isRequired,
+    next_page_id: PropTypes.any,
     body: PropTypes.any.isRequired,
     choice1: PropTypes.any.isRequired,
     choice2: PropTypes.any.isRequired,

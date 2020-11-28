@@ -23,7 +23,7 @@ Generic.propTypes = {
     page_title: PropTypes.any.isRequired,
     scenario_ID: PropTypes.any.isRequired,
     version_ID: PropTypes.any.isRequired,
-    next_page_id: PropTypes.any.isRequired,
+    next_page_id: PropTypes.any,
     body: PropTypes.any.isRequired,
     bodies: PropTypes.any.isRequired,
     created: PropTypes.any.isRequired,

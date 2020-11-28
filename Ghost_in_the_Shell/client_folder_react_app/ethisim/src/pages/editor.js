@@ -62,28 +62,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-/*
-FLOW
-1) Edit button clicked (pass in scenario id)
-ENTERS EDITOR PAGE with prop = scenario_ID
-2) GET request containing
-    JSON  Logistics &
-    [{page_id:id,page_name:name},...]
-3.1) index 0 of scenario compoennts will be : {id:0, page:scenario_ID, name:"Logistics ", component:<Logistics with JSON values>}
-3.2) index 1 of scenario components will be : {id:1, page:scenario_ID, name:"Configure Issues", component:NULL}
-3.3) index 2 of scenario compoennts will be : {id:2, page:scenario_ID, name:"FLOWCHART", component:NULL}
-4) fill out scenarioComponents list with -> id:index, page:page_id, name:page_name, component:NULL
-  filling out side nav bar is simply filling out scenarioComponets list as stated above.
-  then extracting the name for each page.
-5) fill out side nav bar
-
-6) Once a button on the side nav is clicked:
-  a) GET all information for page given 'page' from scenarioComponents
-  b) Instantiate new X page component
-  c) fill out component null with new page component
-*/
-
 function sleep(ms){
   const date= Date.now();
   let currD =null;
@@ -93,10 +71,9 @@ function sleep(ms){
 }
 //Sidebar Components
 var initialComponents = [
-    { id: 0, title: 'Logistics', component: <Logistics/>},
-    { id: 1, title: 'Configure Issues', component: <ConfigureIssues/> },
-    { id: 2, title: 'Conversation Editor', component: <ConversationEditor/> },
-    {id: 3, title: "Introduction", component:null},
+    { id: -1, title: 'Logistics', component: <Logistics/>},
+    { id: -2, title: 'Configure Issues', component: <ConfigureIssues/> },
+    { id: -3, title: 'Conversation Editor', component: <ConversationEditor/> },
 ];
 
 function handlePost(setPostValues,postReqBody,s_id){
@@ -131,13 +108,22 @@ export default function Editor(props) {
         initialComponents[0].component = c
 
         var pages = logitics_and_pages.PAGES
+        console.log("PAGES:::::::::::")
+        console.log(pages)
         for(let i = 0; i < pages.length;i++){
-          initialComponents.concat({id:pages[i].PAGE,title:pages[i].PAGE_TITLE,component:null})
+          initialComponents.push({id:pages[i].PAGE,title:pages[i].PAGE_TITLE,component:null})
+
         }
+        setScenarioComponents(initialComponents)
+        console.log("SCENARIO COMP:::::::::::")
+        console.log(scenarioComponents)
+        setScenarioComponent(initialComponents[0].component)
+        setShowEditor(true)
       }
       function onFailure(){
         console.log("failed to get logistics info")
       }
+      universalFetch(setGetValues,endpoint,onFailure,onSuccess,{SCENARIO:s_ID});
     }
 
     function handleDelete(setDeleteValues,d_id){
@@ -216,11 +202,12 @@ export default function Editor(props) {
     function handleConversationEditorGet(setGetValues){
 
     }
+
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
 
     //const scenario_ID = props.scenario_ID
-    const scenario_ID = 1
+    const scenario_ID = 2
     const [getValues,setGetValues] = useState({
       data: null,
       loading: true,
@@ -240,23 +227,28 @@ export default function Editor(props) {
     ]
 
 
-    /*useEffect(()=>{
-        handleLogisticsGet(setGetValues,scenario_ID);
-    },[])*/
-
     const [scenarioComponents, setScenarioComponents] = useState(
-      initialComponents.concat(page_names_and_ids)
+      initialComponents
     //initialComponents.concat(page_names_and_ids)
-  );
+    );
 
-
+    const [showEditor,setShowEditor] = useState(false)
     const [scenarioComponent, setScenarioComponent] = useState(scenarioComponents[0].component);
+    useEffect(()=>{
+      console.log("handling logistics get")
+        handleLogisticsGet(setGetValues,scenario_ID);
+
+    },[])
+
+
+
+
 
 
     const [shouldFetch, setShouldFetch] = useState(0);
 
     let onClick= (component,id,title) => {
-          console.log("button was clicked")
+
           if (component === null){
             console.log("detects component is null")
             var p = null
@@ -268,23 +260,15 @@ export default function Editor(props) {
               //getConversationEditor
             }
             else{
-              var currPageInfo = {data:1,
-                                  loading:0,error:false}
               handlePageGet(setGetValues,id)
 
           }}
 
-
-          //console.log(typeof scenarioComponents[0])
-          //if(scenarioComponents.find(x=>x.id===id) != null){
           setScenarioComponent(scenarioComponents.find(x => x.id === id).component);
-          //}
 
     }
 
-    //useEffect(setScenarioComponent,[shouldFetch])
-    //useEffect(onClick,[shouldFetch]);
-
+  
     const deleteByID = (d_id) => {
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
         //handleDelete(setDeleteValues,d_id);
@@ -327,7 +311,9 @@ export default function Editor(props) {
         function handleAddNewComponent(){
           setOpenPopup(true)
         }
-
+        if (showEditor === false) {
+          return <div className="Sidebar">Loading...</div>;
+        }
         return (
             <div>
                 <Drawer
@@ -363,6 +349,9 @@ export default function Editor(props) {
         );
     }
 
+    if (showEditor === false) {
+      return <div className="Sidebar">Loading...</div>;
+    }
     return (
         <div className={classes.root}>
             <Sidebar />

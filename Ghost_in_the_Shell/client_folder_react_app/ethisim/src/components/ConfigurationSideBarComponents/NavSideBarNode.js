@@ -29,7 +29,7 @@ NavSideBarNode.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     deleteByID: PropTypes.any.isRequired,
-    component: PropTypes.any.isRequired,
+    component: PropTypes.any,
 };
 
 export default function NavSideBarNode(props) {
