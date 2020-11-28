@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import VersionControl from '../../VersionControl';
 import { mockIssuesHistory } from '../../../shared/mockScenarioData';
-import get from '../../../universalHTTPRequests/get';
+import get from './../../../universalHTTPRequests/get';
 import LoadingSpinner from '../../LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';

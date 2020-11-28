@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import deleteReq from '../../../universalHTTPRequests/delete';
-import post from '../../../universalHTTPRequests/post';
-import put from '../../../universalHTTPRequests/put';
+import deleteReq from './../../../../universalHTTPRequests/delete';
+import post from './../../../../universalHTTPRequests/post';
+import put from './../../../../universalHTTPRequests/put';
 
 const endpointPOST = '/api/issues/';
 //Need issueID
