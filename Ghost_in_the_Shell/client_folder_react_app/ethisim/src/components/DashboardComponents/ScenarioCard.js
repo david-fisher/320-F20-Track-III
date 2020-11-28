@@ -57,7 +57,12 @@ const DialogTitle = withStyles(styles)((props) => {
     const { children, classes, onClose, ...other } = props;
     return (
         <MuiDialogTitle disableTypography className={classes.root} {...other}>
-            <Typography variant="h6">{children}</Typography>
+            <Typography variant="h6" noWrap={true}>
+                Classes for
+            </Typography>
+            <Typography variant="h6" noWrap={true} color="primary">
+                {children}
+            </Typography>
             {onClose ? (
                 <IconButton
                     aria-label="close"
@@ -202,16 +207,17 @@ export default function ScenarioCard(props) {
                     onClose={handleClose}
                     aria-labelledby="customized-dialog-title"
                     open={open}
-                    maxWidth={false}
+                    maxWidth="sm"
+                    fullWidth={true}
                 >
-                    <div style={{ width: 400, height: 400 }}>
+                    <div>
                         <DialogTitle
                             id="customized-dialog-title"
                             onClose={handleClose}
                         >
-                            View Classes for {NAME}
+                            {NAME}
                         </DialogTitle>
-                        <DialogContent>
+                        <DialogContent dividers>
                             {data.COURSES.map((data) => (
                                 <form
                                     style={{ marginBottom: 20 }}
@@ -222,7 +228,11 @@ export default function ScenarioCard(props) {
                                         variant="contained"
                                         color="primary"
                                     >
-                                        <Typography variant="subtitle1" noWrap>
+                                        <Typography
+                                            display="block"
+                                            variant="subtitle1"
+                                            noWrap={true}
+                                        >
                                             {data.NAME}
                                         </Typography>
                                     </Button>
