@@ -4,6 +4,18 @@ import AuthorField from './Author';
 import { isBrowser } from 'react-device-detect';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { mockUnfinishedScenario } from '../../../shared/mockScenarioData';
+import universalPost from '../../../universalHTTPRequests/post.js'
+
+function handlePost(setPostValues,postReqBody,s_id){
+  const endpoint = "/page?scenario_id=" + s_id
+  function onSuccess(resp){
+
+  }
+  function onFailure(){
+    console.log("Post failed")
+  }
+  universalPost(setPostValues,endpoint,null,null,postReqBody);
+}
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -42,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Logistics(props) {
 
-  /*const {postFunction,scenario_ID,version_ID,title,is_finished,
+  /*const {scenario_ID,version_ID,title,is_finished,
     public_scenario,num_convos,professors,courses} = props*/
 
     const classes = useStyles();

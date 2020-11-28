@@ -7,7 +7,9 @@ import InformationItemList from './InformationItemList';
 import { mockGenericHistory } from '../../../shared/mockScenarioData';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import universalPost from '../../../universalHTTPRequests/post.js'
 
+//{ id:id, title: title, component: c }
 const useStyles = makeStyles((theme) => ({
     saveButton: {
         margin: theme.spacing(2),
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 Generic.propTypes = {
-    postFunction: PropTypes.func.isRequired,
+    addWithUpdatedID: PropTypes.func,
     page_id: PropTypes.any.isRequired,
     page_type: PropTypes.any.isRequired,
     page_title: PropTypes.any.isRequired,
@@ -31,7 +33,7 @@ Generic.propTypes = {
 
 export default function Generic(props) {
     const {
-        postFunction,
+        addWithUpdatedID,
         page_id,
         page_type,
         page_title,
@@ -52,21 +54,27 @@ export default function Generic(props) {
     const classes = useStyles();
     //const titleData = mockGenericComponent.title;
     //const bodyData = mockGenericComponent.body;
+    const [pageID,setPageID] = useState(page_id)
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
     const [bodiesText, setBodiesText] = useState(bodies);
-    /*
-    var postReqBody = {
-        PAGE: page_id,
-        PAGE_TYPE: page_type,
-        PAGE_TITLE: title,
-        SCENARIO: scenario_ID,
-        NEXT_PAGE_ID: next_page_id,
-        PAGE_BODY: bodyText,
-        BODIES: bodiesText,
-    };*/
+    const [justCreated,setJustCreated] = useState(created)
 
     var postReqBody = {
+        PAGE: pageID,
+        PAGE_TYPE: page_type,
+        PAGE_TITLE: title,
+        PAGE_BODY: bodyText,
+        SCENARIO: scenario_ID,
+        VERSION: 1,
+        NEXT_PAGE: next_page_id,
+        BODY: bodyText,
+        BODIES: bodiesText,
+        X_COORDINATE: 0,
+        Y_COORDINATE: 0,
+    };
+
+    /*var postReqBody = {
         PAGE: page_id,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
@@ -77,18 +85,38 @@ export default function Generic(props) {
         BODY: bodyText,
         X_COORDINATE: 0,
         Y_COORDINATE: 0,
-    };
+    };*/
+
+    function handlePost(setPostValues,postReqBody,s_id,first_time){
+      const endpoint = "/page?scenario_id=" + s_id
+      function onSuccess(resp){
+
+      }
+      function onSuccess2(resp){
+        setPageID(resp.PAGE)
+        addWithUpdatedID(pageID)
+      }
+      function onFailure(){
+        console.log("Post failed")
+      }
+      if(first_time){
+        universalPost(setPostValues,endpoint,onFailure,onSuccess2,postReqBody);
+      }
+      else{
+        universalPost(setPostValues,endpoint,onFailure,onSuccess,postReqBody);
+      }
+    }
 
     useEffect(() => {
-        if (created === true) {
-            //created = false
-            postFunction(setPostValues, postReqBody, scenario_ID);
-            console.log(postValues);
+        if (justCreated === true) {
+          handlePost(setPostValues, postReqBody, scenario_ID,true);
+          console.log(postValues);
+          setJustCreated(false);
         }
     }, []);
 
     const savePage = () => {
-        postFunction(setPostValues,postReqBody,scenario_ID);
+        handlePost(setPostValues,postReqBody,scenario_ID,false);
         console.log(postValues);
     };
 

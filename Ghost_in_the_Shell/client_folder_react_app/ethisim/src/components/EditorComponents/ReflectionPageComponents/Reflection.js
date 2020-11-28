@@ -7,9 +7,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import QuestionFields from './QuestionComponent/questions';
 import { mockReflectionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
+import universalPost from '../../../universalHTTPRequests/post.js'
+
 
 Reflection.propTypes = {
-    postFunction: PropTypes.func.isRequired,
+    addWithUpdatedID: PropTypes.func,
     page_id: PropTypes.any.isRequired,
     page_type: PropTypes.any.isRequired,
     page_title: PropTypes.any.isRequired,
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Reflection(props) {
     const {
-        postFunction,
+        addWithUpdatedID,
         page_id,
         page_type,
         page_title,
@@ -50,17 +52,18 @@ export default function Reflection(props) {
         loading: true,
         error: null,
     });
-
+    const [pageID,setPageID] = useState(page_id)
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
+
     //Assuming list of questions will be in array form
     const [questions, setQuestions] = useState(reflection_questions);
-
+    const [justCreated,setJustCreated] = useState(created)
     var questionsList = [];
     for (var i = 0; i < questions.length; i++) {
         questionsList.concat({ REFLECTION_QUESTION: questions[i] });
     }
-    var postReqBody = {
+    /*var postReqBody = {
         PAGE: page_id,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
@@ -71,30 +74,52 @@ export default function Reflection(props) {
         BODY: bodyText,
         X_COORDINATE: 0,
         Y_COORDINATE: 0,
-    };
-    /*
+    };*/
+
     var postReqBody = {
-        PAGE: page_id,
+        PAGE: pageID,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
-        PAGE_BODY: bodyText
+        PAGE_BODY: bodyText,
         SCENARIO: scenario_ID,
         VERSION: 1,
         NEXT_PAGE: next_page_id,
-        BODY: bodyText,
         REFLECTION_QUESTIONS: questionsList,
         X_COORDINATE: 0,
         Y_COORDINATE: 0,
-    };*/
+    };
+
+
+    function handlePost(setPostValues,postReqBody,s_id,first_time){
+      const endpoint = "/page?scenario_id=" + s_id
+      function onSuccess(resp){
+
+      }
+      function onSuccess2(resp){
+        setPageID(resp.PAGE)
+        addWithUpdatedID(pageID)
+      }
+      function onFailure(){
+        console.log("Post failed")
+      }
+      if(first_time){
+        universalPost(setPostValues,endpoint,onFailure,onSuccess2,postReqBody);
+      }
+      else{
+        universalPost(setPostValues,endpoint,onFailure,onSuccess,postReqBody);
+      }
+    }
+
     useEffect(() => {
-        if (created === true) {
+        if (justCreated === true) {
             //created = false
-            postFunction(setPostValues, postReqBody, scenario_ID);
+            handlePost(setPostValues, postReqBody, scenario_ID,true);
             console.log(postValues);
+            setJustCreated(false);
         }
     }, []);
     const savePage = () => {
-        postFunction(setPostValues, postReqBody, scenario_ID);
+        handlePost(setPostValues,postReqBody,scenario_ID,false);
         console.log(postValues);
     };
 

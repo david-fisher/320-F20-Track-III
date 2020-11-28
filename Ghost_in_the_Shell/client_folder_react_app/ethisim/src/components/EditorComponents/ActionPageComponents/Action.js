@@ -6,9 +6,10 @@ import Title from '../GeneralPageComponents/Title';
 import VersionControl from '../../VersionControl';
 import { mockActionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
+import universalPost from '../../../universalHTTPRequests/post.js'
 
 Action.propTypes = {
-    postFunction: PropTypes.func.isRequired,
+    addWithUpdatedID: PropTypes.func,
     page_id: PropTypes.any.isRequired,
     page_type: PropTypes.any.isRequired,
     page_title: PropTypes.any.isRequired,
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Action(props) {
     const classes = useStyles();
     const {
-        postFunction,
+        addWithUpdatedID,
         page_id,
         page_type,
         page_title,
@@ -73,27 +74,30 @@ export default function Action(props) {
 
     //const titleData = mockActionComponent.title;
     //const bodyData = mockActionComponent.body;
+    const [pageID,setPageID] = useState(page_id)
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
     const [option1, setOption1] = useState(choice1);
     const [option2, setOption2] = useState(choice2);
     const [result1, setResult1] = useState(r1);
     const [result2, setResult2] = useState(r2);
+    const [justCreated,setJustCreated] = useState(created)
 
-    /*
     var postReqBody = {
-        PAGE: page_id,
+        PAGE: pageID,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
+        PAGE_BODY: bodyText,
         SCENARIO: scenario_ID,
-        BODY: bodyText,
         NEXT_PAGE: next_page_id,
         CHOICES: [
             { CHOICE: option1, RESULT_PAGE: result1 },
             { CHOICE: option2, RESULT_PAGE: result2 },
         ],
-    };*/
-    var postReqBody = {
+        X_COORDINATE: 0,
+        Y_COORDINATE: 0,
+    };
+    /*var postReqBody = {
         PAGE: page_id,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
@@ -104,13 +108,35 @@ export default function Action(props) {
         BODY: bodyText,
         X_COORDINATE: 0,
         Y_COORDINATE: 0,
-    };
+    };*/
+
+
+    function handlePost(setPostValues,postReqBody,s_id,first_time){
+      const endpoint = "/page?scenario_id=" + s_id
+      function onSuccess(resp){
+
+      }
+      function onSuccess2(resp){
+        setPageID(resp.PAGE)
+        addWithUpdatedID(pageID)
+      }
+      function onFailure(){
+        console.log("Post failed")
+      }
+      if(first_time){
+        universalPost(setPostValues,endpoint,onFailure,onSuccess2,postReqBody);
+      }
+      else{
+        universalPost(setPostValues,endpoint,onFailure,onSuccess,postReqBody);
+      }
+    }
 
     useEffect(() => {
-        if (created === true) {
+        if (justCreated === true) {
             //created = false
-            postFunction(setPostValues, postReqBody, scenario_ID);
+            handlePost(setPostValues, postReqBody, scenario_ID,true);
             console.log(postValues);
+            setJustCreated(false);
         }
     }, []);
 
@@ -123,7 +149,7 @@ export default function Action(props) {
     };
 
     const savePage = () => {
-        postFunction(setPostValues, postReqBody, scenario_ID);
+        handlePost(setPostValues,postReqBody,scenario_ID,false);
         console.log(postValues);
     };
 

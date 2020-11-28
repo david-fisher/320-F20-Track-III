@@ -76,16 +76,6 @@ var initialComponents = [
     { id: -3, title: 'Conversation Editor', component: <ConversationEditor/> },
 ];
 
-function handlePost(setPostValues,postReqBody,s_id){
-  const endpoint = "/page?scenario_id=" + s_id
-  function onSuccess(resp){
-
-  }
-  function onFailure(){
-    console.log("Post failed")
-  }
-  universalPost(setPostValues,endpoint,null,null,postReqBody);
-}
 
 
 
@@ -99,7 +89,7 @@ export default function Editor(props) {
         var c = null
         setShouldFetch(shouldFetch+1);
         var logitics_and_pages = resp.data
-        p = {postFunction: handlePost, scenario_ID: logitics_and_pages.SCENARIO,
+        p = {scenario_ID: logitics_and_pages.SCENARIO,
         version_ID: logitics_and_pages.VERSION,title: logitics_and_pages.NAME,
         is_finished: logitics_and_pages.IS_FINISHED,public_scenario:logitics_and_pages.PUBLIC,
         num_convos:logitics_and_pages.NUM_CONVERSATION,
@@ -157,7 +147,7 @@ export default function Editor(props) {
             currPageInfo.PAGE_TYPE = "G"
           }
           if(currPageInfo.PAGE_TYPE === "G"){
-            p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+            p = {page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
             page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
             version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
             body: currPageInfo.PAGE_BODY,bodies: currPageInfo.BODIES,created: false}
@@ -165,7 +155,7 @@ export default function Editor(props) {
 
           }
           else if(currPageInfo.PAGE_TYPE === "A"){
-            p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+            p = {page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
             page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
             next_page_id: currPageInfo.NEXT_PAGE,
             body: currPageInfo.PAGE_BODY,choice1:currPageInfo.CHOICES[0].CHOICE,
@@ -174,7 +164,7 @@ export default function Editor(props) {
             c = <Action {...p}></Action>;
           }
           else if(currPageInfo.PAGE_TYPE === "R"){
-            p = {postFunction: handlePost, page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
+            p = {page_id: currPageInfo.PAGE,page_type: currPageInfo.PAGE_TYPE,
             page_title: currPageInfo.PAGE_TITLE,scenario_ID: currPageInfo.SCENARIO,
             version_ID: currPageInfo.NEXT_PAGE, next_page_id: currPageInfo.NEXT_PAGE,
             body: currPageInfo.PAGE_BODY,reflection_questions:currPageInfo.REFLECTION_QUESTIONS,created: false}
@@ -268,10 +258,10 @@ export default function Editor(props) {
 
     }
 
-  
+
     const deleteByID = (d_id) => {
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
-        //handleDelete(setDeleteValues,d_id);
+        handleDelete(setDeleteValues,d_id);
     };
 
     function Sidebar() {
@@ -279,24 +269,35 @@ export default function Editor(props) {
 
 
         const addNewPage = (id, title, componentType) => {
+
+            function addWithUpdatedID(newID){
+              setShowEditor(false)
+              let newScenarioComponents = [...scenarioComponents]
+              newScenarioComponents.find(x => x.title === title).id = newID
+              setScenarioComponents(newScenarioComponents);
+              setShowEditor(true)
+              console.log("ACTUAL new add os:")
+              console.log(scenarioComponents)
+            }
+
             var c = null;
             var p = null
             switch (componentType) {
                 case 'Generic':
-                    p = {postFunction: handlePost, page_id: 100,page_type: "G",
-                    page_title: title,scenario_ID: 1, version_ID: 1, next_page_id: 2,
+                    p = {addWithUpdatedID: addWithUpdatedID, page_id: 100,page_type: "G",
+                    page_title: title,scenario_ID: scenario_ID, version_ID: 1, next_page_id: 2,
                     body: "BODYTEXTGENERIC",bodies: ["t1","t1"],created: true}
                     c = <Generic {...p}></Generic>;
                     break;
                 case 'Reflection':
-                    p = {postFunction: handlePost, page_id: 120,page_type: "R",
-                    page_title: title,scenario_ID: 1, version_ID: 1, next_page_id: 2,
+                    p = {addWithUpdatedID: addWithUpdatedID, page_id: 120,page_type: "R",
+                    page_title: title,scenario_ID: scenario_ID, version_ID: 1, next_page_id: 2,
                     body: "BODYTEXTREFLECTION",reflection_questions: ["q1","q2"],created: true}
                     c = <Reflection {...p}></Reflection>;
                     break;
                 case 'Action':
-                    p = {postFunction: handlePost, page_id: 140,page_type: "A",
-                    page_title: title,scenario_ID: 1, version_ID: 1, next_page_id: 2,
+                    p = {addWithUpdatedID: addWithUpdatedID, page_id: 140,page_type: "A",
+                    page_title: title,scenario_ID: scenario_ID, version_ID: 1, next_page_id: 2,
                     body:"BODYTEXTACTION",choice1: "OPTION1",r1:4,choice2: "OPTION2",r2: 3,created: true}
                     c = <Action {...p} ></Action>;
                     break;
@@ -304,8 +305,11 @@ export default function Editor(props) {
                     c = <Typography>Error</Typography>;
             }
             setScenarioComponents(
-                scenarioComponents.concat({ id:id, title: title, component: c })
+                scenarioComponents.concat({id:id,title:title,component:c})
             );
+            console.log("placeholder new add os:")
+            console.log(scenarioComponents)
+
         };
 
         function handleAddNewComponent(){
