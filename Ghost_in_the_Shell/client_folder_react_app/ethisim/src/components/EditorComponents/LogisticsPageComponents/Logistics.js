@@ -102,8 +102,11 @@ export default function Logistics() {
         error: null,
     });
     const [menuCourseItems, setMenuCourseItems] = useState(null);
-    // eslint-disable-next-line
-    const [responseSave, setResponseSave] = useState(null);
+    const [responseSave, setResponseSave] = useState({
+        data: null,
+        loading: false,
+        error: null,
+    });
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
     const [errorBannerMessage, setErrorBannerMessage] = useState('');
@@ -277,7 +280,11 @@ export default function Logistics() {
     }
 
     //Loading for both GET requests
-    if (fetchLogisticsResponse.loading || fetchCourseResponse.loading) {
+    if (
+        fetchLogisticsResponse.loading ||
+        fetchCourseResponse.loading ||
+        responseSave.loading
+    ) {
         return <LoadingSpinner />;
     }
 
