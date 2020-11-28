@@ -37,6 +37,7 @@ IssueEntryField.propTypes = {
 
 export default function IssueEntryField({
     id,
+    scenarioID,
     issue,
     score,
     isNewIssue,
@@ -47,9 +48,10 @@ export default function IssueEntryField({
     setErrorBannerMessage,
     setErrorBannerFade,
 }) {
+
     const classes = useStyles();
-    //TODO replace once scenario dashboard page is implemented with backend
-    const scenarioID = 1;
+
+    //TODO replace once versionID is implemented with backend
     const versionID = 2;
 
     // eslint-disable-next-line

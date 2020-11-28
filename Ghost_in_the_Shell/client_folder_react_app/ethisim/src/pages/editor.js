@@ -19,15 +19,14 @@ import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/Fl
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
 import AddIcon from '@material-ui/icons/Add';
-import { mockUnfinishedScenarioData } from '../shared/mockScenarioData';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from '../components/LoadingSpinner';
 
-import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
 import universalDelete from '../universalHTTPRequests/delete.js';
 //  setResponse, endpoint, onError, onSuccess, requestBody
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -122,54 +121,78 @@ function sleep(ms) {
         currD = Date.now();
     } while (currD - date < ms);
 }
+
 //Sidebar Components
-var initialComponents = [
+let initialComponents = [
     { id: -1, title: 'Logistics', component: <Logistics /> },
     { id: -2, title: 'Configure Issues', component: <ConfigureIssues /> },
     { id: -3, title: 'Conversation Editor', component: <ConversationEditor /> },
+    { id: -4, title: 'Flow Diagram', component: <FlowDiagram /> },
 ];
 
 export default function Editor(props) {
+
     function handleLogisticsGet(setGetValues, s_ID) {
         const endpoint = '/logistics?scenario_id=' + s_ID;
         function onSuccess(resp) {
-            console.log('succeeded to get logistics info');
-            var p = null;
-            var c = null;
+            console.log('GET logistics info');
+            let p = null;
+            let c = null;
             setShouldFetch(shouldFetch + 1);
-            var logitics_and_pages = resp.data;
+            let logistics_and_pages = resp.data;
             p = {
-                scenario_ID: logitics_and_pages.SCENARIO,
-                version_ID: logitics_and_pages.VERSION,
-                title: logitics_and_pages.NAME,
-                is_finished: logitics_and_pages.IS_FINISHED,
-                public_scenario: logitics_and_pages.PUBLIC,
-                num_convos: logitics_and_pages.NUM_CONVERSATION,
-                professors: [logitics_and_pages.PROFESSOR],
-                courses: logitics_and_pages.COURSES,
+                scenario_ID: logistics_and_pages.SCENARIO,
+                version_ID: logistics_and_pages.VERSION,
+                title: logistics_and_pages.NAME,
+                is_finished: logistics_and_pages.IS_FINISHED,
+                public_scenario: logistics_and_pages.PUBLIC,
+                num_convos: logistics_and_pages.NUM_CONVERSATION,
+                professors: [logistics_and_pages.PROFESSOR],
+                courses: logistics_and_pages.COURSES,
             };
-            c = <Logistics {...p}></Logistics>;
-            initialComponents[0].component = c;
 
-            var pages = logitics_and_pages.PAGES;
-            console.log('PAGES:::::::::::');
+            c = <Logistics {...p}></Logistics>;
+            initialComponents[0].component = <Logistics {...p}></Logistics>;
+            initialComponents[1].component = <ConfigureIssues {...p}></ConfigureIssues>;
+            initialComponents[2].component = <ConversationEditor {...p}></ConversationEditor>;
+            initialComponents[3].component = <FlowDiagram {...p}></FlowDiagram>;
+
+            let pages = logistics_and_pages.PAGES;
+
+            console.log('Scenario Pages:');
             console.log(pages);
+            
             for (let i = 0; i < pages.length; i++) {
-                initialComponents.push({
-                    id: pages[i].PAGE,
-                    title: pages[i].PAGE_TITLE,
-                    component: null,
-                });
+                //Already have component in initial components
+                if(pages[i].PAGE_TITLE === 'Stakeholder Conversations') {
+                    continue;
+                 }
+                //Intro page is first page on sidebar
+                if(pages[i].PAGE_TITLE === 'Introduction') {
+                    initialComponents.splice(4, 0, {
+                        id: pages[i].PAGE,
+                        title: pages[i].PAGE_TITLE,
+                        component: null,
+                    })
+                 } else {
+                    initialComponents.push({
+                        id: pages[i].PAGE,
+                        title: pages[i].PAGE_TITLE,
+                        component: null,
+                    });
+                }
             }
-            setScenarioComponents(initialComponents);
-            console.log('SCENARIO COMP:::::::::::');
+            console.log('Sscenario Components on Sidebar');
             console.log(scenarioComponents);
+            setScenarioComponents(initialComponents);
             setScenarioComponent(initialComponents[0].component);
             setShowEditor(true);
         }
+
         function onFailure() {
-            console.log('failed to get logistics info');
+            console.log('Failed to get logistics info');
         }
+
         universalFetch(setGetValues, endpoint, onFailure, onSuccess, {
             SCENARIO: s_ID,
         });
@@ -184,18 +207,18 @@ export default function Editor(props) {
         function onFailure() {
             console.log('Delete failed');
         }
-        universalDelete(setDeleteValues, endpoint, null, null, { PAGE: d_id });
+        universalDelete(setDeleteValues, endpoint, onFailure, onSuccess, { PAGE: d_id });
     }
 
     function handlePageGet(setGetValues, g_id) {
         const endpoint = '/page?page_id=' + g_id;
         function onSuccess(resp) {
-            var p = null;
-            var c = null;
+            let p = null;
+            let c = null;
             console.log('response get data is successful ');
             setShouldFetch(shouldFetch + 1);
             if (resp.data !== null) {
-                var currPageInfo = resp.data;
+                let currPageInfo = resp.data;
                 console.log('weawreat');
                 //sleep(10000)
                 console.log(currPageInfo);
@@ -298,16 +321,12 @@ export default function Editor(props) {
         error: null,
     });
 
+    // eslint-disable-next-line
     const [deleteValues, setDeleteValues] = useState({
         data: null,
         loading: true,
         error: null,
     });
-
-    var page_names_and_ids = [
-        { id: 4, title: 'Initial Action', component: null },
-        { id: 5, title: 'Initial Reflection', component: null },
-    ];
 
     const [scenarioComponents, setScenarioComponents] = useState(
         initialComponents
@@ -318,6 +337,7 @@ export default function Editor(props) {
     const [scenarioComponent, setScenarioComponent] = useState(
         scenarioComponents[0].component
     );
+    
     useEffect(() => {
         console.log('handling logistics get');
         handleLogisticsGet(setGetValues, scenario_ID);
@@ -328,8 +348,8 @@ export default function Editor(props) {
     let onClick = (component, id, title) => {
         if (component === null) {
             console.log('detects component is null');
-            var p = null;
-            var c = null;
+            let p = null;
+            let c = null;
             if (title === 'Configure Issues') {
                 //getConfigureIssues
             } else if (title === 'Conversation Editor') {
@@ -363,8 +383,8 @@ export default function Editor(props) {
                 console.log(scenarioComponents);
             }
 
-            var c = null;
-            var p = null;
+            let c = null;
+            let p = null;
             switch (componentType) {
                 case 'Generic':
                     p = {
@@ -434,9 +454,11 @@ export default function Editor(props) {
         function handleAddNewComponent() {
             setOpenPopup(true);
         }
+
         if (showEditor === false) {
-            return <div className="Sidebar">Loading...</div>;
+            return <LoadingSpinner />
         }
+
         return (
             <div>
                 <Drawer
@@ -485,8 +507,9 @@ export default function Editor(props) {
     }
 
     if (showEditor === false) {
-        return <div className="Sidebar">Loading...</div>;
+        return <LoadingSpinner />
     }
+
     return (
         <div className={classes.container}>
             <CssBaseline />
@@ -531,19 +554,13 @@ export default function Editor(props) {
             </AppBar>
 
             <Sidebar />
-            {(getValues.data || scenarioComponent != null) && (
-                <main className={classes.content}>{scenarioComponent}</main>
-            )}
-
             <main
                 className={clsx(classes.content1, {
                     [classes.contentShift]: open,
                 })}
             >
                 <div className={classes.drawerHeader} />
-                {(getValues.data || scenarioComponent != null) && {
-                    scenarioComponent,
-                }}
+                {(getValues.data || scenarioComponent != null) && <div>{scenarioComponent}</div>}
             </main>
         </div>
     );

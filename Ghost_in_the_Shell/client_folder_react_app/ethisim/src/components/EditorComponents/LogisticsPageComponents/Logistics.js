@@ -6,6 +6,7 @@ import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { mockUnfinishedScenario } from '../../../shared/mockScenarioData';
 import universalPost from '../../../universalHTTPRequests/post.js'
 
+// eslint-disable-next-line
 function handlePost(setPostValues,postReqBody,s_id){
   const endpoint = "/page?scenario_id=" + s_id
   function onSuccess(resp){
