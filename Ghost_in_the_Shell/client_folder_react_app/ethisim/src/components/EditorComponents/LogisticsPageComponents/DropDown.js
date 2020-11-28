@@ -27,6 +27,7 @@ Tags.propTypes = {
 
 export default function Tags(props) {
     const classes = useStyles();
+
     const onTagsChange = (event, values) => {
         props.update(values);
     };
@@ -39,10 +40,12 @@ export default function Tags(props) {
                 options={props.courses}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.NAME}
+                getOptionSelected={(option, value) =>
+                    option.COURSE === value.COURSE
+                }
                 onChange={onTagsChange}
                 defaultValue={props.current}
                 renderOption={(option, { selected, inputValue }) => {
-                    console.log('inputvalue', selected, inputValue);
                     return (
                         <React.Fragment>
                             <Checkbox

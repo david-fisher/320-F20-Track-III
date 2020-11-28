@@ -28,7 +28,7 @@ import DashboardNavBar from '../components/DashboardComponents/DashboardNavbar';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: theme.spacing(15),
+        marginTop: theme.spacing(11),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -57,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
     },
     iconRefreshSmall: {
         fontSize: '30px',
+    },
+    border: {
+        borderStyle: 'none none solid none',
+        marginBottom: theme.spacing(2),
     },
 }));
 
@@ -149,6 +153,7 @@ export default function Dashboard() {
     const [errorBannerMessage, setErrorBannerMessage] = useState('');
     const [errorBannerFade, setErrorBannerFade] = useState(false);
     const [errorName, setErrorName] = useState(false);
+    const [errorNameText, setErrorNameText] = useState('');
     const [errorCourses, setErrorCourses] = useState(false);
     const [shouldFetch, setShouldFetch] = useState(0);
     // eslint-disable-next-line
@@ -157,7 +162,7 @@ export default function Dashboard() {
         loading: true,
         error: null,
     });
-    const [NewScenario, setEdit] = useState({
+    const [NewScenario, setNewScenario] = useState({
         NAME: ' ',
         IS_FINISHED: false,
         PUBLIC: false,
@@ -187,11 +192,12 @@ export default function Dashboard() {
     const handleClickOpen = () => {
         setOpen(true);
         NewScenario.PUBLIC = false;
-        setEdit(NewScenario);
+        setNewScenario(NewScenario);
         getCourses();
     };
 
     const handleCloseSave = () => {
+        console.log(2);
         function onSuccessPost(resp) {
             console.log('Success Scenario Post');
             setShouldFetch(shouldFetch + 1);
@@ -213,6 +219,13 @@ export default function Dashboard() {
 
         if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
             setErrorName(true);
+            setErrorNameText('Scenario name cannot be empty');
+            validInput = false;
+        } else if (NewScenario.NAME.length >= 1000) {
+            setErrorName(true);
+            setErrorNameText(
+                'Scenario name must have less than 1000 characters'
+            );
             validInput = false;
         } else {
             setErrorName(false);
@@ -226,6 +239,14 @@ export default function Dashboard() {
         }
 
         if (validInput) {
+            setNewScenario({
+                NAME: ' ',
+                IS_FINISHED: false,
+                PUBLIC: false,
+                NUM_CONVERSATIONS: 0,
+                PROFESSOR: 1,
+                COURSES: [],
+            });
             post(
                 setPost,
                 endpointPost,
@@ -237,18 +258,32 @@ export default function Dashboard() {
         }
     };
 
+    //X button on dialog for creating new scenario
     const handleClose = () => {
+        console.log(1);
+        setNewScenario({
+            NAME: ' ',
+            IS_FINISHED: false,
+            PUBLIC: false,
+            NUM_CONVERSATIONS: 0,
+            PROFESSOR: 1,
+            COURSES: [],
+        });
+        setErrorName(false);
+        setErrorCourses(false);
+        setErrorNameText('');
         setOpen(false);
     };
+
     //For new Scenario Post
     const handleOnChangeName = (event) => {
         NewScenario.NAME = event.target.value;
-        setEdit(NewScenario);
+        setNewScenario(NewScenario);
     };
 
     const handleOnChangePublic = (info) => {
         NewScenario.PUBLIC = !NewScenario.PUBLIC;
-        setEdit(NewScenario);
+        setNewScenario(NewScenario);
     };
 
     //Update Classes
@@ -257,7 +292,7 @@ export default function Dashboard() {
         let sel = [];
         selectedClasses.map((element) => sel.push({ COURSE: element.COURSE }));
         NewScenario.COURSES = sel;
-        setEdit(NewScenario);
+        setNewScenario(NewScenario);
     };
 
     //Delete Scenario
@@ -339,6 +374,7 @@ export default function Dashboard() {
         }
         get(setFetchScenariosResponse, endpointGet, onFailure, onSuccess);
     };
+
     //Get Courses
     let getCourses = () => {
         function onSuccessCourse(response) {
@@ -394,21 +430,23 @@ export default function Dashboard() {
 
     return (
         <div>
+            <SuccessBanner
+                fade={successBannerFade}
+                successMessage={successBannerMessage}
+            />
+            <ErrorBanner
+                fade={errorBannerFade}
+                errorMessage={errorBannerMessage}
+            />
             <DashboardNavBar />
             <Container
                 className={classes.container}
                 component="main"
                 maxWidth="lg"
             >
-                <Typography variant="h4">Unfinished Scenarios</Typography>
-                <SuccessBanner
-                    fade={successBannerFade}
-                    successMessage={successBannerMessage}
-                />
-                <ErrorBanner
-                    fade={errorBannerFade}
-                    errorMessage={errorBannerMessage}
-                />
+                <div className={classes.border}>
+                    <Typography variant="h3">Unfinished Scenarios</Typography>
+                </div>
                 <Grid
                     container
                     spacing={2}
@@ -419,7 +457,9 @@ export default function Dashboard() {
                     {unfinishedScenarios}
                     <AddNewScenarioCard onClick={handleClickOpen} />
                 </Grid>
-                <Typography variant="h4">Finished Scenarios</Typography>
+                <div className={classes.border}>
+                    <Typography variant="h3">Finished Scenarios</Typography>
+                </div>
                 <Grid
                     container
                     spacing={2}
@@ -453,7 +493,7 @@ export default function Dashboard() {
                                 <TextField
                                     error
                                     label="Scenario Name"
-                                    helperText="Scenario Name must be filled in"
+                                    helperText={errorNameText}
                                     style={{ width: 500 }}
                                     multiline
                                     rows={1}

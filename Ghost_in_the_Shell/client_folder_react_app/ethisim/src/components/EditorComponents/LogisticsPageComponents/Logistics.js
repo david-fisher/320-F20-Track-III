@@ -90,10 +90,57 @@ export default function Logistics() {
         loading: false,
         error: null,
     });
+
     //TODO temporary ID
-    const [id, setId] = useState(2);
-    const [authors, setAuthor] = useState([<Author key={id} />]);
     // eslint-disable-next-line
+    const [id, setId] = useState(2);
+
+    //Authors mock implementation
+    const [authors, setAuthors] = useState([]);
+
+    //Set fake ID for list item
+    let initialAuthorsWithID = authors.map(function (author) {
+        return {
+            author: author,
+            id: Math.floor(Math.random() * 10000),
+        };
+    });
+
+    const [authorsWithID, setAuthorsWithID] = useState(initialAuthorsWithID);
+
+    let resetAuthorsWithID = (authorsWithID) => {
+        let initialAuthorsWithID = authors.map(function (author) {
+            return {
+                author: author,
+                id: Math.floor(Math.random() * 10000),
+            };
+        });
+        setAuthorsWithID(initialAuthorsWithID);
+    };
+
+    useEffect(resetAuthorsWithID, [authors]);
+
+    const removeAuthor = (authorID) => {
+        const leftAuthors = authorsWithID.filter(
+            (author) => author.id !== authorID
+        );
+        setAuthorsWithID(leftAuthors);
+    };
+
+    const addAuthor = (e) => {
+        let newAuthors = authorsWithID.map((data) => data.author);
+        newAuthors = [...newAuthors, ''];
+        setAuthors(newAuthors);
+        const newAuthorsWithID = [
+            ...authorsWithID,
+            {
+                id: Math.floor(Math.random() * 10000),
+                author: '',
+            },
+        ];
+        setAuthorsWithID(newAuthorsWithID);
+    };
+
     const [shouldFetch, setShouldFetch] = useState(0);
     const [shouldRender, setShouldRender] = useState(false);
     const [fetchLogisticsResponse, setFetchLogisticsResponse] = useState({
@@ -130,13 +177,6 @@ export default function Logistics() {
 
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
-
-    ///Authors not implemented
-    const addAuthor = (event) => {
-        setAuthor(authors.concat(<Author key={id + 1} />));
-        setId(id + 1);
-        event.preventDefault();
-    };
 
     const handleOnChangePublic = (event) => {
         setEdit({ ...NewScenario, PUBLIC: event.target.checked });
@@ -227,6 +267,66 @@ export default function Logistics() {
 
     useEffect(getData, [shouldFetch]);
 
+    const handleSave = () => {
+        function onSuccessLogistic(response) {
+            console.log('Success Put');
+            setSuccessBannerMessage('Successfully Saved!');
+            setSuccessBannerFade(true);
+            setShouldFetch(shouldFetch + 1);
+        }
+
+        function onFailureLogistic() {
+            console.log('Failed Put Logistics Request');
+            setErrorBannerMessage('Failed to save! Please try again.');
+            setErrorBannerFade(true);
+        }
+
+        let validInput = true;
+
+        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
+            setErrorName(true);
+            validInput = false;
+        } else {
+            setErrorName(false);
+        }
+
+        if (NewScenario.COURSES.length === 0) {
+            setErrorCourses(true);
+            validInput = false;
+        } else {
+            setErrorCourses(false);
+        }
+
+        if (validInput) {
+            setFetchCourseResponse({
+                data: null,
+                loading: true,
+                error: null,
+            });
+            put(
+                setResponseSave,
+                endPointPut,
+                onFailureLogistic,
+                onSuccessLogistic,
+                NewScenario
+            );
+        }
+    };
+
+    const handleOnChange = (event) => {
+        console.log('changed name');
+        NewScenario.NAME = event.target.value;
+        setEdit(NewScenario);
+    };
+
+    const updateSelectedClasses = (selectedClasses) => {
+        //set new scenario courses to selected classes
+        let sel = [];
+        selectedClasses.map((element) => sel.push({ COURSE: element.COURSE }));
+        NewScenario.COURSES = sel;
+        setEdit(NewScenario);
+    };
+
     if (fetchLogisticsResponse.error) {
         return (
             <div className={classes.errorContainer}>
@@ -287,60 +387,6 @@ export default function Logistics() {
     ) {
         return <LoadingSpinner />;
     }
-
-    const handleSave = () => {
-        function onSuccessLogistic(response) {
-            console.log('Success Put');
-            setSuccessBannerMessage('Successfully Saved!');
-            setSuccessBannerFade(true);
-        }
-
-        function onFailureLogistic() {
-            console.log('Failed Put Logistics Request');
-            setErrorBannerMessage('Failed to save! Please try again.');
-            setErrorBannerFade(true);
-        }
-
-        let validInput = true;
-
-        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
-            setErrorName(true);
-            validInput = false;
-        } else {
-            setErrorName(false);
-        }
-
-        if (NewScenario.COURSES.length === 0) {
-            setErrorCourses(true);
-            validInput = false;
-        } else {
-            setErrorCourses(false);
-        }
-
-        if (validInput) {
-            put(
-                setResponseSave,
-                endPointPut,
-                onFailureLogistic,
-                onSuccessLogistic,
-                NewScenario
-            );
-        }
-    };
-
-    const handleOnChange = (event) => {
-        console.log('changed name');
-        NewScenario.NAME = event.target.value;
-        setEdit(NewScenario);
-    };
-
-    const updateSelectedClasses = (selectedClasses) => {
-        //set new scenario courses to selected classes
-        let sel = [];
-        selectedClasses.map((element) => sel.push({ COURSE: element.COURSE }));
-        NewScenario.COURSES = sel;
-        setEdit(NewScenario);
-    };
 
     return (
         <div>
@@ -403,7 +449,16 @@ export default function Logistics() {
                     Authors
                 </form>
 
-                {authors}
+                {authorsWithID.map((data) => (
+                    <Author
+                        key={data.id}
+                        id={data.id}
+                        removeAuthor={removeAuthor}
+                        author={data.author}
+                        listOfAuthors={authorsWithID}
+                        setListOfAuthors={setAuthorsWithID}
+                    />
+                ))}
                 <Button variant="contained" color="primary" onClick={addAuthor}>
                     Add Author
                 </Button>
