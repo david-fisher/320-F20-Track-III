@@ -606,6 +606,7 @@ class student_info(APIView):
                 for x in student_query:
                     name = x['NAME']
             dem['NAME'] = name
+            dem['DATE_TAKEN'] = response['DATE_TAKEN']
             data.append(dem)
                 
 
