@@ -145,7 +145,7 @@ export default function Logistics() {
     const [shouldRender, setShouldRender] = useState(false);
     const [fetchLogisticsResponse, setFetchLogisticsResponse] = useState({
         data: null,
-        loading: false,
+        loading: true,
         error: null,
     });
     const [menuCourseItems, setMenuCourseItems] = useState(null);
@@ -236,7 +236,19 @@ export default function Logistics() {
 
         function onFailure() {
             console.log('Failed Get Logistics Request');
+            //GET request failed, loading animation should end
+            setFetchCourseResponse({
+                data: null,
+                loading: false,
+                error: null,
+            });
         }
+        //Smooth loading animation, loading animation will not reset during both GET requests (GET logistics and GET courses)
+        setFetchCourseResponse({
+            data: null,
+            loading: true,
+            error: null,
+        });
         get(
             setFetchLogisticsResponse,
             endpointGetLogistics + id,
@@ -304,6 +316,7 @@ export default function Logistics() {
         }
 
         if (validInput) {
+            //Smooth loading animation, loading animation will not reset during POST request and both GET requests (GET logistics and GET courses)
             setFetchCourseResponse({
                 data: null,
                 loading: true,
@@ -385,7 +398,7 @@ export default function Logistics() {
         );
     }
 
-    //Loading for both GET requests
+    //Loading for POST request and both GET requests
     if (
         fetchLogisticsResponse.loading ||
         fetchCourseResponse.loading ||

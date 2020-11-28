@@ -208,7 +208,7 @@ export default function Dashboard() {
         function onFailurePost() {
             console.log('Fail Scenario Post');
             setErrorBannerMessage(
-                'Failed to Create Scenario! Please try again.'
+                'Failed to create Scenario! Please try again.'
             );
             setErrorBannerFade(true);
             //Post failed, loading animation should end
@@ -254,7 +254,7 @@ export default function Dashboard() {
                 PROFESSOR: 1,
                 COURSES: [],
             });
-            //for smooth loading animation once save changes button is clicked, no delay
+            //Smooth loading animation, loading animation will not reset during POST and GET Request
             setFetchScenariosResponse({
                 data: null,
                 loading: true,
@@ -348,7 +348,7 @@ export default function Dashboard() {
             });
         }
 
-        //for smooth loading animation once save changes button is clicked, no delay
+        //Smooth loading animation, loading animation will not reset during DELETE and GET Request
         setFetchScenariosResponse({
             data: null,
             loading: true,
@@ -455,20 +455,20 @@ export default function Dashboard() {
 
     return (
         <div>
-            <SuccessBanner
-                fade={successBannerFade}
-                successMessage={successBannerMessage}
-            />
-            <ErrorBanner
-                fade={errorBannerFade}
-                errorMessage={errorBannerMessage}
-            />
             <DashboardNavBar />
             <Container
                 className={classes.container}
                 component="main"
                 maxWidth="lg"
             >
+                <SuccessBanner
+                    fade={successBannerFade}
+                    successMessage={successBannerMessage}
+                />
+                <ErrorBanner
+                    fade={errorBannerFade}
+                    errorMessage={errorBannerMessage}
+                />
                 <div className={classes.border}>
                     <Typography variant="h3">Unfinished Scenarios</Typography>
                 </div>
