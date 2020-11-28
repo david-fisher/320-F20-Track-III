@@ -368,13 +368,14 @@ export default function Dashboard() {
             let unfinishedScenarios = response.data.filter(
                 (data) => !data.IS_FINISHED
             );
+            console.log(response.data);
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
                     key={data.SCENARIO}
                     scenarioID={data.SCENARIO}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
-                    finished={data.IS_FINISHED}
+                    isFinished={data.IS_FINISHED}
                     courses={data.COURSES}
                     onDelete={deleteScenario}
                 />
