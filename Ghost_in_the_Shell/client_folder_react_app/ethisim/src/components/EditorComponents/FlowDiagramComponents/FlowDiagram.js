@@ -81,7 +81,11 @@ const endpointGET = '/flowchart?scenario_id=';
 //Needs scenario id
 const endpointPUT = '/flowchart?scenario_id=';
 
-export default function FlowDiagram({scenario_ID}) {
+FlowDiagram.propTypes = {
+    scenario_ID: PropTypes.number,
+};
+
+export default function FlowDiagram({ scenario_ID }) {
     const scenarioID = scenario_ID;
     const classes = useStyles();
     const [fetchedElements, setFetchedElements] = useState({
@@ -469,7 +473,7 @@ export default function FlowDiagram({scenario_ID}) {
                 <div className={classes.container}>
                     <ErrorIcon className={classes.iconError} />
                     <Typography align="center" variant="h3">
-                        Error in fetching issues.
+                        Error in fetching Flow Diagram.
                     </Typography>
                     <Button
                         variant="contained"

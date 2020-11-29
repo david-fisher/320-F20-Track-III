@@ -3,7 +3,7 @@ import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
 import { Typography, Container, Button } from '@material-ui/core';
 import VersionControl from '../../VersionControl';
-import InformationItemList from './InformationItemList';
+//import InformationItemList from './InformationItemList';
 import { mockGenericHistory } from '../../../shared/mockScenarioData';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -42,7 +42,6 @@ export default function Generic(props) {
         page_id,
         page_type,
         page_title,
-        version_ID,
         scenario_ID,
         next_page_id,
         body,
@@ -70,6 +69,9 @@ export default function Generic(props) {
     const [bodyText, setBodyText] = useState(body);
     // eslint-disable-next-line
     const [bodiesText, setBodiesText] = useState(bodies);
+    const [errorTitle, setErrorTitle] = useState(false);
+    const [errorTitleText, setErrorTitleText] = useState(false);
+    const [errorBody, setErrorBody] = useState(false);
 
     var postReqBody = {
         PAGE_TYPE: page_type,
@@ -88,7 +90,6 @@ export default function Generic(props) {
         function onSuccess(resp) {
             const deleteEndPoint = '/page?page_id=' + pageID;
             let newScenarioComponents = [...scenarioComponents];
-            console.log(newScenarioComponents);
             let component = newScenarioComponents.find((x) => x.id === pageID);
             component.id = resp.data.PAGE;
             component.title = title;
@@ -107,14 +108,38 @@ export default function Generic(props) {
             setErrorBannerMessage('Failed to save page! Please try again.');
         }
 
+        let validInput = true;
+
+        if (!title || !title.trim()) {
+            setErrorTitle(true);
+            setErrorTitleText('Page title cannot be empty');
+            validInput = false;
+        } else if (title.length >= 1000) {
+            setErrorTitle(true);
+            setErrorTitleText('Page title must have less than 1000 characters');
+            validInput = false;
+        } else {
+            setErrorTitle(false);
+        }
+
+        if (!bodyText || !bodyText.trim()) {
+            setErrorBody(true);
+            validInput = false;
+        } else {
+            setErrorBody(false);
+        }
+
         console.log(postReqBody);
-        universalPost(
-            setPostValues,
-            endpoint,
-            onFailure,
-            onSuccess,
-            postReqBody
-        );
+
+        if (validInput) {
+            universalPost(
+                setPostValues,
+                endpoint,
+                onFailure,
+                onSuccess,
+                postReqBody
+            );
+        }
     }
 
     const savePage = () => {
@@ -163,8 +188,18 @@ export default function Generic(props) {
                 setTitle={setTitle}
                 setBody={setBodyText}
             />
-            <Title title={title} setTitle={setTitle} />
-            <Body body={bodyText} setBody={setBodyText} />
+            <Title
+                title={title}
+                setTitle={setTitle}
+                error={errorTitle}
+                errorMessage={errorTitleText}
+            />
+            <Body
+                body={bodyText}
+                setBody={setBodyText}
+                error={errorBody}
+                errorMessage={'Page body cannot be empty.'}
+            />
             <Button
                 className={classes.saveButton}
                 variant="contained"

@@ -21,6 +21,8 @@ import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSide
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SuccessBanner from '../components/Banners/SuccessBanner';
+import ErrorBanner from '../components/Banners/ErrorBanner';
 
 import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
@@ -74,6 +76,12 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
+    },
+    bannerContainer: {
+        marginTop: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
     },
     title: {
@@ -230,9 +238,13 @@ export default function Editor(props) {
         const endpoint = '/page?page_id=' + d_id;
         function onSuccess(resp) {
             console.log('response delete data is successful ');
+            setSuccessBannerFade(true);
+            setSuccessBannerMessage('Successfully deleted page!');
         }
         function onFailure() {
             console.log('Delete failed');
+            setErrorBannerFade(true);
+            setErrorBannerMessage('Failed to save page! Please try again.');
         }
 
         universalDelete(setDeleteValues, endpoint, onFailure, onSuccess, {
@@ -282,10 +294,18 @@ export default function Editor(props) {
                     next_page_id: currPageInfo.NEXT_PAGE,
                     version_ID: tempVersionID,
                     body: currPageInfo.PAGE_BODY,
-                    choice1: currPageInfo.CHOICES[0].CHOICE,
-                    r1: currPageInfo.CHOICES[0].RESULT_PAGE,
-                    choice2: currPageInfo.CHOICES[1].CHOICE,
-                    r2: currPageInfo.CHOICES[1].RESULT_PAGE,
+                    choice1: currPageInfo.CHOICES[0]
+                        ? currPageInfo.CHOICES[0].CHOICE
+                        : '',
+                    r1: currPageInfo.CHOICES[0]
+                        ? currPageInfo.CHOICES[0].RESULT_PAGE
+                        : null,
+                    choice2: currPageInfo.CHOICES[1]
+                        ? currPageInfo.CHOICES[1].CHOICE
+                        : '',
+                    r2: currPageInfo.CHOICES[1]
+                        ? currPageInfo.CHOICES[1].RESULT_PAGE
+                        : null,
                     xCoord: currPageInfo.X_COORDINATE,
                     yCoord: currPageInfo.Y_COORDINATE,
                     created: false,
@@ -386,12 +406,36 @@ export default function Editor(props) {
         error: null,
     });
 
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
+
     function Sidebar() {
         const classes = useStyles();
 
         const addNewPage = (pageType, pageName, pageBody) => {
             const endpoint = '/api/pages/';
+            // eslint-disable-next-line
             let c = null;
+            // eslint-disable-next-line
             let p = null;
             let postReqBody;
 
@@ -608,6 +652,16 @@ export default function Editor(props) {
                 })}
             >
                 <div className={classes.drawerHeader} />
+                <div className={classes.bannerContainer}>
+                    <SuccessBanner
+                        successMessage={successBannerMessage}
+                        fade={successBannerFade}
+                    />
+                    <ErrorBanner
+                        errorMessage={errorBannerMessage}
+                        fade={errorBannerFade}
+                    />
+                </div>
                 {!getValues.data ||
                 scenarioComponent === null ||
                 getValues.loading ? (

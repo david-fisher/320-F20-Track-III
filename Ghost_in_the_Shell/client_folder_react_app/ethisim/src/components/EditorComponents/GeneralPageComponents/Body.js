@@ -7,10 +7,12 @@ import PropTypes from 'prop-types';
 Body.propTypes = {
     body: PropTypes.string.isRequired,
     setBody: PropTypes.any.isRequired,
+    error: PropTypes.bool,
+    errorMessage: PropTypes.string,
 };
 
 export default function Body(props) {
-    const { body, setBody } = props;
+    const { body, setBody, error, errorMessage } = props;
 
     let handleChange = (content) => {
         setBody(content);
@@ -152,6 +154,16 @@ export default function Body(props) {
                 }}
                 onChange={handleChange}
             />
+            {error ? (
+                <Typography
+                    style={{ marginLeft: 15 }}
+                    variant="caption"
+                    display="block"
+                    color="error"
+                >
+                    {errorMessage}
+                </Typography>
+            ) : null}
         </div>
     );
 }

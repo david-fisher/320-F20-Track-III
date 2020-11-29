@@ -71,7 +71,7 @@ export default function Reflection(props) {
 
     //Assuming list of questions will be in array form
     const [questions, setQuestions] = useState(reflection_questions);
-
+    //console.log(questionsList);
     var questionsList = [];
     for (var i = 0; i < questions.length; i++) {
         questionsList.concat({ REFLECTION_QUESTION: questions[i] });

@@ -19,6 +19,8 @@ export default function Title(props) {
     Title.propTypes = props.data;
     const title = props.title;
     const setTitle = props.setTitle;
+    const error = props.error;
+    const errorMessage = props.errorMessage;
 
     let handleChange = (content) => {
         setTitle(content.target.value);
@@ -27,17 +29,33 @@ export default function Title(props) {
     return (
         <div className={classes.root}>
             <Typography variant="h4">Scenario Page Name</Typography>
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="title"
-                label="Title of component"
-                value={title}
-                onChange={handleChange}
-                name="title"
-            />
+            {error ? (
+                <TextField
+                    error
+                    helperText={errorMessage}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="title"
+                    label="Title of component"
+                    value={title}
+                    onChange={handleChange}
+                    name="title"
+                />
+            ) : (
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="title"
+                    label="Title of component"
+                    value={title}
+                    onChange={handleChange}
+                    name="title"
+                />
+            )}
         </div>
     );
 }

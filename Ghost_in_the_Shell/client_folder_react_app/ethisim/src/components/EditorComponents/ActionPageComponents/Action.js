@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../GeneralPageComponents/Body';
@@ -8,6 +8,8 @@ import { mockActionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
 import universalDelete from '../../../universalHTTPRequests/delete.js';
+import SuccessBanner from '../../Banners/SuccessBanner';
+import ErrorBanner from '../../Banners/ErrorBanner';
 
 Action.propTypes = {
     scenarioComponents: PropTypes.any,
@@ -22,10 +24,10 @@ Action.propTypes = {
     bodies: PropTypes.any,
     xCoord: PropTypes.any,
     yCoord: PropTypes.any,
-    choice1: PropTypes.any.isRequired,
-    choice2: PropTypes.any.isRequired,
-    r1: PropTypes.any.isRequired,
-    r2: PropTypes.any.isRequired,
+    choice1: PropTypes.any,
+    choice2: PropTypes.any,
+    r1: PropTypes.any,
+    r2: PropTypes.any,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -86,8 +88,14 @@ export default function Action(props) {
     const [bodyText, setBodyText] = useState(body);
     const [option1, setOption1] = useState(choice1);
     const [option2, setOption2] = useState(choice2);
-    //const [result1, setResult1] = useState(r1);
-    //const [result2, setResult2] = useState(r2);
+
+    const [errorTitle, setErrorTitle] = useState(false);
+    const [errorTitleText, setErrorTitleText] = useState(false);
+    const [errorBody, setErrorBody] = useState(false);
+    const [errorOption1, setErrorOption1] = useState(false);
+    const [errorOption1Text, setErrorOption1Text] = useState(false);
+    const [errorOption2, setErrorOption2] = useState(false);
+    const [errorOption2Text, setErrorOption2Text] = useState(false);
 
     var postReqBody = {
         PAGE: pageID,
@@ -105,39 +113,84 @@ export default function Action(props) {
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
-        const endpoint = '/page?scenario_id=' + s_id;
-        console.log('pageID is: ');
-        console.log(pageID);
+        const endpoint = '/page?page_id=' + pageID;
+
         function onSuccess(resp) {
             const deleteEndPoint = '/page?page_id=' + pageID;
+            let newScenarioComponents = [...scenarioComponents];
+            let component = newScenarioComponents.find((x) => x.id === pageID);
+            component.id = resp.data.PAGE;
+            component.title = title;
+            setPageID(resp.data.PAGE);
+            setScenarioComponents(newScenarioComponents);
+            setSuccessBannerFade(true);
+            setSuccessBannerMessage('Successfully saved page!');
             universalDelete(setDeleteValues, deleteEndPoint, null, null, {
                 PAGE: pageID,
             });
-            setPageID(resp.PAGE);
-            postReqBody.PAGE = pageID;
-            let newScenarioComponents = [...scenarioComponents];
-            newScenarioComponents.find((x) => x.title === title).id = pageID;
-            setScenarioComponents(newScenarioComponents);
         }
-        function onSuccess2(resp) {
-            setPageID(resp.PAGE);
-            postReqBody.PAGE = pageID;
-            let newScenarioComponents = [...scenarioComponents];
-            newScenarioComponents.find((x) => x.title === title).id = pageID;
-            setScenarioComponents(newScenarioComponents);
-        }
+
         function onFailure() {
             console.log('Post failed');
+            setErrorBannerFade(true);
+            setErrorBannerMessage('Failed to save page! Please try again.');
         }
-        if (first_time) {
-            universalPost(
-                setPostValues,
-                endpoint,
-                onFailure,
-                onSuccess2,
-                postReqBody
-            );
+
+        let validInput = true;
+
+        if (!title || !title.trim()) {
+            setErrorTitle(true);
+            setErrorTitleText('Page title cannot be empty');
+            validInput = false;
+        } else if (title.length >= 1000) {
+            setErrorTitle(true);
+            setErrorTitleText('Page title must have less than 1000 characters');
+            validInput = false;
         } else {
+            setErrorTitle(false);
+        }
+
+        if (!bodyText || !bodyText.trim()) {
+            setErrorBody(true);
+            validInput = false;
+        } else {
+            setErrorBody(false);
+        }
+
+        if (!option1 || !option1.trim()) {
+            setErrorOption1(true);
+            setErrorOption1Text('Option cannot be empty');
+            validInput = false;
+        } else if (option1.length >= 1000) {
+            setErrorOption1(true);
+            setErrorOption1Text('Option must have less than 1000 characters');
+            validInput = false;
+        } else {
+            setErrorOption1(false);
+        }
+
+        if (!option2 || !option2.trim()) {
+            setErrorOption2(true);
+            setErrorOption2Text('Option cannot be empty');
+            validInput = false;
+        } else if (option2.length >= 1000) {
+            setErrorOption2(true);
+            setErrorOption2Text('Option must have less than 1000 characters');
+            validInput = false;
+        } else {
+            setErrorOption2(false);
+        }
+
+        if (option1 && option2 && option1.trim() === option2.trim()) {
+            setErrorOption1(true);
+            setErrorOption1Text('Option1 cannot be the same as Option2');
+            setErrorOption2(true);
+            setErrorOption2Text('Option1 cannot be the same as Option2');
+            validInput = false;
+        }
+
+        console.log(postReqBody);
+        if (validInput) {
             universalPost(
                 setPostValues,
                 endpoint,
@@ -156,19 +209,43 @@ export default function Action(props) {
         setOption2(event.target.value);
     };
 
-    // eslint-disable-next-line
-    const onChangeBody = (event) => {
-        setBodyText(event.target.value);
-        postReqBody.PAGE_BODY = bodyText;
-    };
-
     const savePage = () => {
         handlePost(setPostValues, postReqBody, scenario_ID, false);
         console.log(postValues);
     };
 
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
+
     return (
         <Container component="main">
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
             <Typography align="center" variant="h2">
                 Action Component
             </Typography>
@@ -180,38 +257,80 @@ export default function Action(props) {
                 setOption1={setOption1}
                 setOption2={setOption2}
             />
-            <Title title={title} setTitle={setTitle} />
-            <Body body={bodyText} setBody={setBodyText} />
+            <Title
+                title={title}
+                setTitle={setTitle}
+                error={errorTitle}
+                errorMessage={errorTitleText}
+            />
+            <Body
+                body={bodyText}
+                setBody={setBodyText}
+                error={errorBody}
+                errorMessage={'Page body cannot be empty.'}
+            />
             <div className={classes.container}>
                 <form className={classes.form}>
                     <Typography align="center" variant="h6">
                         Option 1
                     </Typography>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="option 1"
-                        label="Input Option 1 Text"
-                        name="option 1"
-                        value={option1}
-                        onChange={onChangeOption1}
-                    />
+                    {errorOption1 ? (
+                        <TextField
+                            error
+                            helperText={errorOption1Text}
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="option 1"
+                            label="Input Option 1 Text"
+                            name="option 1"
+                            value={option1}
+                            onChange={onChangeOption1}
+                        />
+                    ) : (
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="option 1"
+                            label="Input Option 1 Text"
+                            name="option 1"
+                            value={option1}
+                            onChange={onChangeOption1}
+                        />
+                    )}
                     <Typography align="center" variant="h6">
                         Option 2
                     </Typography>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="option 2"
-                        label="Input Option 2 Text"
-                        name="option 2"
-                        value={option2}
-                        onChange={onChangeOption2}
-                    />
+                    {errorOption2 ? (
+                        <TextField
+                            error
+                            helperText={errorOption2Text}
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="option 2"
+                            label="Input Option 2 Text"
+                            name="option 2"
+                            value={option2}
+                            onChange={onChangeOption2}
+                        />
+                    ) : (
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="option 2"
+                            label="Input Option 2 Text"
+                            name="option 2"
+                            value={option2}
+                            onChange={onChangeOption2}
+                        />
+                    )}
                     <Button
                         className={classes.saveButton}
                         variant="contained"
