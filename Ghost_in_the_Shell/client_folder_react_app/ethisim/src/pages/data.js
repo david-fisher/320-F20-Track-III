@@ -98,7 +98,7 @@ Data.propTypes = {
 
 //Needs scenario id
 const endpointGET = '/student_info?scenario_id=';
-const tempScenarioID = '1';
+const tempScenarioID = '2';
 
 export default function Data({ location }) {
     const classes = useStyles();
@@ -207,6 +207,7 @@ export default function Data({ location }) {
                 ]}
                 columns={[
                     { title: 'Name', field: 'NAME' },
+                    { title: 'Date Taken', field: 'DATE_TAKEN' },
                     { title: 'Age', field: 'AGE', type: 'numeric' },
                     { title: 'Grade', field: 'GRADE' },
                     { title: 'Gender', field: 'GENDER' },
