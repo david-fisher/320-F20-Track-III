@@ -181,10 +181,7 @@ export default function Action(props) {
                 setOption2={setOption2}
             />
             <Title title={title} setTitle={setTitle} />
-            <Body
-                body={bodyText}
-                onChange={(e) => setBodyText(e.target.value)}
-            />
+            <Body body={bodyText} setBody={setBodyText} />
             <div className={classes.container}>
                 <form className={classes.form}>
                     <Typography align="center" variant="h6">

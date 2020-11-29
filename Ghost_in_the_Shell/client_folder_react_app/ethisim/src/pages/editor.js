@@ -366,6 +366,13 @@ export default function Editor(props) {
     };
 
     const deleteByID = (d_id) => {
+        //If on page that is going to be deleted, redirect back to logistics page
+        if (
+            scenarioComponents.filter((i) => i.id === d_id)[0].component ===
+            scenarioComponent
+        ) {
+            setScenarioComponent(scenarioComponents[0].component);
+        }
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
         handleDelete(setDeleteValues, d_id);
     };
@@ -429,18 +436,6 @@ export default function Editor(props) {
                 console.log('Post failed');
                 setShowEditor(true);
             }
-
-            /*
-            function addWithUpdatedID(newID) {
-                setShowEditor(false);
-                let newScenarioComponents = [...scenarioComponents];
-                newScenarioComponents.find((x) => x.title === title).id = newID;
-                setScenarioComponents(newScenarioComponents);
-                setShowEditor(true);
-                console.log('ACTUAL new add os:');
-                console.log(scenarioComponents);
-            }
-            */
 
             switch (pageType) {
                 case 'Generic':

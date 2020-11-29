@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
 import VersionControl from '../../VersionControl';
@@ -9,6 +9,8 @@ import { mockReflectionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
 import universalDelete from '../../../universalHTTPRequests/delete.js';
+import SuccessBanner from '../../Banners/SuccessBanner';
+import ErrorBanner from '../../Banners/ErrorBanner';
 
 Reflection.propTypes = {
     scenarioComponents: PropTypes.any,
@@ -42,6 +44,7 @@ export default function Reflection(props) {
         page_type,
         page_title,
         scenario_ID,
+        version_ID,
         next_page_id,
         body,
         reflection_questions,
@@ -80,7 +83,7 @@ export default function Reflection(props) {
         PAGE_TITLE: title,
         PAGE_BODY: bodyText,
         SCENARIO: scenario_ID,
-        VERSION: 1,
+        VERSION: version_ID,
         NEXT_PAGE: next_page_id,
         REFLECTION_QUESTIONS: questionsList,
         X_COORDINATE: xCoord,
@@ -88,48 +91,37 @@ export default function Reflection(props) {
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
-        const endpoint = '/page?scenario_id=' + s_id;
-        console.log('AASSnewScenarioIS');
-        console.log(scenarioComponents);
+        const endpoint = '/page?page_id=' + pageID;
+
         function onSuccess(resp) {
             const deleteEndPoint = '/page?page_id=' + pageID;
+            postReqBody.PAGE = resp.data.PAGE;
+            let newScenarioComponents = [...scenarioComponents];
+            console.log(newScenarioComponents);
+            newScenarioComponents.find((x) => x.id === pageID).id =
+                resp.data.PAGE;
+            setPageID(resp.data.PAGE);
+            setScenarioComponents(newScenarioComponents);
+            setSuccessBannerFade(true);
+            setSuccessBannerMessage('Successfully saved page!');
             universalDelete(setDeleteValues, deleteEndPoint, null, null, {
                 PAGE: pageID,
             });
-            setPageID(resp.PAGE);
-            postReqBody.PAGE = pageID;
-            let newScenarioComponents = [...scenarioComponents];
-            console.log('newScenarioIS');
-            console.log(scenarioComponents);
-            newScenarioComponents.find((x) => x.title === title).id = pageID;
-            setScenarioComponents(newScenarioComponents);
         }
-        function onSuccess2(resp) {
-            setPageID(resp.PAGE);
-            let newScenarioComponents = [...scenarioComponents];
-            newScenarioComponents.find((x) => x.title === title).id = pageID;
-            setScenarioComponents(newScenarioComponents);
-        }
+
         function onFailure() {
             console.log('Post failed');
+            setErrorBannerFade(true);
+            setErrorBannerMessage('Failed to save page! Please try again.');
         }
-        if (first_time) {
-            universalPost(
-                setPostValues,
-                endpoint,
-                onFailure,
-                onSuccess2,
-                postReqBody
-            );
-        } else {
-            universalPost(
-                setPostValues,
-                endpoint,
-                onFailure,
-                onSuccess,
-                postReqBody
-            );
-        }
+        console.log(postReqBody);
+        universalPost(
+            setPostValues,
+            endpoint,
+            onFailure,
+            onSuccess,
+            postReqBody
+        );
     }
 
     const savePage = () => {
@@ -137,8 +129,38 @@ export default function Reflection(props) {
         console.log(postValues);
     };
 
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
+
     return (
         <Container component="main">
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
             <Typography align="center" variant="h2">
                 Reflection Component
             </Typography>
