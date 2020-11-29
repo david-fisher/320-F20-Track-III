@@ -173,12 +173,16 @@ export default function Editor(props) {
 
             initialComponents[0].component = <Logistics {...p}></Logistics>;
             initialComponents[1].component = (
-                <ConfigureIssues {...p}></ConfigureIssues>
+                <ConfigureIssues scenario_ID={p.scenario_ID}></ConfigureIssues>
             );
             initialComponents[2].component = (
-                <ConversationEditor {...p}></ConversationEditor>
+                <ConversationEditor
+                    scenario_ID={p.scenario_ID}
+                ></ConversationEditor>
             );
-            initialComponents[3].component = <FlowDiagram {...p}></FlowDiagram>;
+            initialComponents[3].component = (
+                <FlowDiagram scenario_ID={p.scenario_ID}></FlowDiagram>
+            );
 
             let pages = logistics_and_pages.PAGES;
 

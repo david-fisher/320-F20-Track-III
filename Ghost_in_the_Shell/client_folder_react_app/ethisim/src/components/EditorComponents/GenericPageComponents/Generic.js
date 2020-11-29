@@ -143,6 +143,7 @@ export default function Generic(props) {
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
 
+    //TODO information list
     return (
         <Container component="main">
             <SuccessBanner
@@ -164,7 +165,6 @@ export default function Generic(props) {
             />
             <Title title={title} setTitle={setTitle} />
             <Body body={bodyText} setBody={setBodyText} />
-            <InformationItemList />
             <Button
                 className={classes.saveButton}
                 variant="contained"
