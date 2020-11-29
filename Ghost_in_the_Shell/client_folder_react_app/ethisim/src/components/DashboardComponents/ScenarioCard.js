@@ -8,6 +8,8 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import PropTypes from 'prop-types';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DeleteEntireScenarioWarning from '../DeleteWarnings/DeleteEntireScenarioWarning';
+import ShareButton from './ShareButton';
+
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -115,16 +117,7 @@ export default function ScenarioCard({
                 <DeleteEntireScenarioWarning open={open} setOpen={setOpen} />
             </Grid>
             <Grid className={classes.button} item xs={sizeOfShareButton}>
-                <Button
-                    className={classes.buttonText}
-                    variant="contained"
-                    color="primary"
-                >
-                    <ShareIcon />
-                    <Typography variant="subtitle1" noWrap>
-                        Share
-                    </Typography>
-                </Button>
+                <ShareButton />
             </Grid>
             {dataButton}
         </Grid>

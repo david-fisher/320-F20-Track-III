@@ -29,5 +29,6 @@
      * "error" or 2 - turn the rule on as an error (exit code will be 1)
      * There could be other rules not added below that should be added
      */
+     "react/display-name": "off"
     }
 }
