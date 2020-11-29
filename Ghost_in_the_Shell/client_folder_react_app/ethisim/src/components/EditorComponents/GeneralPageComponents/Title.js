@@ -21,7 +21,6 @@ export default function Title(props) {
     const setTitle = props.setTitle;
 
     let handleChange = (content) => {
-        //TODO Implement
         setTitle(content.target.value);
     };
 

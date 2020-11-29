@@ -22,6 +22,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 
+import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
 import universalDelete from '../universalHTTPRequests/delete.js';
 //  setResponse, endpoint, onError, onSuccess, requestBody
@@ -114,30 +115,50 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function sleep(ms) {
-    const date = Date.now();
-    let currD = null;
-    do {
-        currD = Date.now();
-    } while (currD - date < ms);
-}
-
-//Sidebar Components
-let initialComponents = [
-    { id: -1, title: 'Logistics', component: <Logistics /> },
-    { id: -2, title: 'Configure Issues', component: <ConfigureIssues /> },
-    { id: -3, title: 'Conversation Editor', component: <ConversationEditor /> },
-    { id: -4, title: 'Flow Diagram', component: <FlowDiagram /> },
-];
-
 export default function Editor(props) {
+    //TODO when version control is implemented
+    const tempVersionID = 1;
 
-    function handleLogisticsGet(setGetValues, s_ID) {
-        const endpoint = '/logistics?scenario_id=' + s_ID;
+    const [openPopup, setOpenPopup] = useState(false);
+
+    //const scenario_ID = props.scenario_ID
+    const scenario_ID = 2;
+    const [getValues, setGetValues] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
+    // eslint-disable-next-line
+    const [deleteValues, setDeleteValues] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
+    const [scenarioComponents, setScenarioComponents] = useState([]);
+    const [scenarioComponent, setScenarioComponent] = useState(null);
+    const [showEditor, setShowEditor] = useState(false);
+
+    let handleLogisticsGet = function handleLogisticsGet() {
+        let initialComponents = [
+            { id: -1, title: 'Logistics', component: <Logistics /> },
+            {
+                id: -2,
+                title: 'Configure Issues',
+                component: <ConfigureIssues />,
+            },
+            {
+                id: -3,
+                title: 'Conversation Editor',
+                component: <ConversationEditor />,
+            },
+            { id: -4, title: 'Flow Diagram', component: <FlowDiagram /> },
+        ];
+        const endpoint = '/logistics?scenario_id=' + scenario_ID;
         function onSuccess(resp) {
             console.log('GET logistics info');
             let p = null;
-            let c = null;
             setShouldFetch(shouldFetch + 1);
             let logistics_and_pages = resp.data;
             p = {
@@ -151,30 +172,33 @@ export default function Editor(props) {
                 courses: logistics_and_pages.COURSES,
             };
 
-            c = <Logistics {...p}></Logistics>;
             initialComponents[0].component = <Logistics {...p}></Logistics>;
-            initialComponents[1].component = <ConfigureIssues {...p}></ConfigureIssues>;
-            initialComponents[2].component = <ConversationEditor {...p}></ConversationEditor>;
+            initialComponents[1].component = (
+                <ConfigureIssues {...p}></ConfigureIssues>
+            );
+            initialComponents[2].component = (
+                <ConversationEditor {...p}></ConversationEditor>
+            );
             initialComponents[3].component = <FlowDiagram {...p}></FlowDiagram>;
 
             let pages = logistics_and_pages.PAGES;
 
             console.log('Scenario Pages:');
             console.log(pages);
-            
+
             for (let i = 0; i < pages.length; i++) {
                 //Already have component in initial components
-                if(pages[i].PAGE_TITLE === 'Stakeholder Conversations') {
+                if (pages[i].PAGE_TITLE === 'Stakeholder Conversations') {
                     continue;
-                 }
+                }
                 //Intro page is first page on sidebar
-                if(pages[i].PAGE_TITLE === 'Introduction') {
+                if (pages[i].PAGE_TITLE === 'Introduction') {
                     initialComponents.splice(4, 0, {
                         id: pages[i].PAGE,
                         title: pages[i].PAGE_TITLE,
                         component: null,
-                    })
-                 } else {
+                    });
+                } else {
                     initialComponents.push({
                         id: pages[i].PAGE,
                         title: pages[i].PAGE_TITLE,
@@ -194,9 +218,9 @@ export default function Editor(props) {
         }
 
         universalFetch(setGetValues, endpoint, onFailure, onSuccess, {
-            SCENARIO: s_ID,
+            SCENARIO: scenario_ID,
         });
-    }
+    };
 
     function handleDelete(setDeleteValues, d_id) {
         const endpoint = '/page?page_id=' + d_id;
@@ -207,87 +231,98 @@ export default function Editor(props) {
         function onFailure() {
             console.log('Delete failed');
         }
-        universalDelete(setDeleteValues, endpoint, onFailure, onSuccess, { PAGE: d_id });
+        universalDelete(setDeleteValues, endpoint, onFailure, onSuccess, {
+            PAGE: d_id,
+        });
     }
 
     function handlePageGet(setGetValues, g_id) {
+        console.log(g_id);
         const endpoint = '/page?page_id=' + g_id;
+
         function onSuccess(resp) {
             let p = null;
             let c = null;
-            console.log('response get data is successful ');
-            setShouldFetch(shouldFetch + 1);
-            if (resp.data !== null) {
-                let currPageInfo = resp.data;
-                console.log('weawreat');
-                //sleep(10000)
-                console.log(currPageInfo);
-                console.log('demostrated page body');
-                if (currPageInfo.PAGE_TYPE === 'I') {
-                    currPageInfo.PAGE_TYPE = 'G';
-                }
-                if (currPageInfo.PAGE_TYPE === 'G') {
-                    p = {
-                        page_id: currPageInfo.PAGE,
-                        page_type: currPageInfo.PAGE_TYPE,
-                        page_title: currPageInfo.PAGE_TITLE,
-                        scenario_ID: currPageInfo.SCENARIO,
-                        version_ID: currPageInfo.NEXT_PAGE,
-                        next_page_id: currPageInfo.NEXT_PAGE,
-                        body: currPageInfo.PAGE_BODY,
-                        bodies: currPageInfo.BODIES,
-                        created: false,
-                    };
-                    c = <Generic {...p}></Generic>;
-                } else if (currPageInfo.PAGE_TYPE === 'A') {
-                    p = {
-                        page_id: currPageInfo.PAGE,
-                        page_type: currPageInfo.PAGE_TYPE,
-                        page_title: currPageInfo.PAGE_TITLE,
-                        scenario_ID: currPageInfo.SCENARIO,
-                        next_page_id: currPageInfo.NEXT_PAGE,
-                        body: currPageInfo.PAGE_BODY,
-                        choice1: currPageInfo.CHOICES[0].CHOICE,
-                        r1: currPageInfo.CHOICES[0].RESULT_PAGE,
-                        choice2: currPageInfo.CHOICES[1].CHOICE,
-                        r2: currPageInfo.CHOICES[1].RESULT_PAGE,
-                        created: false,
-                    };
-                    c = <Action {...p}></Action>;
-                } else if (currPageInfo.PAGE_TYPE === 'R') {
-                    p = {
-                        page_id: currPageInfo.PAGE,
-                        page_type: currPageInfo.PAGE_TYPE,
-                        page_title: currPageInfo.PAGE_TITLE,
-                        scenario_ID: currPageInfo.SCENARIO,
-                        version_ID: currPageInfo.NEXT_PAGE,
-                        next_page_id: currPageInfo.NEXT_PAGE,
-                        body: currPageInfo.PAGE_BODY,
-                        reflection_questions: currPageInfo.REFLECTION_QUESTIONS,
-                        created: false,
-                    };
-                    c = <Reflection {...p}></Reflection>;
-                }
-            }
-            let newScenarioComponents = [...scenarioComponents];
-            newScenarioComponents.find((x) => x.id === g_id).component = c;
 
-            setScenarioComponents(newScenarioComponents);
-            setScenarioComponent(
-                scenarioComponents.find((x) => x.id === g_id).component
+            console.log('Response get data is successful ');
+            //setShouldFetch(shouldFetch + 1);
+            let currPageInfo = resp.data;
+            console.log(currPageInfo);
+            if (currPageInfo.PAGE_TYPE === 'I') {
+                currPageInfo.PAGE_TYPE = 'G';
+            }
+            if (currPageInfo.PAGE_TYPE === 'G') {
+                p = {
+                    scenarioComponents: scenarioComponents,
+                    setScenarioComponents: setScenarioComponents,
+                    page_id: currPageInfo.PAGE,
+                    page_type: currPageInfo.PAGE_TYPE,
+                    page_title: currPageInfo.PAGE_TITLE,
+                    scenario_ID: currPageInfo.SCENARIO,
+                    version_ID: tempVersionID,
+                    next_page_id: currPageInfo.NEXT_PAGE,
+                    body: currPageInfo.PAGE_BODY,
+                    bodies: currPageInfo.BODIES,
+                    xCoord: currPageInfo.X_COORDINATE,
+                    yCoord: currPageInfo.Y_COORDINATE,
+                    created: false,
+                };
+                c = <Generic {...p}></Generic>;
+            } else if (currPageInfo.PAGE_TYPE === 'A') {
+                p = {
+                    scenarioComponents: scenarioComponents,
+                    setScenarioComponents: setScenarioComponents,
+                    page_id: currPageInfo.PAGE,
+                    page_type: currPageInfo.PAGE_TYPE,
+                    page_title: currPageInfo.PAGE_TITLE,
+                    scenario_ID: currPageInfo.SCENARIO,
+                    next_page_id: currPageInfo.NEXT_PAGE,
+                    version_ID: tempVersionID,
+                    body: currPageInfo.PAGE_BODY,
+                    choice1: currPageInfo.CHOICES[0].CHOICE,
+                    r1: currPageInfo.CHOICES[0].RESULT_PAGE,
+                    choice2: currPageInfo.CHOICES[1].CHOICE,
+                    r2: currPageInfo.CHOICES[1].RESULT_PAGE,
+                    xCoord: currPageInfo.X_COORDINATE,
+                    yCoord: currPageInfo.Y_COORDINATE,
+                    created: false,
+                };
+                c = <Action {...p}></Action>;
+            } else if (currPageInfo.PAGE_TYPE === 'R') {
+                p = {
+                    scenarioComponents: scenarioComponents,
+                    setScenarioComponents: setScenarioComponents,
+                    page_id: currPageInfo.PAGE,
+                    page_type: currPageInfo.PAGE_TYPE,
+                    page_title: currPageInfo.PAGE_TITLE,
+                    scenario_ID: currPageInfo.SCENARIO,
+                    version_ID: tempVersionID,
+                    next_page_id: currPageInfo.NEXT_PAGE,
+                    body: currPageInfo.PAGE_BODY,
+                    reflection_questions: currPageInfo.REFLECTION_QUESTIONS,
+                    xCoord: currPageInfo.X_COORDINATE,
+                    yCoord: currPageInfo.Y_COORDINATE,
+                    created: false,
+                };
+                c = <Reflection {...p}></Reflection>;
+            }
+
+            let newScenarioComponents = [...scenarioComponents];
+            newScenarioComponents = newScenarioComponents.map((x) =>
+                x.id === resp.data.PAGE ? { ...x, component: c } : x
             );
+            setScenarioComponents(newScenarioComponents);
+            setScenarioComponent(c);
         }
+
         function onFailure() {
             console.log('Get failed');
         }
+
         universalFetch(setGetValues, endpoint, onFailure, onSuccess, {
             PAGE: g_id,
         });
     }
-
-    function handleConfigurerGet(setGetValues) {}
-
-    function handleConversationEditorGet(setGetValues) {}
 
     const classes = useStyles();
     const theme = useTheme();
@@ -311,54 +346,20 @@ export default function Editor(props) {
         },
     })(Typography);
 
-    const [openPopup, setOpenPopup] = useState(false);
-
-    //const scenario_ID = props.scenario_ID
-    const scenario_ID = 2;
-    const [getValues, setGetValues] = useState({
-        data: null,
-        loading: true,
-        error: null,
-    });
-
-    // eslint-disable-next-line
-    const [deleteValues, setDeleteValues] = useState({
-        data: null,
-        loading: true,
-        error: null,
-    });
-
-    const [scenarioComponents, setScenarioComponents] = useState(
-        initialComponents
-        //initialComponents.concat(page_names_and_ids)
-    );
-
-    const [showEditor, setShowEditor] = useState(false);
-    const [scenarioComponent, setScenarioComponent] = useState(
-        scenarioComponents[0].component
-    );
-    
-    useEffect(() => {
-        console.log('handling logistics get');
-        handleLogisticsGet(setGetValues, scenario_ID);
-    }, []);
+    useEffect(handleLogisticsGet, []);
 
     const [shouldFetch, setShouldFetch] = useState(0);
 
     let onClick = (component, id, title) => {
-        if (component === null) {
-            console.log('detects component is null');
-            let p = null;
-            let c = null;
-            if (title === 'Configure Issues') {
-                //getConfigureIssues
-            } else if (title === 'Conversation Editor') {
-                //getConversationEditor
-            } else {
-                handlePageGet(setGetValues, id);
-            }
+        if (
+            title !== 'Configure Issues' &&
+            title !== 'Conversation Editor' &&
+            title !== 'Conversation Editor' &&
+            title !== 'Flow Diagram' &&
+            title !== 'Logistics'
+        ) {
+            handlePageGet(setGetValues, id);
         }
-
         setScenarioComponent(
             scenarioComponents.find((x) => x.id === id).component
         );
@@ -369,10 +370,67 @@ export default function Editor(props) {
         handleDelete(setDeleteValues, d_id);
     };
 
+    // eslint-disable-next-line
+    const [postValues, setPostValues] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
+    console.log(scenarioComponents);
+    console.log(scenarioComponent);
     function Sidebar() {
         const classes = useStyles();
 
-        const addNewPage = (id, title, componentType) => {
+        const addNewPage = (pageType, pageName, pageBody) => {
+            const endpoint = '/api/pages/';
+            let c = null;
+            let p = null;
+            let postReqBody;
+
+            function onSuccess(resp) {
+                let newScenarioComponents = scenarioComponents.concat({
+                    id: resp.data.PAGE,
+                    title: resp.data.PAGE_TITLE,
+                    component: null,
+                });
+                p.page_id = resp.data.PAGE;
+                p.scenarioComponents = newScenarioComponents;
+
+                switch (pageType) {
+                    case 'Generic':
+                        c = <Generic {...p}></Generic>;
+                        break;
+                    case 'Reflection':
+                        c = <Reflection {...p}></Reflection>;
+                        break;
+                    case 'Action':
+                        c = <Action {...p}></Action>;
+                        break;
+                    default:
+                        c = <Typography>Error</Typography>;
+                }
+
+                newScenarioComponents[newScenarioComponents.length - 1] = {
+                    id: resp.data.PAGE,
+                    title: resp.data.PAGE_TITLE,
+                    component: c,
+                };
+
+                setScenarioComponents(newScenarioComponents);
+                setScenarioComponent(
+                    newScenarioComponents.find((x) => x.id === resp.data.PAGE)
+                        .component
+                );
+                setShowEditor(true);
+            }
+
+            function onFailure() {
+                console.log('Post failed');
+                setShowEditor(true);
+            }
+
+            /*
             function addWithUpdatedID(newID) {
                 setShowEditor(false);
                 let newScenarioComponents = [...scenarioComponents];
@@ -382,73 +440,101 @@ export default function Editor(props) {
                 console.log('ACTUAL new add os:');
                 console.log(scenarioComponents);
             }
+            */
 
-            let c = null;
-            let p = null;
-            switch (componentType) {
+            switch (pageType) {
                 case 'Generic':
-                    p = {
-                        scenarioComponents: scenarioComponents,
-                        setScenarioComponents: setScenarioComponents,
-                        page_id: 100,
-                        page_type: 'G',
-                        page_title: title,
-                        scenario_ID: scenario_ID,
-                        version_ID: 1,
-                        next_page_id: 2,
-                        body: 'BODYTEXTGENERIC',
-                        bodies: ['t1', 't1'],
-                        created: true,
+                    postReqBody = {
+                        PAGE_TYPE: 'G',
+                        PAGE_TITLE: pageName,
+                        PAGE_BODY: pageBody,
+                        SCENARIO: scenario_ID,
+                        VERSION: tempVersionID,
+                        NEXT_PAGE: null,
+                        X_COORDINATE: 0,
+                        Y_COORDINATE: 0,
                     };
-                    c = <Generic {...p}></Generic>;
+
+                    p = {
+                        setScenarioComponents: setScenarioComponents,
+                        page_type: 'G',
+                        page_title: pageName,
+                        scenario_ID: scenario_ID,
+                        body: pageBody,
+                        bodies: [],
+                        version_ID: tempVersionID,
+                        next_page_id: null,
+                        created: true,
+                        xCoord: 0,
+                        yCoord: 0,
+                    };
                     break;
                 case 'Reflection':
-                    p = {
-                        scenarioComponents: scenarioComponents,
-                        setScenarioComponents: setScenarioComponents,
-                        page_id: 120,
-                        page_type: 'R',
-                        page_title: title,
-                        scenario_ID: scenario_ID,
-                        version_ID: 1,
-                        next_page_id: 2,
-                        body: 'BODYTEXTREFLECTION',
-                        reflection_questions: ['q1', 'q2'],
-                        created: true,
+                    postReqBody = {
+                        PAGE_TYPE: 'R',
+                        PAGE_TITLE: pageName,
+                        PAGE_BODY: pageBody,
+                        SCENARIO: scenario_ID,
+                        VERSION: tempVersionID,
+                        NEXT_PAGE: null,
+                        X_COORDINATE: 0,
+                        Y_COORDINATE: 0,
                     };
-                    c = <Reflection {...p}></Reflection>;
+                    p = {
+                        setScenarioComponents: setScenarioComponents,
+                        page_type: 'R',
+                        page_title: pageName,
+                        scenario_ID: scenario_ID,
+                        version_ID: tempVersionID,
+                        next_page_id: null,
+                        body: pageBody,
+                        reflection_questions: [],
+                        created: true,
+                        xCoord: 0,
+                        yCoord: 0,
+                    };
                     break;
                 case 'Action':
-                    p = {
-                        scenarioComponents: scenarioComponents,
-                        setScenarioComponents: setScenarioComponents,
-                        page_id: 140,
-                        page_type: 'A',
-                        page_title: title,
-                        scenario_ID: scenario_ID,
-                        version_ID: 1,
-                        next_page_id: 2,
-                        body: 'BODYTEXTACTION',
-                        choice1: 'OPTION1',
-                        r1: 4,
-                        choice2: 'OPTION2',
-                        r2: 3,
-                        created: true,
+                    postReqBody = {
+                        PAGE_TYPE: 'A',
+                        PAGE_TITLE: pageName,
+                        PAGE_BODY: pageBody,
+                        SCENARIO: scenario_ID,
+                        VERSION: tempVersionID,
+                        NEXT_PAGE: null,
+                        X_COORDINATE: 0,
+                        Y_COORDINATE: 0,
                     };
-                    c = <Action {...p}></Action>;
+                    p = {
+                        setScenarioComponents: setScenarioComponents,
+                        page_type: 'A',
+                        page_title: pageName,
+                        scenario_ID: scenario_ID,
+                        version_ID: tempVersionID,
+                        next_page_id: null,
+                        body: pageBody,
+                        choice1: '',
+                        r1: null,
+                        choice2: '',
+                        r2: null,
+                        created: true,
+                        xCoord: 0,
+                        yCoord: 0,
+                    };
                     break;
                 default:
                     c = <Typography>Error</Typography>;
             }
-            setScenarioComponents(
-                scenarioComponents.concat({
-                    id: id,
-                    title: title,
-                    component: c,
-                })
+
+            setShowEditor(false);
+
+            universalPost(
+                setPostValues,
+                endpoint,
+                onFailure,
+                onSuccess,
+                postReqBody
             );
-            console.log('placeholder new add os:');
-            console.log(scenarioComponents);
         };
 
         function handleAddNewComponent() {
@@ -456,7 +542,7 @@ export default function Editor(props) {
         }
 
         if (showEditor === false) {
-            return <LoadingSpinner />
+            return <LoadingSpinner />;
         }
 
         return (
@@ -507,7 +593,7 @@ export default function Editor(props) {
     }
 
     if (showEditor === false) {
-        return <LoadingSpinner />
+        return <LoadingSpinner />;
     }
 
     return (
@@ -560,7 +646,13 @@ export default function Editor(props) {
                 })}
             >
                 <div className={classes.drawerHeader} />
-                {(getValues.data || scenarioComponent != null) && <div>{scenarioComponent}</div>}
+                {!getValues.data ||
+                scenarioComponent === null ||
+                getValues.loading ? (
+                    <LoadingSpinner />
+                ) : (
+                    <div>{scenarioComponent}</div>
+                )}
             </main>
         </div>
     );

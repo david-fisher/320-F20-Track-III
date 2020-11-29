@@ -41,7 +41,12 @@ export default function AddNewScenarioPageDialogBody(props) {
     // eslint-disable-next-line
     const [anchorEl, setAnchorEl] = useState(null);
     const [pageType, setPageType] = useState('Generic');
-    const [pageName, setPageName] = useState('Generic');
+    const [pageName, setPageName] = useState('');
+    const [pageBody, setPageBody] = useState('<empty string>');
+
+    const [errorName, setErrorName] = useState(false);
+    const [errorNameText, setErrorNameText] = useState('');
+    const [errorBody, setErrorBody] = useState(false);
 
     // eslint-disable-next-line
     const handleClick = (event) => {
@@ -58,12 +63,41 @@ export default function AddNewScenarioPageDialogBody(props) {
     };
 
     const createNewPage = () => {
+        console.log('Create new page');
         console.log(pageType);
         console.log(pageName);
-        addPage(Math.floor(Math.random() * 10000), pageName, pageType);
-        setOpenPopup(false);
-        setPageType('Generic');
-        setPageName('Generic');
+        console.log(pageBody);
+
+        let validInput = true;
+
+        if (!pageName || !pageName.trim()) {
+            setErrorName(true);
+            setErrorNameText('Scenario name cannot be empty');
+            validInput = false;
+        } else if (pageName.length >= 1000) {
+            setErrorName(true);
+            setErrorNameText(
+                'Scenario name must have less than 1000 characters'
+            );
+            validInput = false;
+        } else {
+            setErrorName(false);
+        }
+
+        if (!pageBody || !pageBody.trim()) {
+            setErrorBody(true);
+            validInput = false;
+        } else {
+            setErrorBody(false);
+        }
+
+        if (validInput) {
+            addPage(pageType, pageName, pageBody);
+            setOpenPopup(false);
+            setPageType('Generic');
+            setPageName('');
+            setPageBody('Page Body');
+        }
     };
 
     return (
@@ -90,18 +124,45 @@ export default function AddNewScenarioPageDialogBody(props) {
                     </Select>
                 </Grid>
                 <Grid item xs={8}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="New Scenario Page Name"
-                        label="Scenario Page Name"
-                        id="scenariopageAdder"
-                        onChange={(e) => setPageName(e.target.value)}
-                    ></TextField>
-                    <EditedSunEditor></EditedSunEditor>
-
+                    {errorName ? (
+                        <TextField
+                            error
+                            helperText={errorNameText}
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="New Scenario Page Name"
+                            label="Scenario Page Name"
+                            id="scenariopageAdder"
+                            onChange={(e) => setPageName(e.target.value)}
+                        ></TextField>
+                    ) : (
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="New Scenario Page Name"
+                            label="Scenario Page Name"
+                            id="scenariopageAdder"
+                            onChange={(e) => setPageName(e.target.value)}
+                        ></TextField>
+                    )}
+                    <EditedSunEditor
+                        text={pageBody}
+                        setText={setPageBody}
+                    ></EditedSunEditor>
+                    {errorBody ? (
+                        <Typography
+                            style={{ marginLeft: 15 }}
+                            variant="caption"
+                            display="block"
+                            color="error"
+                        >
+                            Page body cannot be empty.
+                        </Typography>
+                    ) : null}
                     <Button
                         className={classes.addButton}
                         variant="contained"

@@ -2,19 +2,18 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
-import htmlToText from 'html-to-text';
 import PropTypes from 'prop-types';
 
 Body.propTypes = {
     body: PropTypes.string.isRequired,
+    setBody: PropTypes.any.isRequired,
 };
 
 export default function Body(props) {
-    const { body } = props;
+    const { body, setBody } = props;
+
     let handleChange = (content) => {
-        //TODO Implement
-        console.log(content);
-        console.log(htmlToText.fromString(content));
+        setBody(content);
     };
 
     return (
