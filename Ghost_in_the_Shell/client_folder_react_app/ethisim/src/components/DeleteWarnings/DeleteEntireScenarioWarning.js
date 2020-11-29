@@ -33,17 +33,7 @@ export default function DeleteEntireScenarioWarning(props) {
      * DeletePopupDashboard component in ScenarioCard.js to allow for Deletion
      * functionailty of a scenario
      *
-     <Button
-         className={classes.buttonText}
-         variant="contained"
-         color="primary"
-         onClick={handleClickOpen}
-     >
-         <DeleteForeverIcon />
-         <Typography variant="subtitle1" noWrap>
-             Delete
-         </Typography>
-     </Button>*/
+     */
     return (
         <Dialog
             open={open}

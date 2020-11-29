@@ -258,7 +258,7 @@ export default function IssueEntryField({
                         Delete
                     </Button>
                     <GenericDeleteWarning
-                        remove={{() => deleteIssue()}}
+                        remove={() => deleteIssue()}
                         open={open}
                         setOpen={setOpen}
                     />
