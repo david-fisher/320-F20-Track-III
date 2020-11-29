@@ -504,6 +504,7 @@ class pages_page(APIView):
                     nested_serializer = Reflection_questionsSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
                     else:
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
@@ -525,6 +526,7 @@ class pages_page(APIView):
                     nested_serializer = Action_pageSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
                     else:
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
@@ -546,6 +548,7 @@ class pages_page(APIView):
                     nested_serializer = Generic_pageSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
                     else:
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
@@ -567,6 +570,7 @@ class pages_page(APIView):
                     nested_serializer = Stakeholder_pageSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
                     else:
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
@@ -581,7 +585,25 @@ class pages_page(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST) 
 
     
-    
+    def put(self, request):
+
+        # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
+        PAGE_ID = self.request.query_params.get('page_id')
+
+        # Get all fields from this page_id if ti doesn't exist return error 404
+        try:
+            page = pages.objects.get(PAGE = PAGE_ID)
+        except pages.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # Convers Django Model Object into a dictionary
+        page_data = PagesSerializer(page).data
+        
+        page_type = page.PAGE_TYPE
+        # Check page.PAGE_TYPE = 'REFLECTION'
+        if (page_type == 'R'):
+
+        
 
 
     # @api_view(['DELETE'])
