@@ -42,7 +42,7 @@ export default function AddNewScenarioPageDialogBody(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [pageType, setPageType] = useState('Generic');
     const [pageName, setPageName] = useState('');
-    const [pageBody, setPageBody] = useState('<empty string>');
+    const [pageBody, setPageBody] = useState('');
 
     const [errorName, setErrorName] = useState(false);
     const [errorNameText, setErrorNameText] = useState('');
@@ -94,9 +94,6 @@ export default function AddNewScenarioPageDialogBody(props) {
         if (validInput) {
             addPage(pageType, pageName, pageBody);
             setOpenPopup(false);
-            setPageType('Generic');
-            setPageName('');
-            setPageBody('Page Body');
         }
     };
 
