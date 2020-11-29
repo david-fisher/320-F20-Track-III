@@ -4,13 +4,24 @@ import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import PropTypes from 'prop-types';
-import DeletePopupInformationItem from '../../DeleteWarnings/DeletePopupInformationItem';
+import GenericDeleteWarning from '../../DeleteWarnings/GenericDeleteWarning';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 
 let handleChange = (content) => {
     //TODO Implement
     console.log(content);
     console.log(htmlToText.fromString(content));
 };
+
+const useStyles = makeStyles((theme) => ({
+    margin: {
+        margin: theme.spacing(0.5),
+        marginTop: theme.spacing(0),
+        height: '5vh',
+        textTransform: 'unset',
+    },
+}));
 
 InformationItem.propTypes = {
     onDelete: PropTypes.any.isRequired,
@@ -20,6 +31,12 @@ InformationItem.propTypes = {
 
 export default function InformationItem(props) {
     InformationItem.propTypes = props.data;
+    const classes = useStyles();
+    //Warning to Delete information Item
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     return (
         <div>
@@ -165,8 +182,25 @@ export default function InformationItem(props) {
             >
                 <Box p={1}>
                     <div>
-                        <DeletePopupInformationItem
+                        <Button
+                            className={classes.margin}
+                            variant="contained"
+                            color="primary"
+                        >
+                            Save
+                        </Button>
+                        <Button
+                            className={classes.margin}
+                            variant="contained"
+                            color="primary"
+                            onClick={handleClickOpen}
+                        >
+                            Delete
+                        </Button>
+                        <GenericDeleteWarning
                             remove={() => props.onDelete(props.iItem.id)}
+                            setOpen={setOpen}
+                            open={open}
                         />
                     </div>
                 </Box>

@@ -18,7 +18,7 @@ import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
-import DeletePopupConversationEditor from '../../../DeleteWarnings/DeletePopupConversationEditor';
+import GenericDeleteWarning from '../../../DeleteWarnings/GenericDeleteWarning';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -111,6 +111,12 @@ export default function StakeHolder({
         score: ' ',
         maxpoints: ' ',
     });
+
+    //Warning for Deleteing a Conversation
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     const removeRow = (rowID) => {
         console.log(rowID);
@@ -219,11 +225,21 @@ export default function StakeHolder({
                     onClick={handleClickOpenMainConvo}
                 />
             </div>
+            <div id="DeleteButton">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClickOpen}
+                >
+                    Delete
+                </Button>
 
-            <DeletePopupConversationEditor
-                remove={() => removeStakeHolder(id)}
-            />
-
+                <GenericDeleteWarning
+                    remove={() => removeStakeHolder(id)}
+                    setOpen={setOpen}
+                    open={open}
+                />
+            </div>
             <div id="PointButton">
                 <Button
                     variant="contained"

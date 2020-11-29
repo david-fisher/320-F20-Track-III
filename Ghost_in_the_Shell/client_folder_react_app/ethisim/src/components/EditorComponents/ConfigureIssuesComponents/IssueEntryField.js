@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeletePopupIssues from '../../DeleteWarnings/DeletePopupIssues';
+import GenericDeleteWarning from '../../DeleteWarnings/GenericDeleteWarning';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -23,6 +23,12 @@ export default function IssueEntryField(props) {
     const classes = useStyles();
     IssueEntryField.propTypes = props.data;
     const { issue, score } = props;
+
+    //Used for Delete Warning
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     return (
         <div>
@@ -57,9 +63,18 @@ export default function IssueEntryField(props) {
                             Save
                         </Button>
                     </div>
-
-                    <DeletePopupIssues
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        onClick={handleClickOpen}
+                    >
+                        Delete
+                    </Button>
+                    <GenericDeleteWarning
                         remove={() => props.onDelete(props.entry.id)}
+                        open={open}
+                        setOpen={setOpen}
                     />
                 </Box>
             </Box>

@@ -6,7 +6,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import ShareIcon from '@material-ui/icons/Share';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PropTypes from 'prop-types';
-import DeletePopupDashboard from '../DeleteWarnings/DeletePopupDashboard';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import DeleteEntireScenarioWarning from '../DeleteWarnings/DeleteEntireScenarioWarning';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -49,6 +50,11 @@ export default function ScenarioCard({
     scenarioData,
 }) {
     const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     //If scenario is unfinished, we show the buttons "Edit," "Delete," "Share"
     //If scenario is finished, we show the button "Edit," "Delete," "Share," "View Student Data"
@@ -95,7 +101,18 @@ export default function ScenarioCard({
                 </Button>
             </Grid>
             <Grid className={classes.button} item xs={6}>
-                <DeletePopupDashboard />
+                <Button
+                    className={classes.buttonText}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClickOpen}
+                >
+                    <DeleteForeverIcon />
+                    <Typography variant="subtitle1" noWrap>
+                        Delete
+                    </Typography>
+                </Button>
+                <DeleteEntireScenarioWarning open={open} setOpen={setOpen} />
             </Grid>
             <Grid className={classes.button} item xs={sizeOfShareButton}>
                 <Button

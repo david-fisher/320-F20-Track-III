@@ -3,7 +3,22 @@ import TextField from '@material-ui/core/TextField';
 import { Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-import DeletePopupLogistics from '../../DeleteWarnings/DeletePopupLogistics';
+import GenericDeleteWarning from '../../DeleteWarnings/GenericDeleteWarning';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles((theme) => ({
+    margin: {
+        margin: theme.spacing(0.5),
+        marginTop: theme.spacing(0),
+        textTransform: 'unset',
+    },
+    buttonContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+}));
 
 Author.propTypes = {
     author: PropTypes.string,
@@ -35,6 +50,15 @@ export default function Author({
             })
         );
     };
+
+    const classes = useStyles();
+
+    //Warning to Delete an author on logistics Page
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     return (
         <div>
             <Grid container>
@@ -53,7 +77,21 @@ export default function Author({
                     </Box>
                 </Grid>
                 <Grid item xs={2}>
-                    <DeletePopupLogistics remove={() => removeAuthor(id)} />
+                    <Box p={1} className={classes.buttonContainer}>
+                        <Button
+                            className={classes.margin}
+                            variant="contained"
+                            color="primary"
+                            onClick={handleClickOpen}
+                        >
+                            Delete
+                        </Button>
+                        <GenericDeleteWarning
+                            remove={() => removeAuthor(id)}
+                            open={open}
+                            setOpen={setOpen}
+                        />
+                    </Box>
                 </Grid>
             </Grid>
         </div>

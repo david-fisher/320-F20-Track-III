@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-import DeletePopupReflectionQuestions from '../../../DeleteWarnings/DeletePopupReflectionQuestions';
+import GenericDeleteWarning from '../../../DeleteWarnings/GenericDeleteWarning';
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -47,6 +47,12 @@ export default function QuestionField({
         );
     };
 
+    //Warning to Delete a question componet
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     return (
         <div>
             <Box
@@ -79,8 +85,18 @@ export default function QuestionField({
                         </Button>
                     </div>
                     <div>
-                        <DeletePopupReflectionQuestions
+                        <Button
+                            className={classes.margin}
+                            variant="contained"
+                            color="primary"
+                            onClick={handleClickOpen}
+                        >
+                            Delete
+                        </Button>
+                        <GenericDeleteWarning
                             remove={() => removeQuestion(id)}
+                            setOpen={setOpen}
+                            open={open}
                         />
                     </div>
                 </Box>

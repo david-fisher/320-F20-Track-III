@@ -2,8 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeletePopupSidebar from '../DeleteWarnings/DeletePopupSidebar';
-//import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import GenericDeleteWarning from '../DeleteWarnings/GenericDeleteWarning';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
     pageButton: {
@@ -39,6 +39,12 @@ export default function NavSideBarNode(props) {
     const data = props;
     const { onClick, deleteByID, id, title, component } = data;
 
+    //Used for the popup delete warning
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     function pageType(title) {
         if (
             title === 'Logistics' ||
@@ -73,8 +79,20 @@ export default function NavSideBarNode(props) {
                             {title}
                         </Button>
                     </Grid>
-
-                    <DeletePopupSidebar id={id} deleteByID={deleteByID} />
+                    <Grid item xs={2} className={classes.deleteButtonContainer}>
+                        <Button
+                            className={classes.deleteButton}
+                            color="primary"
+                            onClick={handleClickOpen}
+                        >
+                            <DeleteForeverIcon />
+                        </Button>
+                        <GenericDeleteWarning
+                            remove={() => deleteByID(id)}
+                            open={open}
+                            setOpen={setOpen}
+                        />
+                    </Grid>
                 </Grid>
             );
         }
