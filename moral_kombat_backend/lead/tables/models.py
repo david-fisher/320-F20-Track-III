@@ -120,7 +120,7 @@ class responses(models.Model):
 
 
 class conversations_had(models.Model):
-    STUDENT = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had1")
+    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="conversations_had1")
     COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had2")
     SCENARIO = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had3")
     VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="conversations_had4")
@@ -135,7 +135,7 @@ class reflections_taken(models.Model):
     class Meta:
         unique_together = (('REFLECTIONS'), ('STUDENT'), ('COURSE'), ('SCENARIO'), ('VERSION'), ('DATE_TAKEN'))
     REFLECTIONS = models.TextField()
-    STUDENT = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken1")
+    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="reflections_taken1")
     COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken2")
     SCENARIO = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken3")
     VERSION = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="reflections_taken4")
