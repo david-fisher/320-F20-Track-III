@@ -137,7 +137,7 @@ Data.propTypes = {
 
 export default function Data({ open, selectedResponseData, handleClose }) {
     const classes = useStyles();
-    const { name } = selectedResponseData;
+    const { NAME } = selectedResponseData;
     const [openDrawer, setOpenDrawer] = React.useState(true);
     const theme = useTheme();
     const handleDrawerOpen = () => {
@@ -250,7 +250,7 @@ export default function Data({ open, selectedResponseData, handleClose }) {
                         </IconButton>
 
                         <Typography variant="h4" noWrap>
-                            {name + "'s Responses"}
+                            {NAME + "'s Responses"}
                         </Typography>
                     </Box>
 
