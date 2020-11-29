@@ -122,7 +122,7 @@ export default function Editor(props) {
     const [openPopup, setOpenPopup] = useState(false);
 
     //const scenario_ID = props.scenario_ID
-    const scenario_ID = 2;
+    const scenario_ID = 52;
     const [getValues, setGetValues] = useState({
         data: null,
         loading: true,
@@ -159,7 +159,6 @@ export default function Editor(props) {
         function onSuccess(resp) {
             console.log('GET logistics info');
             let p = null;
-            setShouldFetch(shouldFetch + 1);
             let logistics_and_pages = resp.data;
             p = {
                 scenario_ID: logistics_and_pages.SCENARIO,
@@ -206,7 +205,7 @@ export default function Editor(props) {
                     });
                 }
             }
-            console.log('Sscenario Components on Sidebar');
+            console.log('Scenario Components on Sidebar');
             console.log(scenarioComponents);
             setScenarioComponents(initialComponents);
             setScenarioComponent(initialComponents[0].component);
@@ -222,15 +221,16 @@ export default function Editor(props) {
         });
     };
 
+    //TODO implement banner
     function handleDelete(setDeleteValues, d_id) {
         const endpoint = '/page?page_id=' + d_id;
         function onSuccess(resp) {
             console.log('response delete data is successful ');
-            setShouldFetch(shouldFetch + 1);
         }
         function onFailure() {
             console.log('Delete failed');
         }
+
         universalDelete(setDeleteValues, endpoint, onFailure, onSuccess, {
             PAGE: d_id,
         });
@@ -245,7 +245,6 @@ export default function Editor(props) {
             let c = null;
 
             console.log('Response get data is successful ');
-            //setShouldFetch(shouldFetch + 1);
             let currPageInfo = resp.data;
             console.log(currPageInfo);
             if (currPageInfo.PAGE_TYPE === 'I') {
@@ -346,9 +345,8 @@ export default function Editor(props) {
         },
     })(Typography);
 
-    useEffect(handleLogisticsGet, []);
-
     const [shouldFetch, setShouldFetch] = useState(0);
+    useEffect(handleLogisticsGet, [shouldFetch]);
 
     let onClick = (component, id, title) => {
         if (
@@ -384,8 +382,6 @@ export default function Editor(props) {
         error: null,
     });
 
-    console.log(scenarioComponents);
-    console.log(scenarioComponent);
     function Sidebar() {
         const classes = useStyles();
 
@@ -396,40 +392,7 @@ export default function Editor(props) {
             let postReqBody;
 
             function onSuccess(resp) {
-                let newScenarioComponents = scenarioComponents.concat({
-                    id: resp.data.PAGE,
-                    title: resp.data.PAGE_TITLE,
-                    component: null,
-                });
-                p.page_id = resp.data.PAGE;
-                p.scenarioComponents = newScenarioComponents;
-
-                switch (pageType) {
-                    case 'Generic':
-                        c = <Generic {...p}></Generic>;
-                        break;
-                    case 'Reflection':
-                        c = <Reflection {...p}></Reflection>;
-                        break;
-                    case 'Action':
-                        c = <Action {...p}></Action>;
-                        break;
-                    default:
-                        c = <Typography>Error</Typography>;
-                }
-
-                newScenarioComponents[newScenarioComponents.length - 1] = {
-                    id: resp.data.PAGE,
-                    title: resp.data.PAGE_TITLE,
-                    component: c,
-                };
-
-                setScenarioComponents(newScenarioComponents);
-                setScenarioComponent(
-                    newScenarioComponents.find((x) => x.id === resp.data.PAGE)
-                        .component
-                );
-                setShowEditor(true);
+                setShouldFetch(shouldFetch + 1);
             }
 
             function onFailure() {

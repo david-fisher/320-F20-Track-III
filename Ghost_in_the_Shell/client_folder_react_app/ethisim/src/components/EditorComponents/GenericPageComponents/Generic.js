@@ -72,12 +72,10 @@ export default function Generic(props) {
     const [bodiesText, setBodiesText] = useState(bodies);
 
     var postReqBody = {
-        PAGE: pageID,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
         PAGE_BODY: bodyText,
         SCENARIO: scenario_ID,
-        VERSION: version_ID,
         NEXT_PAGE: next_page_id,
         BODIES: bodiesText,
         X_COORDINATE: xCoord,
@@ -89,11 +87,11 @@ export default function Generic(props) {
 
         function onSuccess(resp) {
             const deleteEndPoint = '/page?page_id=' + pageID;
-            postReqBody.PAGE = resp.data.PAGE;
             let newScenarioComponents = [...scenarioComponents];
             console.log(newScenarioComponents);
-            newScenarioComponents.find((x) => x.id === pageID).id =
-                resp.data.PAGE;
+            let component = newScenarioComponents.find((x) => x.id === pageID);
+            component.id = resp.data.PAGE;
+            component.title = title;
             setPageID(resp.data.PAGE);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
@@ -108,6 +106,7 @@ export default function Generic(props) {
             setErrorBannerFade(true);
             setErrorBannerMessage('Failed to save page! Please try again.');
         }
+
         console.log(postReqBody);
         universalPost(
             setPostValues,
