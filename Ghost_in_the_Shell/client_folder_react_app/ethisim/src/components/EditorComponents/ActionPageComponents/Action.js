@@ -52,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         textTransform: 'unset',
     },
+    bannerContainer: {
+        marginTop: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
 }));
 
 export default function Action(props) {
@@ -238,14 +244,16 @@ export default function Action(props) {
 
     return (
         <Container component="main">
-            <SuccessBanner
-                successMessage={successBannerMessage}
-                fade={successBannerFade}
-            />
-            <ErrorBanner
-                errorMessage={errorBannerMessage}
-                fade={errorBannerFade}
-            />
+            <div className={classes.bannerContainer}>
+                <SuccessBanner
+                    successMessage={successBannerMessage}
+                    fade={successBannerFade}
+                />
+                <ErrorBanner
+                    errorMessage={errorBannerMessage}
+                    fade={errorBannerFade}
+                />
+            </div>
             <Typography align="center" variant="h2">
                 Action Component
             </Typography>

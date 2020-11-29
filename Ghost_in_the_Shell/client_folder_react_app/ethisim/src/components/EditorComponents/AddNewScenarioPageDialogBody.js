@@ -80,6 +80,12 @@ export default function AddNewScenarioPageDialogBody(props) {
                 'Scenario name must have less than 1000 characters'
             );
             validInput = false;
+        } else if (!pageName || pageName.trim() === 'Introduction') {
+            setErrorName(true);
+            setErrorNameText(
+                "'Introduction' is not a valid title name. Please choose another."
+            );
+            validInput = false;
         } else {
             setErrorName(false);
         }

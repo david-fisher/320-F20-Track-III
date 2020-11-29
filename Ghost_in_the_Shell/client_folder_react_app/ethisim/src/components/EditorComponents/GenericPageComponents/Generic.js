@@ -18,6 +18,12 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         textTransform: 'unset',
     },
+    bannerContainer: {
+        marginTop: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
 }));
 
 Generic.propTypes = {
@@ -171,14 +177,16 @@ export default function Generic(props) {
     //TODO information list
     return (
         <Container component="main">
-            <SuccessBanner
-                successMessage={successBannerMessage}
-                fade={successBannerFade}
-            />
-            <ErrorBanner
-                errorMessage={errorBannerMessage}
-                fade={errorBannerFade}
-            />
+            <div className={classes.bannerContainer}>
+                <SuccessBanner
+                    successMessage={successBannerMessage}
+                    fade={successBannerFade}
+                />
+                <ErrorBanner
+                    errorMessage={errorBannerMessage}
+                    fade={errorBannerFade}
+                />
+            </div>
             <Typography align="center" variant="h2">
                 Generic Component
             </Typography>

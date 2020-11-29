@@ -44,11 +44,11 @@ export default function NavSideBarNode(props) {
 
     function pageType(title) {
         if (
-            title === 'Logistics' ||
-            title === 'Conversation Editor' ||
-            title === 'Configure Issues' ||
-            title === 'Introduction' ||
-            title === 'Flow Diagram'
+            id === -1 ||
+            id === -2 ||
+            id === -3 ||
+            id === -4 ||
+            title === 'Introduction'
         ) {
             return (
                 <Grid container direction="row" justify="flex-start">
