@@ -24,7 +24,7 @@ export default function universalDelete(
                 loading: false,
                 error: null,
             });
-            onSuccess && onSuccess(resp);
+           onSuccess && onSuccess(resp);
         })
         .catch((err) => {
             console.log(`Delete failed with error ${err.message}`);

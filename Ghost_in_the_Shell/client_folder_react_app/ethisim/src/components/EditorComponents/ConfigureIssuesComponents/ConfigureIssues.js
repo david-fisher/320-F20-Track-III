@@ -10,7 +10,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
 
 //TODO once scenario dashboard and component/page loading is finished
-const tempScenarioID = 1;
+const tempScenarioID = 2;
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO_ID=';
