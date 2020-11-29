@@ -521,9 +521,9 @@ class pages_page(APIView):
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["PAGE"]
-                for question in request.data['CHOICES']:
-                    question['PAGE'] = page_id
-                    nested_serializer = Action_pageSerializer(data=question)
+                for choice in request.data['CHOICES']:
+                    choice['PAGE'] = page_id
+                    nested_serializer = Action_pageSerializer(data=choice)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     # If the nested page is not valid it deletes the wrapper page created above
@@ -543,9 +543,9 @@ class pages_page(APIView):
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["PAGE"]
-                for question in request.data['BODIES']:
-                    question['PAGE'] = page_id
-                    nested_serializer = Generic_pageSerializer(data=question)
+                for body in request.data['BODIES']:
+                    body['PAGE'] = page_id
+                    nested_serializer = Generic_pageSerializer(data=body)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     # If the nested page is not valid it deletes the wrapper page created above
@@ -565,9 +565,9 @@ class pages_page(APIView):
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["PAGE"]
-                for question in request.data['STAKEHOLDERS']:
-                    question['PAGE'] = page_id
-                    nested_serializer = Stakeholder_pageSerializer(data=question)
+                for stakeholder in request.data['STAKEHOLDERS']:
+                    stakeholder['PAGE'] = page_id
+                    nested_serializer = Stakeholder_pageSerializer(data=stakeholder)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     # If the nested page is not valid it deletes the wrapper page created above
@@ -575,7 +575,7 @@ class pages_page(APIView):
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-                    nested_serializer.save()
+                    nested_serializer.save() #DELETE
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
 
             # If the request was badly made or could not be created
@@ -590,20 +590,33 @@ class pages_page(APIView):
         # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
         PAGE_ID = self.request.query_params.get('page_id')
 
-        # Get all fields from this page_id if ti doesn't exist return error 404
+        # Get all fields from this page_id if it doesn't exist return error 404
         try:
             page = pages.objects.get(PAGE = PAGE_ID)
         except pages.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        # Convers Django Model Object into a dictionary
-        page_data = PagesSerializer(page).data
-        
-        page_type = page.PAGE_TYPE
-        # Check page.PAGE_TYPE = 'REFLECTION'
-        if (page_type == 'R'):
+        if request.method == "PUT": 
 
+            # Convert Django Model Object into a dictionary
+            page_data = PagesSerializer(page).data
         
+            page_type = page.PAGE_TYPE
+            # Check page.PAGE_TYPE = 'REFLECTION'
+            if (page_type == 'R'):
+                pages_serializer = PagesSerializer(page, data=request.data)
+                if pages_serializer.is_valid():
+                    pages_serializer.save()
+                    # Get the reflection page for this page id
+                    try:
+                        reflection_pages = reflection_questions.objects.filter(PAGE = PAGE_ID).values()
+                    except reflection_questions.DoesNotExist:
+                        return Response(status=status.HTTP_404_NOT_FOUND)
+                    for question in request.data['REFLECTION_QUESTIONS']:
+                        nested_serializer = Reflection_questionsSerializer(reflection_page, data=question)
+                        if nested
+
+
 
 
     # @api_view(['DELETE'])
