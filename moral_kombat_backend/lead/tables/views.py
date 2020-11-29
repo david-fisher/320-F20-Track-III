@@ -504,6 +504,9 @@ class pages_page(APIView):
                     nested_serializer = Reflection_questionsSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
                     nested_serializer.save()
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
@@ -521,6 +524,9 @@ class pages_page(APIView):
                     nested_serializer = Action_pageSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
                     nested_serializer.save()
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
@@ -538,6 +544,9 @@ class pages_page(APIView):
                     nested_serializer = Generic_pageSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
                     nested_serializer.save()
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
@@ -555,7 +564,9 @@ class pages_page(APIView):
                     nested_serializer = Stakeholder_pageSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
-                    nested_serializer.save()
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
 
             # If the request was badly made or could not be created
@@ -563,6 +574,9 @@ class pages_page(APIView):
 
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST) 
+
+    
+
 
 
     # @api_view(['DELETE'])
