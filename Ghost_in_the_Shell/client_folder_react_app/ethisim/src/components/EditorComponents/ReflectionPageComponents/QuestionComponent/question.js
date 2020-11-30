@@ -19,6 +19,7 @@ QuestionField.propTypes = {
     id: PropTypes.number,
     listOfQuestions: PropTypes.any,
     setListOfQuestions: PropTypes.any,
+    setQuestionsForReqBody: PropTypes.any,
 };
 
 export default function QuestionField({
@@ -27,6 +28,7 @@ export default function QuestionField({
     id,
     listOfQuestions,
     setListOfQuestions,
+    setQuestionsForReqBody,
 }) {
     const classes = useStyles();
     const [questionValue, setQuestionValue] = useState(question);
@@ -44,6 +46,12 @@ export default function QuestionField({
                 return data;
             })
         );
+        setQuestionsForReqBody(
+            listOfQuestions.map(function (a) {
+                return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
+            })
+        );
+        console.log(listOfQuestions);
     };
 
     return (

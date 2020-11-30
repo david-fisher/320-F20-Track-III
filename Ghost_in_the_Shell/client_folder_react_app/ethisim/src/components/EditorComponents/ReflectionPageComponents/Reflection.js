@@ -68,15 +68,25 @@ export default function Reflection(props) {
     const [pageID, setPageID] = useState(page_id);
     const [title, setTitle] = useState(page_title);
     const [bodyText, setBodyText] = useState(body);
-
-    //Assuming list of questions will be in array form
     const [questions, setQuestions] = useState(reflection_questions);
+    const [questionsForReqBody, setQuestionsForReqBody] = useState(
+        questions.map(function (a) {
+            return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
+        })
+    );
     //console.log(questionsList);
-    var questionsList = [];
-    for (var i = 0; i < questions.length; i++) {
-        questionsList.concat({ REFLECTION_QUESTION: questions[i] });
-    }
+    /*useEffect(() => {
+        for (var i = 0; i < questions.length; i++) {
+            setQuestionsForReqBody(
+              questionsForReqBody.concat({ REFLECTION_QUESTION: questions[i].REFLECTION_QUESTION })
+            );
+        }
+    }, []);*/
 
+    const [errorTitle, setErrorTitle] = useState(false);
+    const [errorTitleText, setErrorTitleText] = useState(false);
+    const [errorBody, setErrorBody] = useState(false);
+    const [errorQuestions, setErrorQuestions] = useState(false);
     var postReqBody = {
         PAGE: pageID,
         PAGE_TYPE: page_type,
@@ -85,7 +95,7 @@ export default function Reflection(props) {
         SCENARIO: scenario_ID,
         VERSION: version_ID,
         NEXT_PAGE: next_page_id,
-        REFLECTION_QUESTIONS: questionsList,
+        REFLECTION_QUESTIONS: questionsForReqBody,
         X_COORDINATE: xCoord,
         Y_COORDINATE: yCoord,
     };
@@ -97,9 +107,10 @@ export default function Reflection(props) {
             const deleteEndPoint = '/page?page_id=' + pageID;
             postReqBody.PAGE = resp.data.PAGE;
             let newScenarioComponents = [...scenarioComponents];
-            console.log(newScenarioComponents);
-            newScenarioComponents.find((x) => x.id === pageID).id =
-                resp.data.PAGE;
+            let component = newScenarioComponents.find((x) => x.id === pageID);
+            component.id = resp.data.PAGE;
+            component.title = title;
+
             setPageID(resp.data.PAGE);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
@@ -114,6 +125,43 @@ export default function Reflection(props) {
             setErrorBannerFade(true);
             setErrorBannerMessage('Failed to save page! Please try again.');
         }
+
+        let validInput = true;
+
+        if (!title || !title.trim()) {
+            setErrorTitle(true);
+            setErrorTitleText('Page title cannot be empty');
+            validInput = false;
+        } else if (title.length >= 1000) {
+            setErrorTitle(true);
+            setErrorTitleText('Page title must have less than 1000 characters');
+            validInput = false;
+        } else {
+            setErrorTitle(false);
+        }
+
+        if (!bodyText || !bodyText.trim()) {
+            setErrorBody(true);
+            validInput = false;
+        } else {
+            setErrorBody(false);
+        }
+        let one_question_checker = false;
+        for (let i = 0; i < questions.length; i++) {
+            if (
+                !questions[i].REFLECTION_QUESTION ||
+                !questions[i].REFLECTION_QUESTION.trim()
+            ) {
+                setErrorQuestions(true);
+                validInput = false;
+                one_question_checker = true;
+            }
+        }
+
+        if (one_question_checker === false) {
+            setErrorQuestions(false);
+        }
+
         console.log(postReqBody);
         universalPost(
             setPostValues,
@@ -171,9 +219,23 @@ export default function Reflection(props) {
                 setBody={setBodyText}
                 setQuestions={setQuestions}
             />
-            <Title title={title} setTitle={setTitle} />
-            <Body body={bodyText} setBody={setBodyText} />
-            <QuestionFields questions={questions} setQuestions={setQuestions} />
+            <Title
+                title={title}
+                setTitle={setTitle}
+                error={errorTitle}
+                errorMessage={errorTitleText}
+            />
+            <Body
+                body={bodyText}
+                setBody={setBodyText}
+                error={errorBody}
+                errorMessage={'Page body cannot be empty'}
+            />
+            <QuestionFields
+                questions={questions}
+                setQuestions={setQuestions}
+                setQuestionsForReqBody={setQuestionsForReqBody}
+            />
             <Button
                 className={classes.saveButton}
                 variant="contained"

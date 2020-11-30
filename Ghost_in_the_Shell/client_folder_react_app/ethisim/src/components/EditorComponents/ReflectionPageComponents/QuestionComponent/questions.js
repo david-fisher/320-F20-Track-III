@@ -7,9 +7,14 @@ import PropTypes from 'prop-types';
 QuestionFields.propTypes = {
     questions: PropTypes.any,
     setQuestions: PropTypes.any,
+    setQuestionsForReqBody: PropTypes.any,
 };
 
-export default function QuestionFields({ questions, setQuestions }) {
+export default function QuestionFields({
+    questions,
+    setQuestions,
+    setQuestionsForReqBody,
+}) {
     //Set fake ID for list item
     let initialQuestionsWithID = questions.map(function (question) {
         return {
@@ -40,12 +45,25 @@ export default function QuestionFields({ questions, setQuestions }) {
             (q) => q.id !== questionID
         );
         setQuestionsWithID(leftQuestions);
+        let newQuestions = questionsWithID.map((data) => data.question);
+        newQuestions = [...newQuestions, ''];
+        setQuestions(newQuestions);
+        setQuestionsForReqBody(
+            questions.map(function (a) {
+                return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
+            })
+        );
     };
 
     const addQuestion = (e) => {
         let newQuestions = questionsWithID.map((data) => data.question);
         newQuestions = [...newQuestions, ''];
         setQuestions(newQuestions);
+        setQuestionsForReqBody(
+            questions.map(function (a) {
+                return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
+            })
+        );
         const newQuestionsWithID = [
             ...questionsWithID,
             {
@@ -83,6 +101,7 @@ export default function QuestionFields({ questions, setQuestions }) {
                         question={data.question}
                         listOfQuestions={questionsWithID}
                         setListOfQuestions={setQuestionsWithID}
+                        setQuestionsForReqBody={setQuestionsForReqBody}
                     />
                 ))}
             </form>
