@@ -130,7 +130,7 @@ Editor.propTypes = {
 
 export default function Editor(props) {
     const [openPopup, setOpenPopup] = useState(false);
-    const scenario_ID = props.location.SCENARIO;
+    const scenario_ID = props.location.data.SCENARIO;
     //TODO when version control is implemented
     const tempVersionID = 1;
 
