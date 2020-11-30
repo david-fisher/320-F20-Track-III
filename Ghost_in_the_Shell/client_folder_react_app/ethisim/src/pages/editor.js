@@ -130,7 +130,7 @@ export default function Editor(props) {
     const [openPopup, setOpenPopup] = useState(false);
 
     //const scenario_ID = props.scenario_ID
-    const scenario_ID = 52;
+    const scenario_ID = 2;
     const [getValues, setGetValues] = useState({
         data: null,
         loading: true,
@@ -144,13 +144,24 @@ export default function Editor(props) {
         error: null,
     });
 
+    // eslint-disable-next-line
+    const [postValues, setPostValues] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
     const [scenarioComponents, setScenarioComponents] = useState([]);
     const [scenarioComponent, setScenarioComponent] = useState(null);
     const [showEditor, setShowEditor] = useState(false);
 
     let handleLogisticsGet = function handleLogisticsGet() {
         let initialComponents = [
-            { id: -1, title: 'Logistics', component: <Logistics /> },
+            {
+                id: -1,
+                title: 'Logistics',
+                component: <Logistics />,
+            },
             {
                 id: -2,
                 title: 'Configure Issues',
@@ -347,6 +358,14 @@ export default function Editor(props) {
         });
     }
 
+    function handleConfigurerGet(setGetValues) {
+        //TODO: FILL OUT with configurer logic with merge
+    }
+
+    function handleConversationEditorGet(setGetValues) {
+        //TODO: FILL OUT with Conv Editor logic with merge
+    }
+
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -373,14 +392,19 @@ export default function Editor(props) {
     useEffect(handleLogisticsGet, [shouldFetch]);
 
     let onClick = (component, id, title) => {
-        if (
-            title !== 'Configure Issues' &&
-            title !== 'Conversation Editor' &&
-            title !== 'Conversation Editor' &&
-            title !== 'Flow Diagram' &&
-            title !== 'Logistics'
-        ) {
-            handlePageGet(setGetValues, id);
+        if (component === null) {
+            console.log('detects component is null');
+            var p = null;
+            var c = null;
+            if (title === 'Configure Issues') {
+                //getConfigureIssues
+            } else if (title === 'Conversation Editor') {
+                //getConversationEditor
+            } else if (title === 'Flow Diagram') {
+                //getFlowDiagram
+            } else {
+                handlePageGet(setGetValues, id);
+            }
         }
         setScenarioComponent(
             scenarioComponents.find((x) => x.id === id).component
@@ -398,13 +422,6 @@ export default function Editor(props) {
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
         handleDelete(setDeleteValues, d_id);
     };
-
-    // eslint-disable-next-line
-    const [postValues, setPostValues] = useState({
-        data: null,
-        loading: true,
-        error: null,
-    });
 
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
