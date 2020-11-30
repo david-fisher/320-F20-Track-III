@@ -85,9 +85,11 @@ export default function Reflection(props) {
     }, []);*/
 
     const [errorTitle, setErrorTitle] = useState(false);
-    const [errorTitleText, setErrorTitleText] = useState(false);
+    const [errorTitleText, setErrorTitleText] = useState('');
     const [errorBody, setErrorBody] = useState(false);
     const [errorQuestions, setErrorQuestions] = useState(false);
+    const [errorQuestionsMessage, setErrorQuestionsMessage] = useState('');
+
     let postReqBody = {
         PAGE: pageID,
         PAGE_TYPE: page_type,
@@ -147,44 +149,62 @@ export default function Reflection(props) {
         } else {
             setErrorBody(false);
         }
-        let one_question_checker = false;
+
+        let error = false;
         for (let i = 0; i < questions.length; i++) {
             if (
                 !questions[i].REFLECTION_QUESTION ||
                 !questions[i].REFLECTION_QUESTION.trim()
             ) {
                 setErrorQuestions(true);
+                setErrorQuestionsMessage(
+                    'At least one reflection question is blank'
+                );
                 validInput = false;
-                one_question_checker = true;
+                error = true;
             }
         }
-
-        if (one_question_checker === false) {
+        if (!error) {
             setErrorQuestions(false);
         }
 
-        /*
-        console.log("this isthe post req bdy")
-        console.log(postReqBody);*/
-        universalPost(
-            setPostValues,
-            endpoint,
-            onFailure,
-            onSuccess,
-            postReqBody
-        );
+        if (validInput) {
+            let trimmedQuestions = questions.map((obj) =>
+                obj.REFLECTION_QUESTION.trim()
+            );
+            let questionSet = new Set(trimmedQuestions);
+            console.log(trimmedQuestions.length);
+            console.log(questionSet.size);
+            if (trimmedQuestions.length > questionSet.size) {
+                setErrorQuestions(true);
+                setErrorQuestionsMessage(
+                    'You cannot have duplicate reflection questions'
+                );
+                validInput = false;
+            }
+        }
+
+        console.log(postReqBody);
+        if (validInput) {
+            universalPost(
+                setPostValues,
+                endpoint,
+                onFailure,
+                onSuccess,
+                postReqBody
+            );
+        }
     }
 
-    const setReqBodyNew = (qs) =>{
-      let qsrb = []
-      for(let i = 0; i < qs.length; i++){
-        qsrb.push(qs[i].question)
-      }
+    const setReqBodyNew = (qs) => {
+        let qsrb = [];
+        for (let i = 0; i < qs.length; i++) {
+            qsrb.push({ REFLECTION_QUESTION: qs[i] });
+        }
 
-      setQuestionsForReqBody(qsrb);
-      postReqBody.REFLECTION_QUESTIONS = questionsForReqBody
+        setQuestionsForReqBody(qsrb);
+    };
 
-    }
     const savePage = () => {
         handlePost(setPostValues, postReqBody, scenario_ID, false);
         console.log(postValues);
@@ -249,6 +269,16 @@ export default function Reflection(props) {
                 setQuestions={setQuestions}
                 setReqBodyNew={setReqBodyNew}
             />
+            {errorQuestions ? (
+                <Typography
+                    style={{ marginLeft: 50 }}
+                    variant="body1"
+                    display="block"
+                    color="error"
+                >
+                    {errorQuestionsMessage}
+                </Typography>
+            ) : null}
             <Button
                 className={classes.saveButton}
                 variant="contained"

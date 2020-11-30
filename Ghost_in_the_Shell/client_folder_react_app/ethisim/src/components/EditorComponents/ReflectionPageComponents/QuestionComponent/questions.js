@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import QuestionField from './question';
 import Button from '@material-ui/core/Button';
 import './questions.css';
@@ -15,61 +15,40 @@ export default function QuestionFields({
     setQuestions,
     setReqBodyNew,
 }) {
-    //Set fake ID for list item
-    let initialQuestionsWithID = questions.map(function (question) {
-        return {
-            question: question,
-            id: Math.floor(Math.random() * 10000),
-        };
-    });
-
-    const [questionsWithID, setQuestionsWithID] = useState(
-        initialQuestionsWithID
-    );
-
-    let resetQuestionsWithID = (questionsWithID) => {
-        let initialQuestionsWithID = questions.map(function (question) {
-            return {
-                question: question,
-                id: Math.floor(Math.random() * 10000),
-            };
-        });
-        setQuestionsWithID(initialQuestionsWithID);
-    };
-
-    useEffect(resetQuestionsWithID, [questions]);
+    //When we select new issue button, we add new issue object into array.
+    //We set a temporary unique ID.
+    function setNewIssueID() {
+        let newID = Math.floor(Math.random() * 10000000);
+        let collision =
+            questions.filter((data) => data.id === newID).length !== 0;
+        while (collision) {
+            newID = Math.floor(Math.random() * 10000000);
+            const checkNewID = newID;
+            collision =
+                questions.data.filter((data) => data.id === checkNewID)
+                    .length !== 0;
+        }
+        return newID;
+    }
 
     const removeQuestion = (questionID) => {
-        console.log(questionID);
-        const leftQuestions = questionsWithID.filter(
-            (q) => q.id !== questionID
-        );
-        setQuestionsWithID(leftQuestions);
-        let newQuestions = questionsWithID.map((data) => data.question);
-        setQuestions(newQuestions);
-        setReqBodyNew(newQuestions);
+        const leftQuestions = questions.filter((q) => q.id !== questionID);
+        setQuestions(leftQuestions);
+        let reqBody = leftQuestions.map((obj) => obj.REFLECTION_QUESTION);
+        setReqBodyNew(reqBody);
     };
 
     const addQuestion = (e) => {
-        let newQuestions = questionsWithID.map((data) => data.question);
-        newQuestions = [...newQuestions, {REFLECTION_QUESTION:''}];
-        setQuestions(newQuestions);
+        e.preventDefault();
+        let newQuestions = questions.map((data) => data.REFLECTION_QUESTION);
+        newQuestions = [...newQuestions, ''];
         setReqBodyNew(newQuestions);
-        const newQuestionsWithID = [
-            ...questionsWithID,
-            {
-                id: Math.floor(Math.random() * 10000),
-                question: '',
-            },
-        ];
-        setQuestionsWithID(newQuestionsWithID);
+        let newQuestionsList = questions.concat({
+            id: setNewIssueID(),
+            REFLECTION_QUESTION: '',
+        });
+        setQuestions(newQuestionsList);
     };
-
-    // eslint-disable-next-line
-    function updateItem(iItemID, iItemBody) {
-        //TODO
-        //functional code to save items to backend
-    }
 
     return (
         <div className="questions">
@@ -83,14 +62,14 @@ export default function QuestionFields({
             </Button>
 
             <form id="form">
-                {questionsWithID.map((data) => (
+                {questions.map((data) => (
                     <QuestionField
                         key={data.id}
                         id={data.id}
                         removeQuestion={removeQuestion}
-                        question={data.question}
-                        listOfQuestions={questionsWithID}
-                        setListOfQuestions={setQuestionsWithID}
+                        question={data.REFLECTION_QUESTION}
+                        listOfQuestions={questions}
+                        setListOfQuestions={setQuestions}
                         setReqBodyNew={setReqBodyNew}
                     />
                 ))}

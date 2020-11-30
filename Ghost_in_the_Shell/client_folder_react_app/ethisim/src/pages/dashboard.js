@@ -372,6 +372,7 @@ export default function Dashboard() {
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
                     key={data.SCENARIO}
+                    data={data}
                     scenarioID={data.SCENARIO}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}

@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SuccessBanner from '../components/Banners/SuccessBanner';
 import ErrorBanner from '../components/Banners/ErrorBanner';
+import PropTypes from 'prop-types';
 
 import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
@@ -123,14 +124,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+Editor.propTypes = {
+    location: PropTypes.any,
+};
+
 export default function Editor(props) {
+    const [openPopup, setOpenPopup] = useState(false);
+    const scenario_ID = props.location.SCENARIO;
     //TODO when version control is implemented
     const tempVersionID = 1;
 
-    const [openPopup, setOpenPopup] = useState(false);
-
-    //const scenario_ID = props.scenario_ID
-    const scenario_ID = 52;
     const [getValues, setGetValues] = useState({
         data: null,
         loading: true,
@@ -358,14 +361,6 @@ export default function Editor(props) {
         });
     }
 
-    function handleConfigurerGet(setGetValues) {
-        //TODO: FILL OUT with configurer logic with merge
-    }
-
-    function handleConversationEditorGet(setGetValues) {
-        //TODO: FILL OUT with Conv Editor logic with merge
-    }
-
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -391,20 +386,15 @@ export default function Editor(props) {
     const [shouldFetch, setShouldFetch] = useState(0);
     useEffect(handleLogisticsGet, [shouldFetch]);
 
-    let onClick = (component, id, title) => {
-        if (component === null) {
-            console.log('detects component is null');
-            var p = null;
-            var c = null;
-            if (title === 'Configure Issues') {
-                //getConfigureIssues
-            } else if (title === 'Conversation Editor') {
-                //getConversationEditor
-            } else if (title === 'Flow Diagram') {
-                //getFlowDiagram
-            } else {
-                handlePageGet(setGetValues, id);
-            }
+    let onClick = (id, title) => {
+        if (
+            title !== 'Configure Issues' &&
+            title !== 'Conversation Editor' &&
+            title !== 'Conversation Editor' &&
+            title !== 'Flow Diagram' &&
+            title !== 'Logistics'
+        ) {
+            handlePageGet(setGetValues, id);
         }
         setScenarioComponent(
             scenarioComponents.find((x) => x.id === id).component
