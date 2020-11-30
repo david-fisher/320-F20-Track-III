@@ -166,7 +166,9 @@ export default function VersionControlDialog({
         if (selectedVersion !== null) {
             switch (type) {
                 case 'Issues':
-                    setIssueEntryFieldList(selectedVersionData.issues);
+                    setIssueEntryFieldList({
+                        data: selectedVersionData.issues,
+                    });
                     break;
                 case 'Conversation Editor':
                     setStakeHolders(selectedVersionData.stakeholders);
