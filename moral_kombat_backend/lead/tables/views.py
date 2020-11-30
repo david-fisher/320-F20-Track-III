@@ -584,7 +584,7 @@ class pages_page(APIView):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST) 
 
-    # WIP
+        # WIP
   '''  def put(self, request):
 
         # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
@@ -616,8 +616,6 @@ class pages_page(APIView):
                         nested_serializer = Reflection_questionsSerializer(reflection_page, data=question)
                         if nested
 '''
-
-
 
     # @api_view(['DELETE'])
     def delete(self, request):
