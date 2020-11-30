@@ -19,7 +19,7 @@ QuestionField.propTypes = {
     id: PropTypes.number,
     listOfQuestions: PropTypes.any,
     setListOfQuestions: PropTypes.any,
-    setQuestionsForReqBody: PropTypes.any,
+    setReqBodyNew: PropTypes.any,
 };
 
 export default function QuestionField({
@@ -28,30 +28,21 @@ export default function QuestionField({
     id,
     listOfQuestions,
     setListOfQuestions,
-    setQuestionsForReqBody,
+    setReqBodyNew
 }) {
     const classes = useStyles();
     const [questionValue, setQuestionValue] = useState(question);
 
     const onChangeQuestion = (event) => {
         setQuestionValue(event.target.value);
-        setListOfQuestions(
-            listOfQuestions.map((data) => {
-                if (data.id === id) {
-                    return {
-                        ...data,
-                        question: event.target.value,
-                    };
-                }
-                return data;
-            })
-        );
-        setQuestionsForReqBody(
-            listOfQuestions.map(function (a) {
-                return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
-            })
-        );
-        console.log(listOfQuestions);
+        let listOfQuestions2 = [...listOfQuestions]
+        for(let i = 0 ; i < listOfQuestions2.length;i++){
+          if(listOfQuestions2[i].id === id){
+            listOfQuestions2[i].question.REFLECTION_QUESTION = event.target.value
+          }
+        }
+        setListOfQuestions(listOfQuestions2);
+        setReqBodyNew(listOfQuestions2);
     };
 
     return (
@@ -71,7 +62,7 @@ export default function QuestionField({
                         multiline
                         rows={2}
                         variant="outlined"
-                        value={questionValue}
+                        value={questionValue.REFLECTION_QUESTION}
                         onChange={onChangeQuestion}
                     />
                 </Box>

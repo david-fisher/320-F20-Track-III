@@ -581,9 +581,19 @@ class pages_page(APIView):
             page = pages.objects.get(PAGE=PAGE_ID)
         except pages.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
         
         # Delete the page
         if (request.method == "DELETE"):
+            next_pages = page.objects.filter(NEXT_PAGE = PAGE_ID).values()
+            for next_page in next_pages:
+                original_page = next_page
+                next_page["NEXT_PAGE"] = None
+                pages_serializer = PagesSerializer(original_page, next_page)
+                if pages_serializer.is_valid():
+                    pages_serializer.save()
+                else:
+                    return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
             operation = page.delete()
             page_data = {}
             if (operation):

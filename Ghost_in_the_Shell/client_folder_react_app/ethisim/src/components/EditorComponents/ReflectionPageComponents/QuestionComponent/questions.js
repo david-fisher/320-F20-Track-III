@@ -7,13 +7,13 @@ import PropTypes from 'prop-types';
 QuestionFields.propTypes = {
     questions: PropTypes.any,
     setQuestions: PropTypes.any,
-    setQuestionsForReqBody: PropTypes.any,
+    setReqBodyNew: PropTypes.any,
 };
 
 export default function QuestionFields({
     questions,
     setQuestions,
-    setQuestionsForReqBody,
+    setReqBodyNew,
 }) {
     //Set fake ID for list item
     let initialQuestionsWithID = questions.map(function (question) {
@@ -46,24 +46,15 @@ export default function QuestionFields({
         );
         setQuestionsWithID(leftQuestions);
         let newQuestions = questionsWithID.map((data) => data.question);
-        newQuestions = [...newQuestions, ''];
         setQuestions(newQuestions);
-        setQuestionsForReqBody(
-            questions.map(function (a) {
-                return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
-            })
-        );
+        setReqBodyNew(newQuestions);
     };
 
     const addQuestion = (e) => {
         let newQuestions = questionsWithID.map((data) => data.question);
-        newQuestions = [...newQuestions, ''];
+        newQuestions = [...newQuestions, {REFLECTION_QUESTION:''}];
         setQuestions(newQuestions);
-        setQuestionsForReqBody(
-            questions.map(function (a) {
-                return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
-            })
-        );
+        setReqBodyNew(newQuestions);
         const newQuestionsWithID = [
             ...questionsWithID,
             {
@@ -72,7 +63,6 @@ export default function QuestionFields({
             },
         ];
         setQuestionsWithID(newQuestionsWithID);
-        console.log(...questions);
     };
 
     // eslint-disable-next-line
@@ -101,7 +91,7 @@ export default function QuestionFields({
                         question={data.question}
                         listOfQuestions={questionsWithID}
                         setListOfQuestions={setQuestionsWithID}
-                        setQuestionsForReqBody={setQuestionsForReqBody}
+                        setReqBodyNew={setReqBodyNew}
                     />
                 ))}
             </form>

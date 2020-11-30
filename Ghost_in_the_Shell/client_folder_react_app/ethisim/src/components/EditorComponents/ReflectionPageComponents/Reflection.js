@@ -74,6 +74,7 @@ export default function Reflection(props) {
             return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
         })
     );
+
     //console.log(questionsList);
     /*useEffect(() => {
         for (var i = 0; i < questions.length; i++) {
@@ -87,7 +88,7 @@ export default function Reflection(props) {
     const [errorTitleText, setErrorTitleText] = useState(false);
     const [errorBody, setErrorBody] = useState(false);
     const [errorQuestions, setErrorQuestions] = useState(false);
-    var postReqBody = {
+    let postReqBody = {
         PAGE: pageID,
         PAGE_TYPE: page_type,
         PAGE_TITLE: title,
@@ -162,7 +163,9 @@ export default function Reflection(props) {
             setErrorQuestions(false);
         }
 
-        console.log(postReqBody);
+        /*
+        console.log("this isthe post req bdy")
+        console.log(postReqBody);*/
         universalPost(
             setPostValues,
             endpoint,
@@ -172,6 +175,16 @@ export default function Reflection(props) {
         );
     }
 
+    const setReqBodyNew = (qs) =>{
+      let qsrb = []
+      for(let i = 0; i < qs.length; i++){
+        qsrb.push(qs[i].question)
+      }
+
+      setQuestionsForReqBody(qsrb);
+      postReqBody.REFLECTION_QUESTIONS = questionsForReqBody
+
+    }
     const savePage = () => {
         handlePost(setPostValues, postReqBody, scenario_ID, false);
         console.log(postValues);
@@ -234,7 +247,7 @@ export default function Reflection(props) {
             <QuestionFields
                 questions={questions}
                 setQuestions={setQuestions}
-                setQuestionsForReqBody={setQuestionsForReqBody}
+                setReqBodyNew={setReqBodyNew}
             />
             <Button
                 className={classes.saveButton}
