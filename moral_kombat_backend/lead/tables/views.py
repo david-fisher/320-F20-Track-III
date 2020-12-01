@@ -593,14 +593,17 @@ class pages_page(APIView):
         
         # Delete the page
         if (request.method == "DELETE"):
-            next_pages = pages.objects.filter(NEXT_PAGE = PAGE_ID).values()
-            for next_page in next_pages:
-                original_page = next_page
-                next_page["NEXT_PAGE"] = None
-                pages_serializer = PagesSerializer(original_page, data=next_page)
+            next_pages = pages.objects.filter(NEXT_PAGE = PAGE_ID)
+            for updated_page in next_pages:
+                extant_page = updated_page
+                updated_page.NEXT_PAGE = None
+                updated_page_dict = PagesSerializer(updated_page).data
+                pages_serializer = PagesSerializer(extant_page, data=updated_page_dict)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                 else:
+                    print(extant_page)
+                    print(updated_page)
                     print("error in making next_page = null during delete!")
                     return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             operation = page.delete()
