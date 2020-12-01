@@ -43,7 +43,7 @@ export default function GenericDeleteWarning(props) {
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-slide-description">
-                    Once this action is performed it cannot be undone!
+                    Once this action is performed, it cannot be undone!
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
