@@ -10,7 +10,6 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DeleteEntireScenarioWarning from '../DeleteWarnings/DeleteEntireScenarioWarning';
 import ShareButton from './ShareButton';
 
-
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
         minHeight: '100px',
@@ -114,7 +113,11 @@ export default function ScenarioCard({
                         Delete
                     </Typography>
                 </Button>
-                <DeleteEntireScenarioWarning open={open} setOpen={setOpen} />
+                <DeleteEntireScenarioWarning
+                    open={open}
+                    setOpen={setOpen}
+                    remove={true}
+                />
             </Grid>
             <Grid className={classes.button} item xs={sizeOfShareButton}>
                 <ShareButton />

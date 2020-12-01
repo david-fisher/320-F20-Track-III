@@ -147,18 +147,10 @@ export default function Logistics(props) {
                     </Button>
                 </form>
             </div>
-            <Typography align="left" variant="h6">
-                Scenario ID: 1342431
-            </Typography>
-            <Typography align="left" variant="h6">
-                Shareable Link: wwww.ethisim.com
-            </Typography>
+
             <div className={classes.subdiv}>
                 <form className={classes.buttons} noValidate autoComplete="off">
                     <Button variant="contained">View Student Responses</Button>
-                    <Button variant="contained" color="primary">
-                        View Version History
-                    </Button>
                 </form>
             </div>
         </Container>
@@ -218,12 +210,6 @@ export default function Logistics(props) {
                         </Button>
                     </form>
                 </div>
-                <Typography align="left" variant="h6">
-                    Scenario ID: 1342431
-                </Typography>
-                <Typography align="left" variant="h6">
-                    Shareable Link: wwww.ethisim.com
-                </Typography>
                 <div className={classes.subdiv}>
                     <form
                         className={classes.buttons}
@@ -232,9 +218,6 @@ export default function Logistics(props) {
                     >
                         <Button variant="contained">
                             View Student Responses
-                        </Button>
-                        <Button variant="contained" color="primary">
-                            View Version History
                         </Button>
                     </form>
                 </div>
