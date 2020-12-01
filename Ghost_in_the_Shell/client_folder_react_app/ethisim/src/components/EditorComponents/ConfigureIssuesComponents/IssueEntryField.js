@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 IssueEntryField.propTypes = {
     id: PropTypes.number.isRequired,
+    scenarioID: PropTypes.number,
     issue: PropTypes.string,
     score: PropTypes.number,
     isNewIssue: PropTypes.bool,
@@ -37,6 +38,7 @@ IssueEntryField.propTypes = {
 
 export default function IssueEntryField({
     id,
+    scenarioID,
     issue,
     score,
     isNewIssue,
@@ -48,8 +50,8 @@ export default function IssueEntryField({
     setErrorBannerFade,
 }) {
     const classes = useStyles();
-    //TODO replace once scenario dashboard page is implemented with backend
-    const scenarioID = 2;
+
+    //TODO replace once versionID is implemented with backend
     const versionID = 2;
 
     // eslint-disable-next-line
@@ -87,81 +89,89 @@ export default function IssueEntryField({
         setIssueName(content.target.value);
     };
 
+    const [errorName, setErrorName] = useState(false);
+    const [errorNameText, setErrorNameText] = useState('');
+    const [errorScore, setErrorScore] = useState(false);
+    const [errorScoreText, setErrorScoreText] = useState('');
+
     const saveIssue = () => {
         console.log(issueName);
         console.log(issueScore);
 
+        let validInput = true;
+
         //Issue name is null or white space and issue score is null
-        if ((!issueName || !issueName.trim()) && !issueScore) {
-            setErrorBannerMessage('Issue score and name is not filled in!');
-            setErrorBannerFade(true);
-            return;
-        }
-        //Issue name is null or white space
         if (!issueName || !issueName.trim()) {
-            setErrorBannerMessage('Issue name is not filled in!');
-            setErrorBannerFade(true);
-            return;
+            setErrorNameText('Issue score and name is not filled in!');
+            setErrorName(true);
+            validInput = false;
+        } else {
+            setErrorName(false);
         }
+
+        score = Number(issueScore);
         //Issue score is null
         if (!issueScore || !issueScore.trim()) {
-            setErrorBannerMessage('Issue score is not filled in!');
-            setErrorBannerFade(true);
-            return;
-        }
-        score = Number(issueScore);
-        //Issue score is not an integer between 0 and 5
-        if (
+            //Issue score is null
+            setErrorScoreText('Issue score and name is not filled in!');
+            setErrorScore(true);
+            validInput = false;
+        } else if (
             isNaN(issueScore) ||
             issueScore.toString().indexOf('.') !== -1 ||
             score > 5 ||
             score < 0
         ) {
-            setErrorBannerMessage(
+            //Issue score is not an integer between 0 and 5
+            setErrorScoreText(
                 'Issue score must be an integer between 0 and 5.'
             );
-            setErrorBannerFade(true);
-            return;
+            setErrorScore(true);
+            validInput = false;
+        } else {
+            setErrorScore(false);
         }
 
-        if (newIssue) {
-            function onSuccess(resp) {
-                //if newly created issue, replace fake ID with new ID
-                if (resp.data) {
-                    setUnsaved(false);
-                    setIssueID(resp.data.ISSUE);
-                    setSuccessBannerFade(true);
-                    setSuccessBannerMessage('Successfully created issue!');
-                    setNewIssue(false);
+        if (validInput) {
+            if (newIssue) {
+                function onSuccess(resp) {
+                    //if newly created issue, replace fake ID with new ID
+                    if (resp.data) {
+                        setUnsaved(false);
+                        setIssueID(resp.data.ISSUE);
+                        setSuccessBannerFade(true);
+                        setSuccessBannerMessage('Successfully created issue!');
+                        setNewIssue(false);
+                    }
                 }
+                function onFailure() {
+                    setErrorBannerMessage('Failed to save! Please try again.');
+                    setErrorBannerFade(true);
+                }
+                post(setPost, endpointPOST, onFailure, onSuccess, {
+                    SCENARIO: scenarioID,
+                    VERSION: versionID,
+                    IMPORTANCE_SCORE: score,
+                    NAME: issueName,
+                });
+            } else {
+                function onSuccess() {
+                    setUnsaved(false);
+                    setSuccessBannerFade(true);
+                    setSuccessBannerMessage('Successfully updated issue!');
+                }
+                function onFailure() {
+                    setErrorBannerMessage('Failed to save! Please try again.');
+                    setErrorBannerFade(true);
+                }
+                put(setPut, endpointPUT + issueID + '/', onFailure, onSuccess, {
+                    SCENARIO: scenarioID,
+                    VERSION: versionID,
+                    IMPORTANCE_SCORE: score,
+                    NAME: issueName,
+                    ISSUE: id,
+                });
             }
-            function onFailure() {
-                setErrorBannerMessage('Failed to save! Please try again.');
-                setErrorBannerFade(true);
-            }
-            post(setPost, endpointPOST, onFailure, onSuccess, {
-                SCENARIO: scenarioID,
-                VERSION: versionID,
-                IMPORTANCE_SCORE: score,
-                NAME: issueName,
-            });
-        } else {
-            function onSuccess() {
-                setUnsaved(false);
-                setSuccessBannerFade(true);
-                setSuccessBannerMessage('Successfully updated issue!');
-            }
-            function onFailure() {
-                setErrorBannerMessage('Failed to save! Please try again.');
-                setErrorBannerFade(true);
-            }
-            put(setPut, endpointPUT + issueID + '/', onFailure, onSuccess, {
-                SCENARIO: scenarioID,
-                VERSION: versionID,
-                IMPORTANCE_SCORE: score,
-                NAME: issueName,
-                ISSUE: id,
-            });
         }
     };
 
@@ -214,27 +224,58 @@ export default function IssueEntryField({
             ) : null}
             <Box display="flex" flexDirection="row" p={1} m={1}>
                 <Box p={2}>
-                    <TextField
-                        style={{ width: '65%' }}
-                        id="outlined-text"
-                        label="Issue"
-                        value={issueName}
-                        onChange={handleChangeName}
-                        multiline
-                        rows={2}
-                        variant="outlined"
-                    />
-                    <TextField
-                        style={{ width: '35%' }}
-                        margin="normal"
-                        id="outlined-number"
-                        label="Importance Factor"
-                        placeholder="0-5"
-                        onChange={handleChangeScore}
-                        value={issueScore}
-                        rows={1}
-                        variant="filled"
-                    />
+                    {errorName ? (
+                        <TextField
+                            error
+                            helperText={errorNameText}
+                            style={{ width: '65%' }}
+                            id="outlined-text"
+                            label="Issue"
+                            value={issueName}
+                            onChange={handleChangeName}
+                            multiline
+                            rows={2}
+                            variant="outlined"
+                        />
+                    ) : (
+                        <TextField
+                            style={{ width: '65%' }}
+                            id="outlined-text"
+                            label="Issue"
+                            value={issueName}
+                            onChange={handleChangeName}
+                            multiline
+                            rows={2}
+                            variant="outlined"
+                        />
+                    )}
+                    {errorScore ? (
+                        <TextField
+                            error
+                            helperText={errorScoreText}
+                            style={{ width: '35%' }}
+                            margin="normal"
+                            id="outlined-number"
+                            label="Importance Factor"
+                            placeholder="0-5"
+                            onChange={handleChangeScore}
+                            value={issueScore}
+                            rows={1}
+                            variant="filled"
+                        />
+                    ) : (
+                        <TextField
+                            style={{ width: '35%' }}
+                            margin="normal"
+                            id="outlined-number"
+                            label="Importance Factor"
+                            placeholder="0-5"
+                            onChange={handleChangeScore}
+                            value={issueScore}
+                            rows={1}
+                            variant="filled"
+                        />
+                    )}
                 </Box>
                 <Box p={1}>
                     <div>

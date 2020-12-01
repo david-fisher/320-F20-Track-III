@@ -18,6 +18,7 @@ import ErrorBanner from '../../Banners/ErrorBanner';
 import Tags from './DropDown';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -77,7 +78,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Logistics() {
+Logistics.propTypes = {
+    scenario_ID: PropTypes.any,
+};
+
+export default function Logistics({ scenario_ID }) {
     //Need scenario id
     const endpointGetLogistics = '/logistics?scenario_id=';
     const endpointGetCourses = '/api/courses/';
@@ -93,7 +98,7 @@ export default function Logistics() {
 
     //TODO temporary ID
     // eslint-disable-next-line
-    const [id, setId] = useState(2);
+    const [id, setId] = useState(scenario_ID);
 
     //Authors mock implementation
     const [authors, setAuthors] = useState([]);

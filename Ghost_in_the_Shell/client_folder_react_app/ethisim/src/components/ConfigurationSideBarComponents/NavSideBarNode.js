@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
         border: '3px solid',
         borderColor: theme.palette.primary.light,
         textTransform: 'unset',
+        overflowWrap: 'anywhere',
     },
     deleteButtonContainer: {
         display: 'flex',
@@ -29,26 +30,28 @@ NavSideBarNode.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     deleteByID: PropTypes.any.isRequired,
-    component: PropTypes.any.isRequired,
+    component: PropTypes.any,
+    scenarioPages: PropTypes.any,
+    isIntroPage: PropTypes.bool,
 };
 
 export default function NavSideBarNode(props) {
     const classes = useStyles();
-    NavSideBarNode.propTypes = props.data;
-    const data = props;
-    const { onClick, deleteByID, id, title, component } = data;
+    const {
+        onClick,
+        deleteByID,
+        id,
+        title,
+        scenarioPages,
+        isIntroPage,
+    } = props;
 
     function handleDelete() {
         deleteByID(id);
     }
 
     function pageType(title) {
-        if (
-            title === 'Logistics' ||
-            title === 'Conversation Editor' ||
-            title === 'Configure Issues' ||
-            title === 'Flow Diagram'
-        ) {
+        if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) {
             return (
                 <Grid container direction="row" justify="flex-start">
                     <Grid item xs={10}>
@@ -92,7 +95,7 @@ export default function NavSideBarNode(props) {
     }
 
     function handleDisplayComponent() {
-        onClick(component);
+        onClick(id, title, scenarioPages);
     }
 
     return <div>{pageType(title)}</div>;
