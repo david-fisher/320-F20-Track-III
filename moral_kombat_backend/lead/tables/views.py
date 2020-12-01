@@ -293,18 +293,7 @@ class dashboard_page(APIView):
         return Response(logistics)
 
         """format:
-        {
-        "NAME": "Best Test",
-        "IS_FINISHED": false,
-        "PUBLIC": false,
-        "NUM_CONVERSATION": 5,
-        "PROFESSOR": 12345678,
-        "COURSES":[
-            {"COURSE": 1},
-            {"COURSE": 2},
-            {"COURSE": 3}
-        ]
-        }
+        
         """
 
     def post(self, request, *args, **kwargs):
@@ -333,10 +322,28 @@ class dashboard_page(APIView):
 
             for_serializer.save()
 
+        #create a new intro page
+        intro_page = {
+        "PAGE_TYPE": "I",
+        "PAGE_TITLE": "Introduction",
+        "PAGE_BODY": "Page body",
+        "SCENARIO": scenario_dict['SCENARIO'],
+        "NEXT_PAGE": None,
+        "X_COORDINATE": 0,
+        "Y_COORDINATE": 0
+        }
+
+        intro_page_serializer = PagesSerializer(data=intro_page)
+        if intro_page_serializer.is_valid():
+            intro_page_serializer.save()
+        else:
+            print("intro page saved incorrectly")
+            return Response(intro_page_serializer.errors)
+
         scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_dict['SCENARIO'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
+        scenario_dict['INTRO_PAGE'] = intro_page_serializer.data
         return Response(scenario_dict)
-
 
                 
             
@@ -593,7 +600,8 @@ class pages_page(APIView):
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                 else:
-                    return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                    print("error in making next_page = null during delete!")
+                    return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             operation = page.delete()
             page_data = {}
             if (operation):
