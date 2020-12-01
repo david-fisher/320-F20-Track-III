@@ -24,6 +24,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import SuccessBanner from '../components/Banners/SuccessBanner';
 import ErrorBanner from '../components/Banners/ErrorBanner';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
@@ -131,7 +132,11 @@ Editor.propTypes = {
 export default function Editor(props) {
     const [showComponent, setShowComponent] = useState(true);
     const [openPopup, setOpenPopup] = useState(false);
-    const scenario_ID = props.location.data.SCENARIO;
+    const location = useLocation();
+    const url = location.pathname.split('/').pop();
+    const scenario_ID = props.location.data
+        ? props.location.data.SCENARIO
+        : url;
     //TODO when version control is implemented
     const tempVersionID = 1;
 
@@ -267,6 +272,7 @@ export default function Editor(props) {
             console.log('response delete data is successful ');
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully deleted page!');
+            setShowEditor(true);
         }
         function onFailure() {
             console.log('Delete failed');
@@ -421,6 +427,7 @@ export default function Editor(props) {
             setScenarioComponent(scenarioComponents[0].component);
         }
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
+        setShowEditor(false);
         handleDelete(setDeleteValues, d_id);
     };
 
