@@ -585,7 +585,7 @@ class pages_page(APIView):
         
         # Delete the page
         if (request.method == "DELETE"):
-            next_pages = page.objects.filter(NEXT_PAGE = PAGE_ID).values()
+            next_pages = pages.objects.filter(NEXT_PAGE = PAGE_ID).values()
             for next_page in next_pages:
                 original_page = next_page
                 next_page["NEXT_PAGE"] = None
