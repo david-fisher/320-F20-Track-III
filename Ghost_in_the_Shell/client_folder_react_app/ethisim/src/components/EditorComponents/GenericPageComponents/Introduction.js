@@ -143,6 +143,11 @@ export default function Introduction(props) {
                 onSuccess,
                 postReqBody
             );
+        } else {
+            setErrorBannerFade(true);
+            setErrorBannerMessage(
+                'There are currently errors within your page. Please fix all errors in order to save.'
+            );
         }
     }
 

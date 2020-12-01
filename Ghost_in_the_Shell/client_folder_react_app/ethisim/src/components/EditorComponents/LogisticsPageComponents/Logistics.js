@@ -338,6 +338,11 @@ export default function Logistics({ scenario_ID }) {
                 onSuccessLogistic,
                 NewScenario
             );
+        } else {
+            setErrorBannerFade(true);
+            setErrorBannerMessage(
+                'There are currently errors within your page. Please fix all errors in order to save.'
+            );
         }
     };
 

@@ -33,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         textTransform: 'unset',
     },
+    bannerContainer: {
+        marginTop: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
 }));
 
 export default function Reflection(props) {
@@ -183,6 +189,11 @@ export default function Reflection(props) {
                 onSuccess,
                 postReqBody
             );
+        } else {
+            setErrorBannerFade(true);
+            setErrorBannerMessage(
+                'There are currently errors within your page. Please fix all errors in order to save.'
+            );
         }
     }
 
@@ -228,14 +239,16 @@ export default function Reflection(props) {
 
     return (
         <Container component="main">
-            <SuccessBanner
-                successMessage={successBannerMessage}
-                fade={successBannerFade}
-            />
-            <ErrorBanner
-                errorMessage={errorBannerMessage}
-                fade={errorBannerFade}
-            />
+            <div className={classes.bannerContainer}>
+                <SuccessBanner
+                    successMessage={successBannerMessage}
+                    fade={successBannerFade}
+                />
+                <ErrorBanner
+                    errorMessage={errorBannerMessage}
+                    fade={errorBannerFade}
+                />
+            </div>
             <Typography align="center" variant="h2">
                 Reflection Component
             </Typography>
