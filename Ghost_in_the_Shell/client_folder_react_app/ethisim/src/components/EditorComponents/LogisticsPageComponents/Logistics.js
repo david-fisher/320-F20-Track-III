@@ -520,9 +520,6 @@ export default function Logistics({ scenario_ID }) {
                         autoComplete="off"
                     ></form>
                 </div>
-                <Typography align="left" variant="h6">
-                    Scenario ID: {NewScenario.SCENARIO}
-                </Typography>
 
                 <div className={classes.subdiv}>
                     <form

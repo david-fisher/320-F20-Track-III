@@ -50,7 +50,7 @@ ConfigureIssues.propTypes = {
     scenario_ID: PropTypes.number,
 };
 
-export default function ConfigureIssues({scenario_ID}) {
+export default function ConfigureIssues({ scenario_ID }) {
     const classes = useStyles();
     const [issueEntryFieldList, setIssueEntryFieldList] = useState({
         data: null,
