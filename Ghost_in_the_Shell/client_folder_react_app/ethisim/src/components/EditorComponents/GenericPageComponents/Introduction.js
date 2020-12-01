@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 Introduction.propTypes = {
     scenarioComponents: PropTypes.any,
     setScenarioComponents: PropTypes.any,
+    setCurrentPageID: PropTypes.any,
     page_id: PropTypes.any,
     page_type: PropTypes.any,
     page_title: PropTypes.any,
@@ -43,6 +44,7 @@ export default function Introduction(props) {
     const {
         scenarioComponents,
         setScenarioComponents,
+        setCurrentPageID,
         page_id,
         page_type,
         page_title,
@@ -98,6 +100,7 @@ export default function Introduction(props) {
             component.id = resp.data.PAGE;
             component.title = title;
             setPageID(resp.data.PAGE);
+            setCurrentPageID(resp.data.PAGE);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
@@ -195,7 +198,7 @@ export default function Introduction(props) {
                 />
             </div>
             <Typography align="center" variant="h2">
-                Generic Component
+                Introduction Page
             </Typography>
             <Title
                 title={title}

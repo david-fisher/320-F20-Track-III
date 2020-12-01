@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 Generic.propTypes = {
     scenarioComponents: PropTypes.any,
     setScenarioComponents: PropTypes.any,
+    setCurrentPageID: PropTypes.any,
     page_id: PropTypes.any,
     page_type: PropTypes.any,
     page_title: PropTypes.any,
@@ -43,6 +44,7 @@ export default function Generic(props) {
     const {
         scenarioComponents,
         setScenarioComponents,
+        setCurrentPageID,
         page_id,
         page_type,
         page_title,
@@ -98,6 +100,7 @@ export default function Generic(props) {
             component.id = resp.data.PAGE;
             component.title = title;
             setPageID(resp.data.PAGE);
+            setCurrentPageID(resp.data.PAGE);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');

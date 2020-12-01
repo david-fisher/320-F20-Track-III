@@ -251,7 +251,7 @@ export default function Editor(props) {
 
             for (let i = 0; i < pages.length; i++) {
                 //Already have component in initial components
-                if (pages[i].PAGE_TITLE === 'Stakeholder Conversations') {
+                if (pages[i].PAGE_TYPE === 'S') {
                     continue;
                 }
                 //Intro page is first page on sidebar
@@ -331,6 +331,7 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
+                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
@@ -348,6 +349,7 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
+                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
@@ -365,6 +367,7 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
+                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
@@ -393,6 +396,7 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
+                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
