@@ -2,19 +2,20 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
-import htmlToText from 'html-to-text';
 import PropTypes from 'prop-types';
 
 Body.propTypes = {
     body: PropTypes.string.isRequired,
+    setBody: PropTypes.any.isRequired,
+    error: PropTypes.bool,
+    errorMessage: PropTypes.string,
 };
 
 export default function Body(props) {
-    const { body } = props;
+    const { body, setBody, error, errorMessage } = props;
+
     let handleChange = (content) => {
-        //TODO Implement
-        console.log(content);
-        console.log(htmlToText.fromString(content));
+        setBody(content);
     };
 
     return (
@@ -153,6 +154,16 @@ export default function Body(props) {
                 }}
                 onChange={handleChange}
             />
+            {error ? (
+                <Typography
+                    style={{ marginLeft: 15 }}
+                    variant="caption"
+                    display="block"
+                    color="error"
+                >
+                    {errorMessage}
+                </Typography>
+            ) : null}
         </div>
     );
 }
