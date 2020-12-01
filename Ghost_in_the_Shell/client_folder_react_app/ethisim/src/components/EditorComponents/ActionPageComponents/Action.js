@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FinalAction(props) {
+export default function Action(props) {
     const classes = useStyles();
 
     //const titleData = mockActionComponent.title;

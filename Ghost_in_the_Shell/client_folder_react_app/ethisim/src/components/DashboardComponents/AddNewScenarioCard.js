@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
+
 const useStyles = makeStyles((theme) => ({
     addNewScenarioContainer: {
         height: '100%',
@@ -26,13 +27,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AddNewScenarioCard() {
-    const classes = useStyles();
 
+
+
+
+
+export default function AddNewScenarioCard(props) {
+    const classes = useStyles();
+   
     return (
+        
         <Grid key="createNewScenarioButton" item xs>
             <Container className={classes.addNewScenarioContainer} fixed={true}>
-                <Button className={classes.addNewScenarioButton}>
+                <Button className={classes.addNewScenarioButton} onClick= {props.onClick} >
                     <Grid
                         container
                         direction="column"
@@ -55,5 +62,7 @@ export default function AddNewScenarioCard() {
                 </Button>
             </Container>
         </Grid>
+
+
     );
 }
