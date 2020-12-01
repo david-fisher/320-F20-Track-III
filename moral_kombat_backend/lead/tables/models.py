@@ -115,6 +115,7 @@ class responses(models.Model):
     VERSION = models.IntegerField(default=1, editable=False)
     COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="responses4")
     DATE_TAKEN = models.DateField(auto_now_add=True)
+    #ACTION_PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="responses5")
     CHOICE = models.TextField()
 
 
