@@ -201,6 +201,7 @@ class logistics_page(APIView):
             cropped_page = {}
             cropped_page['PAGE'] = page['PAGE']
             cropped_page['PAGE_TITLE'] = page['PAGE_TITLE']
+            cropped_page['PAGE_TYPE'] = page['PAGE_TYPE']
             page_array.append(cropped_page) 
 
 
@@ -596,7 +597,7 @@ class pages_page(APIView):
             for next_page in next_pages:
                 original_page = next_page
                 next_page["NEXT_PAGE"] = None
-                pages_serializer = PagesSerializer(original_page, next_page)
+                pages_serializer = PagesSerializer(original_page, data=next_page)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                 else:
