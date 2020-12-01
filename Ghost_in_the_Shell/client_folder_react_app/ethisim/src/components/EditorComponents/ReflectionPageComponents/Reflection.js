@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import VersionControl from '../../VersionControl';
 import { Typography, Container, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import QuestionFields from './QuestionComponent/questions';
-import { mockReflectionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
 import universalDelete from '../../../universalHTTPRequests/delete.js';
@@ -241,13 +239,6 @@ export default function Reflection(props) {
             <Typography align="center" variant="h2">
                 Reflection Component
             </Typography>
-            <VersionControl
-                history={mockReflectionHistory.history}
-                type={mockReflectionHistory.type}
-                setTitle={setTitle}
-                setBody={setBodyText}
-                setQuestions={setQuestions}
-            />
             <Title
                 title={title}
                 setTitle={setTitle}

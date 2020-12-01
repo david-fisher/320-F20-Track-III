@@ -527,12 +527,6 @@ export default function Logistics({ scenario_ID }) {
                         noValidate
                         autoComplete="off"
                     >
-                        <Button variant="contained">
-                            View Student Responses
-                        </Button>
-                        <Button variant="contained" color="primary">
-                            View Version History
-                        </Button>
                         <Button
                             variant="contained"
                             color="primary"

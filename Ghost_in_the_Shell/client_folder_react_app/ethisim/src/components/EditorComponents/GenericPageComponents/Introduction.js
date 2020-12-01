@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
 import { Typography, Container, Button } from '@material-ui/core';
-import VersionControl from '../../VersionControl';
-//import InformationItemList from './InformationItemList';
-import { mockGenericHistory } from '../../../shared/mockScenarioData';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
@@ -195,12 +192,6 @@ export default function Introduction(props) {
             <Typography align="center" variant="h2">
                 Generic Component
             </Typography>
-            <VersionControl
-                history={mockGenericHistory.history}
-                type={mockGenericHistory.type}
-                setTitle={setTitle}
-                setBody={setBodyText}
-            />
             <Title
                 title={title}
                 setTitle={setTitle}
