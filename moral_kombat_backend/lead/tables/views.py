@@ -161,6 +161,8 @@ class IssuesViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = IssuesSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['SCENARIO']
 
 class Action_pageViewSet(viewsets.ModelViewSet):
     queryset = action_page.objects.all()
