@@ -343,9 +343,16 @@ class dashboard_page(APIView):
             print("intro page saved incorrectly")
             return Response(intro_page_serializer.errors)
 
+        #TODO create blank stakeholder page and return it
+        #page must be called STAKEHOLDER_PAGE and serialier must be called stakeholder_page_serializer
+
+
+
+
         scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_dict['SCENARIO'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         scenario_dict['INTRO_PAGE'] = intro_page_serializer.data
+        scenario_dict['STAKHOLDER_PAGE'] = stakeholder_page_serializer.data
         return Response(scenario_dict)
 
                 
