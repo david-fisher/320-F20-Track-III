@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-Generic.propTypes = {
+Introduction.propTypes = {
     scenarioComponents: PropTypes.any,
     setScenarioComponents: PropTypes.any,
     page_id: PropTypes.any,
@@ -41,7 +41,7 @@ Generic.propTypes = {
     yCoord: PropTypes.any,
 };
 
-export default function Generic(props) {
+export default function Introduction(props) {
     const {
         scenarioComponents,
         setScenarioComponents,

@@ -152,10 +152,6 @@ export default function Action(props) {
             setErrorTitle(true);
             setErrorTitleText('Page title must have less than 1000 characters');
             validInput = false;
-        } else if (title.trim() === 'Introduction') {
-            setErrorTitle(true);
-            setErrorTitleText('Please choose another title name.');
-            validInput = false;
         } else {
             setErrorTitle(false);
         }

@@ -15,6 +15,7 @@ import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesCompo
 import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
+import Introduction from '../components/EditorComponents/GenericPageComponents/Introduction';
 import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
@@ -189,6 +190,7 @@ export default function Editor(props) {
 
         function onSuccess(resp) {
             console.log('GET logistics info');
+            console.log(resp.data);
             let p = null;
             let logistics_and_pages = resp.data;
             p = {
@@ -226,10 +228,11 @@ export default function Editor(props) {
                     continue;
                 }
                 //Intro page is first page on sidebar
-                if (pages[i].PAGE_TITLE === 'Introduction') {
+                if (pages[i].PAGE_TYPE === 'I') {
                     initialComponents.splice(4, 0, {
                         id: pages[i].PAGE,
                         title: pages[i].PAGE_TITLE,
+                        isIntroPage: true,
                         component: null,
                     });
                 } else {
@@ -298,9 +301,23 @@ export default function Editor(props) {
             let currPageInfo = resp.data;
             console.log(currPageInfo);
             if (currPageInfo.PAGE_TYPE === 'I') {
-                currPageInfo.PAGE_TYPE = 'G';
-            }
-            if (currPageInfo.PAGE_TYPE === 'G') {
+                p = {
+                    scenarioComponents: scenarioComponentsArray,
+                    setScenarioComponents: setScenarioComponents,
+                    page_id: currPageInfo.PAGE,
+                    page_type: currPageInfo.PAGE_TYPE,
+                    page_title: currPageInfo.PAGE_TITLE,
+                    scenario_ID: currPageInfo.SCENARIO,
+                    version_ID: tempVersionID,
+                    next_page_id: currPageInfo.NEXT_PAGE,
+                    body: currPageInfo.PAGE_BODY,
+                    bodies: currPageInfo.BODIES,
+                    xCoord: currPageInfo.X_COORDINATE,
+                    yCoord: currPageInfo.Y_COORDINATE,
+                    created: false,
+                };
+                c = <Introduction {...p}></Introduction>;
+            } else if (currPageInfo.PAGE_TYPE === 'G') {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
