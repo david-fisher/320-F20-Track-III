@@ -10,6 +10,7 @@ import universalPost from '../../../universalHTTPRequests/post.js';
 import universalDelete from '../../../universalHTTPRequests/delete.js';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
+import LoadingSpinner from '../../LoadingSpinner';
 
 Action.propTypes = {
     scenarioComponents: PropTypes.any,
@@ -79,13 +80,13 @@ export default function Action(props) {
 
     const [postValues, setPostValues] = useState({
         data: null,
-        loading: true,
+        loading: false,
         error: null,
     });
     // eslint-disable-next-line
     const [deleteValues, setDeleteValues] = useState({
         data: null,
-        loading: true,
+        loading: false,
         error: null,
     });
 
@@ -241,6 +242,10 @@ export default function Action(props) {
 
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
+
+    if (postValues.loading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <Container component="main">

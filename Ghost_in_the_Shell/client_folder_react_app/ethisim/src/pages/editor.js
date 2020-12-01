@@ -26,6 +26,8 @@ import SuccessBanner from '../components/Banners/SuccessBanner';
 import ErrorBanner from '../components/Banners/ErrorBanner';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import ErrorIcon from '@material-ui/icons/Error';
 
 import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
@@ -123,6 +125,28 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
         marginLeft: 0,
+    },
+    issue: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    errorContainer: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    iconError: {
+        paddingRight: theme.spacing(2),
+        fontSize: '75px',
+    },
+    iconRefreshLarge: {
+        fontSize: '75px',
+    },
+    iconRefreshSmall: {
+        fontSize: '30px',
     },
 }));
 
@@ -638,6 +662,26 @@ export default function Editor(props) {
                     setOpenPopup={setOpenPopup}
                     addPage={addNewPage}
                 ></AddNewSimulationScenarioPageDialog>
+            </div>
+        );
+    }
+
+    if (getValues.error) {
+        return (
+            <div className={classes.issue}>
+                <div className={classes.container}>
+                    <ErrorIcon className={classes.iconError} />
+                    <Typography align="center" variant="h3">
+                        Error in fetching Scenario Data.
+                    </Typography>
+                </div>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleLogisticsGet}
+                >
+                    <RefreshIcon className={classes.iconRefreshLarge} />
+                </Button>
             </div>
         );
     }
