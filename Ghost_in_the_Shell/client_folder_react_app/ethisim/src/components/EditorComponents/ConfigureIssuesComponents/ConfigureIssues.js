@@ -8,9 +8,7 @@ import get from '../../../universalHTTPRequests/get';
 import LoadingSpinner from '../../LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
-
-//TODO once scenario dashboard and component/page loading is finished
-const tempScenarioID = 1;
+import PropTypes from 'prop-types';
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO_ID=';
@@ -48,7 +46,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ConfigureIssues(props) {
+ConfigureIssues.propTypes = {
+    scenario_ID: PropTypes.number,
+};
+
+export default function ConfigureIssues({ scenario_ID }) {
     const classes = useStyles();
     const [issueEntryFieldList, setIssueEntryFieldList] = useState({
         data: null,
@@ -57,7 +59,7 @@ export default function ConfigureIssues(props) {
     });
 
     let getData = () => {
-        get(setIssueEntryFieldList, endpointGET + tempScenarioID);
+        get(setIssueEntryFieldList, endpointGET + scenario_ID);
     };
 
     useEffect(getData, []);
@@ -105,6 +107,7 @@ export default function ConfigureIssues(props) {
                     issueEntryFieldList !== null ? issueEntryFieldList : []
                 }
                 setIssueEntryFieldList={setIssueEntryFieldList}
+                scenarioID={scenario_ID}
             />
         </div>
     );

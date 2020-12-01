@@ -22,11 +22,13 @@ const useStyles = makeStyles((theme) => ({
 IssueEntryFieldList.propTypes = {
     issueEntryFieldList: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
+    scenarioID: PropTypes.number,
 };
 
 export default function IssueEntryFieldList({
     issueEntryFieldList,
     setIssueEntryFieldList,
+    scenarioID,
 }) {
     const classes = useStyles();
 
@@ -113,6 +115,7 @@ export default function IssueEntryFieldList({
                     <EntryField
                         key={entry.ISSUE}
                         id={entry.ISSUE}
+                        scenarioID={scenarioID}
                         isNewIssue={entry.isNewIssue}
                         issue={entry.NAME}
                         score={entry.IMPORTANCE_SCORE}
