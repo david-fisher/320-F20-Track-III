@@ -5,6 +5,7 @@ import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import htmlToText from 'html-to-text';
 import PropTypes from 'prop-types';
+import GenericDeleteWarning from '../../../../DeleteWarnings/GenericDeleteWarning';
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -64,6 +65,12 @@ export default function QuestionField({
         );
     };
 
+    //Used for delete Warning Popup window
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     // eslint-disable-next-line
     let handleChange = (content, editor) => {
         //TODO Implement
@@ -120,16 +127,20 @@ export default function QuestionField({
                             Save
                         </Button>
                     </div>
-                    <div>
-                        <Button
-                            className={classes.margin}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => removeQuestion(id)}
-                        >
-                            Delete
-                        </Button>
-                    </div>
+                    <Button
+                        className={classes.margin}
+                        variant="contained"
+                        color="primary"
+                        onClick={handleClickOpen}
+                    >
+                        Delete
+                    </Button>
+
+                    <GenericDeleteWarning
+                        remove={() => removeQuestion(id)}
+                        open={open}
+                        setOpen={setOpen}
+                    />
                 </Box>
             </Box>
         </div>

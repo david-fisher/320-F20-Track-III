@@ -1,8 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import PropTypes from 'prop-types';
+import GenericDeleteWarning from '../DeleteWarnings/GenericDeleteWarning';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
     pageButton: {
@@ -13,15 +14,15 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'unset',
         overflowWrap: 'anywhere',
     },
-    deleteButtonContainer: {
-        display: 'flex',
-        alignItems: 'center',
-    },
     deleteButton: {
         minWidth: '40px',
         border: '3px solid',
         borderColor: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.light,
+    },
+    deleteButtonContainer: {
+        display: 'flex',
+        alignItems: 'center',
     },
 }));
 
@@ -46,9 +47,11 @@ export default function NavSideBarNode(props) {
         isIntroPage,
     } = props;
 
-    function handleDelete() {
-        deleteByID(id);
-    }
+    //Used for the popup delete warning
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     function pageType(title) {
         if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) {
@@ -79,15 +82,19 @@ export default function NavSideBarNode(props) {
                             {title}
                         </Button>
                     </Grid>
-
                     <Grid item xs={2} className={classes.deleteButtonContainer}>
                         <Button
                             className={classes.deleteButton}
                             color="primary"
-                            onClick={handleDelete}
+                            onClick={handleClickOpen}
                         >
                             <DeleteForeverIcon />
                         </Button>
+                        <GenericDeleteWarning
+                            remove={() => deleteByID(id)}
+                            open={open}
+                            setOpen={setOpen}
+                        />
                     </Grid>
                 </Grid>
             );

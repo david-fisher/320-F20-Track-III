@@ -3,9 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { Typography, Grid, Card, CardContent, Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+//import ShareIcon from '@material-ui/icons/Share';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PropTypes from 'prop-types';
+
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import DeleteEntireScenarioWarning from '../DeleteWarnings/DeleteEntireScenarioWarning';
+
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -13,6 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ClassIcon from '@material-ui/icons/Class';
 import { withStyles } from '@material-ui/core/styles';
+
 import ShareButton from './ShareButton';
 
 const useStyles = makeStyles((theme) => ({
@@ -102,7 +107,12 @@ export default function ScenarioCard({
     onDelete,
 }) {
     const [open, setOpen] = React.useState(false);
+    const [openDeletePopup, setOpenDeletePopup] = React.useState(false);
     const classes = useStyles();
+
+    const handleClickOpenDeletePopup = () => {
+        setOpenDeletePopup(true);
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -161,15 +171,20 @@ export default function ScenarioCard({
                     className={classes.buttonText}
                     variant="contained"
                     color="primary"
-                    onClick={function () {
-                        onDelete(scenarioID, isFinished);
-                    }}
+                    onClick={handleClickOpenDeletePopup}
                 >
                     <DeleteForeverIcon />
                     <Typography variant="subtitle1" noWrap>
                         Delete
                     </Typography>
                 </Button>
+                <DeleteEntireScenarioWarning
+                    open={openDeletePopup}
+                    setOpen={setOpenDeletePopup}
+                    remove={function () {
+                        onDelete(scenarioID, isFinished);
+                    }}
+                />
             </Grid>
             <Grid className={classes.button} item xs={6}>
                 <Button

@@ -1,11 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import htmlToText from 'html-to-text';
 import PropTypes from 'prop-types';
+import GenericDeleteWarning from '../../DeleteWarnings/GenericDeleteWarning';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+
+let handleChange = (content) => {
+    //TODO Implement
+    console.log(content);
+    console.log(htmlToText.fromString(content));
+};
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -16,12 +23,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-let handleChange = (content) => {
-    //TODO Implement
-    console.log(content);
-    console.log(htmlToText.fromString(content));
-};
-
 InformationItem.propTypes = {
     onDelete: PropTypes.any.isRequired,
     iItem: PropTypes.any.isRequired,
@@ -29,8 +30,13 @@ InformationItem.propTypes = {
 };
 
 export default function InformationItem(props) {
-    const classes = useStyles();
     InformationItem.propTypes = props.data;
+    const classes = useStyles();
+    //Warning to Delete information Item
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     return (
         <div>
@@ -187,10 +193,15 @@ export default function InformationItem(props) {
                             className={classes.margin}
                             variant="contained"
                             color="primary"
-                            onClick={() => props.onDelete(props.iItem.id)}
+                            onClick={handleClickOpen}
                         >
                             Delete
                         </Button>
+                        <GenericDeleteWarning
+                            remove={() => props.onDelete(props.iItem.id)}
+                            setOpen={setOpen}
+                            open={open}
+                        />
                     </div>
                 </Box>
             </Box>

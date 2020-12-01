@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Button, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
+import GenericDeleteWarning from '../../DeleteWarnings/GenericDeleteWarning';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -33,8 +35,6 @@ export default function Author({
     id,
     removeAuthor,
 }) {
-    const classes = useStyles();
-
     const [authorValue, setAuthorValue] = useState(author);
     const onChangeAuthor = (event) => {
         setAuthorValue(event.target.value);
@@ -50,6 +50,15 @@ export default function Author({
             })
         );
     };
+
+    const classes = useStyles();
+
+    //Warning to Delete an author on logistics Page
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     return (
         <div>
             <Grid container>
@@ -73,10 +82,15 @@ export default function Author({
                             className={classes.margin}
                             variant="contained"
                             color="primary"
-                            onClick={() => removeAuthor(id)}
+                            onClick={handleClickOpen}
                         >
                             Delete
                         </Button>
+                        <GenericDeleteWarning
+                            remove={() => removeAuthor(id)}
+                            open={open}
+                            setOpen={setOpen}
+                        />
                     </Box>
                 </Grid>
             </Grid>

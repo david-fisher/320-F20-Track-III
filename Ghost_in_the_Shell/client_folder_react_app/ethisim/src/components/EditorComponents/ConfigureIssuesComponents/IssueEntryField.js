@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import GenericDeleteWarning from '../../DeleteWarnings/GenericDeleteWarning';
 import deleteReq from '../../../universalHTTPRequests/delete';
 import post from '../../../universalHTTPRequests/post';
 import put from '../../../universalHTTPRequests/put';
-
 const endpointPOST = '/api/issues/';
 //Need issueID
 const endpointPUT = '/api/issues/';
@@ -215,6 +215,12 @@ export default function IssueEntryField({
         }
     };
 
+    //Used for Delete Warning
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     return (
         <div>
             {unsaved ? (
@@ -288,16 +294,19 @@ export default function IssueEntryField({
                             Save
                         </Button>
                     </div>
-                    <div>
-                        <Button
-                            className={classes.button}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => deleteIssue()}
-                        >
-                            Delete
-                        </Button>
-                    </div>
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        onClick={handleClickOpen}
+                    >
+                        Delete
+                    </Button>
+                    <GenericDeleteWarning
+                        remove={() => deleteIssue()}
+                        open={open}
+                        setOpen={setOpen}
+                    />
                 </Box>
             </Box>
         </div>
