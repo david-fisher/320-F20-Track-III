@@ -120,9 +120,13 @@ export default function Generic(props) {
             setErrorTitle(true);
             setErrorTitleText('Page title cannot be empty');
             validInput = false;
-        } else if (title.length >= 1000) {
+        } else if (title.trim().length >= 1000) {
             setErrorTitle(true);
             setErrorTitleText('Page title must have less than 1000 characters');
+            validInput = false;
+        } else if (title.trim() === 'Introduction') {
+            setErrorTitle(true);
+            setErrorTitleText('Please choose another title name.');
             validInput = false;
         } else {
             setErrorTitle(false);

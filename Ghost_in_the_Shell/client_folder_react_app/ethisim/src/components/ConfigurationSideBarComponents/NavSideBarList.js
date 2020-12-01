@@ -9,7 +9,7 @@ NavSideBarList.propTypes = {
 };
 
 export default function NavSideBarList(props) {
-    const { onClick, deleteByID, scenarioPages} = props;
+    const { onClick, deleteByID, scenarioPages } = props;
 
     return (
         <div>
@@ -18,7 +18,7 @@ export default function NavSideBarList(props) {
                     key={scenarioPage.id}
                     onClick={onClick}
                     deleteByID={deleteByID}
-
+                    scenarioPages={scenarioPages}
                     {...scenarioPage}
                 />
             ))}

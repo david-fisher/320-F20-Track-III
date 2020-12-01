@@ -129,6 +129,7 @@ Editor.propTypes = {
 };
 
 export default function Editor(props) {
+    const [showComponent, setShowComponent] = useState(true);
     const [openPopup, setOpenPopup] = useState(false);
     const scenario_ID = props.location.data.SCENARIO;
     //TODO when version control is implemented
@@ -157,6 +158,7 @@ export default function Editor(props) {
     const [scenarioComponents, setScenarioComponents] = useState([]);
     const [scenarioComponent, setScenarioComponent] = useState(null);
     const [showEditor, setShowEditor] = useState(false);
+    const [addNewPageIndex, setAddNewPageIndex] = useState(null);
 
     let handleLogisticsGet = function handleLogisticsGet() {
         let initialComponents = [
@@ -177,7 +179,9 @@ export default function Editor(props) {
             },
             { id: -4, title: 'Flow Diagram', component: <FlowDiagram /> },
         ];
+
         const endpoint = '/logistics?scenario_id=' + scenario_ID;
+
         function onSuccess(resp) {
             console.log('GET logistics info');
             let p = null;
@@ -232,9 +236,18 @@ export default function Editor(props) {
                 }
             }
             console.log('Scenario Components on Sidebar');
-            console.log(scenarioComponents);
+            console.log(initialComponents);
             setScenarioComponents(initialComponents);
-            setScenarioComponent(initialComponents[0].component);
+            if (addNewPageIndex) {
+                handlePageGet(
+                    setGetValues,
+                    initialComponents[addNewPageIndex].id,
+                    initialComponents
+                );
+                setAddNewPageIndex(null);
+            } else {
+                setScenarioComponent(initialComponents[0].component);
+            }
             setShowEditor(true);
         }
 
@@ -266,8 +279,9 @@ export default function Editor(props) {
         });
     }
 
-    function handlePageGet(setGetValues, g_id) {
+    function handlePageGet(setGetValues, g_id, scenarioComponentsArray) {
         console.log(g_id);
+
         const endpoint = '/page?page_id=' + g_id;
 
         function onSuccess(resp) {
@@ -282,7 +296,7 @@ export default function Editor(props) {
             }
             if (currPageInfo.PAGE_TYPE === 'G') {
                 p = {
-                    scenarioComponents: scenarioComponents,
+                    scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
@@ -299,7 +313,7 @@ export default function Editor(props) {
                 c = <Generic {...p}></Generic>;
             } else if (currPageInfo.PAGE_TYPE === 'A') {
                 p = {
-                    scenarioComponents: scenarioComponents,
+                    scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
@@ -327,7 +341,7 @@ export default function Editor(props) {
                 c = <Action {...p}></Action>;
             } else if (currPageInfo.PAGE_TYPE === 'R') {
                 p = {
-                    scenarioComponents: scenarioComponents,
+                    scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
@@ -344,12 +358,14 @@ export default function Editor(props) {
                 c = <Reflection {...p}></Reflection>;
             }
 
-            let newScenarioComponents = [...scenarioComponents];
+            let newScenarioComponents = [...scenarioComponentsArray];
             newScenarioComponents = newScenarioComponents.map((x) =>
                 x.id === resp.data.PAGE ? { ...x, component: c } : x
             );
             setScenarioComponents(newScenarioComponents);
+            console.log(g_id);
             setScenarioComponent(c);
+            setShowComponent(true);
         }
 
         function onFailure() {
@@ -386,15 +402,10 @@ export default function Editor(props) {
     const [shouldFetch, setShouldFetch] = useState(0);
     useEffect(handleLogisticsGet, [shouldFetch]);
 
-    let onClick = (id, title) => {
-        if (
-            title !== 'Configure Issues' &&
-            title !== 'Conversation Editor' &&
-            title !== 'Conversation Editor' &&
-            title !== 'Flow Diagram' &&
-            title !== 'Logistics'
-        ) {
-            handlePageGet(setGetValues, id);
+    let onClick = (id, title, scenarioPages) => {
+        console.log(id);
+        if (id !== -1 && id !== -2 && id !== -3 && id !== -4) {
+            handlePageGet(setGetValues, id, scenarioPages);
         }
         setScenarioComponent(
             scenarioComponents.find((x) => x.id === id).component
@@ -439,6 +450,7 @@ export default function Editor(props) {
         const classes = useStyles();
 
         const addNewPage = (pageType, pageName, pageBody) => {
+            setShowComponent(false);
             const endpoint = '/api/pages/';
             // eslint-disable-next-line
             let c = null;
@@ -447,6 +459,7 @@ export default function Editor(props) {
             let postReqBody;
 
             function onSuccess(resp) {
+                setAddNewPageIndex(scenarioComponents.length);
                 setShouldFetch(shouldFetch + 1);
             }
 
@@ -671,7 +684,8 @@ export default function Editor(props) {
                 </div>
                 {!getValues.data ||
                 scenarioComponent === null ||
-                getValues.loading ? (
+                getValues.loading ||
+                !showComponent ? (
                     <LoadingSpinner />
                 ) : (
                     <div>{scenarioComponent}</div>

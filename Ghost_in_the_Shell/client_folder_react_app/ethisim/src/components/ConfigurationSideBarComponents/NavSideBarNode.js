@@ -30,11 +30,12 @@ NavSideBarNode.propTypes = {
     title: PropTypes.string.isRequired,
     deleteByID: PropTypes.any.isRequired,
     component: PropTypes.any,
+    scenarioPages: PropTypes.any,
 };
 
 export default function NavSideBarNode(props) {
     const classes = useStyles();
-    const { onClick, deleteByID, id, title } = props;
+    const { onClick, deleteByID, id, title, scenarioPages } = props;
 
     function handleDelete() {
         deleteByID(id);
@@ -91,7 +92,7 @@ export default function NavSideBarNode(props) {
     }
 
     function handleDisplayComponent() {
-        onClick(id, title);
+        onClick(id, title, scenarioPages);
     }
 
     return <div>{pageType(title)}</div>;
