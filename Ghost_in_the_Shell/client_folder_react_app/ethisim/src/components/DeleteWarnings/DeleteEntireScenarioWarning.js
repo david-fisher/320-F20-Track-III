@@ -42,8 +42,8 @@ export default function DeleteEntireScenarioWarning(props) {
             <DialogContent>
                 <DialogContentText id="alert-dialog-slide-description">
                     This action will delete the entire scenario and all the work
-                    associated with this scenario. Once this action is performed
-                    it cannot be undone!
+                    associated with this scenario. Once this action is
+                    performed, it cannot be undone!
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
