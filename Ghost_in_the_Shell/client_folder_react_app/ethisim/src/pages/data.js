@@ -20,6 +20,7 @@ import get from '../universalHTTPRequests/get';
 import LoadingSpinner from '../components/LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
+import { useLocation } from 'react-router-dom';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -90,6 +91,28 @@ const useStyles = makeStyles((theme) => ({
     copyright: {
         margin: theme.spacing(2),
     },
+    issue: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    errorContainer: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    iconError: {
+        paddingRight: theme.spacing(2),
+        fontSize: '75px',
+    },
+    iconRefreshLarge: {
+        fontSize: '75px',
+    },
+    iconRefreshSmall: {
+        fontSize: '30px',
+    },
 }));
 
 Data.propTypes = {
@@ -98,16 +121,17 @@ Data.propTypes = {
 
 //Needs scenario id
 const endpointGET = '/student_info?scenario_id=';
-const tempScenarioID = '2';
 
-export default function Data({ location }) {
+export default function Data(props) {
     const classes = useStyles();
 
-    const title =
-        'Student Data: ' +
-        location.scenarioData.scenarioName +
-        ' | ' +
-        location.scenarioData.className;
+    const location = useLocation();
+    const scenarioIDFromURL = location.pathname.split('/').pop();
+    const scenario_ID = props.location.data
+        ? props.location.data.SCENARIO
+        : scenarioIDFromURL;
+
+    const title = 'Student Data';
     const [open, setOpen] = useState(false);
     const [selectedResponseData, setSelectedResponseData] = useState({});
 
@@ -118,7 +142,7 @@ export default function Data({ location }) {
     });
 
     let getData = () => {
-        get(setStudentList, endpointGET + tempScenarioID);
+        get(setStudentList, endpointGET + scenario_ID);
     };
 
     useEffect(getData, []);
@@ -137,28 +161,8 @@ export default function Data({ location }) {
         },
     })(Typography);
 
-    if (studentList.loading) {
-        return <LoadingSpinner />;
-    }
-
-    if (studentList.error) {
-        return (
-            <div className={classes.issue}>
-                <div className={classes.container}>
-                    <ErrorIcon className={classes.iconError} />
-                    <Typography align="center" variant="h3">
-                        Error in fetching issues.
-                    </Typography>
-                </div>
-                <Button variant="contained" color="primary" onClick={getData}>
-                    <RefreshIcon className={classes.iconRefreshLarge} />
-                </Button>
-            </div>
-        );
-    }
-
-    return (
-        <Container component="main" className={classes.container}>
+    const NavBar = (
+        <div>
             <CssBaseline />
             <AppBar position="fixed">
                 <Toolbar>
@@ -181,6 +185,41 @@ export default function Data({ location }) {
                     </Button>
                 </Toolbar>
             </AppBar>
+        </div>
+    );
+
+    if (studentList.loading) {
+        return (
+            <div>
+                {NavBar}
+                <div style={{ marginTop: '100px' }}>
+                    <LoadingSpinner />
+                </div>
+            </div>
+        );
+    }
+
+    if (studentList.error) {
+        return (
+            <div className={classes.issue}>
+                {NavBar}
+
+                <div className={classes.container}>
+                    <ErrorIcon className={classes.iconError} />
+                    <Typography align="center" variant="h3">
+                        Error in fetching Student Data.
+                    </Typography>
+                </div>
+                <Button variant="contained" color="primary" onClick={getData}>
+                    <RefreshIcon className={classes.iconRefreshLarge} />
+                </Button>
+            </div>
+        );
+    }
+
+    return (
+        <Container component="main" className={classes.container}>
+            {NavBar}
 
             <StudentResponseDialog
                 open={open}

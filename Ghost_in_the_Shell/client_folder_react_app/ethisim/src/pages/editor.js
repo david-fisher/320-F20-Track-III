@@ -127,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 0,
     },
     issue: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(10),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -157,11 +157,13 @@ Editor.propTypes = {
 export default function Editor(props) {
     const [showComponent, setShowComponent] = useState(true);
     const [openPopup, setOpenPopup] = useState(false);
+
     const location = useLocation();
-    const url = location.pathname.split('/').pop();
+    const scenarioIDFromURL = location.pathname.split('/').pop();
     const scenario_ID = props.location.data
         ? props.location.data.SCENARIO
-        : url;
+        : scenarioIDFromURL;
+
     //TODO when version control is implemented
     const tempVersionID = 1;
 
@@ -615,10 +617,6 @@ export default function Editor(props) {
             setOpenPopup(true);
         }
 
-        if (showEditor === false) {
-            return <LoadingSpinner />;
-        }
-
         return (
             <div>
                 <Drawer
@@ -666,32 +664,8 @@ export default function Editor(props) {
         );
     }
 
-    if (getValues.error) {
-        return (
-            <div className={classes.issue}>
-                <div className={classes.container}>
-                    <ErrorIcon className={classes.iconError} />
-                    <Typography align="center" variant="h3">
-                        Error in fetching Scenario Data.
-                    </Typography>
-                </div>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleLogisticsGet}
-                >
-                    <RefreshIcon className={classes.iconRefreshLarge} />
-                </Button>
-            </div>
-        );
-    }
-
-    if (showEditor === false) {
-        return <LoadingSpinner />;
-    }
-
-    return (
-        <div className={classes.container}>
+    const NavBar = (
+        <div>
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -732,7 +706,39 @@ export default function Editor(props) {
                     </Button>
                 </Toolbar>
             </AppBar>
+        </div>
+    );
 
+    if (getValues.error) {
+        return (
+            <div>
+                {NavBar}
+                <div className={classes.issue}>
+                    <div className={classes.container}>
+                        <ErrorIcon className={classes.iconError} />
+                        <Typography align="center" variant="h3">
+                            Error in fetching Scenario Data.
+                        </Typography>
+                    </div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleLogisticsGet}
+                    >
+                        <RefreshIcon className={classes.iconRefreshLarge} />
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    if (showEditor === false) {
+        return <LoadingSpinner />;
+    }
+
+    return (
+        <div className={classes.container}>
+            {NavBar}
             <Sidebar />
             <main
                 className={clsx(classes.content1, {
