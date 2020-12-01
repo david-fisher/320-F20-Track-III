@@ -27,13 +27,6 @@ export default function DeleteEntireScenarioWarning(props) {
         setOpen(false);
     };
 
-    /*TODO
-     * Set the onClick of the "No" button below to "remove" imported from props,
-     * instead of handleClose. A remove func should be passed to Our
-     * DeletePopupDashboard component in ScenarioCard.js to allow for Deletion
-     * functionailty of a scenario
-     *
-     */
     return (
         <Dialog
             open={open}
@@ -54,7 +47,7 @@ export default function DeleteEntireScenarioWarning(props) {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={remove} color="primary">
                     Yes
                 </Button>
                 <Button onClick={handleClose} color="primary">

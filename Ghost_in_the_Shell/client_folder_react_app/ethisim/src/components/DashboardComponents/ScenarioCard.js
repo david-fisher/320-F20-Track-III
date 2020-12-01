@@ -107,11 +107,11 @@ export default function ScenarioCard({
     onDelete,
 }) {
     const [open, setOpen] = React.useState(false);
-    const classes = useStyles();
     const [openDeletePopup, setOpenDeletePopup] = React.useState(false);
+    const classes = useStyles();
 
     const handleClickOpenDeletePopup = () => {
-        setOpen(true);
+        setOpenDeletePopup(true);
     };
 
     const handleClickOpen = () => {
