@@ -94,10 +94,10 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tldlnbay',
-        'USER': 'tldlnbay',
-        'PASSWORD': 'N7HX71HjRn4iCfEQ4Ew4iaZmcdFTdzjR',
-        'HOST': 'rajje.db.elephantsql.com',
+        'NAME': 'cnehcbso',
+        'USER': 'cnehcbso',
+        'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
+        'HOST': 'raja.db.elephantsql.com',
         'PORT': '5432',
     }
 }
