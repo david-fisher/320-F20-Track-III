@@ -43,6 +43,7 @@ urlpatterns = [
     path('flowchart', flowchart.as_view()),
     path('coverages', coverages_page.as_view()),
     path('stakeholder', stakeholders_page.as_view()),
+    path('coverages', coverages_page.as_view()),
 
 ] 
 

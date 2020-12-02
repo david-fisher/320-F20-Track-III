@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,15 +56,24 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',  
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
 ]
-CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
+CORS_ORIGIN_ALLOW_ALL = False # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = [
+CORS_ALLOW_HEADERS = default_headers + ('Access-Control-Allow-Origin',)
+CORS_ALLOWED_ORIGIN = [
     'http://localhost:3030',
+    'http://localhost:3000',
+    'http://127.0.0.1:8000/api/',
+    'http://127.0.0.1:8000/',
 ] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
-CORS_ORIGIN_REGEX_WHITELIST = [
+CORS_ALLOWED_ORIGINI_REGEXES= [
     'http://localhost:3030',
+    'http://localhost:3000',
+    'http://127.0.0.1:8000/api/',
+    'http://127.0.0.1:8000/',
 ]
+
 
 ROOT_URLCONF = 'lead.urls'
 
