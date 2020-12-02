@@ -8,8 +8,10 @@ class scenarios(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
     SCENARIO = models.AutoField(primary_key = True, editable=False)
+
     #TODO remove professors
     PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)
+
     VERSION = models.IntegerField(default=1, editable=False)
     NAME = models.CharField(max_length = 1000)
     PUBLIC = models.BooleanField(default = False)
@@ -80,11 +82,12 @@ class stakeholders(models.Model):
     STAKEHOLDER = models.AutoField(primary_key = True, editable = False)
     SCENARIO = models.ForeignKey('scenarios', to_field = 'SCENARIO', on_delete = models.CASCADE, related_name="stakeholders2", default = 1)
     VERSION = models.IntegerField(default=1, editable=False)
-    NAME = models.CharField(max_length = 1000, default = None)
-    DESCRIPTION = models.TextField()
-    JOB = models.TextField()
+
+    NAME = models.CharField(max_length = 1000, default = "deafult")
+    DESCRIPTION = models.TextField(default = "default")
+    JOB = models.TextField(default = "default")
     # MATRIX = ArrayField(ArrayField(models.IntegerField(), size = 15), size = 15)
-    INTRODUCTION = models.TextField(default = '')
+    INTRODUCTION = models.TextField(default = 'default')
 
 
 
@@ -102,8 +105,9 @@ class conversations(models.Model):
         unique_together = (('STAKEHOLDER'), ('CONVERSATION'))
     STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations1")
     CONVERSATION = models.AutoField(default = None, primary_key = True)
-    QUESTION = models.TextField()
-    RESPONSE = models.TextField()
+    QUESTION = models.TextField(default = "default")
+    RESPONSE = models.TextField(default = "default")
+
 
 
 
@@ -116,6 +120,7 @@ class responses(models.Model):
     COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="responses4")
     DATE_TAKEN = models.DateField(auto_now_add=True)
     #ACTION_PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="responses5")
+
     CHOICE = models.TextField()
 
 
