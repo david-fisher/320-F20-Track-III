@@ -109,13 +109,13 @@ class conversations(models.Model):
 
 class responses(models.Model):
     class Meta:
-        unique_together = (('STUDENT'), ('SCENARIO'),('VERSION'),('COURSE'))
+        unique_together = (('STUDENT'), ('SCENARIO'),('VERSION'),('COURSE'),('ACTION_PAGE'))
     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="responses1")
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses2")
     VERSION = models.IntegerField(default=1, editable=False)
     COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="responses4")
     DATE_TAKEN = models.DateField(auto_now_add=True)
-    #ACTION_PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="responses5")
+    ACTION_PAGE = models.ForeignKey('pages', null = True, on_delete = models.CASCADE, related_name="responses5")
     CHOICE = models.TextField()
 
 
@@ -142,6 +142,7 @@ class reflections_taken(models.Model):
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="reflections_taken3")
     VERSION = models.IntegerField(default=1, editable=False)
     DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken5")
+    PAGE = models.ForeignKey('pages',null = True, on_delete = models.CASCADE, related_name = 'reflections_taken6')
 
 
 

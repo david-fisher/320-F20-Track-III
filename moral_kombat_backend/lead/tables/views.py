@@ -680,3 +680,73 @@ class student_info(APIView):
         return Response(data)
 
 
+# class student_responses(APIView):
+#     def get(self, request, *args, **kwargs):
+#         SCENARIO = self.request.query_params.get('scenario_id')
+#         STUDENT = self.request.query_params.get('student_id')
+#         filterargs = {'SCENARIO_id':SCENARIO,'STUDENT_id':STUDENT}
+#         responses_query = responses.objects.filter(**filterargs).values()
+#         data = []
+#         for response in responses_query:
+#             reflections_query = reflections_taken.objects.filter(**filterargs).values()
+#             reflections_array = []
+#             for reflections in reflections_query:
+#                 reflect_date_dict= {"REFLECTION":reflections['REFLECTIONS'],"DATE_TAKEN":reflections['DATE_TAKEN_id']}
+#                 reflections_array.append(reflect_date_dict)
+#             response['REFLECTIONS'] = reflections_array
+#             data.append(response)
+#         return Response(data)
+
+class student_responses(APIView):
+    def get(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('scenario_id')
+        STUDENT = self.request.query_params.get('student_id')
+        filterargs = {'SCENARIO_id':SCENARIO,'STUDENT_id':STUDENT}
+        responses_query = responses.objects.filter(**filterargs).values()
+        choice_array = []
+        choices_array = []
+        choices_dict = {}
+        for response in responses_query:
+            name_query = pages.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+            for name in name_query:
+                NAME = name['PAGE_TITLE']
+                TYPE = name['PAGE_TYPE']
+                # choices_dict["NAME"] = name['PAGE']
+            choices_query = action_page.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+            for choice in choices_query:
+                choice_array.append(choice['CHOICE'])
+            # choices_dict["CHOICES"] = choice_array
+            chosen_query = responses.objects.filter(ACTION_PAGE_id = response["ACTION_PAGE_id"]).values()
+            for chose in chosen_query:
+                # choices_dict["CHOSEN"] = chose['CHOICE']
+                # choices_dict["DATE_TAKEN"] = chose['DATE_TAKEN']
+                CHOSEN = chose['CHOICE']
+                DATE_TAKEN = chose['DATE_TAKEN']
+            
+            # choices_array.append(choices_dict)
+            if TYPE == 'A':
+                choices_dict = {"NAME": NAME, "CHOICES":choice_array, "CHOSEN": CHOSEN, "DATE_TAKEN": DATE_TAKEN }
+                choices_array.append(choices_dict)
+
+        reflections_array = []
+        reflections_dict = {}
+        for response in responses_query:
+            name_query = pages.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+            for name in name_query:
+                NAME = name['PAGE_TITLE']
+                TYPE = name['PAGE_TYPE']
+            ref_questions_query = reflection_questions.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+            for question in ref_questions_query:
+                QUESTION = question['REFLECTION_QUESTION']
+            ref_answers_query = reflections_taken.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+            for answer in ref_answers_query:
+                REFLECTION = answer['REFLECTIONS']
+            if TYPE == 'R':
+                reflections_dict = {"NAME": NAME, "QUESTION": QUESTION, "REFLECTION": REFLECTION, "DATE_TAKEN": DATE_TAKEN}
+                reflections_array.append(reflections_dict)
+        data_dict = {}
+        data_dict["Choices"] = choices_array
+        data_dict["Reflections"] = reflections_array
+        return Response(data_dict)
+
+
