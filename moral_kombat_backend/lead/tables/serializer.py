@@ -43,7 +43,7 @@ class Reflection_questionsSerializer(serializers.ModelSerializer):
 class StakeholdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = stakeholders
-        fields = ('STAKEHOLDER', 'NAME', 'DESCRIPTION', 'INTRODUCTION', 'SCENARIO', 'VERSION', 'JOB')
+        fields = '__all__'
     
 class ConversationsSerializer(serializers.ModelSerializer):
     class Meta: 
@@ -104,12 +104,12 @@ class Professors_teachSerializer(serializers.ModelSerializer):
 class IssuesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issues
-        fields = ('SCENARIO', 'ISSUE', 'VERSION', 'NAME', 'IMPORTANCE_SCORE')
+        fields = '__all__'
 
 class Action_pageSerializer(serializers.ModelSerializer):
     class Meta:
         model = action_page
-        fields = ('id', 'PAGE', 'CHOICE', 'RESULT_PAGE')
+        fields = '__all__'
 
 
 # Serializers for page types
