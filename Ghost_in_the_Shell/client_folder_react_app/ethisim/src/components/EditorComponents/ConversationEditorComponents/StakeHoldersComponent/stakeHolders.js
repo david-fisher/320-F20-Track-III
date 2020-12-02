@@ -3,8 +3,6 @@ import StakeHolder from './stakeHolder';
 import Button from '@material-ui/core/Button';
 import './stakeHolders.css';
 import PropTypes from 'prop-types';
-//import Time from 'react-time';
-//import LoadingSpinner from './../../../../components/LoadingSpinner';
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
@@ -13,6 +11,8 @@ StakeHolderFields.propTypes = {
 
 export default function StakeHolderFields() {
     const scenario = 2;
+    const [didGetSHs, setDidGetSHs] = useState(false);
+
     /*
      * This section is code that is essentially the middleware between the frontend and backend
      * Handles API calls between frontend and backend
@@ -193,9 +193,22 @@ export default function StakeHolderFields() {
         return <div> currently loading...</div>;
     }
 
-    getExistingStakeHolders();
+    if (!didGetSHs) {
+        setDidGetSHs(true);
+        getExistingStakeHolders();
+    }
+
     return (
         <div className="stakeHolders">
+            <Button
+                id="button"
+                onClick={getExistingStakeHolders}
+                variant="contained"
+                color="primary"
+            >
+                Get Stakeholders
+            </Button>
+
             <Button
                 id="button"
                 onClick={addStakeHolder}
