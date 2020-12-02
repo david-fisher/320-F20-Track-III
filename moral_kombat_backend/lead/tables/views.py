@@ -509,7 +509,7 @@ class pages_page(APIView):
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-                    nested_serializer.save()
+                    #nested_serializer.save()
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
             # If the request was badly made or could not be created
@@ -531,7 +531,7 @@ class pages_page(APIView):
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-                    nested_serializer.save()
+                    #nested_serializer.save()
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
             # If the request was badly made or could not be created
@@ -553,7 +553,7 @@ class pages_page(APIView):
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-                    nested_serializer.save()
+                    #nested_serializer.save()
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
             # If the request was badly made or could not be created
@@ -575,7 +575,7 @@ class pages_page(APIView):
                         page = pages.objects.get(PAGE=page_id)
                         page.delete()
                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-                    nested_serializer.save() #DELETE
+                    #nested_serializer.save() #DELETE
                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
 
             # If the request was badly made or could not be created
@@ -584,7 +584,6 @@ class pages_page(APIView):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST) 
 
-    # WIP
     # @api_view(['PUT'])
     def put(self, request):
 
@@ -596,6 +595,9 @@ class pages_page(APIView):
             page = pages.objects.get(PAGE = PAGE_ID)
         except pages.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # PLEASE DON'T MODIFY THE SCENARIO
+        request.data["SCENARIO"] = PagesSerializer(page).data['SCENARIO']
 
         if request.method == "PUT": 
         
@@ -613,6 +615,7 @@ class pages_page(APIView):
                             reflection_page = reflection_questions.objects.get(id = question.get('id'))
                         except:
                             # If the subpage DOES NOT EXIST, then you create that new page and post it and continue to the next component
+                            question['PAGE'] = PAGE_ID
                             nested_serializer = Reflection_questionsSerializer(data=question)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
@@ -620,6 +623,7 @@ class pages_page(APIView):
                                 return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
+                        question['PAGE'] = PAGE_ID
                         nested_serializer = Reflection_questionsSerializer(reflection_page, data=question)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
@@ -641,6 +645,7 @@ class pages_page(APIView):
                             choices_page = action_page.objects.get(id = action.get('id'))
                         except:
                             # If the subpage DOES NOT EXIST, then you create that new page and post it and continue to the next component
+                            action['PAGE'] = PAGE_ID
                             nested_serializer = Action_pageSerializer(data=action)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
@@ -648,6 +653,7 @@ class pages_page(APIView):
                                 return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
+                        action['PAGE'] = PAGE_ID
                         nested_serializer = Action_pageSerializer(choices_page, data=action)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
@@ -669,6 +675,7 @@ class pages_page(APIView):
                             body_page = generic_page.objects.get(id = body.get('id'))
                         except:
                             # If the subpage DOES NOT EXIST, then you create that new page and post it and continue to the next component
+                            body['PAGE'] = PAGE_ID
                             nested_serializer = Generic_pageSerializer(data=body)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
@@ -676,6 +683,7 @@ class pages_page(APIView):
                                 return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
+                        body['PAGE'] = PAGE_ID
                         nested_serializer = Generic_pageSerializer(body_page, data=body)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
@@ -697,6 +705,7 @@ class pages_page(APIView):
                             page_stakeholder = stakeholder_page.objects.get(id = stakeholder.get('id'))
                         except:
                             # If the subpage DOES NOT EXIST, then you create that new page and post it and continue to the next component
+                            stakeholder['PAGE'] = PAGE_ID
                             nested_serializer = Stakeholder_pageSerializer(data=stakeholder)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
@@ -704,6 +713,7 @@ class pages_page(APIView):
                                 return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
+                        stakeholder['PAGE'] = PAGE_ID
                         nested_serializer = Stakeholder_pageSerializer(page_stakeholder, data=stakeholder)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
