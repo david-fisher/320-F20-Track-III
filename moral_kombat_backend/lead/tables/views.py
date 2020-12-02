@@ -584,8 +584,9 @@ class pages_page(APIView):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST) 
 
-        # WIP
-  '''  def put(self, request):
+    # WIP
+    # @api_view(['PUT'])
+    def put(self, request):
 
         # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
         PAGE_ID = self.request.query_params.get('page_id')
@@ -612,10 +613,16 @@ class pages_page(APIView):
                         reflection_pages = reflection_questions.objects.filter(PAGE = PAGE_ID).values()
                     except reflection_questions.DoesNotExist:
                         return Response(status=status.HTTP_404_NOT_FOUND)
+
                     for question in request.data['REFLECTION_QUESTIONS']:
-                        nested_serializer = Reflection_questionsSerializer(reflection_page, data=question)
-                        if nested
-'''
+                        reflection_page_id = reflection_questions.objects.get(id = question['id']) 
+                        nested_serializer = Reflection_questionsSerializer(reflection_page_id, data=question)
+                        if nested_serializer.is_valid():
+                            nested_serializer.save()
+                        else:
+                            return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(pages_serializer.data + nested_serializer.data, status=status.HTTP_201_CREATED)
+
 
     # @api_view(['DELETE'])
     def delete(self, request):
@@ -632,15 +639,33 @@ class pages_page(APIView):
         
         # Delete the page
         if (request.method == "DELETE"):
-            next_pages = page.objects.filter(NEXT_PAGE = PAGE_ID).values()
-            for next_page in next_pages:
-                original_page = next_page
-                next_page["NEXT_PAGE"] = None
-                pages_serializer = PagesSerializer(original_page, next_page)
+            #set next page field of pages pointing to the deleted page to be None/Null
+            next_pages = pages.objects.filter(NEXT_PAGE = PAGE_ID)
+            for updated_page in next_pages:
+                extant_page = updated_page
+                updated_page.NEXT_PAGE = None
+                updated_page_dict = PagesSerializer(updated_page).data
+                pages_serializer = PagesSerializer(extant_page, data=updated_page_dict)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                 else:
-                    return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                    print("error in making next_page = null during delete!")
+                    return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            #also set and result_page fields pointing to the deleted page to be null as well.
+            action_pages = action_page.objects.filter(RESULT_PAGE = PAGE_ID)
+            for updated_page in action_pages:
+                extant_page = updated_page
+                updated_page.RESULT_PAGE = None
+                updated_page_dict = Action_pageSerializer(updated_page).data
+                action_pages_serializer = Action_pageSerializer(extant_page, data=updated_page_dict)
+                if action_pages_serializer.is_valid():
+                    action_pages_serializer.save()
+                else:
+                    print("error in making next_page = null during delete!")
+                    return Response(action_pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Finally delete the page 
             operation = page.delete()
             page_data = {}
             if (operation):
