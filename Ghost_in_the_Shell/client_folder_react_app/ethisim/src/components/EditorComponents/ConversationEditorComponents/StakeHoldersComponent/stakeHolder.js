@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
@@ -15,10 +15,10 @@ import './stakeHolder.css';
 import QuestionFields from './StakeHolderQuestions/questions';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
-import htmlToText from 'html-to-text';
 import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
-import { databaseURL } from './../../../../Constants/Config.js';
+import SuccessBanner from './../../../Banners/SuccessBanner';
+import ErrorBanner from './../../../Banners/ErrorBanner';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -113,6 +113,29 @@ export default function StakeHolder({
 
     const baseURL = 'http://127.0.0.1:8000/';
 
+    //for success and error banners
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
+
     //TABLE
     const [rows, setRows] = useState([]);
 
@@ -124,7 +147,6 @@ export default function StakeHolder({
     });
 
     const removeRow = (rowID) => {
-        console.log(rowID);
         const leftRows = rows.filter((r) => r.id !== rowID);
         setRows(leftRows);
     };
@@ -132,7 +154,6 @@ export default function StakeHolder({
     const addRow = (e) => {
         const newRows = [...rows, row];
         setRows(newRows);
-        console.log(...rows);
         setEdit({ id: Math.floor(Math.random() * 10000) });
     };
 
@@ -168,12 +189,10 @@ export default function StakeHolder({
 
     let handleChangeBiography = (content, editor) => {
         setStakeHolderBiography(content);
-        console.log(content);
     };
 
     let handleChangeConversation = (content, editor) => {
         setStakeHolderConversation(content);
-        console.log(content);
     };
 
     const onChangeName = (e) => {
@@ -214,12 +233,12 @@ export default function StakeHolder({
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 setQRData(response.data);
                 setOpenQuestions(true);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to get the conversation(s) for this stakeholder! Please try again.');
+                setErrorBannerFade(true);
             });
     }
 
@@ -229,7 +248,7 @@ export default function StakeHolder({
 
         var config = {
             method: 'get',
-            url: baseURL + 'api/coverage?STAKEHOLDER=' + id,
+            url: baseURL + 'coverages?stakeholder_id=' + id,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -238,12 +257,12 @@ export default function StakeHolder({
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 setIssues(response.data);
                 setOpenPointSelection(true);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to get the issue(s) for this stakeholder! Please try again.');
+                setErrorBannerFade(true);
             });
     }
 
@@ -716,17 +735,6 @@ export default function StakeHolder({
                         <h2 className="point-selection-header">
                             Point Selection
                         </h2>
-                        {
-                            //TODO
-                            //remove 'Add Issue' button; currently exists for testing
-                        }
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={addRow}
-                        >
-                            Add Issue
-                        </Button>
                     </DialogTitle>
                     <DialogContent>
                         <BasicTable 
@@ -737,6 +745,14 @@ export default function StakeHolder({
                     </DialogContent>
                 </div>
             </Dialog>
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
         </div>
     );
 }

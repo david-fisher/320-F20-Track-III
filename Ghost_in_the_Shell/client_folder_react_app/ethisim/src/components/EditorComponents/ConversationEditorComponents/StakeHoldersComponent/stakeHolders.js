@@ -3,14 +3,18 @@ import StakeHolder from './stakeHolder';
 import Button from '@material-ui/core/Button';
 import './stakeHolders.css';
 import PropTypes from 'prop-types';
+import SuccessBanner from './../../../Banners/SuccessBanner';
+import ErrorBanner from './../../../Banners/ErrorBanner';
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
     setStakeHolders: PropTypes.any,
 };
 
-export default function StakeHolderFields() {
+export default function StakeHolderFields( {scenario_id} ) {
+    //eventaully, scenario will be replaced by scenario_id
     const scenario = 2;
+
     const [didGetSHs, setDidGetSHs] = useState(false);
 
     /*
@@ -28,6 +32,29 @@ export default function StakeHolderFields() {
     //the base url for api calls; will be imported eventually
     const baseURL = 'http://127.0.0.1:8000/';
 
+    //for success and error banners
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
+
     //handles GETting existing stakeholders from the backend and representing
     //    that information in the frontend
     function getExistingStakeHolders() {
@@ -43,11 +70,11 @@ export default function StakeHolderFields() {
 
         axios(config)
             .then(function (response) {
-                console.log(response.data);
                 setStakeHolders(response.data);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to get Stakeholders! Please try again.')
+                setErrorBannerFade(true);
             });
     }
 
@@ -60,7 +87,6 @@ export default function StakeHolderFields() {
         setLoading(true);
 
         //handling it on the frontend
-        console.log(stakeHolderID);
         const leftStakeHolders = stakeHolders.filter(
             (s) => s.STAKEHOLDER !== stakeHolderID
         );
@@ -69,9 +95,6 @@ export default function StakeHolderFields() {
         //calling the DELETE request on the backend
         var data = JSON.stringify({});
 
-        console.log(
-            'sending DELETE request for stakeholder_id ' + stakeHolderID
-        );
         var config = {
             method: 'delete',
             url: baseURL + 'api/stakeholders/' + stakeHolderID + '/',
@@ -83,10 +106,12 @@ export default function StakeHolderFields() {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
+                setSuccessBannerMessage('Successfully deleted the stakeholder!');
+                setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to delete the stakeholder! Please try again.');
+                setErrorBannerFade(true);
             });
 
         setLoading(false);
@@ -117,11 +142,13 @@ export default function StakeHolderFields() {
         var newStakeHolder;
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 setStakeHolders([...stakeHolders, response.data]);
+                setSuccessBannerMessage('Successfully created a new stakeholder!');
+                setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to create a stakeholder! Please try again.');
+                setErrorBannerFade(true);
             });
 
         setLoading(false);
@@ -143,15 +170,12 @@ export default function StakeHolderFields() {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
-                console.log(
-                    'Successfully PUT local stakeholders to the database'
-                );
+                setSuccessBannerMessage('Successfully saved the stakeholders!');
+                setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                //TODO
-                //what happens when we fail to save?
-                console.log(error);
+                setErrorBannerMessage('Failed to save the stakeholders! Please try again.');
+                setErrorBannerFade(true);
             });
     };
 
@@ -234,6 +258,14 @@ export default function StakeHolderFields() {
                     Save Stakeholder Changes
                 </Button>
             </div>
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
         </div>
     );
 }

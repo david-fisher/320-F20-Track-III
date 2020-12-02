@@ -3,13 +3,15 @@ import QuestionField from './question';
 import Button from '@material-ui/core/Button';
 import './questions.css';
 import PropTypes from 'prop-types';
+import SuccessBanner from './../../../../Banners/SuccessBanner';
+import ErrorBanner from './../../../../Banners/ErrorBanner';
 
 QuestionFields.propTypes = {
     qrs: PropTypes.any,
     stakeholder_id: PropTypes.number,
 };
 
-export default function QuestionFields({qrs, stakeholder_id, }) {
+export default function QuestionFields({ qrs, stakeholder_id, }) {
     //used to track if we are waiting on a HTTP GET/POST/PUT request
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
@@ -17,6 +19,29 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
 
     //the base url for api calls; will be imported eventually
     const baseURL = 'http://127.0.0.1:8000/';
+
+    //for success and error banners
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
 
     const [QRs, setQRs] = useState(qrs);
 
@@ -26,7 +51,7 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
 
         var config = {
             method: 'put',
-            url: 'http://127.0.0.1:8000/multi_conv?STAKEHOLDER=93',
+            url: baseURL + 'multi_conv?STAKEHOLDER=' + stakeholder_id,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -35,10 +60,12 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
 
         axios(config)
             .then(function (response) {
-                console.log("Successfully saved conversations for this stakeholder");
+                setSuccessBannerMessage('Successfully saved the conversations for this stakeholder!');
+                setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to save the conversations for this stakeholder! Please try again.');
+                setErrorBannerFade(true);
             });
     }
 
@@ -61,15 +88,17 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 const newQRs = [
                     ...QRs,
                     response.data
                 ];
                 setQRs(newQRs);
+                setSuccessBannerMessage('Successfully created a conversation!');
+                setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to create a conversation! Please try again.');
+                setErrorBannerFade(true);
             });
 
         setLoading(false);
@@ -81,7 +110,6 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
         }
         setLoading(true);
 
-        console.log(questionID);
         const leftQuestions = QRs.filter(
             (q) => q.CONVERSATION !== questionID
         );
@@ -100,19 +128,21 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
+                setSuccessBannerMessage('Successfully deleted the conversation!');
+                setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                console.log(error);
+                setErrorBannerMessage('Failed to delete the conversation! Please try again.')
+                setErrorBannerFade(true);
             });
 
         setLoading(false);
     };
 
-        /*
-     * This section is about managing time to prevent sending a combination of multiple
-     *    HTTP GET/POST/PUT/DELETE calls before a response is returned
-     */
+    /*
+ * This section is about managing time to prevent sending a combination of multiple
+ *    HTTP GET/POST/PUT/DELETE calls before a response is returned
+ */
     const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
     //gets the current time in hms and converts it to an int
     function getCurrentTimeInt() {
@@ -152,6 +182,14 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
             >
                 Add Question
             </Button>
+            <Button
+                id="button"
+                variant="contained"
+                color="primary"
+                onClick={handleSave}
+            >
+                Save Changes
+            </Button>
             <form id="form">
                 {QRs.map((data) => (
                     <QuestionField
@@ -160,18 +198,19 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
                         removeQuestion={removeQuestion}
                         question={data.QUESTION}
                         response={data.RESPONSE}
-                        QRs = {QRs}
-                        setQRs = {setQRs}
+                        QRs={QRs}
+                        setQRs={setQRs}
                     />
                 ))}
             </form>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSave}
-            >
-                Save Changes
-            </Button>
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
         </div>
     );
 }

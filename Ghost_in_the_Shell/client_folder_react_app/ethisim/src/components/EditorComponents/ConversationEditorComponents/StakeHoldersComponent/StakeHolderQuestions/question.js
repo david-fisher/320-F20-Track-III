@@ -50,7 +50,6 @@ export default function QuestionField({
     const onChangeQuestion = (e) => {
         setQuestionValue(e.target.value);
         updateQRs(e.target.value, responseValue);
-        console.log(e.target.value)
     }
 
     const onChangeResponse = (e) => {

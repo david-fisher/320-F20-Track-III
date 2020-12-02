@@ -43,6 +43,16 @@ export default function BasicTable(props) {
 
     return (
         <div>
+            <Button
+                id="button-save"
+                variant="contained"
+                color="primary"
+                //onClick={() => props.removeRow(row.id)}
+                //TODO
+                //functionality for updating issue scores
+            >
+                Save Changes
+            </Button>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
@@ -75,17 +85,6 @@ export default function BasicTable(props) {
                     </TableBody>
                 </Table>
             </TableContainer>
-
-            <Button
-                id="button-save"
-                variant="contained"
-                color="primary"
-                //onClick={() => props.removeRow(row.id)}
-                //TODO
-                //functionality for updating issue scores
-            >
-                Save Changes
-            </Button>
         </div>
     );
 }
