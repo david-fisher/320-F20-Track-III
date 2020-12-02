@@ -682,6 +682,8 @@ class student_info(APIView):
 
 class student_responses(APIView):
     def get(self, request, *args, **kwargs):
+
+        #filter by scenario and student id 
         SCENARIO = self.request.query_params.get('scenario_id')
         STUDENT = self.request.query_params.get('student_id')
         filterargs = {'SCENARIO_id':SCENARIO,'STUDENT_id':STUDENT}
@@ -689,30 +691,29 @@ class student_responses(APIView):
         choice_array = []
         choices_array = []
         choices_dict = {}
+        #get the different actions
         for response in responses_query:
+            #filter by page number 
             name_query = pages.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+
             for name in name_query:
                 NAME = name['PAGE_TITLE']
                 TYPE = name['PAGE_TYPE']
-                # choices_dict["NAME"] = name['PAGE']
             choices_query = action_page.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
             for choice in choices_query:
                 choice_array.append(choice['CHOICE'])
-            # choices_dict["CHOICES"] = choice_array
             chosen_query = responses.objects.filter(ACTION_PAGE_id = response["ACTION_PAGE_id"]).values()
             for chose in chosen_query:
-                # choices_dict["CHOSEN"] = chose['CHOICE']
-                # choices_dict["DATE_TAKEN"] = chose['DATE_TAKEN']
                 CHOSEN = chose['CHOICE']
                 DATE_TAKEN = chose['DATE_TAKEN']
-            
-            # choices_array.append(choices_dict)
+            #only if it is an action page
             if TYPE == 'A':
                 choices_dict = {"NAME": NAME, "CHOICES":choice_array, "CHOSEN": CHOSEN, "DATE_TAKEN": DATE_TAKEN }
                 choices_array.append(choices_dict)
             choice_array = []
         reflections_array = []
         reflections_dict = {}
+        #get the different reflections
         for response in responses_query:
             name_query = pages.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
             for name in name_query:
@@ -724,6 +725,7 @@ class student_responses(APIView):
             ref_answers_query = reflections_taken.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
             for answer in ref_answers_query:
                 REFLECTION = answer['REFLECTIONS']
+                #only if it is a reflection page 
             if TYPE == 'R':
                 reflections_dict = {"NAME": NAME, "QUESTION": QUESTION, "REFLECTION": REFLECTION, "DATE_TAKEN": DATE_TAKEN}
                 reflections_array.append(reflections_dict)
