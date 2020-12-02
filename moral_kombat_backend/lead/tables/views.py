@@ -621,7 +621,7 @@ class pages_page(APIView):
                             nested_serializer.save()
                         else:
                             return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                    return Response(pages_serializer.data + nested_serializer.data, status=status.HTTP_201_CREATED)
+                    return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
 
 
     # @api_view(['DELETE'])
