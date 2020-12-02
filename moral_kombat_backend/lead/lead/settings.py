@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,10 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'tables',
+    'corsheaders',
     'django_filters',
     'rest_framework',
-    'corsheaders',
-
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,7 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
+
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'yitccvki',
         'USER': 'yitccvki',

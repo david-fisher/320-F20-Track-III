@@ -4,6 +4,7 @@ from django.urls import path
 from django.conf import settings
 from .views import *
 from django.conf.urls import url
+
 # DemographicsViewSet, allScenariosViewSet, StudentsViewSet, ProfessorsViewSet, ScenariosViewSet, Choices_forViewSet, Stakeholder_pageViewSet, ConversationsViewSet, Stakeholder_inViewSet, StakeholdersViewSet
 
 router = routers.DefaultRouter()
@@ -27,16 +28,26 @@ router.register('api/professors_teach', Professors_teachViewSet, 'professors_tea
 router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
 router.register('api/issues', IssuesViewSet, 'issues')
 router.register('api/action_page', Action_pageViewSet, 'action_page')
+router.register('api/coverage', CoverageViewSet, 'coverage')
+
 
 urlpatterns = [
     path('allScenarios', allScenariosViewSet.as_view()),
+    path('multi_conv', multi_conv.as_view()),
+    path('multi_stake', multi_stake.as_view()),
+    path('multi_coverage', multi_coverage.as_view()),
     path('logistics', logistics_page.as_view()),
-    path('page', pages_page.as_view()),
     path('multi_issue', multi_issue.as_view()),
     path('dashboard', dashboard_page.as_view()),
     path('flowchart', flowchart.as_view()),
     path('student_info',student_info.as_view()),
     path('student_responses',student_responses.as_view())
+
+    path('coverages', coverages_page.as_view()),
+    path('stakeholder', stakeholders_page.as_view()),
+    path('coverages', coverages_page.as_view()),
+    path('page', pages_page.as_view()),
+
 ] 
 
 urlpatterns += router.urls
