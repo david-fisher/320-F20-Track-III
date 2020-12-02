@@ -680,23 +680,6 @@ class student_info(APIView):
         return Response(data)
 
 
-# class student_responses(APIView):
-#     def get(self, request, *args, **kwargs):
-#         SCENARIO = self.request.query_params.get('scenario_id')
-#         STUDENT = self.request.query_params.get('student_id')
-#         filterargs = {'SCENARIO_id':SCENARIO,'STUDENT_id':STUDENT}
-#         responses_query = responses.objects.filter(**filterargs).values()
-#         data = []
-#         for response in responses_query:
-#             reflections_query = reflections_taken.objects.filter(**filterargs).values()
-#             reflections_array = []
-#             for reflections in reflections_query:
-#                 reflect_date_dict= {"REFLECTION":reflections['REFLECTIONS'],"DATE_TAKEN":reflections['DATE_TAKEN_id']}
-#                 reflections_array.append(reflect_date_dict)
-#             response['REFLECTIONS'] = reflections_array
-#             data.append(response)
-#         return Response(data)
-
 class student_responses(APIView):
     def get(self, request, *args, **kwargs):
         SCENARIO = self.request.query_params.get('scenario_id')
@@ -727,7 +710,7 @@ class student_responses(APIView):
             if TYPE == 'A':
                 choices_dict = {"NAME": NAME, "CHOICES":choice_array, "CHOSEN": CHOSEN, "DATE_TAKEN": DATE_TAKEN }
                 choices_array.append(choices_dict)
-
+            choice_array = []
         reflections_array = []
         reflections_dict = {}
         for response in responses_query:
