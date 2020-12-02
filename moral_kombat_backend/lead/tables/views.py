@@ -652,21 +652,42 @@ class pages_page(APIView):
             
             return Response(data=page_data)
 
+# class student_info(APIView):
+#     def get(self, request, *args, **kwargs):
+#         SCENARIO = self.request.query_params.get('scenario_id')
+#         responses_query = responses.objects.filter(SCENARIO_id = SCENARIO).values()
+#         data = []
+#         for response in responses_query:
+#             demographics_query = demographics.objects.filter(STUDENT_id = response['STUDENT_id']).values()
+#             # demographic = []
+#             for dem in demographics_query:
+#                 student_query = students.objects.filter(STUDENT = dem['STUDENT_id']).values()
+#                 for x in student_query:
+#                     name = x['NAME']
+#             dem['NAME'] = name
+#             dem['DATE_TAKEN'] = response['DATE_TAKEN']
+#             data.append(dem)
 class student_info(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self,request,*args,**kwargs):
         SCENARIO = self.request.query_params.get('scenario_id')
-        responses_query = responses.objects.filter(SCENARIO_id = SCENARIO).values()
+        responses_query = responses.objects.filter(SCENARIO_id=SCENARIO).values()
+        student_ids = []
         data = []
         for response in responses_query:
-            demographics_query = demographics.objects.filter(STUDENT_id = response['STUDENT_id']).values()
-            # demographic = []
+            student = response['STUDENT_id']
+            if student not in student_ids:
+                date_taken = response['DATE_TAKEN']
+                student_ids.append(student)
+        for student in student_ids:
+            demographics_query = demographics.objects.filter(STUDENT_id = student).values()
             for dem in demographics_query:
                 student_query = students.objects.filter(STUDENT = dem['STUDENT_id']).values()
                 for x in student_query:
                     name = x['NAME']
             dem['NAME'] = name
-            dem['DATE_TAKEN'] = response['DATE_TAKEN']
+            dem['DATE_TAKEN'] = date_taken
             data.append(dem)
+
                 
 
 
@@ -707,28 +728,28 @@ class student_responses(APIView):
                 CHOSEN = chose['CHOICE']
                 DATE_TAKEN = chose['DATE_TAKEN']
             #only if it is an action page
-            if TYPE == 'A':
-                choices_dict = {"NAME": NAME, "CHOICES":choice_array, "CHOSEN": CHOSEN, "DATE_TAKEN": DATE_TAKEN }
-                choices_array.append(choices_dict)
+            choices_dict = {"NAME": NAME, "CHOICES":choice_array, "CHOSEN": CHOSEN, "DATE_TAKEN": DATE_TAKEN }
+            choices_array.append(choices_dict)
             choice_array = []
         reflections_array = []
         reflections_dict = {}
         #get the different reflections
-        for response in responses_query:
-            name_query = pages.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+        reflections_query = reflections_taken.objects.filter(**filterargs).values()
+        for reflection in reflections_query:
+            name_query = pages.objects.filter(PAGE = reflection["PAGE_id"]).values()
             for name in name_query:
                 NAME = name['PAGE_TITLE']
                 TYPE = name['PAGE_TYPE']
-            ref_questions_query = reflection_questions.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+            ref_questions_query = reflection_questions.objects.filter(PAGE = reflection["PAGE_id"]).values()
             for question in ref_questions_query:
                 QUESTION = question['REFLECTION_QUESTION']
-            ref_answers_query = reflections_taken.objects.filter(PAGE = response["ACTION_PAGE_id"]).values()
+            ref_answers_query = reflections_taken.objects.filter(PAGE = reflection["PAGE_id"]).values()
             for answer in ref_answers_query:
                 REFLECTION = answer['REFLECTIONS']
+                DATE_TAKEN = answer['DATE_TAKEN_id']
                 #only if it is a reflection page 
-            if TYPE == 'R':
-                reflections_dict = {"NAME": NAME, "QUESTION": QUESTION, "REFLECTION": REFLECTION, "DATE_TAKEN": DATE_TAKEN}
-                reflections_array.append(reflections_dict)
+            reflections_dict = {"NAME": NAME, "QUESTION": QUESTION, "REFLECTION": REFLECTION, "DATE_TAKEN": DATE_TAKEN}
+            reflections_array.append(reflections_dict)
         data_dict = {}
         data_dict["Choices"] = choices_array
         data_dict["Reflections"] = reflections_array
