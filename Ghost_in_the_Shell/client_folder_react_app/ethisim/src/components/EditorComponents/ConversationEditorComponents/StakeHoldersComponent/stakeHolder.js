@@ -108,6 +108,7 @@ export default function StakeHolder({
     const [stakeHolderJob, setStakeHolderJob] = useState(job);
     const [stakeHolderBiography, setStakeHolderBiography] = useState(bio);
     const [stakeHolderConversation, setStakeHolderConversation] = useState(mainConvo);
+    const [issues, setIssues] = useState([]);
     const [qRData, setQRData] = useState([]);
 
     const baseURL = 'http://127.0.0.1:8000/';
@@ -152,7 +153,7 @@ export default function StakeHolder({
     };
 
     const handleClickOpenPointSelection = () => {
-        setOpenPointSelection(true);
+        getIssues();
     };
     const handleClosePointSelection = () => {
         setOpenPointSelection(false);
@@ -160,7 +161,6 @@ export default function StakeHolder({
 
     const handleClickOpenQuestions = () => {
         getQRs();
-        setOpenQuestions(true);
     };
     const handleCloseQuestions = () => {
         setOpenQuestions(false);
@@ -186,17 +186,17 @@ export default function StakeHolder({
         updateBasicText(stakeHolderName, e.target.value, stakeHolderBiography, stakeHolderConversation);
     }
 
-    function updateBasicText(shname, shjob, shbio, shconvo){
+    function updateBasicText(shname, shjob, shbio, shconvo) {
         const updatedStakeHolders = [...stakeHolders];
-            setStakeHolders(updatedStakeHolders.map((sh) => {
-                if (sh.STAKEHOLDER == id){
-                    sh.NAME = shname;
-                    sh.JOB = shjob;
-                    sh.DESCRIPTION = shbio;
-                    sh.INTRODUCTION = shconvo;
-                }
-                return sh;
-            }));
+        setStakeHolders(updatedStakeHolders.map((sh) => {
+            if (sh.STAKEHOLDER == id) {
+                sh.NAME = shname;
+                sh.JOB = shjob;
+                sh.DESCRIPTION = shbio;
+                sh.INTRODUCTION = shconvo;
+            }
+            return sh;
+        }));
     }
 
     function getQRs() {
@@ -216,27 +216,51 @@ export default function StakeHolder({
             .then(function (response) {
                 console.log(JSON.stringify(response.data));
                 setQRData(response.data);
+                setOpenQuestions(true);
             })
             .catch(function (error) {
                 console.log(error);
             });
+    }
 
+    function getIssues() {
+        var axios = require('axios');
+        var data = '';
+
+        var config = {
+            method: 'get',
+            url: baseURL + 'api/coverage?STAKEHOLDER=' + id,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                setIssues(response.data);
+                setOpenPointSelection(true);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     return (
         <div id="parent">
             <div id="SHname">
-                <TextField 
-                    label="StakeHolder Name" 
-                    value={stakeHolderName} 
-                    onChange = {onChangeName}
+                <TextField
+                    label="StakeHolder Name"
+                    value={stakeHolderName}
+                    onChange={onChangeName}
                 />
             </div>
             <div id="SHjob">
-                <TextField 
-                    label="StakeHolder Job" 
-                    value={stakeHolderJob} 
-                    onChange = {onChangeJob}
+                <TextField
+                    label="StakeHolder Job"
+                    value={stakeHolderJob}
+                    onChange={onChangeJob}
                 />
             </div>
             <img id="stakeimg" src={shemptylogo} alt=" "></img>
@@ -672,8 +696,8 @@ export default function StakeHolder({
                     </DialogTitle>
                     <DialogContent>
                         <QuestionFields
-                            qrs = {qRData}
-                            stakeholder_id = {id}
+                            qrs={qRData}
+                            stakeholder_id={id}
                         />
                     </DialogContent>
                 </div>
@@ -705,7 +729,11 @@ export default function StakeHolder({
                         </Button>
                     </DialogTitle>
                     <DialogContent>
-                        <BasicTable removeRow={removeRow} rows={rows} />
+                        <BasicTable 
+                            removeRow={removeRow} 
+                            rows={rows}
+                            //additional parameters here
+                        />
                     </DialogContent>
                 </div>
             </Dialog>

@@ -15,65 +15,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 QuestionField.propTypes = {
-    question: PropTypes.string,
-    response: PropTypes.string,
+    key: PropTypes.number,
     id: PropTypes.number,
     removeQuestion: PropTypes.any.isRequired,
-    listOfQuestions: PropTypes.any,
-    setListOfQuestions: PropTypes.any,
+    question: PropTypes.string,
+    response: PropTypes.string,
+    QRs: PropTypes.any,
+    setQRs: PropTypes.any,
 };
 
 export default function QuestionField({
+    key,
+    id,
+    removeQuestion,
     question,
     response,
-    removeQuestion,
-    id,
-    setListOfQuestions,
-    listOfQuestions,
+    QRs,
+    setQRs,
 }) {
     const [questionValue, setQuestionValue] = useState(question);
     const [responseValue, setResponseValue] = useState(response);
 
-    const onChangeQuestion = (event) => {
-        setQuestionValue(event.target.value);
-        setListOfQuestions(
-            listOfQuestions.map((data) => {
-                if (data.id === id) {
-                    return {
-                        ...data,
-                        question: event.target.value,
-                    };
-                }
-                return data;
-            })
-        );
-    };
+    function updateQRs(shq, shr){
+        const updatedQRs = [...QRs];
+        setQRs(updatedQRs.map((qr) => {
+            if (qr.CONVERSATION == id){
+                qr.QUESTION = shq;
+                qr.RESPONSE = shr;
+            }
+            return qr;
+        }));
+    }
 
-    const onChangeResponse = (event) => {
-        setResponseValue(event.target.value);
-        setListOfQuestions(
-            listOfQuestions.map((data) => {
-                if (data.id === id) {
-                    return {
-                        ...data,
-                        response: event.target.value,
-                    };
-                }
-                return data;
-            })
-        );
-    };
+    const onChangeQuestion = (e) => {
+        setQuestionValue(e.target.value);
+        updateQRs(e.target.value, responseValue);
+        console.log(e.target.value)
+    }
 
-    // eslint-disable-next-line
-    let handleChange = (content, editor) => {
-        //TODO Implement
-        console.log(content);
-        console.log(htmlToText.fromString(content));
-    };
-
-    function updateRow(rowID, rowBody) {
-        //TODO
-        //functional code to save items to backend
+    const onChangeResponse = (e) => {
+        setResponseValue(e.target.value);
+        updateQRs(questionValue, e.target.value);
     }
 
     const classes = useStyles();

@@ -5,36 +5,28 @@ import './questions.css';
 import PropTypes from 'prop-types';
 
 QuestionFields.propTypes = {
-    questionsResponses: PropTypes.any,
     qrs: PropTypes.any,
     stakeholder_id: PropTypes.number,
-
 };
 
 export default function QuestionFields({qrs, stakeholder_id, }) {
-    
-    let initialQuestionsWithID = qrs.map(function (data) {
-        return {
-            question: data.QUESTION,
-            response: data.RESPONSE,
-            stakeholder_id: data.STAKEHOLDER,
-            conversation_id: data.CONVERSATION,
-        };
-    });
+    //used to track if we are waiting on a HTTP GET/POST/PUT request
+    //not needed for DELETE
+    const [isLoading, setLoading] = useState(false);
+    var axios = require('axios');
 
-    const [questionsWithID, setQuestionsWithID] = useState(
-        initialQuestionsWithID
-    );
-
+    //the base url for api calls; will be imported eventually
     const baseURL = 'http://127.0.0.1:8000/';
+
+    const [QRs, setQRs] = useState(qrs);
 
     const handleSave = (e) => {
         var axios = require('axios');
-        var data = [{}]
+        var data = QRs;
 
         var config = {
             method: 'put',
-            url: 'http://127.0.0.1:8000/multi_conv?STAKEHOLDER=68',
+            url: 'http://127.0.0.1:8000/multi_conv?STAKEHOLDER=93',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -50,41 +42,105 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
             });
     }
 
-    /*
-    let resetQuestionsWithID = (questionsWithID) => {
-        let initialQuestionsWithID = questionsResponses.map(function (data) {
-            return {
-                question: data.QUESTION,
-                response: data.RESPONSE,
-                stakeholder_id: data.STAKEHOLDER,
-                conversation_id: data.CONVERSATION,
-            };
-        });
-        setQuestionsWithID(initialQuestionsWithID);
-    };
+    const addQuestion = (e) => {
+        if (!checkTime(setCurrentTime, currentTime)) {
+            return;
+        }
+        setLoading(true);
 
-    useEffect(resetQuestionsWithID, [questionsResponses]);
-    */
+        var data = JSON.stringify({ "STAKEHOLDER": stakeholder_id });
+
+        var config = {
+            method: 'post',
+            url: baseURL + 'api/conversations/',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                const newQRs = [
+                    ...QRs,
+                    response.data
+                ];
+                setQRs(newQRs);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        setLoading(false);
+    };
 
     const removeQuestion = (questionID) => {
+        if (!checkTime(setCurrentTime, currentTime)) {
+            return;
+        }
+        setLoading(true);
+
         console.log(questionID);
-        const leftQuestions = questionsWithID.filter(
-            (q) => q.id !== questionID
+        const leftQuestions = QRs.filter(
+            (q) => q.CONVERSATION !== questionID
         );
-        setQuestionsWithID(leftQuestions);
+        setQRs(leftQuestions);
+
+        var data = JSON.stringify({});
+
+        var config = {
+            method: 'delete',
+            url: baseURL + 'api/conversations/' + questionID + '/',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        setLoading(false);
     };
 
-    const addQuestion = (e) => {
-        const newQuestionsWithID = [
-            ...questionsWithID,
-            {
-                id: Math.floor(Math.random() * 10000),
-                question: '',
-                response: '',
-            },
-        ];
-        setQuestionsWithID(newQuestionsWithID);
-    };
+        /*
+     * This section is about managing time to prevent sending a combination of multiple
+     *    HTTP GET/POST/PUT/DELETE calls before a response is returned
+     */
+    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
+    //gets the current time in hms and converts it to an int
+    function getCurrentTimeInt() {
+        var time_string = Date();
+        let d = Date();
+        var h = d.substring(16, 18);
+        var m = d.substring(19, 21);
+        var s = d.substring(22, 24);
+        return 60 * (60 * h + m) + s;
+    }
+
+    //checks if at least 1 second has elapsed since last action
+    //if someone waits a multiple of exactly 24 hours since their last action they will
+    //    not be able to take an action for an additional second
+    function checkTime(setTime, t) {
+        var ret = false;
+        //current time difference is at least 1 second, but that SHOULD be ample time for
+        //the database to get back to the frontend
+        if (getCurrentTimeInt() - t != 0) {
+            ret = true;
+        }
+        setTime(getCurrentTimeInt());
+        return ret;
+    }
+
+    if (isLoading) {
+        return <div> currently loading...</div>;
+    }
 
     return (
         <div className="questions">
@@ -96,17 +152,16 @@ export default function QuestionFields({qrs, stakeholder_id, }) {
             >
                 Add Question
             </Button>
-
             <form id="form">
-                {questionsWithID.map((data) => (
+                {QRs.map((data) => (
                     <QuestionField
-                        key={data.id}
-                        id={data.id}
+                        key={data.STAKEHOLDER}
+                        id={data.CONVERSATION}
                         removeQuestion={removeQuestion}
-                        question={data.question}
-                        response={data.response}
-                        listOfQuestions={questionsWithID}
-                        setListOfQuestions={setQuestionsWithID}
+                        question={data.QUESTION}
+                        response={data.RESPONSE}
+                        QRs = {QRs}
+                        setQRs = {setQRs}
                     />
                 ))}
             </form>
