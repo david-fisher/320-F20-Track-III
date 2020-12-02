@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
 import { Typography, Container, Button } from '@material-ui/core';
-import VersionControl from '../../VersionControl';
-//import InformationItemList from './InformationItemList';
-import { mockGenericHistory } from '../../../shared/mockScenarioData';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
@@ -30,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 Introduction.propTypes = {
     scenarioComponents: PropTypes.any,
     setScenarioComponents: PropTypes.any,
+    setCurrentPageID: PropTypes.any,
     page_id: PropTypes.any,
     page_type: PropTypes.any,
     page_title: PropTypes.any,
@@ -46,6 +44,7 @@ export default function Introduction(props) {
     const {
         scenarioComponents,
         setScenarioComponents,
+        setCurrentPageID,
         page_id,
         page_type,
         page_title,
@@ -101,6 +100,7 @@ export default function Introduction(props) {
             component.id = resp.data.PAGE;
             component.title = title;
             setPageID(resp.data.PAGE);
+            setCurrentPageID(resp.data.PAGE);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
@@ -145,6 +145,11 @@ export default function Introduction(props) {
                 onFailure,
                 onSuccess,
                 postReqBody
+            );
+        } else {
+            setErrorBannerFade(true);
+            setErrorBannerMessage(
+                'There are currently errors within your page. Please fix all errors in order to save.'
             );
         }
     }
@@ -193,14 +198,8 @@ export default function Introduction(props) {
                 />
             </div>
             <Typography align="center" variant="h2">
-                Generic Component
+                Introduction Page
             </Typography>
-            <VersionControl
-                history={mockGenericHistory.history}
-                type={mockGenericHistory.type}
-                setTitle={setTitle}
-                setBody={setBodyText}
-            />
             <Title
                 title={title}
                 setTitle={setTitle}

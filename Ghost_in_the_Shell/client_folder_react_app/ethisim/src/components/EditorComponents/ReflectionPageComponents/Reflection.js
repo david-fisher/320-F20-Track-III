@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import VersionControl from '../../VersionControl';
 import { Typography, Container, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import QuestionFields from './QuestionComponent/questions';
-import { mockReflectionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
 import universalDelete from '../../../universalHTTPRequests/delete.js';
@@ -16,6 +14,7 @@ import LoadingSpinner from '../../LoadingSpinner';
 Reflection.propTypes = {
     scenarioComponents: PropTypes.any,
     setScenarioComponents: PropTypes.any,
+    setCurrentPageID: PropTypes.any,
     page_id: PropTypes.any,
     page_type: PropTypes.any,
     page_title: PropTypes.any,
@@ -35,12 +34,19 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         textTransform: 'unset',
     },
+    bannerContainer: {
+        marginTop: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
 }));
 
 export default function Reflection(props) {
     const {
         scenarioComponents,
         setScenarioComponents,
+        setCurrentPageID,
         page_id,
         page_type,
         page_title,
@@ -107,6 +113,7 @@ export default function Reflection(props) {
             component.title = title;
 
             setPageID(resp.data.PAGE);
+            setCurrentPageID(resp.data.PAGE);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
@@ -185,6 +192,11 @@ export default function Reflection(props) {
                 onSuccess,
                 postReqBody
             );
+        } else {
+            setErrorBannerFade(true);
+            setErrorBannerMessage(
+                'There are currently errors within your page. Please fix all errors in order to save.'
+            );
         }
     }
 
@@ -230,24 +242,19 @@ export default function Reflection(props) {
 
     return (
         <Container component="main">
-            <SuccessBanner
-                successMessage={successBannerMessage}
-                fade={successBannerFade}
-            />
-            <ErrorBanner
-                errorMessage={errorBannerMessage}
-                fade={errorBannerFade}
-            />
+            <div className={classes.bannerContainer}>
+                <SuccessBanner
+                    successMessage={successBannerMessage}
+                    fade={successBannerFade}
+                />
+                <ErrorBanner
+                    errorMessage={errorBannerMessage}
+                    fade={errorBannerFade}
+                />
+            </div>
             <Typography align="center" variant="h2">
                 Reflection Component
             </Typography>
-            <VersionControl
-                history={mockReflectionHistory.history}
-                type={mockReflectionHistory.type}
-                setTitle={setTitle}
-                setBody={setBodyText}
-                setQuestions={setQuestions}
-            />
             <Title
                 title={title}
                 setTitle={setTitle}

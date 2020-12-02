@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
-import VersionControl from '../../VersionControl';
-import { mockIssuesHistory } from '../../../shared/mockScenarioData';
 import get from '../../../universalHTTPRequests/get';
 import LoadingSpinner from '../../LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -11,7 +9,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import PropTypes from 'prop-types';
 
 //Need scenarioID
-const endpointGET = '/api/issues/?SCENARIO_ID=';
+const endpointGET = '/api/issues/?SCENARIO=';
 
 const useStyles = makeStyles((theme) => ({
     issue: {
@@ -89,14 +87,6 @@ export default function ConfigureIssues({ scenario_ID }) {
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
             </Typography>
-            <div className={classes.spacing}>
-                <VersionControl
-                    className={classes.spacing}
-                    history={mockIssuesHistory.history}
-                    type={'Issues'}
-                    setIssueEntryFieldList={setIssueEntryFieldList}
-                />
-            </div>
             <div className={classes.spacing}>
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />

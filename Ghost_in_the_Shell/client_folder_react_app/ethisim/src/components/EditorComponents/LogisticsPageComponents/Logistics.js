@@ -338,6 +338,11 @@ export default function Logistics({ scenario_ID }) {
                 onSuccessLogistic,
                 NewScenario
             );
+        } else {
+            setErrorBannerFade(true);
+            setErrorBannerMessage(
+                'There are currently errors within your page. Please fix all errors in order to save.'
+            );
         }
     };
 
@@ -527,12 +532,6 @@ export default function Logistics({ scenario_ID }) {
                         noValidate
                         autoComplete="off"
                     >
-                        <Button variant="contained">
-                            View Student Responses
-                        </Button>
-                        <Button variant="contained" color="primary">
-                            View Version History
-                        </Button>
                         <Button
                             variant="contained"
                             color="primary"

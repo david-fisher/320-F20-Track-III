@@ -3,8 +3,6 @@ import { Button, TextField, Typography, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import VersionControl from '../../VersionControl';
-import { mockActionHistory } from '../../../shared/mockScenarioData';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
 import universalDelete from '../../../universalHTTPRequests/delete.js';
@@ -15,6 +13,7 @@ import LoadingSpinner from '../../LoadingSpinner';
 Action.propTypes = {
     scenarioComponents: PropTypes.any,
     setScenarioComponents: PropTypes.any,
+    setCurrentPageID: PropTypes.any,
     page_id: PropTypes.any,
     page_type: PropTypes.any,
     page_title: PropTypes.any,
@@ -66,6 +65,7 @@ export default function Action(props) {
     const {
         scenarioComponents,
         setScenarioComponents,
+        setCurrentPageID,
         page_id,
         page_type,
         page_title,
@@ -129,6 +129,7 @@ export default function Action(props) {
             component.id = resp.data.PAGE;
             component.title = title;
             setPageID(resp.data.PAGE);
+            setCurrentPageID(resp.data.PAGE);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
@@ -205,6 +206,11 @@ export default function Action(props) {
                 onSuccess,
                 postReqBody
             );
+        } else {
+            setErrorBannerFade(true);
+            setErrorBannerMessage(
+                'There are currently errors within your page. Please fix all errors in order to save.'
+            );
         }
     }
 
@@ -262,14 +268,6 @@ export default function Action(props) {
             <Typography align="center" variant="h2">
                 Action Component
             </Typography>
-            <VersionControl
-                history={mockActionHistory.history}
-                type={mockActionHistory.type}
-                setTitle={setTitle}
-                setBody={setBodyText}
-                setOption1={setOption1}
-                setOption2={setOption2}
-            />
             <Title
                 title={title}
                 setTitle={setTitle}
