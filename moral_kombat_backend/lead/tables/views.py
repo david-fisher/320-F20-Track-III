@@ -345,14 +345,28 @@ class dashboard_page(APIView):
 
         #TODO create blank stakeholder page and return it
         #page must be called STAKEHOLDER_PAGE and serialier must be called stakeholder_page_serializer
+        STAKEHOLDER_PAGE = {
+        "PAGE_TYPE": "S",
+        "PAGE_TITLE": "Stakeholders",
+        "PAGE_BODY": "Page of Stakeholders",
+        "SCENARIO": scenario_dict['SCENARIO'],
+        "NEXT_PAGE": None,
+        "X_COORDINATE": 0,
+        "Y_COORDINATE": 0,
+        }
 
-
+        stakeholder_page_serializer = PagesSerializer(data=STAKEHOLDER_PAGE)
+        if stakeholder_page_serializer.is_valid():
+            stakeholder_page_serializer.save()
+        else:
+            print("Stakeholders page saved incorrectly")
+            return Response(stakeholder_page_serializer.errors)
 
 
         scenario_dict = ScenariosSerializer(scenarios.objects.get(SCENARIO = scenario_dict['SCENARIO'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         scenario_dict['INTRO_PAGE'] = intro_page_serializer.data
-        scenario_dict['STAKHOLDER_PAGE'] = stakeholder_page_serializer.data
+        scenario_dict['STAKEHOLDER_PAGE'] = stakeholder_page_serializer.data
         return Response(scenario_dict)
 
                 
@@ -572,9 +586,9 @@ class pages_page(APIView):
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["PAGE"]
-                for question in request.data['STAKEHOLDERS']:
-                    question['PAGE'] = page_id
-                    nested_serializer = Stakeholder_pageSerializer(data=question)
+                for stakeholder in request.data['STAKEHOLDERS']:
+                    stakeholder['PAGE'] = page_id
+                    nested_serializer = Stakeholder_pageSerializer(data=stakeholder)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     nested_serializer.save()
@@ -612,8 +626,6 @@ class pages_page(APIView):
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                 else:
-                    print(extant_page)
-                    print(updated_page)
                     print("error in making next_page = null during delete!")
                     return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -627,8 +639,6 @@ class pages_page(APIView):
                 if action_pages_serializer.is_valid():
                     action_pages_serializer.save()
                 else:
-                    print(extant_page)
-                    print(updated_page)
                     print("error in making next_page = null during delete!")
                     return Response(action_pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
