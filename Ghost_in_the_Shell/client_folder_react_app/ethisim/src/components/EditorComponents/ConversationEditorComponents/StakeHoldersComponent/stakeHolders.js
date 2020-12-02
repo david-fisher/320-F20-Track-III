@@ -25,7 +25,7 @@ export default function StakeHolderFields() {
     const [isLoading, setLoading] = useState(false);
     var axios = require('axios');
 
-    //the base url for api calls; will be imported eventually 
+    //the base url for api calls; will be imported eventually
     const baseURL = 'http://127.0.0.1:8000/';
 
     //handles GETting existing stakeholders from the backend and representing
@@ -74,8 +74,7 @@ export default function StakeHolderFields() {
         );
         var config = {
             method: 'delete',
-            url:
-                baseURL + 'api/stakeholders/' + stakeHolderID + '/',
+            url: baseURL + 'api/stakeholders/' + stakeHolderID + '/',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -89,7 +88,7 @@ export default function StakeHolderFields() {
             .catch(function (error) {
                 console.log(error);
             });
-        
+
         setLoading(false);
     };
 
@@ -124,7 +123,7 @@ export default function StakeHolderFields() {
             .catch(function (error) {
                 console.log(error);
             });
-        
+
         setLoading(false);
     };
 
@@ -194,17 +193,9 @@ export default function StakeHolderFields() {
         return <div> currently loading...</div>;
     }
 
+    getExistingStakeHolders();
     return (
         <div className="stakeHolders">
-            <Button
-                id="button"
-                onClick={getExistingStakeHolders}
-                variant="contained"
-                color="primary"
-            >
-                get
-            </Button>
-
             <Button
                 id="button"
                 onClick={addStakeHolder}
@@ -224,8 +215,8 @@ export default function StakeHolderFields() {
                         job={stakeHolder.JOB}
                         bio={stakeHolder.DESCRIPTION}
                         mainConvo={stakeHolder.INTRODUCTION}
-                        stakeHolders = {stakeHolders}
-                        setStakeHolders = {setStakeHolders}
+                        stakeHolders={stakeHolders}
+                        setStakeHolders={setStakeHolders}
                     />
                 ))}
             </form>
