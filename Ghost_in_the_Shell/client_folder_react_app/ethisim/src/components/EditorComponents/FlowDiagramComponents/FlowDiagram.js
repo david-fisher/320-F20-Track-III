@@ -102,7 +102,6 @@ export default function FlowDiagram({ scenario_ID }) {
 
     const [elements, setElements] = useState([]);
     const [unsaved, setUnsaved] = useState(false);
-    const [errorText, setErrorText] = useState('');
 
     function positionElements(elements) {
         let introductionElement = elements.filter((componentData) => {
@@ -160,10 +159,6 @@ export default function FlowDiagram({ scenario_ID }) {
         elements.forEach((currentElement) => {
             //TODO
             if (currentElement.type === 'actionNode') {
-                if (!currentElement.ACTION[0]) {
-                    // eslint-disable-next-line
-                    throw 'Action incomplete';
-                }
                 //Only 2 action options
                 if (currentElement.ACTION[0].RESULT_PAGE) {
                     elements = addEdge(
@@ -202,16 +197,7 @@ export default function FlowDiagram({ scenario_ID }) {
         function onSuccess(resp) {
             setElements(addEdges(positionElements(resp.data)));
         }
-        function onError(resp) {
-            if (resp === 'Action incomplete') {
-                setErrorText(
-                    'You have at least one Action page that is incomplete (i.e. without options). You must complete all action pages before you can access the Flow Diagram.'
-                );
-            } else {
-                setErrorText('Unable to fetch Flow Diagram! Please try again.');
-            }
-        }
-        get(setFetchedElements, endpointGET + scenarioID, onError, onSuccess);
+        get(setFetchedElements, endpointGET + scenarioID, null, onSuccess);
     };
 
     useEffect(getData, []);
@@ -486,8 +472,8 @@ export default function FlowDiagram({ scenario_ID }) {
             <div className={classes.errorContainer}>
                 <div className={classes.container}>
                     <ErrorIcon className={classes.iconError} />
-                    <Typography align="center" variant="h5">
-                        {errorText}
+                    <Typography align="center" variant="h3">
+                        Error in fetching Flow Diagram.
                     </Typography>
                     <Button
                         variant="contained"

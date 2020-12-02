@@ -191,7 +191,6 @@ export default function Editor(props) {
     const [scenarioComponent, setScenarioComponent] = useState(null);
     const [showEditor, setShowEditor] = useState(false);
     const [addNewPageIndex, setAddNewPageIndex] = useState(null);
-    const [currentPageID, setCurrentPageID] = useState(-1);
 
     let handleLogisticsGet = function handleLogisticsGet() {
         let initialComponents = [
@@ -251,7 +250,7 @@ export default function Editor(props) {
 
             for (let i = 0; i < pages.length; i++) {
                 //Already have component in initial components
-                if (pages[i].PAGE_TYPE === 'S') {
+                if (pages[i].PAGE_TITLE === 'Stakeholder Conversations') {
                     continue;
                 }
                 //Intro page is first page on sidebar
@@ -331,7 +330,6 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
-                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
@@ -349,7 +347,6 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
-                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
@@ -367,7 +364,6 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
-                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
@@ -396,7 +392,6 @@ export default function Editor(props) {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
-                    setCurrentPageID: setCurrentPageID,
                     page_id: currPageInfo.PAGE,
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
@@ -416,7 +411,6 @@ export default function Editor(props) {
             newScenarioComponents = newScenarioComponents.map((x) =>
                 x.id === resp.data.PAGE ? { ...x, component: c } : x
             );
-            setCurrentPageID(currPageInfo.PAGE);
             setScenarioComponents(newScenarioComponents);
             console.log(g_id);
             setScenarioComponent(c);
@@ -458,7 +452,7 @@ export default function Editor(props) {
     useEffect(handleLogisticsGet, [shouldFetch]);
 
     let onClick = (id, title, scenarioPages) => {
-        setCurrentPageID(id);
+        console.log(id);
         if (id !== -1 && id !== -2 && id !== -3 && id !== -4) {
             handlePageGet(setGetValues, id, scenarioPages);
         }
@@ -469,13 +463,10 @@ export default function Editor(props) {
 
     const deleteByID = (d_id) => {
         //If on page that is going to be deleted, redirect back to logistics page
-        console.log(d_id);
-        console.log(currentPageID);
         if (
-            scenarioComponents.filter((i) => i.id === d_id)[0].id ===
-            currentPageID
+            scenarioComponents.filter((i) => i.id === d_id)[0].component ===
+            scenarioComponent
         ) {
-            setCurrentPageID(-1);
             setScenarioComponent(scenarioComponents[0].component);
         }
         setScenarioComponents(scenarioComponents.filter((i) => i.id !== d_id));
