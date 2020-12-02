@@ -202,15 +202,6 @@ export default function StakeHolderFields() {
         <div className="stakeHolders">
             <Button
                 id="button"
-                onClick={getExistingStakeHolders}
-                variant="contained"
-                color="primary"
-            >
-                Get Stakeholders
-            </Button>
-
-            <Button
-                id="button"
                 onClick={addStakeHolder}
                 variant="contained"
                 color="primary"
