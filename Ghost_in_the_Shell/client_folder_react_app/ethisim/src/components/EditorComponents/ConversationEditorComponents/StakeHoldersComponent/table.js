@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import './table.css';
 import PropTypes from 'prop-types';
+import SuccessBanner from './../../../Banners/SuccessBanner';
+import ErrorBanner from './../../../Banners/ErrorBanner';
 
 const useStyles = makeStyles({
     table: {
@@ -18,29 +20,20 @@ const useStyles = makeStyles({
     },
 });
 
-/*
-function createData(issuename, score, maxpoints) {
-  return { issuename, score, maxpoints };
-}
-*/
-
-/*
-const rows = [
-  createData("Money", 1.0, 5.0),
-  createData("Life", 3.0, 5.0),
-  createData("Privacy", 4.0, 5.0),
-]; */
+const baseURL = 'http://127.0.0.1:8000/';
 
 BasicTable.propTypes = {
     rows: PropTypes.any.isRequired,
     removeRow: PropTypes.any.isRequired,
+    stakeholder_id: PropTypes.number,
     issues: PropTypes.any,
+    setIssues: PropTypes.any,
     data: PropTypes.string,
 };
 
 const handleSave = (e) => {
     var axios = require('axios');
-    var data = QRs;
+    var data = issues;
 
     var config = {
         method: 'put',
@@ -61,6 +54,29 @@ const handleSave = (e) => {
             setErrorBannerFade(true);
         });
 }
+
+//for success and error banners
+const [successBannerMessage, setSuccessBannerMessage] = useState('');
+const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+useEffect(() => {
+    const timeout = setTimeout(() => {
+        setSuccessBannerFade(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+}, [successBannerFade]);
+
+const [errorBannerMessage, setErrorBannerMessage] = useState('');
+const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+useEffect(() => {
+    const timeout = setTimeout(() => {
+        setErrorBannerFade(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+}, [errorBannerFade]);
 
 export default function BasicTable(props) {
     const classes = useStyles();
@@ -108,6 +124,14 @@ export default function BasicTable(props) {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
         </div>
     );
 }

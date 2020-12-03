@@ -736,7 +736,9 @@ export default function StakeHolder({
                         <BasicTable 
                             removeRow={removeRow} 
                             rows={rows}
+                            stakeholder_id={stakeholder_id}
                             issues={issues}
+                            setIssues={setIssues}
                         />
                     </DialogContent>
                 </div>
