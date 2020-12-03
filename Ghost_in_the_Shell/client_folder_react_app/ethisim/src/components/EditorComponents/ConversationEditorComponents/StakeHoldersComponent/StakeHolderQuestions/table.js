@@ -18,19 +18,6 @@ const useStyles = makeStyles({
     },
 });
 
-/*
-function createData(issuename, score, maxpoints) {
-  return { issuename, score, maxpoints };
-}
-*/
-
-/*
-const rows = [
-  createData("Money", 1.0, 5.0),
-  createData("Life", 3.0, 5.0),
-  createData("Privacy", 4.0, 5.0),
-]; */
-
 BasicTable.propTypes = {
     rows: PropTypes.any.isRequired,
     removeRow: PropTypes.any.isRequired,
@@ -95,7 +82,3 @@ export default function BasicTable(props) {
         </TableContainer>
     );
 }
-
-//* <Button id="button" variant="contained" color="primary">
-//*Delete Issue
-//*</Button>

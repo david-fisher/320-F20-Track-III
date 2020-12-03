@@ -5,6 +5,7 @@ import './stakeHolders.css';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
+import LoadingSpinner from './../../../LoadingSpinner';
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
@@ -57,8 +58,9 @@ export default function StakeHolderFields( {scenario_id} ) {
 
     //handles GETting existing stakeholders from the backend and representing
     //    that information in the frontend
+    // will eventually know which scenario to get stakeholders from once scenario_id is passed
+    // from baseURL + 'stakeholder?scenario_id=' + scenario_id
     function getExistingStakeHolders() {
-        //TODO: implement  get for specific scenarios
         var config = {
             method: 'get',
             url: baseURL + 'api/stakeholders/',
@@ -124,8 +126,7 @@ export default function StakeHolderFields( {scenario_id} ) {
         }
         setLoading(true);
 
-        //TODO: figure out how to distinguish which scenario this newly put item is from
-        //currently has scenario 2 arbitrarily
+       //currently has scenario 2 arbitrarily
         var data = JSON.stringify({
             SCENARIO: scenario,
         });
@@ -157,7 +158,6 @@ export default function StakeHolderFields( {scenario_id} ) {
     const saveStakeHolders = (e) => {
         var data = [...stakeHolders];
 
-        //TODO figure out how to track the scenario ID
         //currently has arbitrary value of 2
         var config = {
             method: 'put',
@@ -212,9 +212,8 @@ export default function StakeHolderFields( {scenario_id} ) {
      * This code is the frontend rendering; what the users see
      */
 
-    //TODO figure out something better than raw text
     if (isLoading) {
-        return <div> currently loading...</div>;
+        return <LoadingSpinner />
     }
 
     if (!didGetSHs) {

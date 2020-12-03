@@ -397,7 +397,7 @@ export default function StakeHolder({
                                         'superscript',
                                     ],
                                     ['fontColor', 'hiliteColor', 'textStyle'],
-                                    '/', // Line break
+                                    '/',
                                     ['undo', 'redo'],
                                     ['removeFormat'],
                                     ['outdent', 'indent'],
@@ -416,7 +416,6 @@ export default function StakeHolder({
                                     ],
                                     ['fullScreen', 'showBlocks', 'codeView'],
                                     ['preview'],
-                                    // (min-width: 1000px)
                                     [
                                         '%1000',
                                         [
@@ -471,7 +470,6 @@ export default function StakeHolder({
                                             ],
                                         ],
                                     ],
-                                    // (min-width: 875px)
                                     [
                                         '%875',
                                         [
@@ -565,7 +563,7 @@ export default function StakeHolder({
                                         'superscript',
                                     ],
                                     ['fontColor', 'hiliteColor', 'textStyle'],
-                                    '/', // Line break
+                                    '/',
                                     ['undo', 'redo'],
                                     ['removeFormat'],
                                     ['outdent', 'indent'],
@@ -584,7 +582,6 @@ export default function StakeHolder({
                                     ],
                                     ['fullScreen', 'showBlocks', 'codeView'],
                                     ['preview'],
-                                    // (min-width: 1000px)
                                     [
                                         '%1000',
                                         [
@@ -639,7 +636,6 @@ export default function StakeHolder({
                                             ],
                                         ],
                                     ],
-                                    // (min-width: 875px)
                                     [
                                         '%875',
                                         [
@@ -740,7 +736,7 @@ export default function StakeHolder({
                         <BasicTable 
                             removeRow={removeRow} 
                             rows={rows}
-                            //additional parameters here
+                            issues={issues}
                         />
                     </DialogContent>
                 </div>

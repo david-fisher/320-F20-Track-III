@@ -34,8 +34,33 @@ const rows = [
 BasicTable.propTypes = {
     rows: PropTypes.any.isRequired,
     removeRow: PropTypes.any.isRequired,
+    issues: PropTypes.any,
     data: PropTypes.string,
 };
+
+const handleSave = (e) => {
+    var axios = require('axios');
+    var data = QRs;
+
+    var config = {
+        method: 'put',
+        url: baseURL + 'multi_coverage?STAKEHOLDER=' + stakeholder_id,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: data
+    };
+
+    axios(config)
+        .then(function (response) {
+            setSuccessBannerMessage('Successfully saved the issues for this stakeholder!');
+            setSuccessBannerFade(true);
+        })
+        .catch(function (error) {
+            setErrorBannerMessage('Failed to save the issues for this stakeholder! Please try again.');
+            setErrorBannerFade(true);
+        });
+}
 
 export default function BasicTable(props) {
     const classes = useStyles();
@@ -47,9 +72,7 @@ export default function BasicTable(props) {
                 id="button-save"
                 variant="contained"
                 color="primary"
-                //onClick={() => props.removeRow(row.id)}
-                //TODO
-                //functionality for updating issue scores
+                onClick={handleSave}
             >
                 Save Changes
             </Button>
@@ -88,7 +111,3 @@ export default function BasicTable(props) {
         </div>
     );
 }
-
-//* <Button id="button" variant="contained" color="primary">
-//*Delete Issue
-//*</Button>

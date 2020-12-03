@@ -5,6 +5,7 @@ import './questions.css';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../../Banners/ErrorBanner';
+import LoadingSpinner from './../../../../LoadingSpinner';
 
 QuestionFields.propTypes = {
     qrs: PropTypes.any,
@@ -169,7 +170,7 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
     }
 
     if (isLoading) {
-        return <div> currently loading...</div>;
+        return <LoadingSpinner />
     }
 
     return (
