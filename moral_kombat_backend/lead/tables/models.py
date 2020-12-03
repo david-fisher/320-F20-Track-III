@@ -80,7 +80,7 @@ class stakeholders(models.Model):
     STAKEHOLDER = models.AutoField(primary_key = True, editable = False)
     SCENARIO = models.ForeignKey('scenarios', to_field = 'SCENARIO', on_delete = models.CASCADE, related_name="stakeholders2", default = 1)
     VERSION = models.IntegerField(default=1, editable=False)
-    NAME = models.CharField(max_length = 1000, default = "deafult")
+    NAME = models.CharField(max_length = 1000, default = "default")
     DESCRIPTION = models.TextField(default = "default")
     JOB = models.TextField(default = "default")
     # MATRIX = ArrayField(ArrayField(models.IntegerField(), size = 15), size = 15)
