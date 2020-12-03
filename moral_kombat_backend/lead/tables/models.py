@@ -80,11 +80,11 @@ class stakeholders(models.Model):
     STAKEHOLDER = models.AutoField(primary_key = True, editable = False)
     SCENARIO = models.ForeignKey('scenarios', to_field = 'SCENARIO', on_delete = models.CASCADE, related_name="stakeholders2", default = 1)
     VERSION = models.IntegerField(default=1, editable=False)
-    NAME = models.CharField(max_length = 1000, default = None)
-    DESCRIPTION = models.TextField()
-    JOB = models.TextField()
+    NAME = models.CharField(max_length = 1000, default = "default")
+    DESCRIPTION = models.TextField(default = "default")
+    JOB = models.TextField(default = "default")
     # MATRIX = ArrayField(ArrayField(models.IntegerField(), size = 15), size = 15)
-    INTRODUCTION = models.TextField(default = '')
+    INTRODUCTION = models.TextField(default = 'default')
 
 
 
@@ -102,23 +102,21 @@ class conversations(models.Model):
         unique_together = (('STAKEHOLDER'), ('CONVERSATION'))
     STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations1")
     CONVERSATION = models.AutoField(default = None, primary_key = True)
-    QUESTION = models.TextField()
-    RESPONSE = models.TextField()
-
+    QUESTION = models.TextField(default = "default")
+    RESPONSE = models.TextField(default = "default")
 
 
 class responses(models.Model):
-    class Meta:
-        unique_together = (('STUDENT'), ('SCENARIO'),('VERSION'),('COURSE'))
     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="responses1")
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="responses2")
     VERSION = models.IntegerField(default=1, editable=False)
     COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name="responses4")
     DATE_TAKEN = models.DateField(auto_now_add=True)
-    #ACTION_PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="responses5")
-    CHOICE = models.TextField()
 
 
+class actions_taken(models.Model):
+    RESPONSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="actions_taken1")
+    ACTION_PAGE = models.ForeignKey('action_page', on_delete = models.CASCADE, related_name="actions_taken2")
 
 
 class conversations_had(models.Model):
@@ -129,7 +127,7 @@ class conversations_had(models.Model):
     DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had5")
     STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations_had6")
     SCORE = models.IntegerField()
-    CONVERSATION = models.TextField()
+    CONVERSATION = models.ForeignKey('conversations', on_delete = models.CASCADE, related_name="conversations_had7")
 
 
 
@@ -142,6 +140,7 @@ class reflections_taken(models.Model):
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="reflections_taken3")
     VERSION = models.IntegerField(default=1, editable=False)
     DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken5")
+    REFLECTION_PAGE = models.ForeignKey('pages',null = True, on_delete = models.CASCADE, related_name = 'reflections_taken6')
 
 
 
