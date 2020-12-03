@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home',
     'tables',
     'corsheaders',
     'django_filters',
@@ -96,10 +95,10 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'gyknqjsa',
-        'USER': 'gyknqjsa',
-        'PASSWORD': 'HFmu2N5UABxyhFIfiAMyjeQmGvFK1Ysx',
-        'HOST': 'lallah.db.elephantsql.com',
+        'NAME': 'cnehcbso',
+        'USER': 'cnehcbso',
+        'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
+        'HOST': 'raja.db.elephantsql.com',
         'PORT': '5432',
     }
 }
