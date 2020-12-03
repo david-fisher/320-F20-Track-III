@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     addNewScenarioContainer: {
@@ -27,19 +27,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+AddNewScenarioCard.propTypes = {
+    onClick: PropTypes.any,
+};
 
-
-
-
-
-export default function AddNewScenarioCard(props) {
+export default function AddNewScenarioCard({ onClick }) {
     const classes = useStyles();
-   
+
     return (
-        
         <Grid key="createNewScenarioButton" item xs>
             <Container className={classes.addNewScenarioContainer} fixed={true}>
-                <Button className={classes.addNewScenarioButton} onClick= {props.onClick} >
+                <Button
+                    className={classes.addNewScenarioButton}
+                    onClick={onClick}
+                >
                     <Grid
                         container
                         direction="column"
@@ -62,7 +63,5 @@ export default function AddNewScenarioCard(props) {
                 </Button>
             </Container>
         </Grid>
-
-
     );
 }

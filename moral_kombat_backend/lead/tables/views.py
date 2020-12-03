@@ -862,6 +862,7 @@ class pages_page(APIView):
         
         # Delete the page
         if (request.method == "DELETE"):
+
             #set next page field of pages pointing to the deleted page to be None/Null
             next_pages = pages.objects.filter(NEXT_PAGE = PAGE_ID)
             for updated_page in next_pages:
@@ -889,6 +890,7 @@ class pages_page(APIView):
                     return Response(action_pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             # Finally delete the page 
+
             operation = page.delete()
             page_data = {}
             if (operation):

@@ -8,7 +8,7 @@ QuestionField.propTypes = {
     question: PropTypes.string,
     response: PropTypes.string,
     id: PropTypes.number,
-    removeQuestion: PropTypes.any.isRequired,
+    removeQuestion: PropTypes.any,
     listOfQuestions: PropTypes.any,
     setListOfQuestions: PropTypes.any,
 };

@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(2),
     },
     issue: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(10),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -372,6 +372,7 @@ export default function Dashboard() {
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
                     key={data.SCENARIO}
+                    data={data}
                     scenarioID={data.SCENARIO}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
@@ -427,30 +428,40 @@ export default function Dashboard() {
     useEffect(getData, [shouldFetch]);
 
     if (fetchScenariosResponse.loading) {
-        return <LoadingSpinner />;
+        return (
+            <div>
+                <DashboardNavBar />
+                <div style={{ marginTop: '100px' }}>
+                    <LoadingSpinner />
+                </div>
+            </div>
+        );
     }
 
     if (fetchScenariosResponse.error) {
         return (
-            <div className={classes.issue}>
-                <div className={classes.errorContainer}>
-                    <ErrorBanner
-                        fade={errorBannerFade}
-                        errorMessage={errorBannerMessage}
-                    />
-                    <ErrorIcon className={classes.iconError} />
-                    <Typography align="center" variant="h3">
-                        Error in fetching Scenarios.
-                    </Typography>
-                </div>
-                <div className={classes.errorContainer}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={getData}
-                    >
-                        <RefreshIcon className={classes.iconRefreshLarge} />
-                    </Button>
+            <div>
+                <DashboardNavBar />
+                <div className={classes.issue}>
+                    <div className={classes.errorContainer}>
+                        <ErrorBanner
+                            fade={errorBannerFade}
+                            errorMessage={errorBannerMessage}
+                        />
+                        <ErrorIcon className={classes.iconError} />
+                        <Typography align="center" variant="h3">
+                            Error in fetching Scenarios.
+                        </Typography>
+                    </div>
+                    <div className={classes.errorContainer}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={getData}
+                        >
+                            <RefreshIcon className={classes.iconRefreshLarge} />
+                        </Button>
+                    </div>
                 </div>
             </div>
         );

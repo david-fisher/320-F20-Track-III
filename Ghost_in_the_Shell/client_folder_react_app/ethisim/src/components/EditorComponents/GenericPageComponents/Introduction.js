@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-Generic.propTypes = {
+Introduction.propTypes = {
     scenarioComponents: PropTypes.any,
     setScenarioComponents: PropTypes.any,
     setCurrentPageID: PropTypes.any,
@@ -40,7 +40,7 @@ Generic.propTypes = {
     yCoord: PropTypes.any,
 };
 
-export default function Generic(props) {
+export default function Introduction(props) {
     const {
         scenarioComponents,
         setScenarioComponents,
@@ -198,7 +198,7 @@ export default function Generic(props) {
                 />
             </div>
             <Typography align="center" variant="h2">
-                Generic Component
+                Introduction Page
             </Typography>
             <Title
                 title={title}

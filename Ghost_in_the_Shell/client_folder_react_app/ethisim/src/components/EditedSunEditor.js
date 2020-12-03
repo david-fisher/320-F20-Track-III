@@ -1,18 +1,22 @@
 import React from 'react';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
-import htmlToText from 'html-to-text';
+import PropTypes from 'prop-types';
 
-export default function EditedSunEditor() {
-    let handleChangeIntroduction = (content) => {
-        //TODO Implement
-        console.log(content);
-        console.log(htmlToText.fromString(content));
+EditedSunEditor.propTypes = {
+    setText: PropTypes.any,
+    text: PropTypes.string,
+};
+
+export default function EditedSunEditor({ setText, text }) {
+    let handleChange = (content) => {
+        setText(content);
     };
 
     return (
         <div>
             <SunEditor
+                setContents={text}
                 setOptions={{
                     width: '100%',
                     height: 150,
@@ -139,7 +143,7 @@ export default function EditedSunEditor() {
                         ],
                     ],
                 }}
-                onChange={handleChangeIntroduction}
+                onChange={handleChange}
             />
         </div>
     );
