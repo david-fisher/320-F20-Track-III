@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import htmlToText from 'html-to-text';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({

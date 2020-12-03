@@ -14,7 +14,7 @@ StakeHolderFields.propTypes = {
 
 export default function StakeHolderFields( {scenario_id} ) {
     //eventaully, scenario will be replaced by scenario_id
-    const scenario = 2;
+    const scenario = 1;
 
     const [didGetSHs, setDidGetSHs] = useState(false);
 
@@ -61,13 +61,16 @@ export default function StakeHolderFields( {scenario_id} ) {
     // will eventually know which scenario to get stakeholders from once scenario_id is passed
     // from baseURL + 'stakeholder?scenario_id=' + scenario_id
     function getExistingStakeHolders() {
+        setLoading(true);
+
+        var data = {"SCENARIO": {scenario}}
         var config = {
             method: 'get',
             url: baseURL + 'api/stakeholders/',
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: null,
+            data: data,
         };
 
         axios(config)
@@ -78,6 +81,8 @@ export default function StakeHolderFields( {scenario_id} ) {
                 setErrorBannerMessage('Failed to get Stakeholders! Please try again.')
                 setErrorBannerFade(true);
             });
+            
+        setLoading(false);
     }
 
     //handles DELETEing a stakeholder from the backend and removing the corresponding
@@ -126,14 +131,14 @@ export default function StakeHolderFields( {scenario_id} ) {
         }
         setLoading(true);
 
-       //currently has scenario 2 arbitrarily
+       //currently has scenario 1 arbitrarily
         var data = JSON.stringify({
             SCENARIO: scenario,
         });
 
         var config = {
             method: 'post',
-            url: baseURL + 'api/stakeholders/',
+            url: baseURL + 'stakeholder',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -158,7 +163,7 @@ export default function StakeHolderFields( {scenario_id} ) {
     const saveStakeHolders = (e) => {
         var data = [...stakeHolders];
 
-        //currently has arbitrary value of 2
+        //currently has arbitrary value of 1
         var config = {
             method: 'put',
             url: baseURL + 'multi_stake?SCENARIO=' + scenario,

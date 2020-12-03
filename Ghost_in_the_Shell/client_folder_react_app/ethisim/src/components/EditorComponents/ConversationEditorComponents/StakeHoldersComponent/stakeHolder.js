@@ -19,6 +19,8 @@ import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
+import universalFetch from './../../../../universalHTTPRequests/get.js'
+import LoadingSpinner from './../../../LoadingSpinner';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -112,6 +114,7 @@ export default function StakeHolder({
     const [qRData, setQRData] = useState([]);
 
     const baseURL = 'http://127.0.0.1:8000/';
+    var axios = require('axios');
 
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
@@ -135,27 +138,6 @@ export default function StakeHolder({
 
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
-
-    //TABLE
-    const [rows, setRows] = useState([]);
-
-    const [row, setEdit] = useState({
-        id: Math.floor(Math.random() * 10000),
-        issuename: '  ',
-        score: ' ',
-        maxpoints: ' ',
-    });
-
-    const removeRow = (rowID) => {
-        const leftRows = rows.filter((r) => r.id !== rowID);
-        setRows(leftRows);
-    };
-
-    const addRow = (e) => {
-        const newRows = [...rows, row];
-        setRows(newRows);
-        setEdit({ id: Math.floor(Math.random() * 10000) });
-    };
 
     //TABLE
     const handleClickOpenBio = () => {
@@ -219,9 +201,7 @@ export default function StakeHolder({
     }
 
     function getQRs() {
-        var axios = require('axios');
         var data = {};
-
         var config = {
             method: 'get',
             url: baseURL + 'api/conversations/?STAKEHOLDER=' + id,
@@ -241,10 +221,10 @@ export default function StakeHolder({
                 setErrorBannerFade(true);
             });
     }
-
+    const [isLoading, setLoading] = useState(false);
     function getIssues() {
-        var axios = require('axios');
-        var data = '';
+        setLoading(true);
+        var data = JSON.stringify({});
 
         var config = {
             method: 'get',
@@ -257,13 +237,19 @@ export default function StakeHolder({
 
         axios(config)
             .then(function (response) {
-                setIssues(response.data);
+                setIssues(response.data.ISSUES);
+                console.log(issues);
+                setLoading(false);
                 setOpenPointSelection(true);
             })
             .catch(function (error) {
                 setErrorBannerMessage('Failed to get the issue(s) for this stakeholder! Please try again.');
                 setErrorBannerFade(true);
             });
+    }
+
+    if (isLoading) {
+        return <LoadingSpinner />
     }
 
     return (
@@ -733,12 +719,9 @@ export default function StakeHolder({
                         </h2>
                     </DialogTitle>
                     <DialogContent>
-                        <BasicTable 
-                            removeRow={removeRow} 
-                            rows={rows}
-                            stakeholder_id={stakeholder_id}
-                            issues={issues}
-                            setIssues={setIssues}
+                        <BasicTable
+                            stakeholder_id={id}
+                            passed_issues={issues}
                         />
                     </DialogContent>
                 </div>
