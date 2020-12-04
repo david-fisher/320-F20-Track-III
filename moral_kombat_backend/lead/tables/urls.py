@@ -29,6 +29,7 @@ router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
 router.register('api/issues', IssuesViewSet, 'issues')
 router.register('api/action_page', Action_pageViewSet, 'action_page')
 router.register('api/coverage', CoverageViewSet, 'coverage')
+router.register('api/actions_taken',ActionsTakenViewSet,'actions_taken')
 
 
 urlpatterns = [
