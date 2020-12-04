@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+// eslint-disable-next-line
 const useStyles = makeStyles((theme) => ({
     margin: {
         margin: theme.spacing(0.5),
@@ -29,27 +28,26 @@ export default function IssueRow({
     score,
     issue_number,
     issues,
-    setIssues
+    setIssues,
 }) {
     const [issueScore, setIssueScore] = useState(score);
 
     function updateIssueScore(val) {
         const updatedIssues = [...issues];
-        setIssues(updatedIssues.map((i) => {
-            if (i.ISSUE == issue_number) {
-                i.COVERAGE_SCORE = val;
-            }
-            return i;
-        }));
+        setIssues(
+            updatedIssues.map((i) => {
+                if (i.ISSUE === issue_number) {
+                    i.COVERAGE_SCORE = val;
+                }
+                return i;
+            })
+        );
     }
 
     const onChangeScore = (e) => {
         setIssueScore(e.target.value);
         updateIssueScore(e.target.value);
-    }
-
-
-    const classes = useStyles();
+    };
 
     return (
         <div>

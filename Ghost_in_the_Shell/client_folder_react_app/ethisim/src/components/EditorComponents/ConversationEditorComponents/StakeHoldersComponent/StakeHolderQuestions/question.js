@@ -36,21 +36,23 @@ export default function QuestionField({
     const [questionValue, setQuestionValue] = useState(question);
     const [responseValue, setResponseValue] = useState(response);
 
-    function updateQRs(shq, shr){
+    function updateQRs(shq, shr) {
         const updatedQRs = [...QRs];
-        setQRs(updatedQRs.map((qr) => {
-            if (qr.CONVERSATION == id){
-                qr.QUESTION = shq;
-                qr.RESPONSE = shr;
-            }
-            return qr;
-        }));
+        setQRs(
+            updatedQRs.map((qr) => {
+                if (qr.CONVERSATION === id) {
+                    qr.QUESTION = shq;
+                    qr.RESPONSE = shr;
+                }
+                return qr;
+            })
+        );
     }
 
     const onChangeQuestion = (e) => {
         setQuestionValue(e.target.value);
         updateQRs(e.target.value, responseValue);
-    }
+    };
     //Used for delete Warning Popup window
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
@@ -60,7 +62,7 @@ export default function QuestionField({
     const onChangeResponse = (e) => {
         setResponseValue(e.target.value);
         updateQRs(questionValue, e.target.value);
-    }
+    };
 
     const classes = useStyles();
 

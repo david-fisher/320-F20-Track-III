@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
 import LoadingSpinner from './../../../LoadingSpinner';
-import { baseURL } from './../../../../Constants/Config'
+import { baseURL } from './../../../../Constants/Config';
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
@@ -146,7 +146,6 @@ export default function StakeHolderFields({ scenario }) {
             data: data,
         };
 
-        var newStakeHolder;
         axios(config)
             .then(function (response) {
                 setStakeHolders([...stakeHolders, response.data]);
@@ -197,7 +196,6 @@ export default function StakeHolderFields({ scenario }) {
     const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
     //gets the current time in hms and converts it to an int
     function getCurrentTimeInt() {
-        var time_string = Date();
         let d = Date();
         var h = d.substring(16, 18);
         var m = d.substring(19, 21);
@@ -212,7 +210,7 @@ export default function StakeHolderFields({ scenario }) {
         var ret = false;
         //current time difference is at least 1 second, but that SHOULD be ample time for
         //the database to get back to the frontend
-        if (getCurrentTimeInt() - t != 0) {
+        if (getCurrentTimeInt() - t !== 0) {
             ret = true;
         }
         setTime(getCurrentTimeInt());

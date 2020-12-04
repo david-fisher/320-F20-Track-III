@@ -1,24 +1,12 @@
 import React, { useState } from 'react';
-import { Button } from '@material-ui/core';
 import StakeHolderFields from './StakeHoldersComponent/stakeHolders';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
-const useStyles = makeStyles((theme) => ({
-    issue: {
-        marginTop: theme.spacing(2),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    saveButton: {
-        margin: theme.spacing(2),
-        float: 'right',
-        textTransform: 'unset',
-    },
-}));
+ConversationEditor.propTypes = {
+    scenario_ID: PropTypes.number,
+};
 
 export default function ConversationEditor({ scenario_ID }) {
-    const classes = useStyles();
     const [stakeHolders, setStakeHolders] = useState([]);
 
     return (

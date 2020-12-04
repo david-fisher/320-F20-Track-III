@@ -59,15 +59,9 @@ export default function AddNewScenarioPageDialogBody(props) {
 
     const handleChange = (event) => {
         setPageType(event.target.value);
-        //console.log(pageType)
     };
 
     const createNewPage = () => {
-        console.log('Create new page');
-        console.log(pageType);
-        console.log(pageName);
-        console.log(pageBody);
-
         let validInput = true;
 
         if (!pageName || !pageName.trim()) {
