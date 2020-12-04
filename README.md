@@ -9,7 +9,7 @@ This is Track III's repository containing code for both the front-end and back-e
 1. Download node.js version 12.18.4 and npm https://www.npmjs.com/get-npm
 2. Clone the Github repository
 3. cd into the ethisim folder
-4. Run npm install, This shoukd install all dependencies if this doesn't work see section below
+4. Run npm install, This should install all dependencies if this doesn't work see section below
 5. To run the front-end, use npm start to run the development build at local host:3000
 6. You are done, but note that you will need to have the back-end running as well for the front-end to connect to the database and see current scenarios on the dashboard
 
