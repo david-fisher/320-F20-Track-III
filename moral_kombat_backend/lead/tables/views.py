@@ -168,7 +168,12 @@ class ReflectionsTakenViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ReflectionsTakenSerializer
 
-
+class ActionsTakenViewSet(viewsets.ModelViewSet):
+    queryset = actions_taken.objects.all()
+    permission_class = [
+        permissions.AllowAny
+    ]
+    serializer_class = Actions_takenSerializer
 class ConversationsHadViewSet(viewsets.ModelViewSet):
     queryset = conversations_had.objects.all()
     permission_class = [
