@@ -167,9 +167,12 @@ export default function Logistics({ scenario_ID }) {
     const [errorBannerFade, setErrorBannerFade] = useState(false);
     const [errorName, setErrorName] = useState(false);
     const [errorNameText, setErrorNameText] = useState('');
+    const [errorNumConvos, setErrorNumConvos] = useState(false);
+    const [errorNumConvosText, setErrorNumConvosText] = useState('');
     const [errorCourses, setErrorCourses] = useState(false);
     const [currentCourses, setCurrentCourses] = useState([]);
     const [scenarioName, setScenarioName] = useState('');
+    const [numConvos, setNumConvos] = useState(0);
     const [isPublic, setIsPublic] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
 
@@ -198,6 +201,13 @@ export default function Logistics({ scenario_ID }) {
     const handleOnChangeFinish = (event) => {
         setIsFinished(event.target.checked);
         setEdit({ ...NewScenario, IS_FINISHED: event.target.checked });
+    };
+
+    const handleOnChangeNumConvo = (event) => {
+        console.log('changed name');
+        NewScenario.NUM_CONVERSATION = event.target.value;
+        setNumConvos(event.target.value);
+        setEdit(NewScenario);
     };
 
     const makeNewCourses = (response) => {
@@ -244,9 +254,31 @@ export default function Logistics({ scenario_ID }) {
             setScenarioName(response.data.NAME);
             setIsFinished(response.data.IS_FINISHED);
             setIsPublic(response.data.PUBLIC);
+            setNumConvos(response.data.NUM_CONVERSATION);
             setEdit(NewScenario);
             getCourses();
         }
+
+        //code for implementing authors
+        /*
+     Authors
+                </form>
+
+                {authorsWithID.map((data) => (
+                    <Author
+                        key={data.id}
+                        id={data.id}
+                        removeAuthor={removeAuthor}
+                        author={data.author}
+                        listOfAuthors={authorsWithID}
+                        setListOfAuthors={setAuthorsWithID}
+                    />
+                ))}
+                <Button variant="contained" color="primary" onClick={addAuthor}>
+                    Add Author
+                </Button>
+                
+        */
 
         function onFailure() {
             console.log('Failed Get Logistics Request');
@@ -321,6 +353,19 @@ export default function Logistics({ scenario_ID }) {
             validInput = false;
         } else {
             setErrorName(false);
+        }
+
+        if (
+            isNaN(NewScenario.NUM_CONVERSATION) ||
+            NewScenario.NUM_CONVERSATION == ''
+        ) {
+            setErrorNumConvos(true);
+            setErrorNumConvosText(
+                'Max Number of Conversations Must Be A Number'
+            );
+            validInput = false;
+        } else {
+            setErrorNumConvos(false);
         }
 
         if (NewScenario.COURSES.length === 0) {
@@ -476,23 +521,25 @@ export default function Logistics({ scenario_ID }) {
                             At least one course must be selected
                         </Typography>
                     ) : null}
+                    Max Number Of Selected Conversations
+                    {errorNumConvos ? (
+                        <TextField
+                            error
+                            helperText={errorNumConvosText}
+                            value={numConvos}
+                            rows={1}
+                            onChange={handleOnChangeNumConvo}
+                        />
+                    ) : (
+                        <TextField
+                            value={numConvos}
+                            rows={1}
+                            onChange={handleOnChangeNumConvo}
+                        />
+                    )}
                     <Divider style={{ margin: '20px 0' }} />
-                    Authors
                 </form>
 
-                {authorsWithID.map((data) => (
-                    <Author
-                        key={data.id}
-                        id={data.id}
-                        removeAuthor={removeAuthor}
-                        author={data.author}
-                        listOfAuthors={authorsWithID}
-                        setListOfAuthors={setAuthorsWithID}
-                    />
-                ))}
-                <Button variant="contained" color="primary" onClick={addAuthor}>
-                    Add Author
-                </Button>
                 <form style={{ marginLeft: -15, marginTop: 10 }}>
                     <FormControlLabel
                         control={
