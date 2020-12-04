@@ -518,7 +518,7 @@ export default function Editor(props) {
             let postReqBody;
 
             function onSuccess(resp) {
-                setAddNewPageIndex(scenarioComponents.length);
+                setAddNewPageIndex(5);
                 setShouldFetch(shouldFetch + 1);
             }
 
