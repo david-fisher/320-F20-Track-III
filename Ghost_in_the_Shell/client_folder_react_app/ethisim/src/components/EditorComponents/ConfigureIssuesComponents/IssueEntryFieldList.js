@@ -32,8 +32,6 @@ export default function IssueEntryFieldList({
 }) {
     const classes = useStyles();
 
-    console.log(issueEntryFieldList);
-
     //When we select new issue button, we add new issue object into array.
     //We set a temporary unique ID.
     function setNewIssueID() {

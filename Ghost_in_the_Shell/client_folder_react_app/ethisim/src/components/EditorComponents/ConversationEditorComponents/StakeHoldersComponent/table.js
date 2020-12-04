@@ -8,13 +8,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import './table.css';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
 import IssueRow from './IssueRow';
 import LoadingSpinner from './../../../LoadingSpinner';
+import { baseURL } from './../../../../Constants/Config'
 
 const useStyles = makeStyles({
     table: {
@@ -23,8 +23,6 @@ const useStyles = makeStyles({
 });
 
 BasicTable.propTypes = {
-    rows: PropTypes.any.isRequired,
-    removeRow: PropTypes.any.isRequired,
     stakeholder_id: PropTypes.number,
     passed_issues: PropTypes.any,
 };
@@ -34,9 +32,6 @@ export default function BasicTable({stakeholder_id, passed_issues}) {
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
     var axios = require('axios');
-
-    //the base url for api calls; will be imported eventually
-    const baseURL = 'http://127.0.0.1:8000/';
 
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
@@ -78,11 +73,10 @@ export default function BasicTable({stakeholder_id, passed_issues}) {
             delete i.NAME;
             return i;
         });
-        console.log(data);
 
         var config = {
             method: 'put',
-            url: baseURL + 'multi_coverage?STAKEHOLDER=' + stakeholder_id,
+            url: baseURL + '/multi_coverage?STAKEHOLDER=' + stakeholder_id,
             headers: {
                 'Content-Type': 'application/json'
             },

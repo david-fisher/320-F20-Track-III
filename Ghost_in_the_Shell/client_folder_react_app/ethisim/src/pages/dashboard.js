@@ -195,13 +195,11 @@ export default function Dashboard() {
 
     const handleCloseSave = () => {
         function onSuccessPost(resp) {
-            console.log('Success Scenario Post');
             setShouldFetch(shouldFetch + 1);
             setSuccessBannerMessage('Successfully created Scenario!');
             setSuccessBannerFade(true);
         }
         function onFailurePost() {
-            console.log('Fail Scenario Post');
             setErrorBannerMessage(
                 'Failed to create Scenario! Please try again.'
             );
@@ -213,9 +211,6 @@ export default function Dashboard() {
                 error: null,
             });
         }
-
-        console.log('POST INFO');
-        console.log(NewScenario);
 
         let validInput = true;
 
@@ -330,7 +325,6 @@ export default function Dashboard() {
         }
 
         function onFailure() {
-            console.log('Fail To Delete Scenario');
             setErrorBannerMessage(
                 'Failed to delete scenario! Please try again.'
             );
@@ -368,7 +362,6 @@ export default function Dashboard() {
             let unfinishedScenarios = response.data.filter(
                 (data) => !data.IS_FINISHED
             );
-            console.log(response.data);
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
                     key={data.SCENARIO}
@@ -398,7 +391,6 @@ export default function Dashboard() {
         }
 
         function onFailure() {
-            console.log('Failed Get Scenarios Request');
             setErrorBannerMessage('Failed to get scenarios! Please try again.');
             setErrorBannerFade(true);
         }
@@ -412,7 +404,6 @@ export default function Dashboard() {
         }
 
         function onFailureCourse() {
-            console.log('Failed Get Courses Request');
             setErrorBannerMessage('Failed to get courses! Please try again.');
             setErrorBannerFade(true);
         }

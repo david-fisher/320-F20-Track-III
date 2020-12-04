@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
 import LoadingSpinner from './../../../LoadingSpinner';
+import { baseURL } from './../../../../Constants/Config'
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
@@ -27,9 +28,6 @@ export default function StakeHolderFields({ scenario }) {
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
     var axios = require('axios');
-
-    //the base url for api calls; will be imported eventually
-    const baseURL = 'http://sixbrigand.pythonanywhere.com/';
 
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
@@ -64,7 +62,7 @@ export default function StakeHolderFields({ scenario }) {
         var data = { SCENARIO: { scenario } };
         var config = {
             method: 'get',
-            url: baseURL + 'api/stakeholders/',
+            url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -104,7 +102,7 @@ export default function StakeHolderFields({ scenario }) {
 
         var config = {
             method: 'delete',
-            url: baseURL + 'api/stakeholders/' + stakeHolderID + '/',
+            url: baseURL + '/api/stakeholders/' + stakeHolderID + '/',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -135,14 +133,13 @@ export default function StakeHolderFields({ scenario }) {
         }
         setLoading(true);
 
-        //currently has scenario 1 arbitrarily
         var data = JSON.stringify({
             SCENARIO: scenario,
         });
 
         var config = {
             method: 'post',
-            url: baseURL + 'stakeholder',
+            url: baseURL + '/stakeholder',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -171,10 +168,9 @@ export default function StakeHolderFields({ scenario }) {
     const saveStakeHolders = (e) => {
         var data = [...stakeHolders];
 
-        //currently has arbitrary value of 1
         var config = {
             method: 'put',
-            url: baseURL + 'multi_stake?SCENARIO=' + scenario,
+            url: baseURL + '/multi_stake?SCENARIO=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },

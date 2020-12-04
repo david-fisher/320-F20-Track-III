@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import SuccessBanner from './../../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../../Banners/ErrorBanner';
 import LoadingSpinner from './../../../../LoadingSpinner';
+import { baseURL } from './../../../../../Constants/Config'
 
 QuestionFields.propTypes = {
     qrs: PropTypes.any,
@@ -17,9 +18,6 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
     var axios = require('axios');
-
-    //the base url for api calls; will be imported eventually
-    const baseURL = 'http://127.0.0.1:8000/';
 
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
@@ -52,7 +50,7 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
 
         var config = {
             method: 'put',
-            url: baseURL + 'multi_conv?STAKEHOLDER=' + stakeholder_id,
+            url: baseURL + '/multi_conv?STAKEHOLDER=' + stakeholder_id,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -80,7 +78,7 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
 
         var config = {
             method: 'post',
-            url: baseURL + 'api/conversations/',
+            url: baseURL + '/api/conversations/',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -120,7 +118,7 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
 
         var config = {
             method: 'delete',
-            url: baseURL + 'api/conversations/' + questionID + '/',
+            url: baseURL + '/api/conversations/' + questionID + '/',
             headers: {
                 'Content-Type': 'application/json'
             },

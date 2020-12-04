@@ -139,7 +139,6 @@ export default function Action(props) {
         }
 
         function onFailure() {
-            console.log('Post failed');
             setErrorBannerFade(true);
             setErrorBannerMessage('Failed to save page! Please try again.');
         }
@@ -197,7 +196,6 @@ export default function Action(props) {
             validInput = false;
         }
 
-        console.log(postReqBody);
         if (validInput) {
             universalPost(
                 setPostValues,
@@ -224,7 +222,6 @@ export default function Action(props) {
 
     const savePage = () => {
         handlePost(setPostValues, postReqBody, scenario_ID, false);
-        console.log(postValues);
     };
 
     const [successBannerMessage, setSuccessBannerMessage] = useState('');

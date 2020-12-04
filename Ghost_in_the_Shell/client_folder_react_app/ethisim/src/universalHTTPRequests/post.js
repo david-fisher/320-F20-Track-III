@@ -10,7 +10,6 @@ export default function universalPost(
     onSuccess,
     requestBody
 ) {
-    console.log('POST started');
     setResponse({
         data: null,
         loading: true,
@@ -19,8 +18,6 @@ export default function universalPost(
     axios
         .post(baseURL + endpoint, requestBody)
         .then((resp) => {
-            console.log('Response received');
-            console.log(resp);
             setResponse({
                 data: resp.data,
                 loading: false,
@@ -29,7 +26,6 @@ export default function universalPost(
             onSuccess && onSuccess(resp);
         })
         .catch((err) => {
-            console.log(`Post failed with error ${err.message}`);
             setResponse({
                 data: null,
                 loading: false,

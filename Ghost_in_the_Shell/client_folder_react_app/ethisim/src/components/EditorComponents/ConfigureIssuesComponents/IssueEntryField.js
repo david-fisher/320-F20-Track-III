@@ -95,9 +95,6 @@ export default function IssueEntryField({
     const [errorScoreText, setErrorScoreText] = useState('');
 
     const saveIssue = () => {
-        console.log(issueName);
-        console.log(issueScore);
-
         let validInput = true;
 
         //Issue name is null or white space and issue score is null
