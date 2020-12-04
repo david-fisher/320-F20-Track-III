@@ -29,7 +29,7 @@ BasicTable.propTypes = {
     passed_issues: PropTypes.any,
 };
 
-export default function BasicTable(stakeholder_id, passed_issues,) {
+export default function BasicTable({stakeholder_id, passed_issues}) {
     //used to track if we are waiting on a HTTP GET/POST/PUT request
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
@@ -61,22 +61,7 @@ export default function BasicTable(stakeholder_id, passed_issues,) {
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
 
-    const [issues, setIssues] = useState(
-        [
-            {
-                "COVERAGE_SCORE": 0.0,
-                "ISSUE": 2,
-                "STAKEHOLDER": 6,
-                "NAME": "mental health"
-            },
-            {
-                "COVERAGE_SCORE": 0.0,
-                "ISSUE": 1,
-                "STAKEHOLDER": 6,
-                "NAME": "sustainability"
-            }
-        ]
-    );
+    const [issues, setIssues] = useState(passed_issues);
 
     const classes = useStyles();
 
@@ -87,7 +72,13 @@ export default function BasicTable(stakeholder_id, passed_issues,) {
         setLoading(true);
 
         var axios = require('axios');
-        var data = issues;
+
+        var data = [...issues];
+        data = data.map((i) => {
+            delete i.NAME;
+            return i;
+        });
+        console.log(data);
 
         var config = {
             method: 'put',

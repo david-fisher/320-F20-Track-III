@@ -37,7 +37,7 @@ export default function IssueRow({
         const updatedIssues = [...issues];
         setIssues(updatedIssues.map((i) => {
             if (i.ISSUE == issue_number) {
-                i.IMPORTANCE_SCORE = val;
+                i.COVERAGE_SCORE = val;
             }
             return i;
         }));

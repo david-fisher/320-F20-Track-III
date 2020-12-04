@@ -112,6 +112,7 @@ export default function StakeHolder({
     const [stakeHolderConversation, setStakeHolderConversation] = useState(mainConvo);
     const [issues, setIssues] = useState([]);
     const [qRData, setQRData] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
     const baseURL = 'http://127.0.0.1:8000/';
     var axios = require('axios');
@@ -221,11 +222,12 @@ export default function StakeHolder({
                 setErrorBannerFade(true);
             });
     }
-    const [isLoading, setLoading] = useState(false);
+
     function getIssues() {
         setLoading(true);
         var data = JSON.stringify({});
 
+        console.log(id);
         var config = {
             method: 'get',
             url: baseURL + 'coverages?stakeholder_id=' + id,
@@ -238,7 +240,6 @@ export default function StakeHolder({
         axios(config)
             .then(function (response) {
                 setIssues(response.data.ISSUES);
-                console.log(issues);
                 setLoading(false);
                 setOpenPointSelection(true);
             })
