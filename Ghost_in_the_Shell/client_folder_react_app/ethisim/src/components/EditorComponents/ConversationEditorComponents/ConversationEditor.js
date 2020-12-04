@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import StakeHolderFields from './StakeHoldersComponent/stakeHolders';
+import PropTypes from 'prop-types';
 
 ConversationEditor.propTypes = {
     scenario_ID: PropTypes.number,
