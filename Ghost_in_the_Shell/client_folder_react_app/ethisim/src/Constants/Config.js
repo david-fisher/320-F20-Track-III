@@ -1,3 +1,3 @@
-const baseURL = 'http://localhost:8000';
+const baseURL = 'http://sixbrigand.pythonanywhere.com/';
 
 export { baseURL };
