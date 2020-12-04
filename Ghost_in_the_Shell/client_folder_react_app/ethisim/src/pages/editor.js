@@ -216,8 +216,6 @@ export default function Editor(props) {
         const endpoint = '/logistics?scenario_id=' + scenario_ID;
 
         function onSuccess(resp) {
-            console.log('GET logistics info');
-            console.log(resp.data);
             let p = null;
             let logistics_and_pages = resp.data;
             p = {
@@ -246,9 +244,6 @@ export default function Editor(props) {
 
             let pages = logistics_and_pages.PAGES;
 
-            console.log('Scenario Pages:');
-            console.log(pages);
-
             for (let i = 0; i < pages.length; i++) {
                 //Already have component in initial components
                 if (pages[i].PAGE_TYPE === 'S') {
@@ -270,8 +265,6 @@ export default function Editor(props) {
                     });
                 }
             }
-            console.log('Scenario Components on Sidebar');
-            console.log(initialComponents);
             setScenarioComponents(initialComponents);
             if (addNewPageIndex) {
                 handlePageGet(
@@ -287,7 +280,7 @@ export default function Editor(props) {
         }
 
         function onFailure() {
-            console.log('Failed to get logistics info');
+            //console.log('Failed to get logistics info');
         }
 
         universalFetch(setGetValues, endpoint, onFailure, onSuccess, {
@@ -299,13 +292,11 @@ export default function Editor(props) {
     function handleDelete(setDeleteValues, d_id) {
         const endpoint = '/page?page_id=' + d_id;
         function onSuccess(resp) {
-            console.log('response delete data is successful ');
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully deleted page!');
             setShowEditor(true);
         }
         function onFailure() {
-            console.log('Delete failed');
             setErrorBannerFade(true);
             setErrorBannerMessage('Failed to save page! Please try again.');
         }
@@ -316,17 +307,13 @@ export default function Editor(props) {
     }
 
     function handlePageGet(setGetValues, g_id, scenarioComponentsArray) {
-        console.log(g_id);
-
         const endpoint = '/page?page_id=' + g_id;
 
         function onSuccess(resp) {
             let p = null;
             let c = null;
 
-            console.log('Response get data is successful ');
             let currPageInfo = resp.data;
-            console.log(currPageInfo);
             if (currPageInfo.PAGE_TYPE === 'I') {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
@@ -418,13 +405,12 @@ export default function Editor(props) {
             );
             setCurrentPageID(currPageInfo.PAGE);
             setScenarioComponents(newScenarioComponents);
-            console.log(g_id);
             setScenarioComponent(c);
             setShowComponent(true);
         }
 
         function onFailure() {
-            console.log('Get failed');
+            //console.log('Get failed');
         }
 
         universalFetch(setGetValues, endpoint, onFailure, onSuccess, {
@@ -469,8 +455,6 @@ export default function Editor(props) {
 
     const deleteByID = (d_id) => {
         //If on page that is going to be deleted, redirect back to logistics page
-        console.log(d_id);
-        console.log(currentPageID);
         if (
             scenarioComponents.filter((i) => i.id === d_id)[0].id ===
             currentPageID
@@ -523,7 +507,6 @@ export default function Editor(props) {
             }
 
             function onFailure() {
-                console.log('Post failed');
                 setShowEditor(true);
             }
 

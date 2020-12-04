@@ -123,7 +123,6 @@ export default function Reflection(props) {
         }
 
         function onFailure() {
-            console.log('Post failed');
             setErrorBannerFade(true);
             setErrorBannerMessage('Failed to save page! Please try again.');
         }
@@ -172,8 +171,6 @@ export default function Reflection(props) {
                 obj.REFLECTION_QUESTION.trim()
             );
             let questionSet = new Set(trimmedQuestions);
-            console.log(trimmedQuestions.length);
-            console.log(questionSet.size);
             if (trimmedQuestions.length > questionSet.size) {
                 setErrorQuestions(true);
                 setErrorQuestionsMessage(
@@ -183,7 +180,6 @@ export default function Reflection(props) {
             }
         }
 
-        console.log(postReqBody);
         if (validInput) {
             universalPost(
                 setPostValues,
@@ -211,7 +207,6 @@ export default function Reflection(props) {
 
     const savePage = () => {
         handlePost(setPostValues, postReqBody, scenario_ID, false);
-        console.log(postValues);
     };
 
     const [successBannerMessage, setSuccessBannerMessage] = useState('');

@@ -20,7 +20,6 @@ export default function ReflectionResponse({ studentReflections }) {
         }
     );
 
-    console.log(questionResponsesWithID);
     return (
         <div>
             <Typography align="center" variant="h3">

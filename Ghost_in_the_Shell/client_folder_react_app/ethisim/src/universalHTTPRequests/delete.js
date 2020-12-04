@@ -8,7 +8,6 @@ export default function universalDelete(
     onSuccess,
     requestBody
 ) {
-    console.log('DELETE started');
     setResponse({
         data: null,
         loading: true,
@@ -17,8 +16,6 @@ export default function universalDelete(
     axios
         .delete(baseURL + endpoint, requestBody)
         .then((resp) => {
-            console.log('Response received');
-            console.log(resp);
             setResponse({
                 data: resp.data,
                 loading: false,
@@ -27,7 +24,6 @@ export default function universalDelete(
             onSuccess && onSuccess(resp);
         })
         .catch((err) => {
-            console.log(`Delete failed with error ${err.message}`);
             setResponse({
                 data: null,
                 loading: false,

@@ -10,8 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 let handleChange = (content) => {
     //TODO Implement
-    console.log(content);
-    console.log(htmlToText.fromString(content));
 };
 
 const useStyles = makeStyles((theme) => ({

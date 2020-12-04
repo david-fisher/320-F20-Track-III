@@ -19,9 +19,9 @@ import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
-import universalFetch from './../../../../universalHTTPRequests/get.js'
 import LoadingSpinner from './../../../LoadingSpinner';
 import GenericDeleteWarning from '../../../DeleteWarnings/GenericDeleteWarning';
+import { baseURL } from './../../../../Constants/Config'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -115,7 +115,6 @@ export default function StakeHolder({
     const [qRData, setQRData] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
-    const baseURL = 'http://127.0.0.1:8000/';
     var axios = require('axios');
 
     //Warning for Deleteing a Conversation
@@ -212,7 +211,7 @@ export default function StakeHolder({
         var data = {};
         var config = {
             method: 'get',
-            url: baseURL + 'api/conversations/?STAKEHOLDER=' + id,
+            url: baseURL + '/api/conversations/?STAKEHOLDER=' + id,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -234,10 +233,9 @@ export default function StakeHolder({
         setLoading(true);
         var data = JSON.stringify({});
 
-        console.log(id);
         var config = {
             method: 'get',
-            url: baseURL + 'coverages?stakeholder_id=' + id,
+            url: baseURL + '/coverages?stakeholder_id=' + id,
             headers: {
                 'Content-Type': 'application/json'
             },

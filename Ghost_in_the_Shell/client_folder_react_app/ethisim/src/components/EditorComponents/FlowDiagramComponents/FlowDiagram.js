@@ -367,7 +367,6 @@ export default function FlowDiagram({ scenario_ID }) {
             return array;
         }, []);
 
-        console.log(updatedElements);
         put(
             setElementsPUT,
             endpointPUT + scenarioID,

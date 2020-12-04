@@ -8,7 +8,6 @@ export default function universalPut(
     onSuccess,
     requestBody
 ) {
-    console.log('PUT started');
     setResponse({
         data: null,
         loading: true,
@@ -17,8 +16,6 @@ export default function universalPut(
     axios
         .put(baseURL + endpoint, requestBody)
         .then((resp) => {
-            console.log('Response received');
-            console.log(resp);
             setResponse({
                 data: resp.data,
                 loading: false,
@@ -27,7 +24,6 @@ export default function universalPut(
             onSuccess && onSuccess(resp);
         })
         .catch((err) => {
-            console.log(`Put failed with error ${err.message}`);
             setResponse({
                 data: null,
                 loading: false,

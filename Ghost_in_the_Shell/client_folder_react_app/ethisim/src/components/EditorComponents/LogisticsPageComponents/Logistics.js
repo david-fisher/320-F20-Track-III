@@ -206,7 +206,6 @@ export default function Logistics({ scenario_ID }) {
     };
 
     const handleOnChangeNumConvo = (event) => {
-        console.log('changed name');
         NewScenario.NUM_CONVERSATION = event.target.value;
         setNumConvos(event.target.value);
         setEdit(NewScenario);
@@ -214,8 +213,6 @@ export default function Logistics({ scenario_ID }) {
 
     const makeNewCourses = (response) => {
         let sel = [];
-
-        console.log(NewScenario.COURSES);
 
         for (let i = 0; i < response.length; i++) {
             for (let j = 0; j < NewScenario.COURSES.length; j++) {
@@ -283,7 +280,6 @@ export default function Logistics({ scenario_ID }) {
         */
 
         function onFailure() {
-            console.log('Failed Get Logistics Request');
             //GET request failed, loading animation should end
             setFetchCourseResponse({
                 data: null,
@@ -314,7 +310,6 @@ export default function Logistics({ scenario_ID }) {
         }
 
         function onFailureCourse() {
-            console.log('Failed Get Courses Request');
             setErrorBannerMessage('Failed to save! Please try again.');
             setErrorBannerFade(true);
         }
@@ -330,13 +325,11 @@ export default function Logistics({ scenario_ID }) {
 
     const handleSave = () => {
         function onSuccessLogistic(response) {
-            console.log('Success Put');
             setSuccessBannerMessage('Successfully Saved!');
             setSuccessBannerFade(true);
         }
 
         function onFailureLogistic() {
-            console.log('Failed Put Logistics Request');
             setErrorBannerMessage('Failed to save! Please try again.');
             setErrorBannerFade(true);
         }
@@ -394,7 +387,6 @@ export default function Logistics({ scenario_ID }) {
     };
 
     const handleOnChange = (event) => {
-        console.log('changed name');
         NewScenario.NAME = event.target.value;
         setScenarioName(event.target.value);
         setEdit(NewScenario);

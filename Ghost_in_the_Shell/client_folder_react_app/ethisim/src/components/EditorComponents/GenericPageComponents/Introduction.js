@@ -110,7 +110,6 @@ export default function Introduction(props) {
         }
 
         function onFailure() {
-            console.log('Post failed');
             setErrorBannerFade(true);
             setErrorBannerMessage('Failed to save page! Please try again.');
         }
@@ -135,8 +134,6 @@ export default function Introduction(props) {
         } else {
             setErrorBody(false);
         }
-
-        console.log(postReqBody);
 
         if (validInput) {
             universalPost(

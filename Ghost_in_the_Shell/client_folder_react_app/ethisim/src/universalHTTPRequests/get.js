@@ -9,18 +9,14 @@ export default function universalFetch(
     onError,
     onSuccess
 ) {
-    console.log('Fetch started');
     setResponse({
         data: null,
         loading: true,
         error: null,
     });
-    console.log('sets response');
     axios
         .get(baseURL + endpoint)
         .then((resp) => {
-            console.log('Response received');
-            console.log(resp);
             setResponse({
                 data: resp.data,
                 loading: false,
@@ -29,7 +25,6 @@ export default function universalFetch(
             onSuccess && onSuccess(resp);
         })
         .catch((err) => {
-            console.log(`Fetch failed with error ${err.message}`);
             setResponse({
                 data: null,
                 loading: false,
