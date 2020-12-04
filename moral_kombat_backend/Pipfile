@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-django = "==2.2.12"
+django = "==2.2.13"
 djangorestframework = "==3.12.2"
 django-rest-knox = "*"
 drf-extensions = "*"
