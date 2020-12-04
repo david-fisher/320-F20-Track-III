@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Author from './Author';
+//import Author from './Author';
 import {
     Button,
     TextField,
@@ -125,6 +125,7 @@ export default function Logistics({ scenario_ID }) {
 
     useEffect(resetAuthorsWithID, [authors]);
 
+    // eslint-disable-next-line
     const removeAuthor = (authorID) => {
         const leftAuthors = authorsWithID.filter(
             (author) => author.id !== authorID
@@ -132,6 +133,7 @@ export default function Logistics({ scenario_ID }) {
         setAuthorsWithID(leftAuthors);
     };
 
+    // eslint-disable-next-line
     const addAuthor = (e) => {
         let newAuthors = authorsWithID.map((data) => data.author);
         newAuthors = [...newAuthors, ''];
@@ -357,7 +359,7 @@ export default function Logistics({ scenario_ID }) {
 
         if (
             isNaN(NewScenario.NUM_CONVERSATION) ||
-            NewScenario.NUM_CONVERSATION == ''
+            NewScenario.NUM_CONVERSATION === ''
         ) {
             setErrorNumConvos(true);
             setErrorNumConvosText(
