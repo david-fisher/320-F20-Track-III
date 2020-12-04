@@ -52,15 +52,15 @@ This is Track III's repository containing code for both the front-end and back-e
 
 ## How to get the Back-end Running
 ### On MAC
-1. Install python3 https://www.python.org/downloads/
+1. Install python3
 2. sudo pip3 install pipenv (do it globally)
-3. pipenv shell
-4. pipenv install django djangorestframework django-rest-knox\
-5. pipenv install django-filter (or pip3 install django-filter)
-6. pip install psycopg2 (or pip install django psycopg2 or pip install psycopg2-binary or pipenv run pip3 install psycopg2-binary)
-7. pip install django-cors-headers
-8. cd lead
-9. python3 manage.py runserver
+3. clone https://github.com/david-fisher/320-F20-Track-III.git
+4. Navigate to moral_kombat_backend folder
+5. pipenv shell
+6. pipenv install -r requirements.txt
+7. cd lead
+8. python3 manage.py runserver
+
 
 #### How to run server on MAC:
 1. Go to moral_kombat_backend directory
@@ -70,12 +70,12 @@ This is Track III's repository containing code for both the front-end and back-e
 
 ### On WINDOWS
 1. https://www.python.org/downloads/ (Checkmark all optional features, add Python to environment variables)
-2. Open Terminal
-3. (IF RUN INTO ERRORS INSERT py -m before each command)
-4. pip install pipwin
-5. pipwin install psycopg2
-6. pip install django djangorestframework django-rest-knox
-7. pip install django-filter (or pip3 install django-filter)
+2. clone https://github.com/david-fisher/320-F20-Track-III.git
+3. Navigate to moral_kombat_backend folder
+4. Open Terminal (IF RUN INTO ERRORS INSERT py -m before each command)
+5. pip install -r requirements.txt
+6. cd lead
+7. python manage.py runserver
 8. Might need to download https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 
 #### How to run server on Windows:
@@ -85,9 +85,11 @@ This is Track III's repository containing code for both the front-end and back-e
 4. py -m manage.py runserver
 
 ### TEST The back-end:
-Go to postman and send a GET request to http://localhost:8000/api/scenarios (Should get Array of scenarios)
+Download postman
 
-
+### Database:
+Used ElephantSQL (postgreSQL)
+Schema Diagram: https://dbdiagram.io/d/5f8326e63a78976d7b772f0c
 
 
 ## API Endpoints and Rest Documentation
