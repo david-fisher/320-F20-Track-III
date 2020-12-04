@@ -28,7 +28,6 @@ export default function IssueRow({
     name,
     score,
     issue_number,
-    scenario,
     issues,
     setIssues
 }) {
@@ -45,6 +44,7 @@ export default function IssueRow({
     }
 
     const onChangeScore = (e) => {
+        console.log(e.target.value)
         setIssueScore(e.target.value);
         updateIssueScore(e.target.value);
     }

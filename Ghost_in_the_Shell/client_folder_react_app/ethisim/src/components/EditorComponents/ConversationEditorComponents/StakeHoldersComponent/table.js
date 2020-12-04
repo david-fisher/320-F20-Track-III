@@ -61,7 +61,22 @@ export default function BasicTable(stakeholder_id, passed_issues,) {
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
 
-    const [issues, setIssues] = useState(passed_issues);
+    const [issues, setIssues] = useState(
+        [
+            {
+                "COVERAGE_SCORE": 0.0,
+                "ISSUE": 2,
+                "STAKEHOLDER": 6,
+                "NAME": "mental health"
+            },
+            {
+                "COVERAGE_SCORE": 0.0,
+                "ISSUE": 1,
+                "STAKEHOLDER": 6,
+                "NAME": "sustainability"
+            }
+        ]
+    );
 
     const classes = useStyles();
 
@@ -149,16 +164,17 @@ export default function BasicTable(stakeholder_id, passed_issues,) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {/*issues.map((i) => (
-                            <IssueRow 
-                                name = {i.NAME}
-                                score = {i.IMPORTANCE_SCORE}
-                                issue_number = {i.ISSUE}
-                                scenario = {i.SCENARIO}
-                                issues = {issues}
-                                setIssues = {setIssues}
-                            />
-                    ))*/}
+                        {issues.map((i) => (
+                            <TableRow>
+                                <IssueRow 
+                                    name = {i.NAME}
+                                    score = {i.COVERAGE_SCORE}
+                                    issue_number = {i.ISSUE}
+                                    issues = {issues}
+                                    setIssues = {setIssues}
+                                />
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
