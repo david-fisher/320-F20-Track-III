@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import SuccessBanner from './../../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../../Banners/ErrorBanner';
 import LoadingSpinner from './../../../../LoadingSpinner';
-import { baseURL } from './../../../../../Constants/Config'
+import { baseURL } from './../../../../../Constants/Config';
 
 QuestionFields.propTypes = {
     qrs: PropTypes.any,
     stakeholder_id: PropTypes.number,
 };
 
-export default function QuestionFields({ qrs, stakeholder_id, }) {
+export default function QuestionFields({ qrs, stakeholder_id }) {
     //used to track if we are waiting on a HTTP GET/POST/PUT request
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
@@ -52,21 +52,25 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
             method: 'put',
             url: baseURL + '/multi_conv?STAKEHOLDER=' + stakeholder_id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            data: data
+            data: data,
         };
 
         axios(config)
             .then(function (response) {
-                setSuccessBannerMessage('Successfully saved the conversations for this stakeholder!');
+                setSuccessBannerMessage(
+                    'Successfully saved the conversations for this stakeholder!'
+                );
                 setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to save the conversations for this stakeholder! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to save the conversations for this stakeholder! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
-    }
+    };
 
     const addQuestion = (e) => {
         if (!checkTime(setCurrentTime, currentTime)) {
@@ -74,29 +78,28 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
         }
         setLoading(true);
 
-        var data = JSON.stringify({ "STAKEHOLDER": stakeholder_id });
+        var data = JSON.stringify({ STAKEHOLDER: stakeholder_id });
 
         var config = {
             method: 'post',
             url: baseURL + '/api/conversations/',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            data: data
+            data: data,
         };
 
         axios(config)
             .then(function (response) {
-                const newQRs = [
-                    ...QRs,
-                    response.data
-                ];
+                const newQRs = [...QRs, response.data];
                 setQRs(newQRs);
                 setSuccessBannerMessage('Successfully created a conversation!');
                 setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to create a conversation! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to create a conversation! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
 
@@ -109,9 +112,7 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
         }
         setLoading(true);
 
-        const leftQuestions = QRs.filter(
-            (q) => q.CONVERSATION !== questionID
-        );
+        const leftQuestions = QRs.filter((q) => q.CONVERSATION !== questionID);
         setQRs(leftQuestions);
 
         var data = JSON.stringify({});
@@ -120,18 +121,22 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
             method: 'delete',
             url: baseURL + '/api/conversations/' + questionID + '/',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            data: data
+            data: data,
         };
 
         axios(config)
             .then(function (response) {
-                setSuccessBannerMessage('Successfully deleted the conversation!');
+                setSuccessBannerMessage(
+                    'Successfully deleted the conversation!'
+                );
                 setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to delete the conversation! Please try again.')
+                setErrorBannerMessage(
+                    'Failed to delete the conversation! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
 
@@ -139,13 +144,12 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
     };
 
     /*
- * This section is about managing time to prevent sending a combination of multiple
- *    HTTP GET/POST/PUT/DELETE calls before a response is returned
- */
+     * This section is about managing time to prevent sending a combination of multiple
+     *    HTTP GET/POST/PUT/DELETE calls before a response is returned
+     */
     const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
     //gets the current time in hms and converts it to an int
     function getCurrentTimeInt() {
-        var time_string = Date();
         let d = Date();
         var h = d.substring(16, 18);
         var m = d.substring(19, 21);
@@ -160,7 +164,7 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
         var ret = false;
         //current time difference is at least 1 second, but that SHOULD be ample time for
         //the database to get back to the frontend
-        if (getCurrentTimeInt() - t != 0) {
+        if (getCurrentTimeInt() - t !== 0) {
             ret = true;
         }
         setTime(getCurrentTimeInt());
@@ -168,7 +172,7 @@ export default function QuestionFields({ qrs, stakeholder_id, }) {
     }
 
     if (isLoading) {
-        return <LoadingSpinner />
+        return <LoadingSpinner />;
     }
 
     return (

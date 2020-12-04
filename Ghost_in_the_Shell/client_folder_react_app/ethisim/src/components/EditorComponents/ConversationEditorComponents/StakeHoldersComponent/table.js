@@ -14,7 +14,7 @@ import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
 import IssueRow from './IssueRow';
 import LoadingSpinner from './../../../LoadingSpinner';
-import { baseURL } from './../../../../Constants/Config'
+import { baseURL } from './../../../../Constants/Config';
 
 const useStyles = makeStyles({
     table: {
@@ -27,11 +27,10 @@ BasicTable.propTypes = {
     passed_issues: PropTypes.any,
 };
 
-export default function BasicTable({stakeholder_id, passed_issues}) {
+export default function BasicTable({ stakeholder_id, passed_issues }) {
     //used to track if we are waiting on a HTTP GET/POST/PUT request
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
-    var axios = require('axios');
 
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
@@ -78,32 +77,35 @@ export default function BasicTable({stakeholder_id, passed_issues}) {
             method: 'put',
             url: baseURL + '/multi_coverage?STAKEHOLDER=' + stakeholder_id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            data: data
+            data: data,
         };
 
         axios(config)
             .then(function (response) {
-                setSuccessBannerMessage('Successfully saved the issues for this stakeholder!');
+                setSuccessBannerMessage(
+                    'Successfully saved the issues for this stakeholder!'
+                );
                 setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to save the issues for this stakeholder! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to save the issues for this stakeholder! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
 
         setLoading(false);
-    }
+    };
 
     /*
-* This section is about managing time to prevent sending a combination of multiple
-*    HTTP GET/POST/PUT/DELETE calls before a response is returned
-*/
+     * This section is about managing time to prevent sending a combination of multiple
+     *    HTTP GET/POST/PUT/DELETE calls before a response is returned
+     */
     const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
     //gets the current time in hms and converts it to an int
     function getCurrentTimeInt() {
-        var time_string = Date();
         let d = Date();
         var h = d.substring(16, 18);
         var m = d.substring(19, 21);
@@ -118,7 +120,7 @@ export default function BasicTable({stakeholder_id, passed_issues}) {
         var ret = false;
         //current time difference is at least 1 second, but that SHOULD be ample time for
         //the database to get back to the frontend
-        if (getCurrentTimeInt() - t != 0) {
+        if (getCurrentTimeInt() - t !== 0) {
             ret = true;
         }
         setTime(getCurrentTimeInt());
@@ -126,7 +128,7 @@ export default function BasicTable({stakeholder_id, passed_issues}) {
     }
 
     if (isLoading) {
-        return <LoadingSpinner />
+        return <LoadingSpinner />;
     }
 
     return (
@@ -150,13 +152,13 @@ export default function BasicTable({stakeholder_id, passed_issues}) {
                     </TableHead>
                     <TableBody>
                         {issues.map((i) => (
-                            <TableRow>
-                                <IssueRow 
-                                    name = {i.NAME}
-                                    score = {i.COVERAGE_SCORE}
-                                    issue_number = {i.ISSUE}
-                                    issues = {issues}
-                                    setIssues = {setIssues}
+                            <TableRow key={i.ISSUE}>
+                                <IssueRow
+                                    name={i.NAME}
+                                    score={i.COVERAGE_SCORE}
+                                    issue_number={i.ISSUE}
+                                    issues={issues}
+                                    setIssues={setIssues}
                                 />
                             </TableRow>
                         ))}
@@ -173,4 +175,4 @@ export default function BasicTable({stakeholder_id, passed_issues}) {
             />
         </div>
     );
-} 
+}

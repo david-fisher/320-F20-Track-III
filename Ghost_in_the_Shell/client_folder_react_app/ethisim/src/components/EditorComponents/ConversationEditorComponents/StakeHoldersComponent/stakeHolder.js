@@ -5,7 +5,6 @@ import { Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
@@ -21,7 +20,7 @@ import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
 import LoadingSpinner from './../../../LoadingSpinner';
 import GenericDeleteWarning from '../../../DeleteWarnings/GenericDeleteWarning';
-import { baseURL } from './../../../../Constants/Config'
+import { baseURL } from './../../../../Constants/Config';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,22 +70,13 @@ const DialogContent = withStyles((theme) => ({
     },
 }))(MuiDialogContent);
 
-const DialogActions = withStyles((theme) => ({
-    root: {
-        margin: 0,
-        padding: theme.spacing(1),
-    },
-}))(MuiDialogActions);
-
 StakeHolder.propTypes = {
     name: PropTypes.string,
     bio: PropTypes.string,
     mainConvo: PropTypes.string,
-    questionsResponses: PropTypes.any,
-    stakeHolderIssues: PropTypes.any,
     id: PropTypes.number,
     removeStakeHolder: PropTypes.any,
-    stakeHolder: PropTypes.any,
+    job: PropTypes.string,
     stakeHolders: PropTypes.any,
     setStakeHolders: PropTypes.func,
 };
@@ -110,7 +100,9 @@ export default function StakeHolder({
     const [stakeHolderName, setStakeHolderName] = useState(name);
     const [stakeHolderJob, setStakeHolderJob] = useState(job);
     const [stakeHolderBiography, setStakeHolderBiography] = useState(bio);
-    const [stakeHolderConversation, setStakeHolderConversation] = useState(mainConvo);
+    const [stakeHolderConversation, setStakeHolderConversation] = useState(
+        mainConvo
+    );
     const [issues, setIssues] = useState([]);
     const [qRData, setQRData] = useState([]);
     const [isLoading, setLoading] = useState(false);
@@ -124,6 +116,7 @@ export default function StakeHolder({
     };
 
     //for success and error banners
+    // eslint-disable-next-line
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
 
@@ -151,14 +144,24 @@ export default function StakeHolder({
         setOpenBio(true);
     };
     const handleCloseBio = () => {
-        updateBasicText(stakeHolderName, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
+        updateBasicText(
+            stakeHolderName,
+            stakeHolderJob,
+            stakeHolderBiography,
+            stakeHolderConversation
+        );
         setOpenBio(false);
     };
     const handleClickOpenMainConvo = () => {
         setOpenMainConvo(true);
     };
     const handleCloseMainConvo = () => {
-        updateBasicText(stakeHolderName, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
+        updateBasicText(
+            stakeHolderName,
+            stakeHolderJob,
+            stakeHolderBiography,
+            stakeHolderConversation
+        );
         setOpenMainConvo(false);
     };
 
@@ -186,25 +189,37 @@ export default function StakeHolder({
 
     const onChangeName = (e) => {
         setStakeHolderName(e.target.value);
-        updateBasicText(e.target.value, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
-    }
+        updateBasicText(
+            e.target.value,
+            stakeHolderJob,
+            stakeHolderBiography,
+            stakeHolderConversation
+        );
+    };
 
     const onChangeJob = (e) => {
         setStakeHolderJob(e.target.value);
-        updateBasicText(stakeHolderName, e.target.value, stakeHolderBiography, stakeHolderConversation);
-    }
+        updateBasicText(
+            stakeHolderName,
+            e.target.value,
+            stakeHolderBiography,
+            stakeHolderConversation
+        );
+    };
 
     function updateBasicText(shname, shjob, shbio, shconvo) {
         const updatedStakeHolders = [...stakeHolders];
-        setStakeHolders(updatedStakeHolders.map((sh) => {
-            if (sh.STAKEHOLDER == id) {
-                sh.NAME = shname;
-                sh.JOB = shjob;
-                sh.DESCRIPTION = shbio;
-                sh.INTRODUCTION = shconvo;
-            }
-            return sh;
-        }));
+        setStakeHolders(
+            updatedStakeHolders.map((sh) => {
+                if (sh.STAKEHOLDER === id) {
+                    sh.NAME = shname;
+                    sh.JOB = shjob;
+                    sh.DESCRIPTION = shbio;
+                    sh.INTRODUCTION = shconvo;
+                }
+                return sh;
+            })
+        );
     }
 
     function getQRs() {
@@ -213,9 +228,9 @@ export default function StakeHolder({
             method: 'get',
             url: baseURL + '/api/conversations/?STAKEHOLDER=' + id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            data: data
+            data: data,
         };
 
         axios(config)
@@ -224,7 +239,9 @@ export default function StakeHolder({
                 setOpenQuestions(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to get the conversation(s) for this stakeholder! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to get the conversation(s) for this stakeholder! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
     }
@@ -237,9 +254,9 @@ export default function StakeHolder({
             method: 'get',
             url: baseURL + '/coverages?stakeholder_id=' + id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            data: data
+            data: data,
         };
 
         axios(config)
@@ -249,13 +266,15 @@ export default function StakeHolder({
                 setOpenPointSelection(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to get the issue(s) for this stakeholder! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to get the issue(s) for this stakeholder! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
     }
 
     if (isLoading) {
-        return <LoadingSpinner />
+        return <LoadingSpinner />;
     }
 
     return (
@@ -702,10 +721,7 @@ export default function StakeHolder({
                         <h2 className="questions-header">Questions</h2>
                     </DialogTitle>
                     <DialogContent>
-                        <QuestionFields
-                            qrs={qRData}
-                            stakeholder_id={id}
-                        />
+                        <QuestionFields qrs={qRData} stakeholder_id={id} />
                     </DialogContent>
                 </div>
             </Dialog>
@@ -720,9 +736,9 @@ export default function StakeHolder({
                         id="customized-dialog-title"
                         onClose={handleClosePointSelection}
                     >
-                        <h2 className="point-selection-header">
+                        <div className="point-selection-header">
                             Point Selection
-                        </h2>
+                        </div>
                     </DialogTitle>
                     <DialogContent>
                         <BasicTable
