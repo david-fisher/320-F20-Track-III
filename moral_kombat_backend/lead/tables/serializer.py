@@ -142,4 +142,7 @@ class coverageSerializer(serializers.ModelSerializer):
         model = coverage
         fields = ('STAKEHOLDER', 'ISSUE', 'COVERAGE_SCORE')
 
-
+class Actions_takenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = actions_taken
+        fields = '__all__'
