@@ -1,45 +1,227 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StakeHolder from './stakeHolder';
 import Button from '@material-ui/core/Button';
 import './stakeHolders.css';
 import PropTypes from 'prop-types';
+import SuccessBanner from './../../../Banners/SuccessBanner';
+import ErrorBanner from './../../../Banners/ErrorBanner';
+import LoadingSpinner from './../../../LoadingSpinner';
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
     setStakeHolders: PropTypes.any,
+    scenario: PropTypes.number,
 };
 
-export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
-    //const [stakeHolders, setStakeHolders] = useState([]);
-    //const [name, setName] = useState('');
+export default function StakeHolderFields( {scenario} ) {
+    const [didGetSHs, setDidGetSHs] = useState(false);
 
-    const [stakeHolder, setEdit] = useState({
-        id: Math.floor(Math.random() * 10000),
-        questionsResponses: [],
-    });
+    /*
+     * This section is code that is essentially the middleware between the frontend and backend
+     * Handles API calls between frontend and backend
+     */
 
+    //tracks current state of stakeholders to be represented on the frontend
+    const [stakeHolders, setStakeHolders] = useState([]);
+    //used to track if we are waiting on a HTTP GET/POST/PUT request
+    //not needed for DELETE
+    const [isLoading, setLoading] = useState(false);
+    var axios = require('axios');
+
+    //the base url for api calls; will be imported eventually
+    const baseURL = 'http://127.0.0.1:8000/';
+
+    //for success and error banners
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
+
+    //handles GETting existing stakeholders from the backend and representing
+    //    that information in the frontend
+    // will eventually know which scenario to get stakeholders from once scenario_id is passed
+    // from baseURL + 'stakeholder?scenario_id=' + scenario_id
+    function getExistingStakeHolders() {
+        setLoading(true);
+
+        var data = {"SCENARIO": {scenario}}
+        var config = {
+            method: 'get',
+            url: baseURL + 'api/stakeholders/',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                setStakeHolders(response.data);
+            })
+            .catch(function (error) {
+                setErrorBannerMessage('Failed to get Stakeholders! Please try again.')
+                setErrorBannerFade(true);
+            });
+            
+        setLoading(false);
+    }
+
+    //handles DELETEing a stakeholder from the backend and removing the corresponding
+    //    stakeholder from the frontend
     const removeStakeHolder = (stakeHolderID) => {
-        console.log(stakeHolderID);
+        if (!checkTime(setCurrentTime, currentTime)) {
+            return;
+        }
+        setLoading(true);
+
+        //handling it on the frontend
         const leftStakeHolders = stakeHolders.filter(
-            (s) => s.id !== stakeHolderID
+            (s) => s.STAKEHOLDER !== stakeHolderID
         );
         setStakeHolders(leftStakeHolders);
+
+        //calling the DELETE request on the backend
+        var data = JSON.stringify({});
+
+        var config = {
+            method: 'delete',
+            url: baseURL + 'api/stakeholders/' + stakeHolderID + '/',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                setSuccessBannerMessage('Successfully deleted the stakeholder!');
+                setSuccessBannerFade(true);
+            })
+            .catch(function (error) {
+                setErrorBannerMessage('Failed to delete the stakeholder! Please try again.');
+                setErrorBannerFade(true);
+            });
+
+        setLoading(false);
     };
 
+    //handles POSTing a new stakeholder to the backend and adding that stakeholder to the frontend
     const addStakeHolder = (e) => {
-        const newStakeHolders = [...stakeHolders, stakeHolder];
-        setStakeHolders(newStakeHolders);
-        console.log(...stakeHolders);
-        setEdit({
-            id: Math.floor(Math.random() * 10000),
-            questionsResponses: [],
+        if (!checkTime(setCurrentTime, currentTime)) {
+            return;
+        }
+        setLoading(true);
+
+       //currently has scenario 1 arbitrarily
+        var data = JSON.stringify({
+            SCENARIO: scenario,
         });
+
+        var config = {
+            method: 'post',
+            url: baseURL + 'stakeholder',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+
+        var newStakeHolder;
+        axios(config)
+            .then(function (response) {
+                setStakeHolders([...stakeHolders, response.data]);
+                setSuccessBannerMessage('Successfully created a new stakeholder!');
+                setSuccessBannerFade(true);
+            })
+            .catch(function (error) {
+                setErrorBannerMessage('Failed to create a stakeholder! Please try again.');
+                setErrorBannerFade(true);
+            });
+
+        setLoading(false);
     };
 
-    // eslint-disable-next-line
-    function updateStakeholder(stakeholderID, stakeholderBody) {
-        //TODO
-        //functional code to save items to backend
+    const saveStakeHolders = (e) => {
+        var data = [...stakeHolders];
+
+        //currently has arbitrary value of 1
+        var config = {
+            method: 'put',
+            url: baseURL + 'multi_stake?SCENARIO=' + scenario,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                setSuccessBannerMessage('Successfully saved the stakeholders!');
+                setSuccessBannerFade(true);
+            })
+            .catch(function (error) {
+                setErrorBannerMessage('Failed to save the stakeholders! Please try again.');
+                setErrorBannerFade(true);
+            });
+    };
+
+    /*
+     * This section is about managing time to prevent sending a combination of multiple
+     *    HTTP GET/POST/PUT/DELETE calls before a response is returned
+     */
+    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
+    //gets the current time in hms and converts it to an int
+    function getCurrentTimeInt() {
+        var time_string = Date();
+        let d = Date();
+        var h = d.substring(16, 18);
+        var m = d.substring(19, 21);
+        var s = d.substring(22, 24);
+        return 60 * (60 * h + m) + s;
+    }
+
+    //checks if at least 1 second has elapsed since last action
+    //if someone waits a multiple of exactly 24 hours since their last action they will
+    //    not be able to take an action for an additional second
+    function checkTime(setTime, t) {
+        var ret = false;
+        //current time difference is at least 1 second, but that SHOULD be ample time for
+        //the database to get back to the frontend
+        if (getCurrentTimeInt() - t != 0) {
+            ret = true;
+        }
+        setTime(getCurrentTimeInt());
+        return ret;
+    }
+
+    /*
+     * This code is the frontend rendering; what the users see
+     */
+
+    if (isLoading) {
+        return <LoadingSpinner />
+    }
+
+    if (!didGetSHs) {
+        setDidGetSHs(true);
+        getExistingStakeHolders();
     }
 
     return (
@@ -56,17 +238,36 @@ export default function StakeHolderFields({ stakeHolders, setStakeHolders }) {
             <form id="form">
                 {stakeHolders.map((stakeHolder) => (
                     <StakeHolder
-                        key={stakeHolder.id}
+                        key={stakeHolder.STAKEHOLDER}
                         removeStakeHolder={removeStakeHolder}
-                        id={stakeHolder.id}
-                        name={stakeHolder.name}
-                        bio={stakeHolder.bio}
-                        mainConvo={stakeHolder.mainConvo}
-                        questionsResponses={stakeHolder.questionsResponses}
-                        stakeHolderIssues={stakeHolder.stakeHolderIssues}
+                        id={stakeHolder.STAKEHOLDER}
+                        name={stakeHolder.NAME}
+                        job={stakeHolder.JOB}
+                        bio={stakeHolder.DESCRIPTION}
+                        mainConvo={stakeHolder.INTRODUCTION}
+                        stakeHolders={stakeHolders}
+                        setStakeHolders={setStakeHolders}
                     />
                 ))}
             </form>
+
+            <div id="SaveButton">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={saveStakeHolders}
+                >
+                    Save Stakeholder Changes
+                </Button>
+            </div>
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
@@ -15,9 +15,12 @@ import './stakeHolder.css';
 import QuestionFields from './StakeHolderQuestions/questions';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
-import htmlToText from 'html-to-text';
 import shemptylogo from './shemptylogo.png';
 import PropTypes from 'prop-types';
+import SuccessBanner from './../../../Banners/SuccessBanner';
+import ErrorBanner from './../../../Banners/ErrorBanner';
+import universalFetch from './../../../../universalHTTPRequests/get.js'
+import LoadingSpinner from './../../../LoadingSpinner';
 import GenericDeleteWarning from '../../../DeleteWarnings/GenericDeleteWarning';
 
 const useStyles = makeStyles((theme) => ({
@@ -84,16 +87,19 @@ StakeHolder.propTypes = {
     id: PropTypes.number,
     removeStakeHolder: PropTypes.any,
     stakeHolder: PropTypes.any,
+    stakeHolders: PropTypes.any,
+    setStakeHolders: PropTypes.func,
 };
 
 export default function StakeHolder({
     name,
     bio,
     mainConvo,
-    questionsResponses,
-    stakeHolderIssues,
     id,
     removeStakeHolder,
+    job,
+    stakeHolders,
+    setStakeHolders,
 }) {
     const classes = useStyles();
 
@@ -101,16 +107,16 @@ export default function StakeHolder({
     const [openMainConvo, setOpenMainConvo] = useState(false);
     const [openPointSelection, setOpenPointSelection] = useState(false);
     const [openQuestions, setOpenQuestions] = useState(false);
+    const [stakeHolderName, setStakeHolderName] = useState(name);
+    const [stakeHolderJob, setStakeHolderJob] = useState(job);
+    const [stakeHolderBiography, setStakeHolderBiography] = useState(bio);
+    const [stakeHolderConversation, setStakeHolderConversation] = useState(mainConvo);
+    const [issues, setIssues] = useState([]);
+    const [qRData, setQRData] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
-    //TABLE
-    const [rows, setRows] = useState([]);
-
-    const [row, setEdit] = useState({
-        id: Math.floor(Math.random() * 10000),
-        issuename: '  ',
-        score: ' ',
-        maxpoints: ' ',
-    });
+    const baseURL = 'http://127.0.0.1:8000/';
+    var axios = require('axios');
 
     //Warning for Deleteing a Conversation
     const [open, setOpen] = React.useState(false);
@@ -118,64 +124,157 @@ export default function StakeHolder({
         setOpen(true);
     };
 
-    const removeRow = (rowID) => {
-        console.log(rowID);
-        const leftRows = rows.filter((r) => r.id !== rowID);
-        setRows(leftRows);
-    };
+    //for success and error banners
+    const [successBannerMessage, setSuccessBannerMessage] = useState('');
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
 
-    const addRow = (e) => {
-        const newRows = [...rows, row];
-        setRows(newRows);
-        console.log(...rows);
-        setEdit({ id: Math.floor(Math.random() * 10000) });
-    };
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccessBannerFade(false);
+        }, 1000);
 
-    // eslint-disable-next-line
-    function updateRow(rowID, rowBody) {
-        //TODO
-        //functional code to save items to backend
-    }
+        return () => clearTimeout(timeout);
+    }, [successBannerFade]);
+
+    const [errorBannerMessage, setErrorBannerMessage] = useState('');
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrorBannerFade(false);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [errorBannerFade]);
 
     //TABLE
-
     const handleClickOpenBio = () => {
         setOpenBio(true);
     };
     const handleCloseBio = () => {
+        updateBasicText(stakeHolderName, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
         setOpenBio(false);
     };
     const handleClickOpenMainConvo = () => {
         setOpenMainConvo(true);
     };
     const handleCloseMainConvo = () => {
+        updateBasicText(stakeHolderName, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
         setOpenMainConvo(false);
     };
 
     const handleClickOpenPointSelection = () => {
-        setOpenPointSelection(true);
+        getIssues();
     };
     const handleClosePointSelection = () => {
         setOpenPointSelection(false);
     };
 
     const handleClickOpenQuestions = () => {
-        setOpenQuestions(true);
+        getQRs();
     };
     const handleCloseQuestions = () => {
         setOpenQuestions(false);
     };
 
-    let handleChange = (content, editor) => {
-        //TODO Implement
-        console.log(content);
-        console.log(htmlToText.fromString(content));
+    let handleChangeBiography = (content, editor) => {
+        setStakeHolderBiography(content);
     };
+
+    let handleChangeConversation = (content, editor) => {
+        setStakeHolderConversation(content);
+    };
+
+    const onChangeName = (e) => {
+        setStakeHolderName(e.target.value);
+        updateBasicText(e.target.value, stakeHolderJob, stakeHolderBiography, stakeHolderConversation);
+    }
+
+    const onChangeJob = (e) => {
+        setStakeHolderJob(e.target.value);
+        updateBasicText(stakeHolderName, e.target.value, stakeHolderBiography, stakeHolderConversation);
+    }
+
+    function updateBasicText(shname, shjob, shbio, shconvo) {
+        const updatedStakeHolders = [...stakeHolders];
+        setStakeHolders(updatedStakeHolders.map((sh) => {
+            if (sh.STAKEHOLDER == id) {
+                sh.NAME = shname;
+                sh.JOB = shjob;
+                sh.DESCRIPTION = shbio;
+                sh.INTRODUCTION = shconvo;
+            }
+            return sh;
+        }));
+    }
+
+    function getQRs() {
+        var data = {};
+        var config = {
+            method: 'get',
+            url: baseURL + 'api/conversations/?STAKEHOLDER=' + id,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                setQRData(response.data);
+                setOpenQuestions(true);
+            })
+            .catch(function (error) {
+                setErrorBannerMessage('Failed to get the conversation(s) for this stakeholder! Please try again.');
+                setErrorBannerFade(true);
+            });
+    }
+
+    function getIssues() {
+        setLoading(true);
+        var data = JSON.stringify({});
+
+        console.log(id);
+        var config = {
+            method: 'get',
+            url: baseURL + 'coverages?stakeholder_id=' + id,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                setIssues(response.data.ISSUES);
+                setLoading(false);
+                setOpenPointSelection(true);
+            })
+            .catch(function (error) {
+                setErrorBannerMessage('Failed to get the issue(s) for this stakeholder! Please try again.');
+                setErrorBannerFade(true);
+            });
+    }
+
+    if (isLoading) {
+        return <LoadingSpinner />
+    }
 
     return (
         <div id="parent">
             <div id="SHname">
-                <TextField label="StakeHolder Name" value={name} />
+                <TextField
+                    label="StakeHolder Name"
+                    value={stakeHolderName}
+                    onChange={onChangeName}
+                />
+            </div>
+            <div id="SHjob">
+                <TextField
+                    label="StakeHolder Job"
+                    value={stakeHolderJob}
+                    onChange={onChangeJob}
+                />
             </div>
             <img id="stakeimg" src={shemptylogo} alt=" "></img>
             <label id="upl" htmlFor="contained-button-file">
@@ -293,7 +392,7 @@ export default function StakeHolder({
                                         'superscript',
                                     ],
                                     ['fontColor', 'hiliteColor', 'textStyle'],
-                                    '/', // Line break
+                                    '/',
                                     ['undo', 'redo'],
                                     ['removeFormat'],
                                     ['outdent', 'indent'],
@@ -312,7 +411,6 @@ export default function StakeHolder({
                                     ],
                                     ['fullScreen', 'showBlocks', 'codeView'],
                                     ['preview'],
-                                    // (min-width: 1000px)
                                     [
                                         '%1000',
                                         [
@@ -367,7 +465,6 @@ export default function StakeHolder({
                                             ],
                                         ],
                                     ],
-                                    // (min-width: 875px)
                                     [
                                         '%875',
                                         [
@@ -422,18 +519,9 @@ export default function StakeHolder({
                                     ],
                                 ],
                             }}
-                            onChange={handleChange}
+                            onChange={handleChangeBiography}
                         />
                     </DialogContent>
-                    <DialogActions>
-                        <Button
-                            autoFocus
-                            onClick={handleCloseBio}
-                            color="primary"
-                        >
-                            Save changes
-                        </Button>
-                    </DialogActions>
                 </div>
             </Dialog>
 
@@ -469,7 +557,7 @@ export default function StakeHolder({
                                         'superscript',
                                     ],
                                     ['fontColor', 'hiliteColor', 'textStyle'],
-                                    '/', // Line break
+                                    '/',
                                     ['undo', 'redo'],
                                     ['removeFormat'],
                                     ['outdent', 'indent'],
@@ -488,7 +576,6 @@ export default function StakeHolder({
                                     ],
                                     ['fullScreen', 'showBlocks', 'codeView'],
                                     ['preview'],
-                                    // (min-width: 1000px)
                                     [
                                         '%1000',
                                         [
@@ -543,7 +630,6 @@ export default function StakeHolder({
                                             ],
                                         ],
                                     ],
-                                    // (min-width: 875px)
                                     [
                                         '%875',
                                         [
@@ -598,51 +684,10 @@ export default function StakeHolder({
                                     ],
                                 ],
                             }}
-                            onChange={handleChange}
+                            onChange={handleChangeConversation}
                         />
                     </DialogContent>
-                    <DialogActions>
-                        <Button
-                            autoFocus
-                            onClick={handleCloseMainConvo}
-                            color="primary"
-                        >
-                            Save changes
-                        </Button>
-                    </DialogActions>
                 </div>
-            </Dialog>
-
-            <Dialog
-                onClose={handleClosePointSelection}
-                aria-labelledby="customized-dialog-title"
-                open={openPointSelection}
-            >
-                <DialogTitle
-                    id="customized-dialog-title"
-                    onClose={handleClosePointSelection}
-                >
-                    <h2>Point Selection</h2>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={addRow}
-                    >
-                        Add Issue
-                    </Button>
-                </DialogTitle>
-                <DialogContent>
-                    <BasicTable removeRow={removeRow} rows={rows} />
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        autoFocus
-                        onClick={handleClosePointSelection}
-                        color="primary"
-                    >
-                        Save changes
-                    </Button>
-                </DialogActions>
             </Dialog>
 
             <Dialog
@@ -656,24 +701,47 @@ export default function StakeHolder({
                         id="customized-dialog-title"
                         onClose={handleCloseQuestions}
                     >
-                        <h2>Questions</h2>
+                        <h2 className="questions-header">Questions</h2>
                     </DialogTitle>
                     <DialogContent>
                         <QuestionFields
-                            questionsResponses={questionsResponses}
+                            qrs={qRData}
+                            stakeholder_id={id}
                         />
                     </DialogContent>
-                    <DialogActions>
-                        <Button
-                            autoFocus
-                            onClick={handleCloseQuestions}
-                            color="primary"
-                        >
-                            Save changes
-                        </Button>
-                    </DialogActions>
                 </div>
             </Dialog>
+
+            <Dialog
+                onClose={handleClosePointSelection}
+                aria-labelledby="customized-dialog-title"
+                open={openPointSelection}
+            >
+                <div className="point-selection-body" style={{ width: 500 }}>
+                    <DialogTitle
+                        id="customized-dialog-title"
+                        onClose={handleClosePointSelection}
+                    >
+                        <h2 className="point-selection-header">
+                            Point Selection
+                        </h2>
+                    </DialogTitle>
+                    <DialogContent>
+                        <BasicTable
+                            stakeholder_id={id}
+                            passed_issues={issues}
+                        />
+                    </DialogContent>
+                </div>
+            </Dialog>
+            <SuccessBanner
+                successMessage={successBannerMessage}
+                fade={successBannerFade}
+            />
+            <ErrorBanner
+                errorMessage={errorBannerMessage}
+                fade={errorBannerFade}
+            />
         </div>
     );
 }

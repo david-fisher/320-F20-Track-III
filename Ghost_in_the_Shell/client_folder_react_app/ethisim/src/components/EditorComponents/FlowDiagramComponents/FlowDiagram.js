@@ -25,8 +25,8 @@ import {
     introNode,
 } from './HelperFunctions/node';
 import addEdge from './HelperFunctions/addEdge';
-import get from '../../../universalHTTPRequests/get';
-import put from '../../../universalHTTPRequests/put';
+import get from './../../../universalHTTPRequests/get';
+import put from './../../../universalHTTPRequests/put';
 import LoadingSpinner from '../../LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
