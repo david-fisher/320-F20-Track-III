@@ -13,7 +13,7 @@ StakeHolderFields.propTypes = {
     scenario: PropTypes.number,
 };
 
-export default function StakeHolderFields( {scenario} ) {
+export default function StakeHolderFields({ scenario }) {
     const [didGetSHs, setDidGetSHs] = useState(false);
 
     /*
@@ -29,7 +29,7 @@ export default function StakeHolderFields( {scenario} ) {
     var axios = require('axios');
 
     //the base url for api calls; will be imported eventually
-    const baseURL = 'http://127.0.0.1:8000/';
+    const baseURL = 'http://sixbrigand.pythonanywhere.com/';
 
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
@@ -61,7 +61,7 @@ export default function StakeHolderFields( {scenario} ) {
     function getExistingStakeHolders() {
         setLoading(true);
 
-        var data = {"SCENARIO": {scenario}}
+        var data = { SCENARIO: { scenario } };
         var config = {
             method: 'get',
             url: baseURL + 'api/stakeholders/',
@@ -76,10 +76,12 @@ export default function StakeHolderFields( {scenario} ) {
                 setStakeHolders(response.data);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to get Stakeholders! Please try again.')
+                setErrorBannerMessage(
+                    'Failed to get Stakeholders! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
-            
+
         setLoading(false);
     }
 
@@ -111,11 +113,15 @@ export default function StakeHolderFields( {scenario} ) {
 
         axios(config)
             .then(function (response) {
-                setSuccessBannerMessage('Successfully deleted the stakeholder!');
+                setSuccessBannerMessage(
+                    'Successfully deleted the stakeholder!'
+                );
                 setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to delete the stakeholder! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to delete the stakeholder! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
 
@@ -129,7 +135,7 @@ export default function StakeHolderFields( {scenario} ) {
         }
         setLoading(true);
 
-       //currently has scenario 1 arbitrarily
+        //currently has scenario 1 arbitrarily
         var data = JSON.stringify({
             SCENARIO: scenario,
         });
@@ -147,11 +153,15 @@ export default function StakeHolderFields( {scenario} ) {
         axios(config)
             .then(function (response) {
                 setStakeHolders([...stakeHolders, response.data]);
-                setSuccessBannerMessage('Successfully created a new stakeholder!');
+                setSuccessBannerMessage(
+                    'Successfully created a new stakeholder!'
+                );
                 setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to create a stakeholder! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to create a stakeholder! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
 
@@ -177,7 +187,9 @@ export default function StakeHolderFields( {scenario} ) {
                 setSuccessBannerFade(true);
             })
             .catch(function (error) {
-                setErrorBannerMessage('Failed to save the stakeholders! Please try again.');
+                setErrorBannerMessage(
+                    'Failed to save the stakeholders! Please try again.'
+                );
                 setErrorBannerFade(true);
             });
     };
@@ -216,7 +228,7 @@ export default function StakeHolderFields( {scenario} ) {
      */
 
     if (isLoading) {
-        return <LoadingSpinner />
+        return <LoadingSpinner />;
     }
 
     if (!didGetSHs) {
