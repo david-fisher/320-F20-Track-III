@@ -10,12 +10,10 @@ import LoadingSpinner from './../../../LoadingSpinner';
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
     setStakeHolders: PropTypes.any,
+    scenario: PropTypes.number,
 };
 
-export default function StakeHolderFields( {scenario_id} ) {
-    //eventaully, scenario will be replaced by scenario_id
-    const scenario = 1;
-
+export default function StakeHolderFields( {scenario} ) {
     const [didGetSHs, setDidGetSHs] = useState(false);
 
     /*

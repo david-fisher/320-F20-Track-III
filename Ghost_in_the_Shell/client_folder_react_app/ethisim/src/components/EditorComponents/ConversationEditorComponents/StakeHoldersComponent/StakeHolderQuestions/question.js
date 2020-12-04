@@ -57,13 +57,6 @@ export default function QuestionField({
         setOpen(true);
     };
 
-    // eslint-disable-next-line
-    let handleChange = (content, editor) => {
-        //TODO Implement
-        console.log(content);
-        console.log(htmlToText.fromString(content));
-    };
-
     const onChangeResponse = (e) => {
         setResponseValue(e.target.value);
         updateQRs(questionValue, e.target.value);

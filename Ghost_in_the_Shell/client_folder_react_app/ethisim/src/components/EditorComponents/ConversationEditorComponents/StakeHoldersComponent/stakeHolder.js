@@ -118,6 +118,12 @@ export default function StakeHolder({
     const baseURL = 'http://127.0.0.1:8000/';
     var axios = require('axios');
 
+    //Warning for Deleteing a Conversation
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
@@ -365,7 +371,6 @@ export default function StakeHolder({
                         onClose={handleCloseBio}
                     >
                         Biography
-                        (Changes are automatically saved upon closing)
                     </DialogTitle>
                     <DialogContent>
                         <SunEditor
@@ -532,7 +537,6 @@ export default function StakeHolder({
                         onClose={handleCloseMainConvo}
                     >
                         Main Coversation
-                        (Changes are automatically saved upon closing)
                     </DialogTitle>
                     <DialogContent>
                         <SunEditor

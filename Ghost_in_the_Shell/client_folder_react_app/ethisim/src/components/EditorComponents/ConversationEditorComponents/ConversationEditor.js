@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ConversationEditor() {
+export default function ConversationEditor({ scenario_ID }) {
     const classes = useStyles();
     const [stakeHolders, setStakeHolders] = useState([]);
 
@@ -26,6 +26,7 @@ export default function ConversationEditor() {
             <StakeHolderFields
                 stakeHolders={stakeHolders}
                 setStakeHolders={setStakeHolders}
+                scenario={scenario_ID}
             />
         </div>
     );
