@@ -15,6 +15,7 @@ export default function universalFetch(
         loading: true,
         error: null,
     });
+    console.log('sets response');
     axios
         .get(baseURL + endpoint)
         .then((resp) => {

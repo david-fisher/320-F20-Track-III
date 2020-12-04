@@ -21,6 +21,7 @@ import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
 import universalFetch from './../../../../universalHTTPRequests/get.js'
 import LoadingSpinner from './../../../LoadingSpinner';
+import GenericDeleteWarning from '../../../DeleteWarnings/GenericDeleteWarning';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -317,19 +318,21 @@ export default function StakeHolder({
                     onClick={handleClickOpenMainConvo}
                 />
             </div>
-
             <div id="DeleteButton">
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => {
-                        removeStakeHolder(id);
-                    }}
+                    onClick={handleClickOpen}
                 >
                     Delete
                 </Button>
-            </div>
 
+                <GenericDeleteWarning
+                    remove={() => removeStakeHolder(id)}
+                    setOpen={setOpen}
+                    open={open}
+                />
+            </div>
             <div id="PointButton">
                 <Button
                     variant="contained"

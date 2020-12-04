@@ -377,7 +377,7 @@ const mockFinishedScenarioStudentResponse = {
     ],
     reflections: [
         {
-            id: 0,
+            id: 2,
             title: 'Initial Reflection',
             questionResponses: [
                 {
@@ -393,7 +393,7 @@ const mockFinishedScenarioStudentResponse = {
             ],
         },
         {
-            id: 1,
+            id: 3,
             title: 'Final Reflection',
             questionResponses: [
                 {
